@@ -4,6 +4,8 @@ import static it.polimi.se2018.model.PublicObjectiveUtils.allDifferentValues;
 
 /**
  * The Singleton for the Column Shade Variety Objective Card
+ *
+ * @author michelemarzollo
  */
 public class ColumnShadeVariety implements PublicObjectiveCard {
     /**
@@ -23,8 +25,9 @@ public class ColumnShadeVariety implements PublicObjectiveCard {
      *
      * @return The instance
      */
-    public static ColumnShadeVariety instance() {
-        if (instance == null) return new ColumnShadeVariety();
+    public static ColumnShadeVariety getInstance() {
+        if (instance == null)
+            instance = new ColumnShadeVariety();
         return instance;
     }
 

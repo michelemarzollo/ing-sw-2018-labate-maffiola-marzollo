@@ -4,6 +4,8 @@ import java.util.Arrays;
 
 /**
  * The class contains a set of useful functions to calculate the scores of PublicObjectiveCards
+ *
+ * @author michelemarzollo
  */
 class PublicObjectiveUtils {
 
@@ -14,8 +16,8 @@ class PublicObjectiveUtils {
      * The method that controls if in an array of Cells all values of the dice are different
      *
      * @param cellArray The array
-     * @return <code>true</code> if all cells are not null and have dice with different
-     * values, <code>false</code> otherwise
+     * @return {@code true} if all cells are not null and have dice with different
+     * values, {@code false} otherwise
      */
     static boolean allDifferentValues(Cell[] cellArray) {
         for (int i = 0; i < cellArray.length - 1; i++) {
@@ -32,8 +34,8 @@ class PublicObjectiveUtils {
      * The method that controls if in an array of Cells all colours of the dice are different
      *
      * @param cellArray The array
-     * @return <code>true</code> if all cells are not null and have dice with different
-     * colours, <code>false</code> otherwise
+     * @return {@code true} if all cells are not null and have dice with different
+     * colours, {@code false} otherwise
      */
     static boolean allDifferentColours(Cell[] cellArray) {
         for (int i = 0; i < cellArray.length - 1; i++) {
@@ -48,7 +50,7 @@ class PublicObjectiveUtils {
 
     /**
      * Counts the number shades, i.e. the number of occurrences
-     * of the value between the ones in <code>numbers</code> that occurs fewer times
+     * of the value between the ones in {@code numbers} that occurs fewer times
      *
      * @param grid    The grid where to count the number of value-shades
      * @param numbers The array of numbers to count
@@ -61,10 +63,10 @@ class PublicObjectiveUtils {
         int[] occurrences = new int[numbers.length];
 
         for (Cell[] row : grid) {
-            for (int col = 0; col < grid[0].length; col++) {
+            for (Cell cell : row) {
                 for (int i = 0; i < numbers.length; i++)
-                    if (row[col].getDie() != null &&
-                            row[col].getDie().getValue() == numbers[i])
+                    if (cell.getDie() != null &&
+                            cell.getDie().getValue() == numbers[i])
                         occurrences[i]++;
             }
         }
@@ -86,10 +88,10 @@ class PublicObjectiveUtils {
         int[] occurrences = new int[Colour.values().length];
 
         for (Cell[] row : grid) {
-            for (int col = 0; col < grid[0].length; col++) {
+            for (Cell cell : row) {
                 for (int i = 0; i < occurrences.length; i++)
-                    if (row[col].getDie() != null &&
-                            row[col].getDie().getColour() == Colour.values()[i])
+                    if (cell.getDie() != null &&
+                            cell.getDie().getColour() == Colour.values()[i])
                         occurrences[i]++;
             }
         }
