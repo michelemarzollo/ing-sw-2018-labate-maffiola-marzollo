@@ -5,6 +5,8 @@ import static it.polimi.se2018.model.PublicObjectiveUtils.allDifferentValues;
 
 /**
  * The Singleton for the Row Shade Variety Objective Card
+ *
+ * @author michelemarzollo
  */
 public class RowShadeVariety implements PublicObjectiveCard {
     /**
@@ -24,8 +26,8 @@ public class RowShadeVariety implements PublicObjectiveCard {
      *
      * @return The instance
      */
-    public static RowShadeVariety instance() {
-        if (instance == null) return new RowShadeVariety();
+    public static RowShadeVariety getInstance() {
+        if (instance == null) instance = new RowShadeVariety();
         return instance;
     }
 

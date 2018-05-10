@@ -4,6 +4,8 @@ import java.util.stream.IntStream;
 
 /**
  * The Singleton for the Color Diagonals Objective Card
+ *
+ * @author michelemarzollo
  */
 public class ColorDiagonals implements PublicObjectiveCard {
 
@@ -24,8 +26,9 @@ public class ColorDiagonals implements PublicObjectiveCard {
      *
      * @return The instance
      */
-    public static ColorDiagonals instance() {
-        if (instance == null) return new ColorDiagonals();
+    public static ColorDiagonals getInstance() {
+        if (instance == null)
+            instance = new ColorDiagonals();
         return instance;
     }
 

@@ -24,8 +24,9 @@ public class ColumnColorVariety implements PublicObjectiveCard {
      *
      * @return The instance
      */
-    public static ColumnColorVariety instance() {
-        if (instance == null) return new ColumnColorVariety();
+    public static ColumnColorVariety getInstance() {
+        if (instance == null)
+            instance = new ColumnColorVariety();
         return instance;
     }
 
