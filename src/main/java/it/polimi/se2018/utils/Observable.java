@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author dvdmff
- * Base class for observable object that can have one or more
- * associated {@link Observer<T>} objects.
- * <p>The communication
- * between observable and observer is handled through messages
- * of type T.</p>
+ * Abstract class for observable objects.
+ * <p>The communication between observable and observer is handled
+ * through messages of type T.</p>
  * @param <T> The type of the message the observable object
- *  *        can notify to the observer.
+ *            can notify to the observer.
+ * @author dvdmff
  */
 public abstract class Observable<T> {
     /**
@@ -20,8 +18,7 @@ public abstract class Observable<T> {
     private List<Observer<T>> observers = new ArrayList<>();
 
     /**
-     * This method associates the given observer to the observable
-     * object.
+     * Associates the specified observer to this observable.
      * @param observer The observer to be associated with the
      *                 observable
      */
@@ -30,8 +27,8 @@ public abstract class Observable<T> {
     }
 
     /**
-     * This method removes the association between the given observer
-     * and the observable object if it exists.
+     * Removes the association between the specified observer and this
+     * observable object if such relation exists.
      * @param observer The observer to be removed.
      * @return {@code true} if the observer has successfully been
      *         removed; {@code false} if there was no prior association
@@ -42,11 +39,9 @@ public abstract class Observable<T> {
     }
 
     /**
-     * When this method is invoked, all the currently registered
-     * observers are notified through the given message by
-     * the observable.
-     * @param message The message to send to the observers to notify
-     *                them.
+     * Notifies all the registered observers.
+     * @param message The message to send to the observers in order to
+     *               notify  them.
      */
     public void notifyObservers(T message){
         observers.forEach(o -> o.update(message));
