@@ -4,6 +4,8 @@ import static it.polimi.se2018.model.PublicObjectiveUtils.numberOfShades;
 
 /**
  * The Singleton for the Medium Shades Objective Card
+ *
+ * @author michelemarzollo
  */
 public class MediumShades implements PublicObjectiveCard {
 
@@ -24,8 +26,9 @@ public class MediumShades implements PublicObjectiveCard {
      *
      * @return The instance
      */
-    public static MediumShades instance() {
-        if (instance == null) return new MediumShades();
+    public static MediumShades getInstance() {
+        if (instance == null)
+            instance = new MediumShades();
         return instance;
     }
 

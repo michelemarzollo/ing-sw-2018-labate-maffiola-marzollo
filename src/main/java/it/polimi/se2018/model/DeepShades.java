@@ -4,6 +4,8 @@ import static it.polimi.se2018.model.PublicObjectiveUtils.numberOfShades;
 
 /**
  * The Singleton for the Deep Shades Objective Card
+ *
+ * @author michelemarzollo
  */
 public class DeepShades implements PublicObjectiveCard {
 
@@ -24,8 +26,9 @@ public class DeepShades implements PublicObjectiveCard {
      *
      * @return The instance
      */
-    public static DeepShades instance() {
-        if (instance == null) return new DeepShades();
+    public static DeepShades getInstance() {
+        if (instance == null)
+            instance = new DeepShades();
         return instance;
     }
 

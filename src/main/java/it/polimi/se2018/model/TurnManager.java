@@ -4,23 +4,33 @@ import java.util.*;
 
 
 /**
- * TurnManager is the component of Game that is responsible for
- * the correct flow of the rounds in the game. It keeps track of the
- * player who can make a move and handles the correct rotation of
- * turns after each round.
- * <p>The class relies on the inner class {@link TurnIterator} to select
- * the players in the correct order during the rounds.</p>
+ * This class is responsible for the correct flow of turns in a game.
+ * <p>A game lasts exactly 10 rounds and during each of them every
+ * player has two turns, the second of which can be skipped in some
+ * cases if signaled.</p>
+ * <p>During a round the turns are handled according to a forth-and-back
+ * model. For instance, if the set of players is {1, 2, 3} and 1 has the
+ * first turn this round, then the correct distribution of turns will be
+ * {1, 2, 3, 3, 2, 1}.</p>
+ * <p>The class is mutable.</p>
+ * <note>No thread safety mechanism has yet been introduced.</note>
+ * @author dvdmff
  */
 public class TurnManager {
-    private static final int ROUNDS = 10;
+    /**
+     * Constant indicating the total number of rounds.
+     */
+    public static final int ROUNDS = 10;
 
     /**
-     * TurnIterator allows to go through a list of players
-     * twice, the second time being in reverse order.
-     * <p>This implementation doesn't offer the possibility to remove
-     * elements nor the method forEachRemaining, it only grants
-     * sequential access to the underlying list of players in the order
-     * specified above.</p>
+     * This class allows to go through the list of players contained
+     * in the outer class twice, the second time being in reverse order.
+     * <p>This iterator doesn't offer the possibility to remove
+     * elements nor the method forEachRemaining.</p>
+     * <p>The visiting is done in a forth-and-back manner, meaning that
+     * the list is traversed from the first element to the last one first,
+     * then from the last element to the first one.</p>
+     * @author dvdmff
      */
     private class TurnIterator implements Iterator<Player> {
 
@@ -28,10 +38,10 @@ public class TurnManager {
 
 
         /**
-         * Tells whether there are still objects to go through or not.
+         * Tells whether there are still elements to go through or not.
          *
          * @return {@code true} if there is at least one more element
-         * to traverse; {@code false} otherwise.
+         *         to traverse; {@code false} otherwise.
          */
         @Override
         public boolean hasNext() {
@@ -42,7 +52,7 @@ public class TurnManager {
          * Tells if the iterator is going backwards.
          *
          * @return {@code true} if the iterator is going in reverse
-         * order; {@code false} otherwise.
+         *         order; {@code false} otherwise.
          */
         private boolean reverse() {
             return nextIndex >= players.size();
@@ -50,7 +60,7 @@ public class TurnManager {
 
         /**
          * Helper function to retrieve the correct index of the next item
-         * to be traversed.
+         * to be visited.
          *
          * @return The index of the next item to be visited.
          */
@@ -62,12 +72,11 @@ public class TurnManager {
         }
 
         /**
-         * Progresses the iteration, if possible, returning the next value
-         * according to the traversing order.
+         * Progresses the iteration, if possible.
          * <p>This method is irreversible, so once invoked, it isn't possible
-         * to put back the value or any kind of rewinding.</p>
+         * to put back the element or any other kind of rewinding.</p>
          *
-         * @return The next element to be visited according to the order
+         * @return The next element to be visited according to the order.
          * @throws NoSuchElementException if there isn't any element left
          *                                to be visited.
          */
@@ -83,7 +92,7 @@ public class TurnManager {
         }
 
         /**
-         * Tells if the iterator has gone through at least once every
+         * Tells if the iterator has visited at least once every
          * element in the list.
          * <p>When the return value is <code>true</code> it also means
          * that the iterator has started traversing backwards the objects.
@@ -122,10 +131,10 @@ public class TurnManager {
 
 
     /**
-     * Instantiates a new TurnManager for the given list of players.
-     * <p><strong>note:</strong> the list passed as argument will be
-     * modified, so using a copy instead of the original is to be
-     * considered.</p>
+     * Creates a TurnManager for the specified list of players.
+     * <p>The list passed as argument can be modified, so to use
+     * a copy instead of the original one is recommended if the
+     * order of the elements matters.</p>
      *
      * @param players The list containing the players who partake of
      *                the game; can be modified by some methods.
@@ -142,6 +151,7 @@ public class TurnManager {
 
     /**
      * Getter for the current turn.
+     *
      * @return An instance of Turn containing all information
      *         about the current turn.
      */
@@ -150,8 +160,7 @@ public class TurnManager {
     }
 
     /**
-     * Tells if the game has finished. It is equivalent to check if
-     * the current round is terminated and it is the last one.
+     * Tells if the game has finished.
      *
      * @return {@code true} if the game is over; {@code false} otherwise.
      */
@@ -179,33 +188,42 @@ public class TurnManager {
     }
 
     /**
-     * Sets up a new round. It ensures to increment the round counter,
-     * to clear any leftover information from the previous one and
-     * to correctly rotate the player order.
+     * Sets up a new round.
+     * <p>The call to this method results in the increment of the
+     * round counter, the cleaning of any leftover information from
+     * the previous one and the correct rotation of the first player
+     * to have the turn.</p>
+     *
      */
-    private void setupNewRound() {
+    public void setupNewRound() throws GameFinishedException {
         ++round;
         playersToSkip.clear();
         Collections.rotate(players, 1);
         turnIterator = new TurnIterator();
+        //return value is ignored since there must exist at least one
+        //valid turn
+        boolean updateSuccessful = updateTurn();
+        if(!updateSuccessful)
+            throw new GameFinishedException();
     }
 
     /**
-     * This method makes the game progress by selecting the next player
-     * who can make a move.
-     * <p>Whenever a round terminates, it automatically sets up a new one,
-     * if it is the case (i.e. the last round has finished)</p>
-     * <p>All the players who are contained in the skip list will
-     * be ignored, effectively losing their turn this round.</p>
+     * Updates the current turn, if possible.
+     * <p>The method forces the turns to follow a forth-and-back order,
+     * but will skip all those players whose second turn has already
+     * been consumed.</p>
+     * <p>If no players can move this round the method does nothing but signal
+     * the caller the failure with its return value.</p>
      *
-     * @throws GameFinishedException if the game is already over.
+     * @return {@code true} if the turn has been successfully updated;
+     *         {@code false} otherwise.
      */
-    public void updateTurn() throws GameFinishedException {
+    public boolean updateTurn() {
         if (isGameFinished())
-            throw new GameFinishedException();
+            return false;
 
         if (!turnIterator.hasNext())
-            setupNewRound();
+            return false;
 
         Player nextPlayer = turnIterator.next();
         //skip all player whose second turn has been consumed
@@ -214,10 +232,11 @@ public class TurnManager {
 
         if (playersToSkip.contains(nextPlayer))
             //no players have a second turn this round, so move the game forward.
-            updateTurn();
-        else
-            //this player can move, set new turn
-            currentTurn = new Turn(nextPlayer, isSecondTurnAvailable());
+            return false;
+
+        //this player can move, set new turn
+        currentTurn = new Turn(nextPlayer, isSecondTurnAvailable());
+        return true;
 
     }
 
@@ -232,9 +251,8 @@ public class TurnManager {
     }
 
     /**
-     * Prevents a player from being able to use his second turn in a
-     * round. If this is not possible, a SecondTurnUnavailableException
-     * is thrown.
+     * Prevents a player from being able to use his second turn in the
+     * same round.
      *
      * @param player The player who has to skip his second turn this round.
      * @throws SecondTurnUnavailableException if the player has already

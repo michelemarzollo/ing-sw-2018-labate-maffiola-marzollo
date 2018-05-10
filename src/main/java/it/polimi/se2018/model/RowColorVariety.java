@@ -4,6 +4,8 @@ import static it.polimi.se2018.model.PublicObjectiveUtils.allDifferentColours;
 
 /**
  * The Singleton for the Row Color Variety Objective Card
+ *
+ * @author michelemarzollo
  */
 public class RowColorVariety implements PublicObjectiveCard {
 
@@ -24,8 +26,9 @@ public class RowColorVariety implements PublicObjectiveCard {
      *
      * @return The instance
      */
-    public static RowColorVariety instance() {
-        if (instance == null) return new RowColorVariety();
+    public static RowColorVariety getInstance() {
+        if (instance == null)
+            instance = new RowColorVariety();
         return instance;
     }
 

@@ -3,9 +3,12 @@ package it.polimi.se2018.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * The class is a factory that instantiates a given number of PublicObjectiveCards
+ *
+ * @author michelemarzollo
  */
 public class PublicObjectiveFactory {
     /**
@@ -16,7 +19,7 @@ public class PublicObjectiveFactory {
      */
     public PublicObjectiveCard[] newInstances(int n) {
 
-        ArrayList<Integer> arrayOfNumbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+        List<Integer> arrayOfNumbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
 
         Collections.shuffle(arrayOfNumbers);
 
@@ -41,37 +44,37 @@ public class PublicObjectiveFactory {
 
         switch (randomNumber) {
             case 1:
-                card = RowColorVariety.instance();
+                card = RowColorVariety.getInstance();
                 break;
             case 2:
-                card = ColumnColorVariety.instance();
+                card = ColumnColorVariety.getInstance();
                 break;
             case 3:
-                card = RowShadeVariety.instance();
+                card = RowShadeVariety.getInstance();
                 break;
             case 4:
-                card = ColumnShadeVariety.instance();
+                card = ColumnShadeVariety.getInstance();
                 break;
             case 5:
-                card = LightShades.instance();
+                card = LightShades.getInstance();
                 break;
             case 6:
-                card = MediumShades.instance();
+                card = MediumShades.getInstance();
                 break;
             case 7:
-                card = DeepShades.instance();
+                card = DeepShades.getInstance();
                 break;
             case 8:
-                card = ShadeVariety.instance();
+                card = ShadeVariety.getInstance();
                 break;
             case 9:
-                card = ColorDiagonals.instance();
+                card = ColorDiagonals.getInstance();
                 break;
             case 10:
-                card = ColorVariety.instance();
+                card = ColorVariety.getInstance();
                 break;
             default:
-                return null;
+                return null;    //Maybe we could put an exception
         }
         return card;
     }

@@ -3,6 +3,8 @@ package it.polimi.se2018.model;
 /**
  * ObjectiveCard represents the common features of both public and private
  * objective cards
+ *
+ * @author michelemarzollo
  */
 public interface ObjectiveCard {
 

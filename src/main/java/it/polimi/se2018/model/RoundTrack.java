@@ -1,28 +1,29 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.utils.Coordinates;
+
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
- * The class represents the round track in the game.
- * <p>Its main role is to keep track of all the dice that
- * have been discarded during the rounds, since they can
- * still be used in some cases (most notably, state if player
- * has won in single player mode).</p>
+ * This class represents the round track in the game.
+ * <p>Its role is to keep track of all the dice that
+ * are left unused after each round, since they still may
+ * be used in some cases</p>
+ * <p>The class is immutable, but is not yet thread-safe.</p>
+ * @author dvdmff
  */
 public class RoundTrack {
 
     /**
-     * Collection of all the discarded dice, ordered by
-     * the round number.
+     * List of all the discarded dice, ordered by the round number.
      */
-    private final ArrayList<List<Die>> leftovers;
+    private final List<List<Die>> leftovers;
 
     /**
-     * Constructs a RoundTrack object able to correctly manage the
-     * leftover dice for the given number of rounds.
-     * @param rounds The number of rounds in the game, must be non-negative.
+     * Creates a RoundTrack object able to manage the specified
+     * number of rounds.
+     * @param rounds The number of rounds in the game.
      */
     public RoundTrack(int rounds) {
         leftovers = new ArrayList<>(rounds);
@@ -31,18 +32,18 @@ public class RoundTrack {
     }
 
     /**
-     * Inserts a collection of dice in the leftovers for
-     * a given round.
+     * Inserts a list of dice in the leftovers for
+     * the specified round.
      * @param round The round number to which {@code dice} belongs.
      * @param dice The collection of dice to be added.
      */
-    public void addAllForRound(int round, Collection<? extends Die> dice) {
+    public void addAllForRound(int round, List<? extends Die> dice) {
         leftovers.get(round).addAll(dice);
     }
 
     /**
-     * Computes the sum of all the values of the dice in the RoundTrack
-     * @return The sum of all the values of the dice.
+     * Calculates the sum of the values of all the dice in the RoundTrack.
+     * @return The sum of the values of the dice.
      */
     public int getSum() {
         return leftovers.stream()
@@ -66,41 +67,30 @@ public class RoundTrack {
     }
 
     /**
-     * Helper method to find the number of round in which a die
-     * is located. If the die isn't in the leftovers, it returns -1
-     * to indicate failure.
-     * @param die The die to be searched.
-     * @return The number of round where the die is located.
-     */
-    private int getRoundOf(Die die){
-        for(int i = 0; i < leftovers.size(); ++i){
-            if(leftovers.get(i).contains(die))
-                return i;
-        }
-        return -1;
-    }
-
-    /**
+     * Exchanges the die at the specified coordinates with the given one.
+     *
      * This method swaps two dice, one of which has to be among
      * the leftovers and the other mustn't. If this isn't the case,
      * the method returns false to indicate that the operation
      * is not permitted.
-     * @param leftover The leftover die, which has to be in RoundTrack.
-     * @param die A non-leftover die to be inserted in the leftovers.
-     * @return {@code true} if the swap is successful, {@code false}
-     *         otherwise.
+     * @param coordinates The location of the die to swap in the round track.
+     * @param die The die to be inserted in the leftovers.
+     * @return A reference to the die that has been removed from the
+     * round track. A value of {@code null} indicates that the swap
+     * was unsuccessful.
      */
-    public boolean swap(Die leftover, Die die) {
-        //Can't swap if leftover is not in RoundTrack or die is.
-        int round = getRoundOf(leftover);
+    public Die swap(Coordinates coordinates, Die die) {
+        //Can't swap if no die is found at coordinates.
+        Die toSwap = leftovers
+                .get(coordinates.getRow())
+                .get(coordinates.getCol());
 
-        if(round < 0 || getRoundOf(die) > 0)
-            return false;
-
-        boolean removed = leftovers.get(round).remove(leftover);
-        if(removed)
-            leftovers.get(round).add(die);
-
-        return removed;
+        if(toSwap != null) {
+            leftovers.get(coordinates.getRow())
+                    .remove(toSwap);
+            leftovers.get(coordinates.getRow())
+                    .add(die);
+        }
+        return toSwap;
     }
 }

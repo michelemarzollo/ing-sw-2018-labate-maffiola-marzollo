@@ -1,7 +1,8 @@
 package it.polimi.se2018.model;
 
 /**
- * Class representing a turn in the game
+ * Class representing a turn in the game.
+ * @author dvdmff
  */
 public class Turn {
     /**
@@ -25,7 +26,10 @@ public class Turn {
     private boolean alreadyUsedToolCard;
 
     /**
-     * Constructs a Turn for {@code player}.
+     * Creates a Turn object for the given player.
+     * <p>The newly created turn has, by default, {@code hasAlreadyPlacedDie()}
+     * and {@code hasAlreadyUsedToolCard()} returning {@code false}, since
+     * the player is supposed not to have done any move yet.</p>
      * @param player The player whose turn this is.
      * @param secondTurnAvailable Flag to indicate if {@code player}
      *                            has a second turn this round.
@@ -65,7 +69,7 @@ public class Turn {
     }
 
     /**
-     * Updates Turn instance to indicate that the player has placed
+     * Updates the object to indicate that the player has placed
      * a die this turn.
      */
     public void placeDie() {
@@ -82,7 +86,7 @@ public class Turn {
     }
 
     /**
-     * Updates Turn instance to indicate that the player has used
+     * Updates the object to indicate that the player has used
      * a tool card this turn.
      */
     public void useToolCard() {

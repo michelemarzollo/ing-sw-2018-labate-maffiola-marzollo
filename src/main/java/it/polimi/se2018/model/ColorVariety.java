@@ -4,6 +4,8 @@ import static it.polimi.se2018.model.PublicObjectiveUtils.numberOfColours;
 
 /**
  * The Singleton for the Color Variety Objective Card
+ *
+ * @author michelemarzollo
  */
 public class ColorVariety implements PublicObjectiveCard {
 
@@ -24,8 +26,9 @@ public class ColorVariety implements PublicObjectiveCard {
      *
      * @return The instance
      */
-    public static ColorVariety instance() {
-        if (instance == null) return new ColorVariety();
+    public static ColorVariety getInstance() {
+        if (instance == null)
+            instance = new ColorVariety();
         return instance;
     }
 

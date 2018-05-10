@@ -2,6 +2,8 @@ package it.polimi.se2018.model;
 
 /**
  * PrivateObjectiveCard represents all private objective cards
+ *
+ * @author michelemarzollo
  */
 public class PrivateObjectiveCard implements ObjectiveCard {
 
@@ -41,7 +43,7 @@ public class PrivateObjectiveCard implements ObjectiveCard {
 
     /**
      * The method to calculate the score dealing with the PrivateObjectiveCard
-     * <p>The score is given by the number of dice with colour <code>colour</code></p>
+     * <p>The score is given by the number of dice with colour {@code colour}</p>
      *
      * @param grid The grid on which the score must be calculated
      * @return The score
@@ -52,9 +54,9 @@ public class PrivateObjectiveCard implements ObjectiveCard {
 
         //Counts all dice with colour "colour"
         for (Cell[] row : grid) {
-            for (int j = 0; j < grid[0].length; j++) {
-                if (row[j].getDie().getColour() == colour)
-                    count += row[j].getDie().getValue();
+            for (Cell cell : row) {
+                if (cell.getDie().getColour() == colour)
+                    count += cell.getDie().getValue();
             }
         }
         return count;
