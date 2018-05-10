@@ -2,38 +2,68 @@ package it.polimi.se2018.model;
 
 /**
  * @author giorgiolbt
+ * This class represents a Player
+ * of the Game.
  */
 
 public class Player {
-    private final String name;
-    private int score;
-    private int tokens;
     /**
-     * Array of the 4 pattern candidates for the player's choice
+     * The Player's username.
      */
-    private Pattern[] candidates;
+    private final String name;
+
     /**
-     * The pattern actually chosen by the player
+     * The Player's score: it is
+     * computed at the end of the Game.
+     */
+    private int score;
+
+    /**
+     * Number of Player's favor tokens.
+     */
+
+    private int tokens;
+
+    /**
+     * boolean value that indicates if
+     * a Player is connected.
+     */
+
+    private boolean connected;
+
+    /**
+     * Array of the 4 {@link Pattern} candidates
+     * for the player's choice
+     */
+
+    private Pattern[] candidates;
+
+    /**
+     * The {@link Pattern} actually chosen by the player.
+     *
      */
     private Pattern pattern;
+
     /**
-     * Array that contains the Private Objective Card/Cards of the player. In MultiPlayer mode the player has only one Private
-     * Objective Card: the second element of the array will be null
+     * Array that contains the Private Objective Card/Cards of the player.
+     * In MultiPlayer mode the player has only one Private
+     * Objective Card: the second element of the array will be null.
      */
+
     private PrivateObjectiveCard[] cards;
 
     /**
-     * The constructor of <code>Player</code>
-     *
-     * @param name is the <code>name</code> of the player
+     * The constructor of Player
+     * @param name is the Player's name.
      */
     public Player(String name) {
         this.name = name;
+        this.connected = true;
     }
 
     /**
-     * Getter for the attribute <code>name</code>
-     * @return the <code>name</code> of the player
+     * Getter for the attribute name of Player.
+     * @return the name of Player.
      */
 
     public String getName() {
@@ -41,8 +71,8 @@ public class Player {
     }
 
     /**
-     * Getter for the attribute <code>score</code>
-     * @return the <code>score</code> of the player
+     * Getter for the attribute score
+     * @return the score of Player.
      */
 
     public int getScore() {
@@ -50,25 +80,51 @@ public class Player {
     }
 
     /**
-     * Setter for the <code>score</code> of the player
-     * @param score is the value set for the attribute
+     * Setter for the score of Player
+     * @param score is the value set for the attribute.
+     *              This value is computed at the end of the Game.
      */
+
     public void setScore(int score) {
         this.score = score;
     }
 
     /**
-     * Getter for the attribute <code>tokens</code>
-     * @return the <code>tokens</code> of the player
+     * Getter for the attribute tokens of Player.
+     * @return the tokens of Player.
      */
 
     public int getTokens() {
         return tokens;
     }
 
+
     /**
-     * Getter for the attribute <code>canditates</code>
-     * @return the <code>candidates</code> of the player
+     * Getter for the attribute connected.
+     * @return {@code true} if Player result connected
+     * to the Server, {@code false} otherwise.
+     */
+
+    public boolean isConnected() {
+        return connected;
+    }
+
+    /**
+     * Setter for the attribute connected.
+     * @param connected Is the value set for the attribute:
+     *                  it will be {@code true} if the Player
+     *                  is connected, {@code false} otherwise.
+     *
+     */
+
+    public void setConnected(boolean connected) {
+        this.connected = connected;
+    }
+
+
+    /**
+     * Getter for the attribute canditates.
+     * @return the {@link Pattern} candidates of Player.
      */
 
     public Pattern[] getCandidates() {
@@ -76,8 +132,10 @@ public class Player {
     }
 
     /**
-     * Setter for the attribute <code>candidates </code>
-     * @param candidates is the value setted for the attribute
+     * Setter for the attribute candidates.
+     * @param candidates are the {@link Pattern} array
+     *                   among which the Player has to make
+     *                   his choice.
      */
 
     public void setCandidates(Pattern[] candidates) {
@@ -85,8 +143,8 @@ public class Player {
     }
 
     /**
-     * Getter for the attribute <code>pattern</code>
-     * @return the <code>pattern</code> of the player
+     * Getter for the attribute pattern.
+     * @return the Pattern chosen by the player.
      */
 
     public Pattern getPattern() {
@@ -94,9 +152,10 @@ public class Player {
     }
 
     /**
-     * Setter for the attribute <code>candidates </code>
-     * @param pattern is the value set for the attribute. This method also set the number of <code>tokens</code> of the player
-     *                that depends on the <code>difficulty</code> of the <code>pattern</code>
+     * Setter for the attribute pattern.
+     * @param pattern is the {@link Pattern} set for the attribute.
+     *                This method also set the number of tokens of the player
+     *                that depends on the {@code difficulty} of the {@link Pattern}.
      */
 
     public void setPattern(Pattern pattern) {
@@ -105,8 +164,9 @@ public class Player {
     }
 
     /**
-     * Getter for the attribute <code>cards</code>
-     * @return the <code>cards</code> of the player
+     * Getter for the attribute cards
+     * @return the array of PrivateObjectiveCards
+     * of the player.
      */
 
     public PrivateObjectiveCard[] getCards() {
@@ -114,22 +174,28 @@ public class Player {
     }
 
     /**
-     * Setter for the attribute <code>cards</code>
-     * @param cards is the value setted for the attribute
+     * Setter for the attribute cards.
+     * @param cards is array of PrivateObjectiveCards assigned
+     *             to the Player.
      */
     public void setCards(PrivateObjectiveCard[] cards) {
         this.cards = cards;
     }
 
     /**
-     * method for decrementing the number of <code>tokens</code> of the player when using a Tool Card
-     * @param n is the number of <code> tokens</code> used for using the Tool Card
-     * @throws NotEnoughTokensException when the player doesn't have enough tokens to use the Tool Card
+     * Method for decrementing the number of tokens of Player
+     * when using a {@link ToolCard}.
+     * @param n is the number of tokens needed for the usage of
+     *         the {@link ToolCard}.
+     * @throws NotEnoughTokensException when the player doesn't
+     * have enough tokens to use the {@link ToolCard}.
      */
+
     public void consumeTokens(int n) throws NotEnoughTokensException{
         if(n > getTokens()){
             throw new NotEnoughTokensException("Not enough tokens to use the Toolcard");
         }
         tokens -= n;
     }
+
 }
