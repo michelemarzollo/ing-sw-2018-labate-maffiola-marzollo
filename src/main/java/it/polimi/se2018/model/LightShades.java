@@ -1,13 +1,11 @@
 package it.polimi.se2018.model;
 
-import static it.polimi.se2018.model.PublicObjectiveUtils.numberOfShades;
-
 /**
  * The Singleton for the Light Shades Objective Card
  *
  * @author michelemarzollo
  */
-public class LightShades implements PublicObjectiveCard {
+public class LightShades extends PublicObjectiveCard {
 
     /**
      * The instance of the Singleton

@@ -55,7 +55,8 @@ public class PrivateObjectiveCard implements ObjectiveCard {
         //Counts all dice with colour "colour"
         for (Cell[] row : grid) {
             for (Cell cell : row) {
-                if (cell.getDie().getColour() == colour)
+                Die die = cell.getDie();
+                if (die != null && die.getColour() == getColour())
                     count += cell.getDie().getValue();
             }
         }

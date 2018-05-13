@@ -1,14 +1,12 @@
 package it.polimi.se2018.model;
 
 
-import static it.polimi.se2018.model.PublicObjectiveUtils.allDifferentValues;
-
 /**
  * The Singleton for the Row Shade Variety Objective Card
  *
  * @author michelemarzollo
  */
-public class RowShadeVariety implements PublicObjectiveCard {
+public class RowShadeVariety extends PublicObjectiveCard {
     /**
      * The instance of the Singleton
      */
