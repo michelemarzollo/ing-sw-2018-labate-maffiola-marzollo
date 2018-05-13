@@ -1,13 +1,11 @@
 package it.polimi.se2018.model;
 
-import static it.polimi.se2018.model.PublicObjectiveUtils.numberOfColours;
-
 /**
  * The Singleton for the Color Variety Objective Card
  *
  * @author michelemarzollo
  */
-public class ColorVariety implements PublicObjectiveCard {
+public class ColorVariety extends PublicObjectiveCard {
 
     /**
      * The instance of the Singleton

@@ -11,6 +11,9 @@ import java.util.List;
  * @author michelemarzollo
  */
 public class PublicObjectiveFactory {
+
+    public static final int NUMBER_OF_CARDS = 10;
+
     /**
      * The method that creates the random instances of the PublicObjectiveCards
      *
@@ -18,6 +21,9 @@ public class PublicObjectiveFactory {
      * @return The array with the cards
      */
     public PublicObjectiveCard[] newInstances(int n) {
+
+        if(n > NUMBER_OF_CARDS)
+            throw new IllegalArgumentException();
 
         List<Integer> arrayOfNumbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
 

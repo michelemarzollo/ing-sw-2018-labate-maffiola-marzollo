@@ -1,11 +1,9 @@
 package it.polimi.se2018.model;
 
-import static it.polimi.se2018.model.PublicObjectiveUtils.allDifferentColours;
-
 /**
  * The Singleton for the Column Color Variety Objective Card
  */
-public class ColumnColorVariety implements PublicObjectiveCard {
+public class ColumnColorVariety extends PublicObjectiveCard {
 
     /**
      * The instance of the Singleton

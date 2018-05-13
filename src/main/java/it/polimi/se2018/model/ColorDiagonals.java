@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
  *
  * @author michelemarzollo
  */
-public class ColorDiagonals implements PublicObjectiveCard {
+public class ColorDiagonals extends PublicObjectiveCard {
 
     /**
      * The instance of the Singleton
@@ -67,7 +67,7 @@ public class ColorDiagonals implements PublicObjectiveCard {
             }
         }
         //Adds all the "1s" in countedCells to get the final result
-        for (int i = 0; i < grid[0].length; i++) {
+        for (int i = 0; i < grid.length; i++) {
             numOfCells += IntStream.of(countedCells[i]).sum();
         }
         return numOfCells;
