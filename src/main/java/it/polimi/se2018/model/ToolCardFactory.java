@@ -1,6 +1,9 @@
 package it.polimi.se2018.model;
 
-import java.util.Random;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * This is a factory class for {@link ToolCard}.
@@ -55,9 +58,14 @@ public class ToolCardFactory {
      *         tool cards.
      */
     public ToolCard[] getInstances(int n){
-        return (new Random()).ints(1, 13)
-                .limit(n)
+        List<Integer> ints = IntStream.range(0, 12)
                 .boxed()
+                .collect(Collectors.toList());
+
+        Collections.shuffle(ints);
+
+        return ints.stream()
+                .limit(n)
                 .map(i -> new ToolCard(names[i], colours[i]))
                 .toArray(ToolCard[]::new);
 

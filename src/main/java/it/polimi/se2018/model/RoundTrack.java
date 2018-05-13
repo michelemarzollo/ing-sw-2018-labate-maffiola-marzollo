@@ -81,16 +81,18 @@ public class RoundTrack {
      */
     public Die swap(Coordinates coordinates, Die die) {
         //Can't swap if no die is found at coordinates.
-        Die toSwap = leftovers
-                .get(coordinates.getRow())
-                .get(coordinates.getCol());
-
-        if(toSwap != null) {
-            leftovers.get(coordinates.getRow())
-                    .remove(toSwap);
-            leftovers.get(coordinates.getRow())
-                    .add(die);
+        Die toSwap;
+        try {
+            toSwap = leftovers.get(coordinates.getRow())
+                    .get(coordinates.getCol());
         }
+        catch(IndexOutOfBoundsException ex){
+            return null;
+        }
+        leftovers.get(coordinates.getRow())
+                .remove(toSwap);
+        leftovers.get(coordinates.getRow())
+                .add(die);
         return toSwap;
     }
 }

@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+
 import java.util.*;
 
 
@@ -102,7 +103,7 @@ public class TurnManager {
          * whole at least once; {@code false} otherwise.
          */
         public boolean hasTraversedAllOnce() {
-            return reverse();
+            return nextIndex > players.size();
         }
     }
 
@@ -141,8 +142,10 @@ public class TurnManager {
      * @throws NullPointerException if the list of players is null.
      */
     public TurnManager(List<Player> players) {
-        if(players == null)
+        if(players == null )
             throw new NullPointerException();
+        if(players.isEmpty())
+            throw new IllegalArgumentException();
         this.players = players;
         turnIterator = new TurnIterator();
         playersToSkip = new ArrayList<>();
@@ -160,22 +163,22 @@ public class TurnManager {
     }
 
     /**
+     * Getter for the players that have to  be skipped
+     *
+     * @return a copy of the ArrayList of players that
+     * have to be skipped
+     */
+    public List<Player> getPlayersToSkip() {
+        return new ArrayList<>(playersToSkip);
+    }
+
+    /**
      * Tells if the game has finished.
      *
      * @return {@code true} if the game is over; {@code false} otherwise.
      */
-    public boolean isGameFinished() {
-        return getRound() == ROUNDS && isLastTurn();
-    }
-
-    /**
-     * Tells if the current round has reached the last turn.
-     *
-     * @return {@code true} if the current player is the
-     * last one in the current round; {@code false} otherwise.
-     */
-    public boolean isLastTurn() {
-        return !turnIterator.hasNext();
+    public boolean isLastTurnOfGame() {
+        return getRound() == ROUNDS && !turnIterator.hasNext();
     }
 
     /**
@@ -196,15 +199,14 @@ public class TurnManager {
      *
      */
     public void setupNewRound() throws GameFinishedException {
+        if (isLastTurnOfGame()) throw new GameFinishedException();
         ++round;
         playersToSkip.clear();
         Collections.rotate(players, 1);
         turnIterator = new TurnIterator();
         //return value is ignored since there must exist at least one
         //valid turn
-        boolean updateSuccessful = updateTurn();
-        if(!updateSuccessful)
-            throw new GameFinishedException();
+        //updateTurn(); da levare probabilmente
     }
 
     /**
@@ -219,9 +221,6 @@ public class TurnManager {
      *         {@code false} otherwise.
      */
     public boolean updateTurn() {
-        if (isGameFinished())
-            return false;
-
         if (!turnIterator.hasNext())
             return false;
 
@@ -264,9 +263,9 @@ public class TurnManager {
         playersToSkip.add(player);
     }
 
-    private class GameFinishedException extends Exception {
+    public class GameFinishedException extends Exception {
     }
 
-    private class SecondTurnUnavailableException extends Exception {
+    public class SecondTurnUnavailableException extends Exception {
     }
 }
