@@ -2,8 +2,9 @@ package it.polimi.se2018.model;
 
 
 /**
- * @author giorgiolabate
  * This enum represent the colours used in the game.
+ *
+ *  @author giorgiolbt
  */
 public enum Colour {
     BLUE, GREEN, PURPLE, RED, YELLOW;

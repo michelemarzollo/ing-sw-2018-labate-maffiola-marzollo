@@ -1,12 +1,14 @@
 package it.polimi.se2018.model;
 
 /**
- * @author giorgiolbt
  * This class represents a Player
  * of the Game.
+ *
+ * @author giorgiolbt
  */
 
 public class Player {
+
     /**
      * The Player's username.
      */
@@ -21,35 +23,30 @@ public class Player {
     /**
      * Number of Player's favor tokens.
      */
-
     private int tokens;
 
     /**
      * boolean value that indicates if
      * a Player is connected.
      */
-
     private boolean connected;
 
     /**
      * Array of the 4 {@link Pattern} candidates
      * for the player's choice
      */
-
     private Pattern[] candidates;
 
     /**
      * The {@link Pattern} actually chosen by the player.
-     *
      */
     private Pattern pattern;
 
     /**
      * Array that contains the Private Objective Card/Cards of the player.
      * In MultiPlayer mode the player has only one Private
-     * Objective Card: the second element of the array will be null.
+     * Objective Card: the array will have just one element
      */
-
     private PrivateObjectiveCard[] cards;
 
     /**
@@ -65,7 +62,6 @@ public class Player {
      * Getter for the attribute name of Player.
      * @return the name of Player.
      */
-
     public String getName() {
         return name;
     }
@@ -74,7 +70,6 @@ public class Player {
      * Getter for the attribute score
      * @return the score of Player.
      */
-
     public int getScore() {
         return score;
     }
@@ -84,7 +79,6 @@ public class Player {
      * @param score is the value set for the attribute.
      *              This value is computed at the end of the Game.
      */
-
     public void setScore(int score) {
         this.score = score;
     }
@@ -93,7 +87,6 @@ public class Player {
      * Getter for the attribute tokens of Player.
      * @return the tokens of Player.
      */
-
     public int getTokens() {
         return tokens;
     }
@@ -104,7 +97,6 @@ public class Player {
      * @return {@code true} if Player result connected
      * to the Server, {@code false} otherwise.
      */
-
     public boolean isConnected() {
         return connected;
     }
@@ -116,17 +108,15 @@ public class Player {
      *                  is connected, {@code false} otherwise.
      *
      */
-
     public void setConnected(boolean connected) {
         this.connected = connected;
     }
 
 
     /**
-     * Getter for the attribute canditates.
+     * Getter for the attribute candidates.
      * @return the {@link Pattern} candidates of Player.
      */
-
     public Pattern[] getCandidates() {
         return candidates;
     }
@@ -137,7 +127,6 @@ public class Player {
      *                   among which the Player has to make
      *                   his choice.
      */
-
     public void setCandidates(Pattern[] candidates) {
         this.candidates = candidates;
     }
@@ -146,7 +135,6 @@ public class Player {
      * Getter for the attribute pattern.
      * @return the Pattern chosen by the player.
      */
-
     public Pattern getPattern() {
         return pattern;
     }
@@ -157,7 +145,6 @@ public class Player {
      *                This method also set the number of tokens of the player
      *                that depends on the {@code difficulty} of the {@link Pattern}.
      */
-
     public void setPattern(Pattern pattern) {
         this.pattern = pattern;
         this.tokens = pattern.getDifficulty();
@@ -168,7 +155,6 @@ public class Player {
      * @return the array of PrivateObjectiveCards
      * of the player.
      */
-
     public PrivateObjectiveCard[] getCards() {
         return cards;
     }
@@ -190,7 +176,6 @@ public class Player {
      * @throws NotEnoughTokensException when the player doesn't
      * have enough tokens to use the {@link ToolCard}.
      */
-
     public void consumeTokens(int n) throws NotEnoughTokensException{
         if(n > getTokens()){
             throw new NotEnoughTokensException("Not enough tokens to use the Toolcard");

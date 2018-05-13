@@ -3,21 +3,25 @@ package it.polimi.se2018.model;
 import java.util.Random;
 
 /**
- * @author giorgiolabate
  * The class represent a six-sides Die.
  * The class is immutable, so all the attributes are final.
+ *
+ * @author giorgiolbt
  */
 public class Die {
+
     /**
      * Value of the Die.
      */
     private final int value;
+
     /**
      * Random number generator: it allows to have a random {@code value}
      * when the Die is rolled or drafted from the
      * {@link DiceBag}.
      */
     private final Random random;
+
     /**
      * Colour of the Die.
      */
@@ -58,7 +62,6 @@ public class Die {
      * Getter for the value of the Die.
      * @return the value of the Die.
      */
-
     public int getValue() {
         return value;
     }
@@ -67,16 +70,14 @@ public class Die {
      * Getter for the colour of the Die.
      * @return the colour of the Die.
      */
-
     public Colour getColour() {
         return colour;
     }
 
     /**
      * Roll the Die.
-     * @return a new Die with a randomic value.
+     * @return a new Die with a random value.
      */
-
     public Die roll(){
         return new Die(random,colour);
     }
@@ -96,7 +97,6 @@ public class Die {
      * @throws DieValueException when value is 1:
      * 1 may not change to 6 due to the Game's rules.
      */
-
     public Die decrease(){
         if (value == 1) {
             throw new DieValueException("Cannot decrease the value of the drafted Die: value must be between 1 and 6");

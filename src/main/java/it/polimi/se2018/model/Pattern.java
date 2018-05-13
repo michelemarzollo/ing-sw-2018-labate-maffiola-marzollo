@@ -5,18 +5,22 @@ import it.polimi.se2018.utils.Coordinates;
 import java.util.ArrayList;
 
 /**
- * @author giorgiolabate
- * The class represent a Window Pattern Card.
+ * The class represents a Window Pattern Card.
+ *
+ * @author giorgiolbt
  */
 public class Pattern {
+
     /**
      * The name of the Pattern
      */
     private String name;
+
     /**
      * The difficulty of the Pattern
      */
     private int difficulty;
+
     /**
      * The matrix of Cell that actually represents
      * the grid of the Pattern.
@@ -60,7 +64,6 @@ public class Pattern {
      *
      * @return the difficulty of the Pattern
      */
-
     public int getDifficulty() {
         return difficulty;
     }
@@ -99,7 +102,7 @@ public class Pattern {
             throw new PlacementErrorException("The first die is not placed on an edge or corner space");
         if (!isEmpty(grid) && !isAdjacent(c))
             throw new PlacementErrorException("The die is not adjacent to a previously placed die");
-        if (!respectRestrictions(d, getOrtogAdiacent(c)))
+        if (!respectRestrictions(d, getOrthogAdjacent(c)))
             throw new PlacementErrorException("The die is placed orthogonally adjacent to a die of the same color or the same value");
         grid[c.getRow()][c.getCol()].place(d);
 
@@ -115,9 +118,9 @@ public class Pattern {
      * {@code false} otherwise.
      */
     private boolean isEmpty(Cell[][] g){
-        for(int row = 0; row <= 3; row++){
-            for(int col = 0; col <= 4; col++){
-                if(g[row][col].getDie() != null) {
+        for(Cell[] row: g){
+            for(Cell cell: row){
+                if(cell.getDie() != null) {
                     return false;
                 }
             }
@@ -135,7 +138,6 @@ public class Pattern {
      * @return {@code true} if {@code c} doesn't represent
      * an edge or corner space, {@code false} otherwise.
      */
-
     private boolean notEdgeOrCorner (Coordinates c){
         return c.getRow() >= 1 && c.getRow() <= 2 && c.getCol() >= 1 && c.getCol() <= 3;
     }
@@ -173,7 +175,6 @@ public class Pattern {
      * @return {@code true} if the Coordinates are valid according to
      * the previous description, {@code false} otherwise.
      */
-
     private boolean validCoordinates(int row, int col) {
         return row >= 0 && row <= 3 && col >= 0 && col <= 4;
     }
@@ -221,7 +222,7 @@ public class Pattern {
      * @return A list of the orthogonally adjacent dice to the {@link Cell} of
      * {@link Coordinates} {@code c}.
      */
-    private ArrayList<Die> getOrtogAdiacent(Coordinates c) {
+    private ArrayList<Die> getOrthogAdjacent(Coordinates c) {
         ArrayList<Die> result = new ArrayList<>();
 
         if (c.getRow() - 1 >= 0 && fullCell(c.getRow() - 1, c.getCol())) {
@@ -249,7 +250,6 @@ public class Pattern {
      * @return The removed Die (null if the
      * {@link Cell was empty).
      */
-
     public Die removeDie(Coordinates c) {
         return grid[c.getRow()][c.getCol()].remove();
     }

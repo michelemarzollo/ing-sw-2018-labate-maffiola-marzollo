@@ -1,14 +1,23 @@
 package it.polimi.se2018.utils;
 
 /**
- * @author giorgiolabate
  * Class that encapsulates the pair of
  * coordinates to refer to a
  * {@link it.polimi.se2018.model.Cell}
  * on a {@link it.polimi.se2018.model.Pattern}
+ *
+ * @author giorgiolbt
  */
 public class Coordinates {
+
+    /**
+     * The coordinate that describes the row
+     */
     private int row;
+
+    /**
+     * The coordinate that describes the column
+     */
     private int col;
 
     /**

@@ -5,16 +5,21 @@ package it.polimi.se2018.model;
  * Each Cell may have a value restriction, a Colour restriction
  * or no restriction for the Die to be placed. The restrictions are exclusive:
  * a Cell may have only a value or a colour restriction, not both of them.
+ *
+ * @author giorgiolbt
  */
 public class Cell {
+
     /**
      * Value restriction (0 if there isn't a restriction of this type)
      */
     private int value;
+
     /**
      * Colour restriction (null if there isn't a restriction of this type)
      */
     private Colour colour;
+
     /**
      * Die placed in the Cell: it is left to null until a {@code place}
      * call (until a die is placed).

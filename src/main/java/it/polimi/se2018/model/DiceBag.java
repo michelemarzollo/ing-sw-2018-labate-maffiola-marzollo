@@ -5,18 +5,20 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * @author giorgiolabate
  * The class represents the DiceBag. It's main role is to
  * keep trace of all the dice of the Game, but that have not
  * been drafted yet and to draft new dice at the beginning of
  * each round.
+ *
+ * @author giorgiolbt
  */
-
 public class DiceBag {
+
     /**
      * The dice in the DiceBag.
      */
     private ArrayList<Die> dice;
+
     /**
      * Random number generator: assigned to every
      * {@link Die} to allow to roll it.
@@ -28,7 +30,6 @@ public class DiceBag {
      * all the 90 dice  having already rolled them
      * (they already have a random value assigned).
      */
-
     public DiceBag() {
         dice = new ArrayList<>();
         random = new Random();
@@ -42,7 +43,6 @@ public class DiceBag {
         }
     }
 
-
     /**
      * Draft the indicated number of dice from the DiceBag
      * in a random way.
@@ -50,10 +50,11 @@ public class DiceBag {
      * @return An ArrayList containing the drafted dice
      * in the drafted order.
      */
-
     public List<Die> draft (int n){
         int diceCounter = 0;
         ArrayList<Die> draftPool = new ArrayList<>();
+        if (this.dice.size() < n)
+            throw new IllegalArgumentException ("The DiceBag is empty or doesn't contain enough elements");
         for (; diceCounter < n; diceCounter++){
             //index is a random value between 0 and dice's size -1
             //to randomly choose the die from the DiceBag.
