@@ -2,6 +2,7 @@ package it.polimi.se2018.model;
 
 import java.util.List;
 
+import it.polimi.se2018.model.events.ModelUpdate;
 import it.polimi.se2018.utils.Observable;
 
 /**
@@ -10,7 +11,7 @@ import it.polimi.se2018.utils.Observable;
  *
  * @author michelemarzollo
  */
-public class Game extends Observable {
+public class Game extends Observable<ModelUpdate> {
 
     //ATTRIBUTES
 
