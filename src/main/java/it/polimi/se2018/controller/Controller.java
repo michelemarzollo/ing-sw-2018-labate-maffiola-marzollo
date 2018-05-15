@@ -105,7 +105,7 @@ public abstract class Controller implements Observer<ViewMessage> {
         }
 
         try {
-            Die die = game.getDraftPool().draft(placeMessage.getIndex());
+            Die die = game.getDraftPool().draft(placeMessage.getDieIndex());
             currentTurn.getPlayer().getPattern().placeDie(die, placeMessage.getDestination());
             currentTurn.placeDie();
         } catch (IndexOutOfBoundsException e) {
