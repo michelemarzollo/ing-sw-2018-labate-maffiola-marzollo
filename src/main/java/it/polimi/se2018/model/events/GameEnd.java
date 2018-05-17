@@ -3,6 +3,7 @@ package it.polimi.se2018.model.events;
 
 import it.polimi.se2018.model.Die;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,19 +23,18 @@ public class GameEnd extends ModelUpdate {
     /**
      * The final {@link it.polimi.se2018.model.RoundTrack} of the game.
      */
-    private Die[][] roundTrack;
+    private List<List<Die>> roundTrack;
 
     /**
      * The constructor of the class.
      *
-     * @param updateType The kind of message it is.
      * @param scoreBoard The map that contains the name of the player and the corresponding final score,
      *                   ordered by score.
      * @param roundTrack The final {@link it.polimi.se2018.model.RoundTrack} of the game.
      */
-    public GameEnd(String updateType, Map<String, Integer> scoreBoard, Die[][] roundTrack) {
+    public GameEnd(Map<String, Integer> scoreBoard, List<List<Die>> roundTrack) {
 
-        super(updateType);
+        super(ModelEvent.GAME_END);
         this.scoreBoard = scoreBoard;
         this.roundTrack = roundTrack;
 
@@ -54,7 +54,7 @@ public class GameEnd extends ModelUpdate {
      *
      * @return {@code roundTrack}
      */
-    public Die[][] getRoundTrack() {
+    public List<List<Die>>   getRoundTrack() {
         return roundTrack;
     }
 

@@ -16,11 +16,10 @@ public class NextTurn extends ModelUpdate {
     /**
      * The constructor of the class.
      *
-     * @param updateType The kind of message it is.
      * @param nextPlayer The name of the next {@link it.polimi.se2018.model.Player}.
      */
-    public NextTurn(String updateType, String nextPlayer) {
-        super(updateType);
+    public NextTurn(String nextPlayer) {
+        super(ModelEvent.NEXT_TURN);
         this.nextPlayer = nextPlayer;
     }
 

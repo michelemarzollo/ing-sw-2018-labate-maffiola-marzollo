@@ -45,7 +45,6 @@ public class MoveUpdate extends ModelUpdate {
      * The constructor of the class. All parameters must be initialized, so passed as
      * parameters.
      *
-     * @param updateType      The kind of message it is.
      * @param player          The name of the player who made the move.
      * @param tokens          The updated number of tokens.
      * @param grid            The updated grid.
@@ -53,10 +52,10 @@ public class MoveUpdate extends ModelUpdate {
      * @param roundTrack      The current RoundTrack.
      * @param forcedSelection The index of the die in {@code draftPool} that must be used by the player.
      */
-    public MoveUpdate(String updateType, String player, int tokens, Cell[][] grid,
+    public MoveUpdate(String player, int tokens, Cell[][] grid,
                       Die[] draftPool, Die[][] roundTrack, int forcedSelection) {
 
-        super(updateType);
+        super(ModelEvent.MOVE_UPDATE);
         this.player = player;
         this.tokens = tokens;
         this.grid = grid;

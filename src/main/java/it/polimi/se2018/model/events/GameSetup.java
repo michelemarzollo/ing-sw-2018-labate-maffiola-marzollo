@@ -8,7 +8,7 @@ import it.polimi.se2018.model.Pattern;
  *
  * @author michelemarzollo
  */
-public class GameSetUp extends ModelUpdate {
+public class GameSetup extends ModelUpdate {
 
     /**
      * The array of players that will participate to the game.
@@ -42,16 +42,15 @@ public class GameSetUp extends ModelUpdate {
     /**
      * The constructor of the class.
      *
-     * @param updateType       The kind of message it is.
      * @param players          The array of players that will participate to the game.
      * @param toolCards        The array of private objective cards.
      * @param publicObjectives The array of the public objective cards that will be used in the game.
      * @param candidates       The array of quartets of patterns.
      */
-    public GameSetUp(String updateType, String[] players, String[] toolCards,
+    public GameSetup(String[] players, String[] toolCards,
                      String[] publicObjectives, Pattern[][] candidates) {
 
-        super(updateType);
+        super(ModelEvent.GAME_SETUP);
         this.players = players;
         this.toolCards = toolCards;
         this.publicObjectives = publicObjectives;

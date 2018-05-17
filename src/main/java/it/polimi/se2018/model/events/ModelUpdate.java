@@ -13,24 +13,24 @@ public class ModelUpdate {
     /**
      * The type of message it is
      */
-    private String updateType;
+    private ModelEvent eventType;
 
     /**
      * The constructor of the class.
      *
-     * @param updateType The kind of message it is.
+     * @param eventType The kind of message it is.
      */
-    public ModelUpdate(String updateType) {
-        this.updateType = updateType;
+    public ModelUpdate(ModelEvent eventType) {
+        this.eventType = eventType;
     }
 
     /**
-     * The getter of the attribute {@code updateType}.
+     * The getter of the attribute {@code eventType}.
      *
-     * @return The String {@code updateType}.
+     * @return The String {@code eventType}.
      */
-    public String getUpdateType() {
-        return updateType;
+    public ModelEvent getEventType() {
+        return eventType;
     }
 
 }

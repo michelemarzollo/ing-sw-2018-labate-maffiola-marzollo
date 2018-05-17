@@ -8,7 +8,7 @@ import it.polimi.se2018.model.Die;
  *
  * @author michelemarzollo
  */
-public class RoundSetUp extends ModelUpdate {
+public class RoundSetup extends ModelUpdate {
 
     /**
      * The updated roundTrack.
@@ -28,14 +28,13 @@ public class RoundSetUp extends ModelUpdate {
     /**
      * The constructor of the class.
      *
-     * @param updateType  The kind of message it is.
      * @param roundTrack  The updated roundTrack.
      * @param draftPool   The new draftPool.
      * @param roundNumber The number of the actual round.
      */
-    public RoundSetUp(String updateType, Die[][] roundTrack, Die[] draftPool, int roundNumber) {
+    public RoundSetup(Die[][] roundTrack, Die[] draftPool, int roundNumber) {
 
-        super(updateType);
+        super(ModelEvent.ROUND_SETUP);
         this.roundTrack = roundTrack;
         this.draftPool = draftPool;
         this.roundNumber = roundNumber;

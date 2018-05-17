@@ -24,13 +24,12 @@ public class PatternSelection extends ModelUpdate {
     /**
      * The constructor of the class.
      *
-     * @param updateType The kind of message it is.
      * @param player     The name of player that has just selected the pattern.
      * @param pattern    The pattern selected.
      */
-    public PatternSelection(String updateType, String player, Pattern pattern) {
+    public PatternSelection(String player, Pattern pattern) {
 
-        super(updateType);
+        super(ModelEvent.PATTERN_SELECTION);
         this.player = player;
         this.pattern = pattern;
 
