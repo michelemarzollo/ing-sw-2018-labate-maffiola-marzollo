@@ -1,8 +1,9 @@
 package it.polimi.se2018.model;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
-import it.polimi.se2018.model.events.ModelUpdate;
+import it.polimi.se2018.model.events.*;
 import it.polimi.se2018.utils.Observable;
 
 /**
@@ -13,17 +14,25 @@ import it.polimi.se2018.utils.Observable;
  */
 public class Game extends Observable<ModelUpdate> {
 
-    //ATTRIBUTES
-
     /**
      * The DraftPool, which contains the dice that can be drafted by players
      */
     private DraftPool draftPool;
 
     /**
+     * Flag to indicate if the game has started.
+     */
+    private boolean started = false;
+
+    /**
+     * Flag to indicate if the game is ready to start.
+     */
+    private boolean setupComplete = false;
+
+    /**
      * The list of players
      */
-    private List<Player> players;
+    private List<Player> players = new ArrayList<>();
 
     /**
      * The container of the dice of the game that weren't already drafted
@@ -53,10 +62,8 @@ public class Game extends Observable<ModelUpdate> {
     /**
      * The array containing the players in the order of the final ranking
      */
-    private Player[] scoreBoard;
+    private List<Player> scoreBoard;
 
-
-    //GETTERS AND SETTERS
 
     /**
      * The getter of the DraftPool
@@ -77,12 +84,21 @@ public class Game extends Observable<ModelUpdate> {
     }
 
     /**
-     * The setter for the list of players
+     * Adds the specified player to the game.
      *
-     * @param players The list
+     * @param player The new player.
      */
-    public void setPlayers(List<Player> players) {
-        this.players = players;
+    public void setPlayers(Player player) {
+        players.add(player);
+    }
+
+    /**
+     * Removes the specified player from the game.
+     *
+     * @param player The player to remove.
+     */
+    public void removePlayer(Player player) {
+        players.remove(player);
     }
 
     /**
@@ -153,28 +169,61 @@ public class Game extends Observable<ModelUpdate> {
      *
      * @return The final ranking as an array of players
      */
-    public Player[] getScoreBoard() {
+    public List<Player> getScoreBoard() {
         return scoreBoard;
     }
 
     /**
-     * The setter for {@code scoreBoard}
+     * Setter for the score board.
      *
-     * @param scoreBoard The final ranking as an array of players
+     * @param scoreBoard The final ranking as an ordered array of players.
      */
-    public void setScoreBoard(Player[] scoreBoard) {
+    public void setScoreBoard(List<Player> scoreBoard) {
         this.scoreBoard = scoreBoard;
     }
 
-    //OTHER METHODS
-
-    public void start() {
-
-        draftPool = new DraftPool();
-        diceBag = new DiceBag();
-        roundTrack = new RoundTrack(10);    //use constant instead of number after davide's commit
-        turnManager = new TurnManager(players);
-
+    /**
+     * Updates the game status so it's ready to start.
+     */
+    public void teminateSetup() {
+        setupComplete = true;
     }
+
+    /**
+     * Starts the game.
+     * <p>All the components the game requires during its execution
+     * are instantiated and game status updated to started.</p>
+     */
+    public void start() {
+        if (setupComplete && !started) {
+
+            draftPool = new DraftPool();
+            diceBag = new DiceBag();
+            roundTrack = new RoundTrack(TurnManager.ROUNDS);
+            turnManager = new TurnManager(players);
+
+            started = true;
+        }
+    }
+
+    /**
+     * Tells if the game is correctly set up and ready to start.
+     *
+     * @return {@code true} if the game is ready to start;
+     * {@code false} otherwise.
+     */
+    public boolean isSetupComplete() {
+        return setupComplete;
+    }
+
+    /**
+     * Tells if the game has been started.
+     *
+     * @return {@code true} if the game has started; {@code false} otherwise.
+     */
+    public boolean isStarted() {
+        return started;
+    }
+
 
 }

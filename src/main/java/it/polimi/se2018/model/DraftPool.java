@@ -32,6 +32,15 @@ public class DraftPool {
     }
 
     /**
+     * Returns the current amount of dice in the draft pool.
+     *
+     * @return The number of dice currently in the draft pool.
+     */
+    public int getAmount() {
+        return dice.size();
+    }
+
+    /**
      * The getter for {@code dice}
      *
      * @return The list {@code dice}
@@ -70,13 +79,14 @@ public class DraftPool {
     /**
      * The method to draft a die form the DraftPool
      *
-     * @param index The position of the dice to draft in the list
+     * @param index The position of the die to draft in the list
      * @return The die in position {@code index}
      */
-    public Die draft(int index) {
-        //The temporary value that allows to remove the dice
-        Die d = dice.get(index);
+    public void draft(int index) {
         dice.remove(index);
-        return d;
+    }
+
+    public Die select(int index) {
+        return dice.get(index);
     }
 }
