@@ -1,7 +1,6 @@
 package it.polimi.se2018.model;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import it.polimi.se2018.model.events.*;
 import it.polimi.se2018.utils.Observable;
@@ -88,7 +87,7 @@ public class Game extends Observable<ModelUpdate> {
      *
      * @param player The new player.
      */
-    public void setPlayers(Player player) {
+    public void addPlayer(Player player) {
         players.add(player);
     }
 
@@ -185,7 +184,7 @@ public class Game extends Observable<ModelUpdate> {
     /**
      * Updates the game status so it's ready to start.
      */
-    public void teminateSetup() {
+    public void terminateSetup() {
         setupComplete = true;
     }
 
