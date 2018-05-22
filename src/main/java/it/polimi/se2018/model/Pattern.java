@@ -177,13 +177,13 @@ public class Pattern {
         if (isEmpty(pattern.grid) && pattern.notEdgeOrCorner(c))
             throw new PlacementErrorException("The first die is not placed on an edge or corner space");
         if(restriction.equals(Restriction.ONLY_COLOUR)){
-           placeDieOnlyColour(d, c, pattern);
+           pattern.placeDieOnlyColour(d, c);
         }
         if(restriction.equals(Restriction.ONLY_VALUE)){
-            placeDieOnlyValue(d, c, pattern);
+            pattern.placeDieOnlyValue(d, c);
         }
         if(restriction.equals(Restriction.NOT_ADJACENT)){
-            placeDieNotAdjacent(d, c, pattern);
+            pattern.placeDieNotAdjacent(d, c);
         }
         return pattern; //never executed
     }
@@ -200,8 +200,6 @@ public class Pattern {
      * @param c The Coordinates that indicates
      *          the placement position on the
      *          Pattern's grid.
-     * @param pattern The pattern on which the
-     *                placement has to be done.
      * @return The pattern passed as a parameter, but with {@code d}
      * placed at the correct position {@code c}.
      * @throws PlacementErrorException if the placement doesn't respect
@@ -210,13 +208,13 @@ public class Pattern {
      *                                 It also propagates the exception if it is thrown from
      *                                 {@link Cell}'s {@code place} method.
      */
-    private Pattern placeDieOnlyColour(Die d, Coordinates c, Pattern pattern) throws PlacementErrorException {
-        if (!pattern.respectColourRestrictions(d, getOrthogAdjacent(c)))
+    private Pattern placeDieOnlyColour(Die d, Coordinates c) throws PlacementErrorException {
+        if (!this.respectColourRestrictions(d, getOrthogAdjacent(c)))
             throw new PlacementErrorException("The die is placed orthogonally adjacent to a die of the same colour");
-        if (!pattern.isEmpty(grid) && !pattern.isAdjacent(c))
+        if (!this.isEmpty(grid) && !this.isAdjacent(c))
             throw new PlacementErrorException("The die is not adjacent to a previously placed die");
-        pattern.grid[c.getRow()][c.getCol()].place(d);
-        return pattern;
+        this.grid[c.getRow()][c.getCol()].place(d);
+        return this;
     }
 
     /**
@@ -231,8 +229,6 @@ public class Pattern {
      * @param c The Coordinates that indicates
      *          the placement position on the
      *          Pattern's grid.
-     * @param pattern The pattern on which the
-     *                placement has to be done.
      * @return The pattern passed as a parameter, but with {@code d}
      * placed at the correct position {@code c}.
      * @throws PlacementErrorException if the placement doesn't respect
@@ -241,13 +237,13 @@ public class Pattern {
      *                                 It also propagates the exception if it is thrown from
      *                                 {@link Cell}'s {@code place} method.
      */
-    private Pattern placeDieOnlyValue(Die d, Coordinates c, Pattern pattern) throws PlacementErrorException{
-        if (!pattern.respectValueRestrictions(d, getOrthogAdjacent(c)))
+    private Pattern placeDieOnlyValue(Die d, Coordinates c) throws PlacementErrorException{
+        if (!this.respectValueRestrictions(d, getOrthogAdjacent(c)))
             throw new PlacementErrorException("The die is placed orthogonally adjacent to a die of the same value");
-        if (!pattern.isEmpty(grid) && !pattern.isAdjacent(c))
+        if (!this.isEmpty(grid) && !this.isAdjacent(c))
             throw new PlacementErrorException("The die is not adjacent to a previously placed die");
-        pattern.grid[c.getRow()][c.getCol()].place(d);
-        return pattern;
+        this.grid[c.getRow()][c.getCol()].place(d);
+        return this;
     }
 
     /**
@@ -262,8 +258,6 @@ public class Pattern {
      * @param c The Coordinates that indicates
      *          the placement position on the
      *          Pattern's grid.
-     * @param pattern The pattern on which the
-     *                placement has to be done.
      * @return The pattern passed as a parameter, but with {@code d}
      * placed at the correct position {@code c}.
      * @throws PlacementErrorException if the die would be placed adjacent to a previously
@@ -271,11 +265,11 @@ public class Pattern {
      *                                 It also propagates the exception if it is thrown from
      *                                 {@link Cell}'s {@code place} method.
      */
-    private Pattern placeDieNotAdjacent (Die d, Coordinates c, Pattern pattern) throws PlacementErrorException{
-        if (!pattern.isEmpty(grid) && pattern.isAdjacent(c))
+    private Pattern placeDieNotAdjacent (Die d, Coordinates c) throws PlacementErrorException{
+        if (!this.isEmpty(grid) && this.isAdjacent(c))
             throw new PlacementErrorException("The die is adjacent to a previously placed die");
-        pattern.grid[c.getRow()][c.getCol()].place(d);
-        return pattern;
+        this.grid[c.getRow()][c.getCol()].place(d);
+        return this;
     }
 
     /**
@@ -530,14 +524,14 @@ public class Pattern {
      * @return the number of empty spaces in the Pattern's
      * grid.
      */
-    public int emptySpace(){
-        int spaces = 0;
+    public int emptyCells(){
+        int cells = 0;
         for (int i = 0; i < 4; i++){
             for(int j = 0; j < 5; j++){
-                if(getGrid()[i][j].getDie() == null) spaces++;
+                if(getGrid()[i][j].getDie() == null) cells++;
             }
         }
-        return spaces;
+        return cells;
     }
 
 }
