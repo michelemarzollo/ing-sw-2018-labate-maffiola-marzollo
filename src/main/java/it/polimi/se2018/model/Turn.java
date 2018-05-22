@@ -26,6 +26,22 @@ public class Turn {
     private boolean alreadyUsedToolCard;
 
     /**
+     * The index of the die that the player is forced to select.
+     */
+    private int forcedSelectionIndex;
+
+    /**
+     * The index of the die that will be consumed to activate a tool
+     * card in single player mode.
+     */
+    private int sacrificeIndex;
+
+    /**
+     * The tool card set to active.
+     */
+    private ToolCard selectedToolCard;
+
+    /**
      * Creates a Turn object for the given player.
      * <p>The newly created turn has, by default, {@code hasAlreadyPlacedDie()}
      * and {@code hasAlreadyUsedToolCard()} returning {@code false}, since
@@ -39,6 +55,9 @@ public class Turn {
         this.secondTurnAvailable = secondTurnAvailable;
         this.alreadyPlacedDie = false;
         this.alreadyUsedToolCard = false;
+        this.forcedSelectionIndex = -1;
+        this.sacrificeIndex = -1;
+        this.selectedToolCard = null;
     }
 
 
@@ -91,5 +110,63 @@ public class Turn {
      */
     public void useToolCard() {
         this.alreadyUsedToolCard = true;
+    }
+
+    /**
+     * Getter for the die in the draft pool that has to be picked
+     * this turn.
+     * @return The index of the die in the draft pool to be picked
+     * this turn.
+     */
+    public int getForcedSelectionIndex() {
+        return forcedSelectionIndex;
+    }
+
+    /**
+     * Setter for the die in the draft pool that has to be picked
+     * this turn.
+     *
+     * @param forcedSelectionIndex The index of the die in the draft
+     *                            pool to be picked this turn.
+     */
+    public void setForcedSelectionIndex(int forcedSelectionIndex) {
+        this.forcedSelectionIndex = forcedSelectionIndex;
+    }
+
+    /**
+     * Getter for the index of the sacrifice die used to activate tool cards.
+     * @return The index of the sacrifice die used to activate tool cards.
+     */
+    public int getSacrificeIndex() {
+        return sacrificeIndex;
+    }
+
+    /**
+     * Setter for the index of the sacrifice die used to activate tool cards.
+     * @param sacrificeIndex The index of the sacrifice die used to activate
+     *                      tool cards.
+     */
+    public void setSacrificeIndex(int sacrificeIndex) {
+        this.sacrificeIndex = sacrificeIndex;
+    }
+
+    /**
+     * Getter for the currently active tool card.
+     * <p>If a tool card is set active, it means that only that tool card can
+     * be used.</p>
+     * @return The currently active tool card.
+     */
+    public ToolCard getSelectedToolCard() {
+        return selectedToolCard;
+    }
+
+    /**
+     * Setter for the currently active tool card.
+     * <p>If a tool card is set active, it means that only that tool card can
+     * be used.</p>
+     * @param selectedToolCard The tool card to be set active.
+     */
+    public void setSelectedToolCard(ToolCard selectedToolCard) {
+        this.selectedToolCard = selectedToolCard;
     }
 }

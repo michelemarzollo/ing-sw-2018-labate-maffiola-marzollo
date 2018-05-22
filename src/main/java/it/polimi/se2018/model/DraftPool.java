@@ -17,18 +17,11 @@ public class DraftPool {
     private List<Die> dice;
 
     /**
-     * The index of the die in {@code dice} that must be selected because a ToolCard
-     * is being used.
-     */
-    private int forcedSelection;
-
-    /**
      * The constructor of the class. When the class is built there is no forced selection:
      * the attribute <code>forcedSelection</code> is set to a non valid value -1.
      */
     public DraftPool() {
         this.dice = null;
-        this.forcedSelection = -1;
     }
 
     /**
@@ -56,24 +49,6 @@ public class DraftPool {
      */
     public void setDice(List<Die> dice) {
         this.dice = dice;
-    }
-
-    /**
-     * The getter for forcedSelection
-     *
-     * @return the value of {@code forcedSelection}.
-     */
-    public int getForcedSelection() {
-        return forcedSelection;
-    }
-
-    /**
-     * The setter for forcedSelection.
-     *
-     * @param forcedSelection the index of the array that denotes the die that is forced to be used.
-     */
-    public void setForcedSelection(int forcedSelection) {
-        this.forcedSelection = forcedSelection;
     }
 
     /**
