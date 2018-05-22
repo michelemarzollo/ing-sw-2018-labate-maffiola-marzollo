@@ -18,7 +18,7 @@ public class ToolCardFactoryTest {
     @Test
     public void testGetInstances() {
         ToolCardFactory factory = new ToolCardFactory();
-        ToolCard[] result = factory.getInstances(5);
+        ToolCard[] result = factory.newInstances(5);
         assertEquals(5, result.length);
         assertTrue(noDups(result, 5));
         }
