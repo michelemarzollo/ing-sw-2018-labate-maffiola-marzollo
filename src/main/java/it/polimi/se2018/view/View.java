@@ -10,7 +10,8 @@ public abstract class View {
         this.playerName = playerName;
     }
 
-    public abstract void showGame();
+    public abstract void showMultiPlayerGame();
+    public abstract void showSinglePlayerGame();
     public abstract void showError(String error);
     public abstract void showPatternSelection();
     public abstract void showPrivateObjectiveSelection();

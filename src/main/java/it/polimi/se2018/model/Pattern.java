@@ -170,7 +170,7 @@ public class Pattern {
      *                                 It also propagates the exception if it is thrown from
      *                                 {@link Cell}'s {@code place} method.
      */
-    private Pattern placeDie(Die d, Coordinates c, Restriction restriction) throws PlacementErrorException {
+    public Pattern placeDie(Die d, Coordinates c, Restriction restriction) throws PlacementErrorException {
         Pattern pattern = new Pattern(this);
         if(d == null)
             throw new PlacementErrorException("The die to be placed does not exists");
