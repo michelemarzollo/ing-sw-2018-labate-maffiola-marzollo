@@ -40,7 +40,7 @@ public class TestPlayer {
     @Test
     public void testPatternCandidates() {
 
-        Pattern[] p = new Pattern[3];
+        Pattern[] p = new Pattern[2];
 
         //instantiation of two different patterns
 
@@ -74,9 +74,8 @@ public class TestPlayer {
         grid1[3][1] = new Cell(3);
         grid1[3][4] = new Cell(Colour.PURPLE);
 
-        p[0] = new Pattern("Pippo", 4, null);
-        p[1] = new Pattern("Pluto", 5, grid);
-        p[2] = new Pattern("Paperino", 3, grid1);
+        p[0] = new Pattern("Pluto", 5, grid);
+        p[1] = new Pattern("Pippo", 3, grid1);
 
         //tests the methods setCandidates and getCandidates
 
@@ -85,8 +84,7 @@ public class TestPlayer {
         //setting of candidates
         player.setCandidates(p);
         assertTrue(p[0].equals(player.getCandidates()[0]) &&
-                p[1].equals(player.getCandidates()[1]) &&
-                p[2].getDifficulty() == player.getCandidates()[2].getDifficulty());
+                p[1].equals(player.getCandidates()[1]));
 
     }
 
@@ -136,9 +134,16 @@ public class TestPlayer {
     @Test
     public void testSetPattern() {
 
-        Pattern p = new Pattern("SunCatcher", 4, null);
+        Cell[][] grid = new Cell[4][5];
+
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                grid[i][j] = new Cell();
+            }
+        }
+
+        Pattern p = new Pattern("SunCatcher", 4, grid);
         player.setPattern(p);
-        assertEquals(4, player.getTokens());
         assertEquals("SunCatcher", player.getPattern().getName());
     }
 
@@ -147,16 +152,15 @@ public class TestPlayer {
      * are more the the ones available. It must catch an exception.
      */
     @Test
-    public void testConsumeTokensNegative() {
+    public void testConsumeTokensFail() {
 
-        Pattern p = new Pattern("SunCatcher", 4, null);
-        player.setPattern(p);
+        player.setTokens(4);
         try {
             player.consumeTokens(5);
             fail();
         } catch (NotEnoughTokensException e) {
             //The tokens, if not enough, mustn't be used
-            assertTrue(player.getTokens() == 4);
+            assertEquals(4, player.getTokens());
         }
     }
 
@@ -165,13 +169,12 @@ public class TestPlayer {
      * are less the the ones available. It must catch decrease the attribute {@code tokens}.
      */
     @Test
-    public void testConsumeTokensPositive() {
+    public void testConsumeTokensSuccessful() {
 
-        Pattern p = new Pattern("SunCatcher", 4, null);
-        player.setPattern(p);
+        player.setTokens(4);
         try {
             player.consumeTokens(3);
-            assertTrue(player.getTokens() == 1);
+            assertEquals(1, player.getTokens());
         } catch (NotEnoughTokensException e) {
             fail();
         }
@@ -184,11 +187,10 @@ public class TestPlayer {
     @Test
     public void testConsumeTokensLimit() {
 
-        Pattern p = new Pattern("SunCatcher", 4, null);
-        player.setPattern(p);
+        player.setTokens(4);
         try {
             player.consumeTokens(0);
-            assertTrue(player.getTokens() == 4);
+            assertEquals(4, player.getTokens());
         } catch (NotEnoughTokensException e) {
             fail();
         }

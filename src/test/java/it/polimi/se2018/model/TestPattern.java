@@ -91,7 +91,8 @@ public class TestPattern {
 
         for (int i = 0; i < grid.length && check; i++) {
             for (int j = 0; j < grid[i].length; j++) {
-                if (grid[i][j] != p.getGrid()[i][j]) {
+                if (grid[i][j].getColour() != p.getGrid()[i][j].getColour() ||
+                        grid[i][j].getValue() != p.getGrid()[i][j].getValue()) {
                     check = false;
                 }
             }
@@ -136,7 +137,7 @@ public class TestPattern {
         Coordinates c = new Coordinates(0, 2);
 
         try {
-            p.placeDie(d1, c);
+            p = p.placeDie(d1, c);
             Die d2 = p.getGrid()[c.getRow()][c.getCol()].getDie();
             //Checks that the die placed is the correct one
             assertEquals(d1, d2);
@@ -156,7 +157,7 @@ public class TestPattern {
      * <p>Checks that the exception thrown comes from the correct branch</p>
      */
     @Test
-    public void testPlaceDieNegativeAdjacency() {
+    public void testPlaceDieAdjacentFail() {
 
         Pattern p = new Pattern("SunCatcher", 3, grid);
 
@@ -164,14 +165,14 @@ public class TestPattern {
         Die d2 = new Die(4, new Random(), Colour.RED);
 
         try {
-            p.placeDie(d1, new Coordinates(3, 2));
+            p = p.placeDie(d1, new Coordinates(3, 2));
         } catch (PlacementErrorException e) {
             fail();
         }
 
         // Tries to put the new die in a non adjacent cell
         try {
-            p.placeDie(d2, new Coordinates(1, 0));
+            p = p.placeDie(d2, new Coordinates(1, 0));
             fail();
         } catch (PlacementErrorException e) {
             assertEquals("The die is not adjacent to a previously placed die", e.getMessage());
@@ -186,7 +187,7 @@ public class TestPattern {
      * <p>Also checks that the placed die is the correct one</p>
      */
     @Test
-    public void testPlaceDiePositiveAdjacency() {
+    public void testPlaceDieAdjacenctSuccessful() {
 
         Pattern p = new Pattern("SunCatcher", 3, grid);
 
@@ -197,14 +198,14 @@ public class TestPattern {
         Coordinates c2 = new Coordinates(2, 1);
 
         try {
-            p.placeDie(d1, c1);
+            p = p.placeDie(d1, c1);
         } catch (PlacementErrorException e) {
             fail();
         }
 
         // Tries to put the new die in an adjacent cell
         try {
-            p.placeDie(d2, c2);
+            p = p.placeDie(d2, c2);
 
             Die d3 = p.getGrid()[c2.getRow()][c2.getCol()].getDie();
             //Checks that the die placed is the correct one
@@ -222,7 +223,7 @@ public class TestPattern {
      * <p>Checks that the exception thrown comes from the correct branch</p>
      */
     @Test
-    public void testPlaceDieNegativeColourRestriction() {
+    public void testPlaceDieColourRestrictionFail() {
 
         Pattern p = new Pattern("SunCatcher", 3, grid);
 
@@ -230,17 +231,20 @@ public class TestPattern {
         Die d2 = new Die(4, new Random(), Colour.GREEN);
 
         try {
-            p.placeDie(d1, new Coordinates(2, 0));
+            p = p.placeDie(d1, new Coordinates(2, 0));
         } catch (PlacementErrorException e) {
             fail();
         }
 
         // Tries to put a die of the same colour to the already placed one
         try {
-            p.placeDie(d2, new Coordinates(2, 1));
+            p = p.placeDie(d2, new Coordinates(2, 1));
             fail();
         } catch (PlacementErrorException e) {
-            assertEquals("The die is placed orthogonally adjacent to a die of the same color or the same value", e.getMessage());
+            assertEquals(
+                    "The die is placed orthogonally adjacent to a " +
+                    "die of the same color or the same value",
+                    e.getMessage());
         }
     }
 
@@ -251,7 +255,7 @@ public class TestPattern {
      * value restriction and with the second die in the border</p>
      */
     @Test
-    public void testPlaceDiePositiveColourRestriction() {
+    public void testPlaceDieColourRestrictionSuccessful() {
 
         Pattern p = new Pattern("SunCatcher", 3, grid);
 
@@ -261,7 +265,7 @@ public class TestPattern {
         Coordinates c = new Coordinates(0, 3);
 
         try {
-            p.placeDie(d1, c);
+            p = p.placeDie(d1, c);
         } catch (PlacementErrorException e) {
             fail();
         }
@@ -269,7 +273,7 @@ public class TestPattern {
         // Tries to put the new die in an orthogonally adjacent cell
         try {
 
-            p.placeDie(d2, new Coordinates(0, 2));
+            p = p.placeDie(d2, new Coordinates(0, 2));
 
             Die d3 = p.getGrid()[0][2].getDie();
             //Checks that the die placed is the correct one
@@ -288,7 +292,7 @@ public class TestPattern {
      * <p>Checks that the exception thrown comes from the correct branch</p>
      */
     @Test
-    public void testPlaceDieNegativeValueRestriction() {
+    public void testPlaceDieValueRestrictionFail() {
 
         Pattern p = new Pattern("SunCatcher", 3, grid);
 
@@ -299,14 +303,14 @@ public class TestPattern {
         Coordinates c2 = new Coordinates(2, 4);
 
         try {
-            p.placeDie(d1, c1);
+            p = p.placeDie(d1, c1);
         } catch (PlacementErrorException e) {
             fail();
         }
 
         // Tries to put a die of the same colour to the already placed one
         try {
-            p.placeDie(d2, c2);
+            p = p.placeDie(d2, c2);
             fail();
         } catch (PlacementErrorException e) {
             assertEquals("The die is placed orthogonally adjacent to a die of the same color or the same value", e.getMessage());
@@ -320,7 +324,7 @@ public class TestPattern {
      * value restriction and with the second die in the border</p>
      */
     @Test
-    public void testPlaceDiePositiveValueRestriction() {
+    public void testPlaceDieValueRestrictionSuccessful() {
 
         Pattern p = new Pattern("SunCatcher", 3, grid);
 
@@ -331,7 +335,7 @@ public class TestPattern {
         Coordinates c2 = new Coordinates(0, 1);
 
         try {
-            p.placeDie(d1, c1);
+            p = p.placeDie(d1, c1);
         } catch (PlacementErrorException e) {
             fail();
         }
@@ -339,7 +343,7 @@ public class TestPattern {
         // Tries to put the new die in an orthogonally adjacent cell
         try {
 
-            p.placeDie(d2, c2);
+            p = p.placeDie(d2, c2);
 
             Die d3 = p.getGrid()[c2.getRow()][c2.getCol()].getDie();
             //Checks that the die placed is the correct one
@@ -357,32 +361,32 @@ public class TestPattern {
      * the cell must remain empty and the method return must be the same
      * of the one put on it.
      */
+//    @Test
+//    public void testRemoveDie() {
+//
+//        Pattern p = new Pattern("SunCatcher", 3, grid);
+//
+//        Die d1 = new Die(3, new Random(), Colour.GREEN);
+//
+//        Coordinates c = new Coordinates(3, 0);
+//
+//        //Placement of a die respecting pattern and cell restrictions
+//        try {
+//            p.placeDie(d1, c);
+//        } catch (PlacementErrorException e) {
+//            fail();
+//        }
+//        //removal of the die
+//        Die d2 = p.removeDie(c);
+//        //Check that the removed die is the correct one
+//        assertEquals(d1, d2);
+//        //Check that the cell is now empty
+//        assertNull(p.getGrid()[c.getRow()][c.getCol()].getDie());
+//
+//    }
+
     @Test
-    public void testRemoveDie() {
-
-        Pattern p = new Pattern("SunCatcher", 3, grid);
-
-        Die d1 = new Die(3, new Random(), Colour.GREEN);
-
-        Coordinates c = new Coordinates(3, 0);
-
-        //Placement of a die respecting pattern and cell restrictions
-        try {
-            p.placeDie(d1, c);
-        } catch (PlacementErrorException e) {
-            fail();
-        }
-        //removal of the die
-        Die d2 = p.removeDie(c);
-        //Check that the removed die is the correct one
-        assertEquals(d1, d2);
-        //Check that the cell is now empty
-        assertNull(p.getGrid()[c.getRow()][c.getCol()].getDie());
-
-    }
-
-    @Test
-    public void testOrthogAdjacent() {
+    public void testOrthogonalAdjacent() {
 
         Pattern p = new Pattern("SunCatcher", 3, grid);
 
@@ -399,11 +403,11 @@ public class TestPattern {
         Coordinates c5 = new Coordinates(1, 1);
 
         try {
-            p.placeDie(d1, c1);
-            p.placeDie(d2, c2);
-            p.placeDie(d3, c3);
-            p.placeDie(d4, c4);
-            p.placeDie(d5, c5);
+            p = p.placeDie(d1, c1);
+            p = p.placeDie(d2, c2);
+            p = p.placeDie(d3, c3);
+            p = p.placeDie(d4, c4);
+            p = p.placeDie(d5, c5);
         } catch (PlacementErrorException e) {
             fail();
         }
