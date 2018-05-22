@@ -57,12 +57,16 @@ public class Cell {
         this.colour = colour;
     }
 
+    public Cell(Cell cell){
+        this.colour = cell.colour;
+        this.value = cell.value;
+        this.die = cell.die;
+    }
     /**
      * Getter for the value restriction on the Cell.
      * @return The value of the restriction
      * (0 if the Cell has no value restriction).
      */
-
     public int getValue() {
         return value;
     }
