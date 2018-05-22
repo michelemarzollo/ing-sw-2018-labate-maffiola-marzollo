@@ -37,11 +37,10 @@ public class ViewMessage {
 
     /**
      * Constructor of the class.
-     * @param view The view reference.
-     * @param action The action that the Player wants
-     *               to perform.
-     * @param playerName The name of the player that
-     *                   is performing the action.
+     *
+     * @param view       the view reference.
+     * @param action     the action that the Player wants to perform.
+     * @param playerName the name of the player that is performing the action.
      */
     public ViewMessage(View view, String action, String playerName) {
         this.view = view;
@@ -52,6 +51,7 @@ public class ViewMessage {
 
     /**
      * Getter for the {@link View} reference.
+     *
      * @return the reference to the {@link View}.
      */
     public View getView() {
@@ -61,6 +61,7 @@ public class ViewMessage {
     /**
      * Getter for the String that describes the
      * action.
+     *
      * @return a String that describes the
      * action.
      */
@@ -71,6 +72,7 @@ public class ViewMessage {
     /**
      * Getter for the name of the Player
      * that is performing the action.
+     *
      * @return the name of the player that
      * is performing the action.
      */
