@@ -57,7 +57,7 @@ public class ToolCardFactory {
      * @return An array containing exactly n instances of distinct
      *         tool cards.
      */
-    public ToolCard[] getInstances(int n){
+    public ToolCard[] newInstances(int n){
         List<Integer> ints = IntStream.range(0, 12)
                 .boxed()
                 .collect(Collectors.toList());
