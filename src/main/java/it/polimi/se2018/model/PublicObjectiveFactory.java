@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * The class is a factory that instantiates a given number of PublicObjectiveCards
+ * The class is a factory that instantiates a given number of PublicObjectiveCards.
  *
  * @author michelemarzollo
  */
@@ -15,14 +15,17 @@ public class PublicObjectiveFactory {
     public static final int NUMBER_OF_CARDS = 10;
 
     /**
-     * The method that creates the random instances of the PublicObjectiveCards
+     * The method that creates randomly a given number of PublicObjectiveCards.
+     * <p>
+     * Each card is associated to a number. {@code n} different numbers are
+     * extracted randomly, and the card associated to the number is created.</p>
      *
-     * @param n The number of instances to create
-     * @return The array with the cards
+     * @param n the number of instances to create.
+     * @return the array with the cards.
      */
     public PublicObjectiveCard[] newInstances(int n) {
 
-        if(n > NUMBER_OF_CARDS)
+        if (n > NUMBER_OF_CARDS)
             throw new IllegalArgumentException();
 
         List<Integer> arrayOfNumbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
@@ -39,10 +42,10 @@ public class PublicObjectiveFactory {
     }
 
     /**
-     * The method that instantiates one PublicObjectiveCard
+     * The method that instantiates one PublicObjectiveCard.
      *
-     * @param randomNumber A random number corresponding to the card to instantiate
-     * @return The card
+     * @param randomNumber a random number corresponding to the card to instantiate.
+     * @return the card.
      */
     private PublicObjectiveCard createCard(int randomNumber) {
 
@@ -80,7 +83,7 @@ public class PublicObjectiveFactory {
                 card = ColorVariety.getInstance();
                 break;
             default:
-                return null;    //Maybe we could put an exception
+                return null;
         }
         return card;
     }
