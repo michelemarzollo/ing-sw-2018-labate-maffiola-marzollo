@@ -55,6 +55,12 @@ public abstract class Controller implements Observer<ViewMessage> {
     protected abstract boolean canUseToolCard(ViewMessage message);
 
     /**
+     * Displays the correct game view.
+     * @param message The message sent by the view.
+     */
+    protected abstract void displayGame(ViewMessage message);
+
+    /**
      * Specifies how many dice have to be drafted when a new round is
      * set up.
      *
@@ -338,7 +344,7 @@ public abstract class Controller implements Observer<ViewMessage> {
         }
 
         // return to game view
-        message.getView().showGame();
+        displayGame(message);
 
         if (checkTurnEnd())
             endTurn(message);
@@ -378,7 +384,7 @@ public abstract class Controller implements Observer<ViewMessage> {
 
         player.setPattern(pattern);
         player.setTokens(pattern.getDifficulty());
-        selectMessage.getView().showGame();
+        displayGame(message);
 
         boolean gameReady = getGame().getPlayers().stream()
                 .allMatch(p -> p.getPattern() != null);
