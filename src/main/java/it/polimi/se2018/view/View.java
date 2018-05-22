@@ -15,6 +15,8 @@ public abstract class View {
     public abstract void showPatternSelection();
     public abstract void showPrivateObjectiveSelection();
     public abstract void showScoreBoard();
+    public abstract void showDieSelection();
+    public abstract void showMoveSelection(int amount);
 
     public abstract void handlePlacement(int index, Coordinates destination);
     public abstract void handleToolCardSelection(String name);
@@ -26,5 +28,9 @@ public abstract class View {
     public abstract void handleToolCardUsage(String name, Coordinates source, Coordinates destination);
     public abstract void handleToolCardUsage(String name, Coordinates[] sources, Coordinates[] destinations);
     public abstract void handleDisconnect();
+
+    public String getPlayerName() {
+        return playerName;
+    }
 
 }
