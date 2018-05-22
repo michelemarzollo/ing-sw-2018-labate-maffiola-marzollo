@@ -42,7 +42,8 @@ public class FluxBrushBehavior implements ToolCardBehavior {
             game.getDraftPool().setDice(draftPool);
 
             // force next selection
-            game.getDraftPool().setForcedSelection(draftPool.indexOf(rerolledDie));
+            int index = draftPool.indexOf(rerolledDie);
+            game.getTurnManager().getCurrentTurn().setForcedSelectionIndex(index);
 
         } catch (IndexOutOfBoundsException e){
             selectDie.getView().showError("Invalid selection: index too big!");
