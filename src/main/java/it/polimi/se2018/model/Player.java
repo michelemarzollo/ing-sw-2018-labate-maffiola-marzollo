@@ -91,6 +91,14 @@ public class Player {
         return tokens;
     }
 
+    /**
+     * Setter for the attribute tokens of Player.
+     * @param tokens The new token amount.
+     */
+    public void setTokens(int tokens) {
+        this.tokens = tokens;
+    }
+
 
     /**
      * Getter for the attribute connected.
@@ -147,7 +155,6 @@ public class Player {
      */
     public void setPattern(Pattern pattern) {
         this.pattern = pattern;
-        this.tokens = pattern.getDifficulty();
     }
 
     /**
