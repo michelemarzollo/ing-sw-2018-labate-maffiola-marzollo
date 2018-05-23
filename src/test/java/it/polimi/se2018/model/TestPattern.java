@@ -1,6 +1,7 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.utils.Coordinates;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,6 +21,11 @@ public class TestPattern {
      * The grid that will be used in many methods
      */
     private Cell[][] grid = new Cell[4][5];
+
+    /**
+     * A sample pattern that is used frequently in test cases.
+     */
+    private Pattern sunCatcher;
 
     /**
      * Initializes a grid of cells, some of which contain a die.
@@ -45,6 +51,8 @@ public class TestPattern {
         grid[3][1] = new Cell(3);
         grid[3][4] = new Cell(Colour.PURPLE);
 
+        sunCatcher = new Pattern("SunCatcher", 3, grid);
+
     }
 
     /**
@@ -52,10 +60,10 @@ public class TestPattern {
      * (higher than allowed).
      */
     @Test
-    public void testInvalidConstructorHigher() {
+    public void testInvalidConstructorTooHighDifficulty() {
 
         try {
-            Pattern p = new Pattern("SunCatcher", 7, grid);
+            new Pattern("SunCatcher", 7, grid);
             fail();
         } catch (IllegalArgumentException e) {
             assertTrue(true);
@@ -67,10 +75,10 @@ public class TestPattern {
      * (lower than allowed).
      */
     @Test
-    public void testInvalidConstructorLower() {
+    public void testInvalidConstructorTooLowDifficulty() {
 
         try {
-            Pattern p = new Pattern("SunCatcher", 0, grid);
+            new Pattern("SunCatcher", 0, grid);
             fail();
         } catch (IllegalArgumentException e) {
             assertTrue(true);
@@ -83,16 +91,15 @@ public class TestPattern {
     @Test
     public void testGetters() {
 
-        Pattern p = new Pattern("SunCatcher", 3, grid);
         boolean check = true;
 
-        assertEquals("SunCatcher", p.getName());
-        assertEquals(3, p.getDifficulty());
+        assertEquals("SunCatcher", sunCatcher.getName());
+        assertEquals(3, sunCatcher.getDifficulty());
 
         for (int i = 0; i < grid.length && check; i++) {
             for (int j = 0; j < grid[i].length; j++) {
-                if (grid[i][j].getColour() != p.getGrid()[i][j].getColour() ||
-                        grid[i][j].getValue() != p.getGrid()[i][j].getValue()) {
+                if (grid[i][j].getColour() != sunCatcher.getGrid()[i][j].getColour() ||
+                        grid[i][j].getValue() != sunCatcher.getGrid()[i][j].getValue()) {
                     check = false;
                 }
             }
@@ -112,14 +119,34 @@ public class TestPattern {
     @Test
     public void testPlaceDieNotOnBorder() {
 
-        Pattern p = new Pattern("SunCatcher", 3, grid);
         Die d1 = new Die(3, new Random(), Colour.GREEN);
 
         try {
-            p.placeDie(d1, new Coordinates(2, 1));
+            sunCatcher.placeDie(d1, new Coordinates(2, 1));
             fail();
         } catch (PlacementErrorException e) {
-            assertEquals("The first die is not placed on an edge or corner space", e.getMessage());
+            assertEquals("The first die is not placed on an edge or corner space",
+                    e.getMessage());
+        }
+
+    }
+
+    /**
+     * Checks if an {@code IndexOutOfBoundsException} is thrown when
+     * bad indexes are used.
+     */
+    @Test
+    public void testPlaceDieOutOfBound() {
+
+        Die d1 = new Die(3, new Random(), Colour.GREEN);
+
+        try {
+            sunCatcher.placeDie(d1, new Coordinates(50, 50));
+            fail();
+        } catch (PlacementErrorException e) {
+            Assert.fail(e.getMessage());
+        } catch (IndexOutOfBoundsException e){
+            Assert.assertTrue(true);
         }
 
     }
@@ -132,17 +159,16 @@ public class TestPattern {
     @Test
     public void testPlaceDieOnBorder() {
 
-        Pattern p = new Pattern("SunCatcher", 3, grid);
         Die d1 = new Die(2, new Random(), Colour.GREEN);
         Coordinates c = new Coordinates(0, 2);
 
         try {
-            p = p.placeDie(d1, c);
-            Die d2 = p.getGrid()[c.getRow()][c.getCol()].getDie();
+            sunCatcher = sunCatcher.placeDie(d1, c);
+            Die d2 = sunCatcher.getGrid()[c.getRow()][c.getCol()].getDie();
             //Checks that the die placed is the correct one
             assertEquals(d1, d2);
         } catch (PlacementErrorException e) {
-            fail();
+            fail(e.getMessage());
         }
 
     }
@@ -159,23 +185,22 @@ public class TestPattern {
     @Test
     public void testPlaceDieAdjacentFail() {
 
-        Pattern p = new Pattern("SunCatcher", 3, grid);
-
         Die d1 = new Die(3, new Random(), Colour.GREEN);
         Die d2 = new Die(4, new Random(), Colour.RED);
 
         try {
-            p = p.placeDie(d1, new Coordinates(3, 2));
+            sunCatcher = sunCatcher.placeDie(d1, new Coordinates(3, 2));
         } catch (PlacementErrorException e) {
             fail();
         }
 
         // Tries to put the new die in a non adjacent cell
         try {
-            p = p.placeDie(d2, new Coordinates(1, 0));
+            sunCatcher = sunCatcher.placeDie(d2, new Coordinates(1, 0));
             fail();
         } catch (PlacementErrorException e) {
-            assertEquals("The die is not adjacent to a previously placed die", e.getMessage());
+            assertEquals("The die is not adjacent to a previously placed die",
+                    e.getMessage());
         }
     }
 
@@ -187,9 +212,7 @@ public class TestPattern {
      * <p>Also checks that the placed die is the correct one</p>
      */
     @Test
-    public void testPlaceDieAdjacenctSuccessful() {
-
-        Pattern p = new Pattern("SunCatcher", 3, grid);
+    public void testPlaceDieAdjacentSuccessful() {
 
         Die d1 = new Die(3, new Random(), Colour.GREEN);
         Die d2 = new Die(4, new Random(), Colour.RED);
@@ -198,16 +221,16 @@ public class TestPattern {
         Coordinates c2 = new Coordinates(2, 1);
 
         try {
-            p = p.placeDie(d1, c1);
+            sunCatcher = sunCatcher.placeDie(d1, c1);
         } catch (PlacementErrorException e) {
             fail();
         }
 
         // Tries to put the new die in an adjacent cell
         try {
-            p = p.placeDie(d2, c2);
+            sunCatcher = sunCatcher.placeDie(d2, c2);
 
-            Die d3 = p.getGrid()[c2.getRow()][c2.getCol()].getDie();
+            Die d3 = sunCatcher.getGrid()[c2.getRow()][c2.getCol()].getDie();
             //Checks that the die placed is the correct one
             assertEquals(d2, d3);
         } catch (PlacementErrorException e) {
@@ -225,25 +248,23 @@ public class TestPattern {
     @Test
     public void testPlaceDieColourRestrictionFail() {
 
-        Pattern p = new Pattern("SunCatcher", 3, grid);
-
         Die d1 = new Die(3, new Random(), Colour.GREEN);
         Die d2 = new Die(4, new Random(), Colour.GREEN);
 
         try {
-            p = p.placeDie(d1, new Coordinates(2, 0));
+            sunCatcher = sunCatcher.placeDie(d1, new Coordinates(2, 0));
         } catch (PlacementErrorException e) {
             fail();
         }
 
         // Tries to put a die of the same colour to the already placed one
         try {
-            p = p.placeDie(d2, new Coordinates(2, 1));
+            sunCatcher = sunCatcher.placeDie(d2, new Coordinates(2, 1));
             fail();
         } catch (PlacementErrorException e) {
             assertEquals(
                     "The die is placed orthogonally adjacent to a " +
-                    "die of the same color or the same value",
+                    "die of the same colour",
                     e.getMessage());
         }
     }
@@ -257,15 +278,13 @@ public class TestPattern {
     @Test
     public void testPlaceDieColourRestrictionSuccessful() {
 
-        Pattern p = new Pattern("SunCatcher", 3, grid);
-
         Die d1 = new Die(4, new Random(), Colour.GREEN);
         Die d2 = new Die(2, new Random(), Colour.RED);
 
         Coordinates c = new Coordinates(0, 3);
 
         try {
-            p = p.placeDie(d1, c);
+            sunCatcher = sunCatcher.placeDie(d1, c);
         } catch (PlacementErrorException e) {
             fail();
         }
@@ -273,9 +292,9 @@ public class TestPattern {
         // Tries to put the new die in an orthogonally adjacent cell
         try {
 
-            p = p.placeDie(d2, new Coordinates(0, 2));
+            sunCatcher = sunCatcher.placeDie(d2, new Coordinates(0, 2));
 
-            Die d3 = p.getGrid()[0][2].getDie();
+            Die d3 = sunCatcher.getGrid()[0][2].getDie();
             //Checks that the die placed is the correct one
             assertEquals(d2, d3);
 
@@ -294,8 +313,6 @@ public class TestPattern {
     @Test
     public void testPlaceDieValueRestrictionFail() {
 
-        Pattern p = new Pattern("SunCatcher", 3, grid);
-
         Die d1 = new Die(4, new Random(), Colour.PURPLE);
         Die d2 = new Die(4, new Random(), Colour.RED);
 
@@ -303,17 +320,19 @@ public class TestPattern {
         Coordinates c2 = new Coordinates(2, 4);
 
         try {
-            p = p.placeDie(d1, c1);
+            sunCatcher = sunCatcher.placeDie(d1, c1);
         } catch (PlacementErrorException e) {
-            fail();
+            fail(e.getMessage());
         }
 
         // Tries to put a die of the same colour to the already placed one
         try {
-            p = p.placeDie(d2, c2);
+            sunCatcher = sunCatcher.placeDie(d2, c2);
             fail();
         } catch (PlacementErrorException e) {
-            assertEquals("The die is placed orthogonally adjacent to a die of the same color or the same value", e.getMessage());
+            assertEquals("The die is placed orthogonally adjacent to a " +
+                    "die of the same value",
+                    e.getMessage());
         }
     }
 
@@ -326,8 +345,6 @@ public class TestPattern {
     @Test
     public void testPlaceDieValueRestrictionSuccessful() {
 
-        Pattern p = new Pattern("SunCatcher", 3, grid);
-
         Die d1 = new Die(2, new Random(), Colour.GREEN);
         Die d2 = new Die(3, new Random(), Colour.BLUE);
 
@@ -335,17 +352,17 @@ public class TestPattern {
         Coordinates c2 = new Coordinates(0, 1);
 
         try {
-            p = p.placeDie(d1, c1);
+            sunCatcher = sunCatcher.placeDie(d1, c1);
         } catch (PlacementErrorException e) {
-            fail();
+            fail(e.getMessage());
         }
 
         // Tries to put the new die in an orthogonally adjacent cell
         try {
 
-            p = p.placeDie(d2, c2);
+            sunCatcher = sunCatcher.placeDie(d2, c2);
 
-            Die d3 = p.getGrid()[c2.getRow()][c2.getCol()].getDie();
+            Die d3 = sunCatcher.getGrid()[c2.getRow()][c2.getCol()].getDie();
             //Checks that the die placed is the correct one
             assertEquals(d2, d3);
 
@@ -354,41 +371,11 @@ public class TestPattern {
         }
     }
 
-    //TESTS ON OTHER METHODS
-
     /**
-     * Tests the behaviour of remove: if a die is placed and then removed
-     * the cell must remain empty and the method return must be the same
-     * of the one put on it.
+     * Tests if dice are correctly placed when they form a cross-shaped pattern.
      */
-//    @Test
-//    public void testRemoveDie() {
-//
-//        Pattern p = new Pattern("SunCatcher", 3, grid);
-//
-//        Die d1 = new Die(3, new Random(), Colour.GREEN);
-//
-//        Coordinates c = new Coordinates(3, 0);
-//
-//        //Placement of a die respecting pattern and cell restrictions
-//        try {
-//            p.placeDie(d1, c);
-//        } catch (PlacementErrorException e) {
-//            fail();
-//        }
-//        //removal of the die
-//        Die d2 = p.removeDie(c);
-//        //Check that the removed die is the correct one
-//        assertEquals(d1, d2);
-//        //Check that the cell is now empty
-//        assertNull(p.getGrid()[c.getRow()][c.getCol()].getDie());
-//
-//    }
-
     @Test
     public void testOrthogonalAdjacent() {
-
-        Pattern p = new Pattern("SunCatcher", 3, grid);
 
         Die d1 = new Die(3, new Random(), Colour.BLUE);
         Die d2 = new Die(5, new Random(), Colour.PURPLE);
@@ -403,14 +390,322 @@ public class TestPattern {
         Coordinates c5 = new Coordinates(1, 1);
 
         try {
-            p = p.placeDie(d1, c1);
-            p = p.placeDie(d2, c2);
-            p = p.placeDie(d3, c3);
-            p = p.placeDie(d4, c4);
-            p = p.placeDie(d5, c5);
+            sunCatcher = sunCatcher.placeDie(d1, c1);
+            sunCatcher = sunCatcher.placeDie(d2, c2);
+            sunCatcher = sunCatcher.placeDie(d3, c3);
+            sunCatcher = sunCatcher.placeDie(d4, c4);
+            sunCatcher = sunCatcher.placeDie(d5, c5);
         } catch (PlacementErrorException e) {
-            fail();
+            fail(e.getMessage());
         }
 
     }
+
+    /**
+     * Tests if the loose placement where only colour restriction are applied
+     * acts correctly.
+     */
+    @Test
+    public void testOnlyColourRestrictionPlacementSuccess(){
+        Die die = new Die(4, new Random(), Colour.BLUE);
+
+        try{
+            sunCatcher = sunCatcher.placeDie(
+                    die,
+                    new Coordinates(0, 2),
+                    Restriction.ONLY_COLOUR);
+        } catch (PlacementErrorException e) {
+            Assert.fail();
+        }
+
+        Assert.assertEquals(die, sunCatcher.getGrid()[0][2].getDie());
+    }
+
+    /**
+     * Tests if the loose placement where only colour restriction are applied
+     * fails when a bad destination is provided.
+     * <p>The state of the pattern after the failure must be the same as before,
+     * meaning that the failed operation left no side effects.</p>
+     */
+    @Test
+    public void testOnlyColourRestrictionPlacementFailure(){
+        Die die = new Die(2, new Random(), Colour.RED);
+        try{
+            sunCatcher = sunCatcher.placeDie(
+                    die,
+                    new Coordinates(0, 1),
+                    Restriction.ONLY_COLOUR);
+            Assert.fail();
+        } catch (PlacementErrorException e) {
+            Assert.assertNull(sunCatcher.getGrid()[0][1].getDie());
+        }
+    }
+
+    /**
+     * Tests if the loose placement where only value restriction are applied
+     * acts correctly.
+     */
+    @Test
+    public void testOnlyValueRestrictionPlacementSuccess(){
+        Die die = new Die(2, new Random(), Colour.RED);
+
+        try{
+            sunCatcher = sunCatcher.placeDie(
+                    die,
+                    new Coordinates(0, 1),
+                    Restriction.ONLY_VALUE);
+        } catch (PlacementErrorException e) {
+            Assert.fail();
+        }
+
+        Assert.assertEquals(die, sunCatcher.getGrid()[0][1].getDie());
+    }
+
+    /**
+     * Tests if the loose placement where only value restriction are applied
+     * fails when a bad destination is provided.
+     * <p>The state of the pattern after the failure must be the same as before,
+     * meaning that the failed operation left no side effects.</p>
+     */
+    @Test
+    public void testOnlyValueRestrictionPlacementFailure(){
+        Die die = new Die(4, new Random(), Colour.BLUE);
+
+        try{
+            sunCatcher = sunCatcher.placeDie(
+                    die,
+                    new Coordinates(0, 2),
+                    Restriction.ONLY_VALUE);
+            Assert.fail();
+        } catch (PlacementErrorException e) {
+            Assert.assertNull(sunCatcher.getGrid()[0][2].getDie());
+        }
+    }
+
+    /**
+     * Tests if the placement where the placed die must <strong>not</strong> be
+     * adjacent to another acts correctly.
+     */
+    @Test
+    public void testOnlyNotAdjacentPlacementSuccess(){
+        Die firstDie = new Die(2, new Random(), Colour.BLUE);
+        Die secondDie = new Die(2, new Random(), Colour.BLUE);
+
+        try{
+            sunCatcher = sunCatcher.placeDie(firstDie, new Coordinates(0, 0));
+        } catch (PlacementErrorException e) {
+            Assert.fail("First die cannot be placed");
+        }
+
+        try{
+            sunCatcher = sunCatcher.placeDie(
+                    secondDie,
+                    new Coordinates(1, 2),
+                    Restriction.NOT_ADJACENT);
+        } catch (PlacementErrorException e) {
+            Assert.fail("Second die cannot be placed");
+        }
+
+        Assert.assertEquals(secondDie, sunCatcher.getGrid()[1][2].getDie());
+    }
+
+    /**
+     * Tests if the placement where the placed die must <strong>not</strong> be
+     * adjacent to another fails when a bad destination is provided.
+     * <p>The state of the pattern after the failure must be the same as before,
+     * meaning that the failed operation left no side effects.</p>
+     */
+    @Test
+    public void testOnlyNotAdjacentPlacementFailure(){
+        Die firstDie = new Die(2, new Random(), Colour.BLUE);
+        Die secondDie = new Die(2, new Random(), Colour.BLUE);
+
+        try{
+            sunCatcher = sunCatcher.placeDie(firstDie, new Coordinates(0, 0));
+        } catch (PlacementErrorException e) {
+            Assert.fail("First die cannot be placed");
+        }
+
+        try{
+            sunCatcher = sunCatcher.placeDie(
+                    secondDie,
+                    new Coordinates(1, 1),
+                    Restriction.NOT_ADJACENT);
+            Assert.fail("Second die placed wrong");
+        } catch (PlacementErrorException e) {
+            Assert.assertNull(sunCatcher.getGrid()[1][1].getDie());
+        }
+
+    }
+
+    /**
+     * Tests if {@code moveDie} acts correctly in a regular case where all
+     * restrictions are met.
+     */
+    @Test
+    public void testMoveDieSuccessful(){
+        Die firstDie = new Die(2, new Random(), Colour.YELLOW);
+        Die secondDie = new Die(3, new Random(), Colour.BLUE);
+
+        try{
+            sunCatcher = sunCatcher.placeDie(firstDie, new Coordinates(0, 0));
+            sunCatcher = sunCatcher.placeDie(secondDie, new Coordinates(0, 1));
+        } catch (PlacementErrorException e) {
+            Assert.fail("Dice cannot be placed");
+        }
+
+        try {
+            sunCatcher = sunCatcher.moveDie(
+                    new Coordinates(0, 0),
+                    new Coordinates(1, 0),
+                    Restriction.DEFAULT);
+        } catch (PlacementErrorException e) {
+            Assert.fail();
+        }
+
+        Assert.assertNull(sunCatcher.getGrid()[0][0].getDie());
+        Assert.assertEquals(firstDie, sunCatcher.getGrid()[1][0].getDie());
+    }
+
+    /**
+     * Tests if {@code moveDie} fails when an invalid destination is provided.
+     * <p>When the method fails, the pattern state must be fully restored to the
+     * valid one it had just before the call.</p>
+     */
+    @Test
+    public void testMoveDieFailure(){
+        Die firstDie = new Die(2, new Random(), Colour.YELLOW);
+        Die secondDie = new Die(3, new Random(), Colour.BLUE);
+
+        try{
+            sunCatcher = sunCatcher.placeDie(firstDie, new Coordinates(0, 0));
+            sunCatcher = sunCatcher.placeDie(secondDie, new Coordinates(0, 1));
+        } catch (PlacementErrorException e) {
+            Assert.fail("Dice cannot be placed");
+        }
+
+        try {
+            sunCatcher = sunCatcher.moveDie(
+                    new Coordinates(0, 0),
+                    new Coordinates(1, 1),
+                    Restriction.DEFAULT);
+            Assert.fail();
+        } catch (PlacementErrorException e) {
+            Assert.assertNull(sunCatcher.getGrid()[1][1].getDie());
+            Assert.assertEquals(firstDie, sunCatcher.getGrid()[0][0].getDie());
+        }
+
+    }
+
+    /**
+     * Tests if {@code moveDice} acts correctly in a regular case where all
+     * restrictions are met.
+     */
+    @Test
+    public void testMoveDiceSuccessful(){
+        Die firstDie = new Die(2, new Random(), Colour.YELLOW);
+        Die secondDie = new Die(3, new Random(), Colour.BLUE);
+
+        try{
+            sunCatcher = sunCatcher.placeDie(firstDie, new Coordinates(0, 0));
+            sunCatcher = sunCatcher.placeDie(secondDie, new Coordinates(0, 1));
+        } catch (PlacementErrorException e) {
+            Assert.fail("Dice cannot be placed");
+        }
+
+        Coordinates[] sources = {
+                new Coordinates(0, 0),
+                new Coordinates(0, 1)
+        };
+        Coordinates[] destinations = {
+                new Coordinates(0, 4),
+                new Coordinates(1, 4)
+        };
+
+        try {
+            sunCatcher = sunCatcher.moveDice(sources, destinations);
+        } catch (PlacementErrorException e) {
+            Assert.fail(e.getMessage());
+        }
+
+        Assert.assertNull(sunCatcher.getGrid()[0][0].getDie());
+        Assert.assertNull(sunCatcher.getGrid()[0][1].getDie());
+
+        Assert.assertEquals(firstDie, sunCatcher.getGrid()[0][4].getDie());
+        Assert.assertEquals(secondDie, sunCatcher.getGrid()[1][4].getDie());
+    }
+
+    /**
+     * Tests if {@code moveDice} fails when invalid destinations are provided.
+     * <p>When the method fails, the pattern state must be fully restored to the
+     * valid one it had just before the call.</p>
+     */
+    @Test
+    public void testMoveDiceFailure(){
+        Die firstDie = new Die(2, new Random(), Colour.YELLOW);
+        Die secondDie = new Die(3, new Random(), Colour.BLUE);
+
+        try{
+            sunCatcher = sunCatcher.placeDie(firstDie, new Coordinates(0, 0));
+            sunCatcher = sunCatcher.placeDie(secondDie, new Coordinates(0, 1));
+        } catch (PlacementErrorException e) {
+            Assert.fail("Dice cannot be placed");
+        }
+
+        Coordinates[] sources = {
+                new Coordinates(0, 0),
+                new Coordinates(0, 1)
+        };
+        Coordinates[] destinations = {
+                new Coordinates(0, 4),
+                new Coordinates(1, 1)
+        };
+
+        try {
+            sunCatcher = sunCatcher.moveDice(sources, destinations);
+            Assert.fail();
+        } catch (PlacementErrorException e) {
+            Assert.assertNull(sunCatcher.getGrid()[0][4].getDie());
+            Assert.assertNull(sunCatcher.getGrid()[1][1].getDie());
+            Assert.assertEquals(firstDie, sunCatcher.getGrid()[0][0].getDie());
+            Assert.assertEquals(secondDie, sunCatcher.getGrid()[0][1].getDie());
+        }
+    }
+
+    /**
+     * Tests if the count of empty cells is 0 on an empty pattern.
+     */
+    @Test
+    public void testCountEmptyOnEmptyPattern(){
+        int expected = Pattern.ROWS * Pattern.COLS;
+        Assert.assertEquals(expected, sunCatcher.emptyCells());
+    }
+
+    /**
+     * Tests if the count of empty cell is correct when some are filled
+     * with a die.
+     */
+    @Test
+    public void testCountEmptyOnPattern(){
+        Random random = new Random();
+        Die[] dice = {
+                new Die(2, random, Colour.RED),
+                new Die(5, random, Colour.BLUE),
+                new Die(2, random, Colour.RED),
+                new Die(1, random, Colour.GREEN),
+                new Die(2, random, Colour.YELLOW),
+        };
+
+        try {
+            for(int i = 0; i < dice.length; ++i)
+            sunCatcher = sunCatcher.placeDie(dice[i], new Coordinates(0, i));
+        } catch (PlacementErrorException e) {
+            Assert.fail(e.getMessage());
+        }
+
+        int expected = Pattern.ROWS * Pattern.COLS - dice.length;
+
+        Assert.assertEquals(expected, sunCatcher.emptyCells());
+    }
+
 }

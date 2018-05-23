@@ -19,7 +19,7 @@ public class TestCell {
     @Test
     public void testConstructor() {
         try {
-            Cell cell = new Cell(7);
+            new Cell(7);
             fail();
         } catch (IllegalArgumentException e) {
             assertTrue(true);
@@ -32,7 +32,7 @@ public class TestCell {
     @Test
     public void testConstructor2() {
         try {
-            Cell cell = new Cell(0);
+            new Cell(0);
             fail();
         } catch (IllegalArgumentException e) {
             assertTrue(true);
@@ -44,8 +44,8 @@ public class TestCell {
      */
     @Test
     public void testGetValue() {
-        Cell c = new Cell(3);
-        assertEquals(3, c.getValue());
+        Cell cell = new Cell(3);
+        assertEquals(3, cell.getValue());
     }
 
     /**
@@ -53,8 +53,8 @@ public class TestCell {
      */
     @Test
     public void testGetColour() {
-        Cell c = new Cell(Colour.YELLOW);
-        assertEquals(Colour.YELLOW, c.getColour());
+        Cell cell = new Cell(Colour.YELLOW);
+        assertEquals(Colour.YELLOW, cell.getColour());
     }
 
     /**
@@ -65,22 +65,22 @@ public class TestCell {
      */
     @Test
     public void testPlaceOccupied() {
-        Die d1 = new Die(5, new Random(), Colour.BLUE);
-        Cell c = new Cell();
+        Die die1 = new Die(5, new Random(), Colour.BLUE);
+        Cell cell = new Cell();
         //Puts the first die in the cell
         try {
-            c.place(d1);
+            cell.place(die1);
         } catch (PlacementErrorException e) {
-            fail();
+            fail(e.getMessage());
         }
 
         //Tries to put a second die
-        Die d2 = new Die(5, new Random(), Colour.BLUE);
+        Die die2 = new Die(5, new Random(), Colour.BLUE);
         try {
-            c.place(d2);
+            cell.place(die2);
             fail();
         } catch (PlacementErrorException e) {
-            assertEquals(c.getDie(), d1);
+            assertEquals(cell.getDie(), die1);
         }
     }
 
@@ -92,14 +92,14 @@ public class TestCell {
      */
     @Test
     public void testPlaceValueRestriction() {
-        Die d = new Die(6, new Random(), Colour.GREEN);
-        Cell c = new Cell(5);
+        Die die = new Die(6, new Random(), Colour.GREEN);
+        Cell cell = new Cell(5);
         try {
-            c.place(d);
+            cell.place(die);
             fail();
         } catch (PlacementErrorException e) {
             //at the and there must be no placed die
-            assertNull(c.getDie());
+            assertNull(cell.getDie());
         }
     }
 
@@ -110,13 +110,13 @@ public class TestCell {
      */
     @Test
     public void testPlaceColourRestriction() {
-        Die d = new Die(3, new Random(), Colour.GREEN);
-        Cell c = new Cell(Colour.PURPLE);
+        Die die = new Die(3, new Random(), Colour.GREEN);
+        Cell cell = new Cell(Colour.PURPLE);
         try {
-            c.place(d);
+            cell.place(die);
             fail();
         } catch (PlacementErrorException e) {
-            assertNull(c.getDie());
+            assertNull(cell.getDie());
         }
     }
 
@@ -127,12 +127,12 @@ public class TestCell {
      */
     @Test
     public void testPositivePlaceNoRestriction() {
-        Die d = new Die(2, new Random(), Colour.PURPLE);
-        Cell c = new Cell();
+        Die die = new Die(2, new Random(), Colour.PURPLE);
+        Cell cell = new Cell();
         try {
-            c.place(d);
+            cell.place(die);
             //Verifies that the places die is the correct one
-            assertEquals(c.getDie(), d);
+            assertEquals(cell.getDie(), die);
         } catch (PlacementErrorException e) {
             fail();
         }
@@ -145,12 +145,12 @@ public class TestCell {
      */
     @Test
     public void testPositivePlaceColourRestriction() {
-        Die d = new Die(3, new Random(), Colour.PURPLE);
-        Cell c = new Cell(Colour.PURPLE);
+        Die die = new Die(3, new Random(), Colour.PURPLE);
+        Cell cell = new Cell(Colour.PURPLE);
         try {
-            c.place(d);
+            cell.place(die);
             //Verifies that the places die is the correct one
-            assertEquals(c.getDie(), d);
+            assertEquals(cell.getDie(), die);
         } catch (PlacementErrorException e) {
             fail();
         }
@@ -163,12 +163,12 @@ public class TestCell {
      */
     @Test
     public void testPositivePlaceValueRestriction() {
-        Die d = new Die(3, new Random(), Colour.PURPLE);
-        Cell c = new Cell(3);
+        Die die = new Die(3, new Random(), Colour.PURPLE);
+        Cell cell = new Cell(3);
         try {
-            c.place(d);
+            cell.place(die);
             //Verifies that the places die is the correct one
-            assertEquals(c.getDie(), d);
+            assertEquals(cell.getDie(), die);
         } catch (PlacementErrorException e) {
             fail();
         }
@@ -181,15 +181,39 @@ public class TestCell {
     @Test
     public void testRemove() {
         //Creation of a cell, with a die on it
-        Cell c = new Cell();
-        Die d = new Die(2, new Random(), Colour.RED);
+        Cell cell = new Cell();
+        Die die = new Die(2, new Random(), Colour.RED);
         try {
-            c.place(d);
+            cell.place(die);
         } catch (PlacementErrorException e) {
             fail();
         }
 
-        Die d2 = c.remove();
-        assertEquals(d2, d);
+        Die d2 = cell.remove();
+        assertEquals(d2, die);
+    }
+
+    @Test
+    public void testLoosePlaceSuccess(){
+        Die die = new Die(3, new Random(), Colour.PURPLE);
+        Cell cell = new Cell(3);
+        try {
+            cell.place(die, Restriction.ONLY_COLOUR);
+            assertEquals(cell.getDie(), die);
+        } catch (PlacementErrorException e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void testLoosePlaceFailure(){
+        Die die = new Die(3, new Random(), Colour.PURPLE);
+        Cell cell = new Cell(3);
+        try {
+            cell.place(die, Restriction.ONLY_VALUE);
+            assertEquals(cell.getDie(), die);
+        } catch (PlacementErrorException e) {
+            fail();
+        }
     }
 }

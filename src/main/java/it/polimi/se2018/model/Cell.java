@@ -22,9 +22,9 @@ public class Cell {
 
     /**
      * Die placed in the Cell: it is left to null until a {@code place}
-     * call (until a die is placed).
+     * call (until a placedDie is placed).
      */
-    private Die die;
+    private Die placedDie;
 
     /**
      * Default constructor: constructs a new Cell with no restriction.
@@ -60,7 +60,7 @@ public class Cell {
     public Cell(Cell cell){
         this.colour = cell.colour;
         this.value = cell.value;
-        this.die = cell.die;
+        this.placedDie = cell.placedDie;
     }
     /**
      * Getter for the value restriction on the Cell.
@@ -82,46 +82,61 @@ public class Cell {
 
     /**
      *
-     * Getter for the die placed in the Cell.
-     * @return the die placed in the Cell
+     * Getter for the placedDie placed in the Cell.
+     * @return the placedDie placed in the Cell
      * (null if the Cell is still empty).
      */
     public Die getDie() {
-        return die;
+        return placedDie;
     }
 
     /**
-     * Place the Die {@code d} in the Cell.
-     * @param d the Die to be placed in the Cell.
+     * Place the Die {@code die} in the Cell.
+     * @param die the Die to be placed in the Cell.
      * @throws PlacementErrorException if the Cell is full or
      * if it doesn't respect value or Colour restriction.
      * The control is made only at a 'local' level:
      * it checks only the restriction on the specific
      * Cell, not other placement restrictions.
      */
-    public void place (Die d) throws PlacementErrorException{
-        if(die != null){
-            throw new PlacementErrorException("This cell has already a placed die. Choose another cell.");
+    public void place (Die die) throws PlacementErrorException{
+        place(die, Restriction.DEFAULT);
+    }
+
+    private boolean hasBadValue(Die die){
+        return value != 0 && value != die.getValue();
+    }
+
+    private boolean hasBadColour(Die die){
+        return colour != null && colour != die.getColour();
+    }
+
+    public void place (Die die, Restriction restriction) throws PlacementErrorException{
+        if(placedDie != null){
+            throw new PlacementErrorException(
+                    "This cell has already a placed placedDie. Choose another cell.");
         }
-        if(value != 0 && value != d.getValue()){
-            throw new PlacementErrorException("The die's value is different from the value restriction of the cell");
+        if(restriction.checkColourConstraint() && hasBadColour(die)){
+            throw new PlacementErrorException(
+                    "The placedDie's value is different from the value restriction of the cell");
         }
-        if(colour != null && colour != d.getColour()){
-            throw new PlacementErrorException("The die's colour is different from the colour restriction of the cell");
+        if(restriction.checkValueConstraint() && hasBadValue(die)){
+            throw new PlacementErrorException(
+                    "The placedDie's colour is different from the colour restriction of the cell");
         }
-        die = d;
+        placedDie = die;
     }
 
 
     /**
-     * Remove the die from the Cell if there is one or left the
+     * Remove the placedDie from the Cell if there is one or left the
      * Cell empty otherwise. It's necessary for ToolCards that allows
      * to move dice on the {@link Pattern}.
      * @return the Die removed.
      */
     public Die remove (){
-        Die tmp = die;
-        die = null;
+        Die tmp = placedDie;
+        placedDie = null;
         return tmp;
     }
 }
