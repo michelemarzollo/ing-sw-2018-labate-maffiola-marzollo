@@ -24,7 +24,7 @@ public class SelectCard extends ViewMessage{
      *                   is performing the action.
      */
     public SelectCard(String name,
-                      View view, String action, String playerName) {
+                      View view, Action action, String playerName) {
         super(view, action, playerName);
         this.name = name;
     }

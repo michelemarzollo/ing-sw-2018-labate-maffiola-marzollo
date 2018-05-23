@@ -39,7 +39,7 @@ public class PlaceDie extends ViewMessage {
      *                   is performing the action.
      */
     public PlaceDie(int dieIndex, Coordinates destination,
-                    View view, String action, String playerName) {
+                    View view, Action action, String playerName) {
         super(view, action, playerName);
         this.dieIndex = dieIndex;
         this.destination = destination;

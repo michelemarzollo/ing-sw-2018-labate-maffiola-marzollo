@@ -28,7 +28,7 @@ public class SelectDie extends ViewMessage{
      *                   is performing the action.
      */
     public SelectDie(int dieIndex,
-                     View view, String action, String playerName) {
+                     View view, Action action, String playerName) {
         super(view, action, playerName);
         this.dieIndex = dieIndex;
     }

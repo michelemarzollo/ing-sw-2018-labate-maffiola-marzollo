@@ -1,6 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.model.events.Action;
 import it.polimi.se2018.model.events.PlaceDie;
 import it.polimi.se2018.model.events.SelectCard;
 import it.polimi.se2018.model.events.ViewMessage;
@@ -42,7 +43,7 @@ public abstract class Controller implements Observer<ViewMessage> {
      * Map used to resolve requests by mapping each action to its
      * handler.
      */
-    private final Map<String, Consumer<ViewMessage>> actionMap;
+    private final Map<Action, Consumer<ViewMessage>> actionMap;
 
 
     /**
@@ -72,7 +73,7 @@ public abstract class Controller implements Observer<ViewMessage> {
     /**
      * Consumes resources after the usage of a tool card.
      */
-    protected abstract void consumeResources();
+    protected abstract void consumeResources(ViewMessage message);
 
     /**
      * Fills the score board.
@@ -138,7 +139,7 @@ public abstract class Controller implements Observer<ViewMessage> {
      *
      * @param actions The map containing the name-handler pairs.
      */
-    protected abstract void registerActions(Map<String, Consumer<ViewMessage>> actions);
+    protected abstract void registerActions(Map<Action, Consumer<ViewMessage>> actions);
 
     /**
      * Detects what action {@code message} refers to and delegates the
@@ -340,7 +341,7 @@ public abstract class Controller implements Observer<ViewMessage> {
         if (behavior != null) {
             behavior.useToolCard(getGame(), message);
             getGame().getTurnManager().getCurrentTurn().useToolCard();
-            consumeResources();
+            consumeResources(message);
         }
 
         // return to game view

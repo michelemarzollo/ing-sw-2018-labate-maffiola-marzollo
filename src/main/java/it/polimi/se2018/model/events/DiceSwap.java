@@ -41,7 +41,7 @@ public class DiceSwap extends ViewMessage {
      *                    is performing the action.
      */
     public DiceSwap(int sourceIndex, Coordinates destination,
-                    View view, String action, String playerName) {
+                    View view, Action action, String playerName) {
         super(view, action, playerName);
         this.sourceIndex = sourceIndex;
         this.destination = destination;

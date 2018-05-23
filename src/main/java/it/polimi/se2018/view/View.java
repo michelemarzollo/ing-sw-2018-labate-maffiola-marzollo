@@ -18,6 +18,7 @@ public abstract class View {
     public abstract void showScoreBoard();
     public abstract void showDieSelection();
     public abstract void showMoveSelection(int amount);
+    public abstract void showDifficultySelection();
     public abstract void showLensCutterSelection();
 
     /**

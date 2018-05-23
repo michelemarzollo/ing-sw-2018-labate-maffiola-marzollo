@@ -185,7 +185,7 @@ public class Pattern {
         if(restriction.equals(Restriction.NOT_ADJACENT)){
             pattern.placeDieNotAdjacent(d, c);
         }
-        return pattern; //never executed
+        return pattern;
     }
 
     /**

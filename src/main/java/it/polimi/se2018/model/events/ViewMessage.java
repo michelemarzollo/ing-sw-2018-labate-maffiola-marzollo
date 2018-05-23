@@ -20,13 +20,12 @@ public class ViewMessage {
     private View view;
 
     /**
-     * String that describes the action
-     * that the user want to perform.
+     * Action that describes what the user want to do.
      * The {@link it.polimi.se2018.controller.Controller}
-     * will distinguish which action to perform parsing
-     * this string.
+     * will distinguish which action to perform through
+     * this attribute actual value.
      */
-    private String action;
+    private Action action;
 
     /**
      * Name of Player that is
@@ -42,7 +41,7 @@ public class ViewMessage {
      * @param action     the action that the Player wants to perform.
      * @param playerName the name of the player that is performing the action.
      */
-    public ViewMessage(View view, String action, String playerName) {
+    public ViewMessage(View view, Action action, String playerName) {
         this.view = view;
         this.action = action;
         this.playerName = playerName;
@@ -65,7 +64,7 @@ public class ViewMessage {
      * @return a String that describes the
      * action.
      */
-    public String getAction() {
+    public Action getAction() {
         return action;
     }
 
