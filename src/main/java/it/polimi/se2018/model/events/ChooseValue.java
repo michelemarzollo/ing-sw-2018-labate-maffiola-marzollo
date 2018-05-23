@@ -27,7 +27,7 @@ public class ChooseValue extends ViewMessage {
      * @param destination the coordinates of the cell in the pattern
      *                    where the die should be placed.
      */
-    public ChooseValue(View view, String action, String playerName,
+    public ChooseValue(View view, Action action, String playerName,
                        int value, Coordinates destination) {
         super(view, action, playerName);
         this.value = value;
