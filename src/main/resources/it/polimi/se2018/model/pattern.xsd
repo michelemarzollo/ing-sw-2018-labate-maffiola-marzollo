@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:pat="http://se2018.polimi.it/pattern"
+           targetNamespace="http://se2018.polimi.it/pattern"
+           elementFormDefault="qualified">
+
+    <xs:simpleType name="range1to6">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="1"/>
+            <xs:maxInclusive value="6"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="difficultyType">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="3"/>
+            <xs:maxInclusive value="6"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="rowIndex">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="1"/>
+            <xs:maxInclusive value="4"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="columnIndex">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="1"/>
+            <xs:maxInclusive value="5"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="dieColour">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="BLUE"/>
+            <xs:enumeration value="GREEN"/>
+            <xs:enumeration value="PURPLE"/>
+            <xs:enumeration value="RED"/>
+            <xs:enumeration value="YELLOW"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="gridDescription">
+        <xs:sequence>
+            <xs:element name="cell" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:choice>
+                        <xs:element name="valueRestriction" type="pat:range1to6"/>
+                        <xs:element name="colourRestriction" type="pat:dieColour"/>
+                    </xs:choice>
+
+                    <xs:attribute name="row" use="required" type="pat:rowIndex"/>
+                    <xs:attribute name="col" use="required" type="pat:columnIndex"/>
+
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="pattern">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="name" type="xs:string"/>
+                <xs:element name="difficulty" type="pat:difficultyType"/>
+                <xs:element name="grid" type="pat:gridDescription" minOccurs="0">
+                    <!--Prohibits multiple cell definitions-->
+                    <xs:unique name="cellCoordinates">
+                        <xs:selector xpath="pat:cell"/>
+                        <xs:field xpath="@row"/>
+                        <xs:field xpath="@col"/>
+                    </xs:unique>
+                </xs:element>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
