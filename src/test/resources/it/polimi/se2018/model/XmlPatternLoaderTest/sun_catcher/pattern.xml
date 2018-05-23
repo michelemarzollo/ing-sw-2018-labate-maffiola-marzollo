@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<pattern xmlns="http://se2018.polimi.it/pattern">
+    <name>Duomo</name>
+    <difficulty>4</difficulty>
+    <grid>
+        <cell row="3" col="1">
+            <valueRestriction>2</valueRestriction>
+        </cell>
+        <cell row="1" col="1">
+            <colourRestriction>BLUE</colourRestriction>
+        </cell>
+    </grid>
+</pattern>
