@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * currently in the draft pool.</p>
  * <p>This tool card doesn't require any parameters to be applied.</p>
  */
-public class GlazingHammerBehavior implements ToolCardBehavior {
+public class GlazingHammerBehaviour implements ToolCardBehaviour {
     /**
      * Does nothing.
      * <p>The card doesn't require parameters.</p>

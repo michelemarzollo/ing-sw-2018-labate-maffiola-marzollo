@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * <p>This tool card requires two pairs of source-destination coordinates
  * as user-given parameters to be applied.</p>
  */
-public class TapWheelBehavior implements ToolCardBehavior {
+public class TapWheelBehaviour implements ToolCardBehaviour {
     /**
      * Selects the view to let the user choose two dice.
      * @param message The message sent by the view.

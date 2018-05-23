@@ -16,7 +16,7 @@ import java.util.Random;
  * with a Die drafted randomly from the {@link DiceBag}. The value of
  * the new die is chosen by the player.</p>
  */
-public class FluxRemoverBehaviour implements ToolCardBehavior {
+public class FluxRemoverBehaviour implements ToolCardBehaviour {
 
     /**
      * The attribute to indicate if the first part of the procedure linked

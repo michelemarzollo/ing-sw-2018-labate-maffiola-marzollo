@@ -14,7 +14,7 @@ import it.polimi.se2018.utils.Coordinates;
  * To use this card, the present position and the new position of the two dice on the
  * {@link it.polimi.se2018.model.Pattern} are required({@code message} will contain the data required).
  */
-public class LathekinBehavior implements ToolCardBehavior {
+public class LathekinBehaviour implements ToolCardBehaviour {
 
     /**
      * Selects the view to let the user insert the two couple of {@link Coordinates},

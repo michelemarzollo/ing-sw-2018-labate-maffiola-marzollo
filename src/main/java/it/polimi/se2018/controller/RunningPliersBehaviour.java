@@ -13,7 +13,7 @@ import it.polimi.se2018.model.events.ViewMessage;
  * <p>
  * If used, the ToolCard makes the player loose his second turn.</p>
  */
-public class RunningPliersBehaviour implements ToolCardBehavior {
+public class RunningPliersBehaviour implements ToolCardBehaviour {
 
     /**
      * Selects the correct view to gather the parameters the tool card

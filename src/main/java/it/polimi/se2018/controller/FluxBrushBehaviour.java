@@ -15,7 +15,7 @@ import java.util.List;
  * <p>This tool card requires the index of the die in the draft pool
  * to be applied.</p>
  */
-public class FluxBrushBehavior implements ToolCardBehavior {
+public class FluxBrushBehaviour implements ToolCardBehaviour {
 
     /**
      * Selects the view to let the user select a die from the draft pool.

@@ -37,7 +37,7 @@ public abstract class Controller implements Observer<ViewMessage> {
      * The dictionary which associates tool card names
      * to their behavior.
      */
-    private final Map<String, ToolCardBehavior> toolCardBehaviors;
+    private final Map<String, ToolCardBehaviour> toolCardBehaviors;
 
     /**
      * Map used to resolve requests by mapping each action to its
@@ -118,20 +118,20 @@ public abstract class Controller implements Observer<ViewMessage> {
      *
      * @param behaviors The map containing the name-behavior pairs.
      */
-    protected void registerToolCardBehaviors(Map<String, ToolCardBehavior> behaviors) {
+    protected void registerToolCardBehaviors(Map<String, ToolCardBehaviour> behaviors) {
 
-        behaviors.put("Grozing Pliers", new GrozingPliersBehavior());
-        behaviors.put("Eglomise Brush", new EglomiseBrushBehavior());
-        behaviors.put("Copper Foil Burnisher", new CopperFoilBurnisherBehavior());
-        behaviors.put("Lathekin", new LathekinBehavior());
+        behaviors.put("Grozing Pliers", new GrozingPliersBehaviour());
+        behaviors.put("Eglomise Brush", new EglomiseBrushBehaviour());
+        behaviors.put("Copper Foil Burnisher", new CopperFoilBurnisherBehaviour());
+        behaviors.put("Lathekin", new LathekinBehaviour());
         behaviors.put("Lens Cutter", new LensCutterBehaviour());
-        behaviors.put("Flux Brush", new FluxBrushBehavior());
-        behaviors.put("Glazing Hammer", new GlazingHammerBehavior());
+        behaviors.put("Flux Brush", new FluxBrushBehaviour());
+        behaviors.put("Glazing Hammer", new GlazingHammerBehaviour());
         behaviors.put("Running Pliers", new RunningPliersBehaviour());
-        behaviors.put("Cork-backed Straightedge", new CorkBackedSrtaighteddgeBehavior());
+        behaviors.put("Cork-backed Straightedge", new CorkBackedSrtaightedgeBehaviour());
         behaviors.put("Grinding Stone", new GrindingStoneBehaviour());
         behaviors.put("Flux Remover", new FluxRemoverBehaviour());
-        behaviors.put("Tap Wheel", new TapWheelBehavior());
+        behaviors.put("Tap Wheel", new TapWheelBehaviour());
     }
 
     /**
@@ -318,7 +318,7 @@ public abstract class Controller implements Observer<ViewMessage> {
         SelectCard selectMessage = (SelectCard) message;
         if (canUseToolCard(selectMessage)) {
 
-            ToolCardBehavior behavior = toolCardBehaviors.get(message.getAction());
+            ToolCardBehaviour behavior = toolCardBehaviors.get(message.getAction());
             if (behavior != null)
                 behavior.askParameters(message);
 
@@ -336,7 +336,7 @@ public abstract class Controller implements Observer<ViewMessage> {
      */
     protected void applyToolCard(ViewMessage message) {
         //TODO check turn
-        ToolCardBehavior behavior = toolCardBehaviors.get(message.getAction());
+        ToolCardBehaviour behavior = toolCardBehaviors.get(message.getAction());
 
         if (behavior != null) {
             behavior.useToolCard(getGame(), message);

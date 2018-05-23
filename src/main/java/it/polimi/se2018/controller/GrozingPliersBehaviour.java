@@ -16,7 +16,7 @@ import java.util.List;
  * To use this card, the index of the chosen die in the {@link it.polimi.se2018.model.DraftPool}
  * is required ({@code message} will contain the data required).
  */
-public class GrozingPliersBehavior implements ToolCardBehavior {
+public class GrozingPliersBehaviour implements ToolCardBehaviour {
 
     /**
      * Selects the view to let the user select a die from the draft pool.

@@ -14,7 +14,7 @@ import java.util.List;
  * The ToolCard allows to change a die from the {@link it.polimi.se2018.model.DraftPool}
  * with a die from the {@link it.polimi.se2018.model.RoundTrack}</p>
  */
-public class LensCutterBehaviour implements ToolCardBehavior {
+public class LensCutterBehaviour implements ToolCardBehaviour {
 
     /**
      * Selects the correct view to gather the parameters the tool card

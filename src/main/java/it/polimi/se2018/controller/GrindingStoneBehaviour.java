@@ -14,7 +14,7 @@ import java.util.List;
  * The ToolCard allows to flip to the opposite face the die drafted from
  * the {@link it.polimi.se2018.model.DraftPool}.</p>
  */
-public class GrindingStoneBehaviour implements ToolCardBehavior {
+public class GrindingStoneBehaviour implements ToolCardBehaviour {
 
     /**
      * Selects the correct view to gather the parameters the tool card

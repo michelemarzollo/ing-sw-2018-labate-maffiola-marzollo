@@ -15,7 +15,7 @@ import it.polimi.se2018.utils.Coordinates;
  * To use this card, the present position and the new position of the die
  * on the {@link it.polimi.se2018.model.Pattern} are required({@code message} will contain the data required).
  */
-public class CopperFoilBurnisherBehavior implements ToolCardBehavior {
+public class CopperFoilBurnisherBehaviour implements ToolCardBehaviour {
 
     /**
      * Selects the view to let the user insert the couple of {@link Coordinates},

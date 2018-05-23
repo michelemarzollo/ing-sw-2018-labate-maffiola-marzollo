@@ -6,7 +6,7 @@ import it.polimi.se2018.model.events.ViewMessage;
 /**
  * This interface represents the behavior of a tool card.
  */
-public interface ToolCardBehavior {
+public interface ToolCardBehaviour {
 
     /**
      * Selects the correct view to gather the parameters the tool card
