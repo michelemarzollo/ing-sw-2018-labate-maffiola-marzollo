@@ -29,18 +29,19 @@ public class DiceSwap extends ViewMessage {
 
     /**
      * Constructor of the class.
+     *
      * @param sourceIndex The index used to select the
      *                    Die from the DraftPool.
      * @param destination The coordinates of the
      *                    Die in the RoundTrack.
-     * @param view The view reference.
-     * @param action The action that the Player wants
-     *               to perform.
-     * @param playerName The name of the player that
-     *                   is performing the action.
+     * @param view        The view reference.
+     * @param action      The action that the Player wants
+     *                    to perform.
+     * @param playerName  The name of the player that
+     *                    is performing the action.
      */
     public DiceSwap(int sourceIndex, Coordinates destination,
-                    View view, String action, String playerName) {
+                    View view, Action action, String playerName) {
         super(view, action, playerName);
         this.sourceIndex = sourceIndex;
         this.destination = destination;
@@ -48,6 +49,7 @@ public class DiceSwap extends ViewMessage {
 
     /**
      * Getter for the index of the Die in the DraftPool.
+     *
      * @return The index of the chosen Die in the DraftPool.
      */
     public int getSourceIndex() {
@@ -56,6 +58,7 @@ public class DiceSwap extends ViewMessage {
 
     /**
      * Getter for the coordinates of the Die in the RoundTrack.
+     *
      * @return The coordinates of the position in the RoundTrack
      * at which the Die in the DraftPool must be placed through
      * the swapping.

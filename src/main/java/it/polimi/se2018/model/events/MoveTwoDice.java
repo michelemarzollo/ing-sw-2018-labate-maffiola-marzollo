@@ -43,7 +43,7 @@ import it.polimi.se2018.utils.Coordinates;
      *                   is performing the action.
      */
     public MoveTwoDice(Coordinates[] sources, Coordinates[] destinations,
-                       View view, String action, String playerName) {
+                       View view, Action action, String playerName) {
         super(view, action, playerName);
         this.sources = sources;
         this.destinations = destinations;

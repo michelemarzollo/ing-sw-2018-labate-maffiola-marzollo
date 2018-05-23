@@ -42,7 +42,7 @@ public class MoveDie extends ViewMessage{
      *                   is performing the action.
      */
     public MoveDie(Coordinates source, Coordinates destination,
-                   View view, String action, String playerName) {
+                   View view, Action action, String playerName) {
         super(view, action, playerName);
         this.source = source;
         this.destination = destination;

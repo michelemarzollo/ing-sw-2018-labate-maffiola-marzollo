@@ -18,7 +18,15 @@ public abstract class View {
     public abstract void showScoreBoard();
     public abstract void showDieSelection();
     public abstract void showMoveSelection(int amount);
+    public abstract void showDifficultySelection();
+    public abstract void showLensCutterSelection();
 
+    /**
+     * Requires the value to give to the die and the destination where to put it
+     * (for the FluxRemover ToolCard).
+     */
+    public abstract void showValueDestinationSelection();
+    public abstract void showFinalView();
     public abstract void handlePlacement(int index, Coordinates destination);
     public abstract void handleToolCardSelection(String name);
     public abstract void handleEndTurn();

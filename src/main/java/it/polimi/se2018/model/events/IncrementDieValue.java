@@ -39,7 +39,7 @@ public class IncrementDieValue extends ViewMessage {
      *                   is performing the action.
      */
     public IncrementDieValue(int dieIndex, boolean increment,
-                             View view, String action, String playerName) {
+                             View view, Action action, String playerName) {
         super(view, action, playerName);
         this.dieIndex = dieIndex;
         this.increment = increment;
