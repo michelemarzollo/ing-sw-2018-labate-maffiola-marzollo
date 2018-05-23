@@ -11,14 +11,16 @@ public interface ToolCardBehavior {
     /**
      * Selects the correct view to gather the parameters the tool card
      * needs to be used.
+     *
      * @param message The message sent by the view.
      */
     void askParameters(ViewMessage message);
 
     /**
      * Applies the effect of the tool card to the game.
-     * @param game The game the effect has to be applied to.
-     * @param message The message sent by th view.
+     *
+     * @param game    the game the effect has to be applied to.
+     * @param message the message sent by the view.
      */
     void useToolCard(Game game, ViewMessage message);
 }

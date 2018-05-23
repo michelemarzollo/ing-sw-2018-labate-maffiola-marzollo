@@ -54,7 +54,8 @@ public class DraftPool {
     /**
      * The method to draft a die form the DraftPool.
      *
-     * @param index The position of the die to draft in the list
+     * @param index the position of the die to draft in the list.
+     * @throws IndexOutOfBoundsException if the index is out of range.
      */
     public void draft(int index) {
         dice.remove(index);
@@ -65,6 +66,7 @@ public class DraftPool {
      *
      * @param index the index of the die to select in the DraftPool.
      * @return the die.
+     * @throws IndexOutOfBoundsException if the index is out of range.
      */
     public Die select(int index) {
         return dice.get(index);
