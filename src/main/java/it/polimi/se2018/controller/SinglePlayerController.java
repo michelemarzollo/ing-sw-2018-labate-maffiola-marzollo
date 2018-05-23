@@ -67,7 +67,7 @@ public class SinglePlayerController extends Controller {
         actions.put(Action.SELECT_PATTERN, this::selectPattern);
         actions.put(Action.PLACE_DIE, this::placeDie);
         actions.put(Action.ACTIVATE_TOOL_CARD, this::activateToolCard);
-        actions.put(Action.APPLY_TOOLCARD, this::applyToolCard);
+        actions.put(Action.APPLY_TOOL_CARD, this::applyToolCard);
         actions.put(Action.END_TURN, this::endTurn);
         actions.put(Action.DISCONNECT_PLAYER, this::disconnectPlayer);
         actions.put(Action.RECONNECT_PLAYER, this::reconnectPlayer);

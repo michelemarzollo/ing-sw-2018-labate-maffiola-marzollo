@@ -8,6 +8,14 @@ import it.polimi.se2018.model.events.ViewMessage;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * The class to describe the behaviour of the Flux Remover ToolCard
+ * {@link it.polimi.se2018.model.ToolCard}. (Tool Card 11)
+ * <p>
+ * The ToolCard allows to change a die form the {@link DraftPool}
+ * with a Die drafted randomly from the {@link DiceBag}. The value of
+ * the new die is chosen by the player.</p>
+ */
 public class FluxRemoverBehaviour implements ToolCardBehavior {
 
     /**

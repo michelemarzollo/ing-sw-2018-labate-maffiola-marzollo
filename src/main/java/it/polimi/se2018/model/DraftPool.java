@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,11 +36,14 @@ public class DraftPool {
 
     /**
      * The getter for {@code dice}.
+     * <p>
+     * A copy of the list is returned, in order not to expose
+     * the rep.</p>
      *
      * @return The list {@code dice}
      */
     public List<Die> getDice() {
-        return dice;
+        return new ArrayList<>(dice);
     }
 
     /**
@@ -79,6 +83,7 @@ public class DraftPool {
      * This method is useful to detect if a {@link ToolCard} can be used or not
      * in single player mode: Tool Cards may be used only by spending
      * a Die from the {@link DraftPool} that matches the ToolCard's Colour.
+     *
      * @param colour The colour of the toolCard that the Player is
      *               trying to use.
      * @return {@code true} if a Die in the {@code draftPool} is

@@ -7,6 +7,13 @@ import it.polimi.se2018.model.events.ViewMessage;
 
 import java.util.List;
 
+/**
+ * The class to describe the behaviour of the Grinding Stone ToolCard
+ * {@link it.polimi.se2018.model.ToolCard}. (Tool Card 10)
+ * <p>
+ * The ToolCard allows to flip to the opposite face the die drafted from
+ * the {@link it.polimi.se2018.model.DraftPool}.</p>
+ */
 public class GrindingStoneBehaviour implements ToolCardBehavior {
 
     /**

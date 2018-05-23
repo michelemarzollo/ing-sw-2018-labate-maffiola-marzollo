@@ -26,7 +26,7 @@ public abstract class View {
      * (for the FluxRemover ToolCard).
      */
     public abstract void showValueDestinationSelection();
-
+    public abstract void showFinalView();
     public abstract void handlePlacement(int index, Coordinates destination);
     public abstract void handleToolCardSelection(String name);
     public abstract void handleEndTurn();

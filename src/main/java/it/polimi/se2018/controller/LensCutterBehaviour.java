@@ -7,6 +7,13 @@ import it.polimi.se2018.model.events.ViewMessage;
 
 import java.util.List;
 
+/**
+ * The class to describe the behaviour of the Lens Cutter ToolCard
+ * {@link it.polimi.se2018.model.ToolCard}. (Tool Card 5)
+ * <p>
+ * The ToolCard allows to change a die from the {@link it.polimi.se2018.model.DraftPool}
+ * with a die from the {@link it.polimi.se2018.model.RoundTrack}</p>
+ */
 public class LensCutterBehaviour implements ToolCardBehavior {
 
     /**
@@ -58,7 +65,6 @@ public class LensCutterBehaviour implements ToolCardBehavior {
         } catch (IndexOutOfBoundsException e) {
             swapMessage.getView().showError("There is no die in that position in the Draft Pool!");
         }
-
 
     }
 }
