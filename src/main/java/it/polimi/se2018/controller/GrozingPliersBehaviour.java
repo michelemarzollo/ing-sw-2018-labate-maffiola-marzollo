@@ -38,8 +38,8 @@ public class GrozingPliersBehaviour implements ToolCardBehaviour {
         IncrementDieValue msg = (IncrementDieValue) message;
         int dieIndex = msg.getDieIndex();
         List<Die> dice = game.getDraftPool().getDice();
-        Die selectedDie = dice.remove(dieIndex);
         try {
+            Die selectedDie = dice.remove(dieIndex);
             if (msg.isIncrement()) {
                 dice.add(selectedDie.increase());
                 //The draftPool is actually modified only if the increment has been successful.
@@ -54,6 +54,9 @@ public class GrozingPliersBehaviour implements ToolCardBehaviour {
         }
         catch(DieValueException ex){
             msg.getView().showError(ex.getMessage());
+        }
+        catch(IndexOutOfBoundsException ex){
+            msg.getView().showError("The index of the selected die is not valid");
         }
     }
 }
