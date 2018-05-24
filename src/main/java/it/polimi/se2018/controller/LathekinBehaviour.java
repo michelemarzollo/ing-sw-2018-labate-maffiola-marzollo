@@ -44,5 +44,8 @@ public class LathekinBehaviour implements ToolCardBehaviour {
         catch (PlacementErrorException ex){
             message.getView().showError(ex.getMessage());
         }
+        catch (IndexOutOfBoundsException ex){
+            message.getView().showError("The source or destination coordinates indicated are not valid");
+        }
     }
 }

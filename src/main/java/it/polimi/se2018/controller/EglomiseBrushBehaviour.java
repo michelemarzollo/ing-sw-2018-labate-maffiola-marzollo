@@ -17,6 +17,7 @@ import it.polimi.se2018.utils.Coordinates;
  */
 public class EglomiseBrushBehaviour implements ToolCardBehaviour {
 
+
     /**
      * Selects the view to let the user insert the couple of {@link Coordinates},
      * source and destination, for the movement of the die.
@@ -29,7 +30,8 @@ public class EglomiseBrushBehaviour implements ToolCardBehaviour {
 
     /**
      * Applies the die movement and set the modified {@link it.polimi.se2018.model.Pattern}
-     * in the {@link Player}'s attribute if the movement is correct.
+     * in the {@link Player}'s attribute if the movement is correct (respects all the
+     * restrictions with the exception of the colour restrictions).
      * @param game The game the effect has to be applied to.
      * @param message The message sent by the view.
      */
@@ -44,6 +46,9 @@ public class EglomiseBrushBehaviour implements ToolCardBehaviour {
         }
         catch (PlacementErrorException ex){
             message.getView().showError(ex.getMessage());
+        }
+        catch (IndexOutOfBoundsException ex){
+            message.getView().showError("The source or destination coordinates indicated are not valid");
         }
     }
 }

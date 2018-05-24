@@ -101,12 +101,18 @@ public class SinglePlayerController extends Controller {
 
     private void setUpGame(ViewMessage message) {
         SelectDifficulty difficulty = (SelectDifficulty) message;
-        CardDealer cardDealer = new CardDealer(getGame());
-        //In singlePlayer mode the Player has two privateObjectiveCards and
-        //the number of ToolCards depend on the level of difficulty chosen.
-        cardDealer.deal(3, 2, difficulty.getDifficulty());
-        getGame().terminateSetup();
-        //now to begin the Game the only missing thing is the choice of a Pattern.
+        if (difficulty.getDifficulty() < 1 || difficulty.getDifficulty() > 5){
+            message.getView().showError("The level of difficulty must be in 1-5 range: choose another one");
+            message.getView().showDifficultySelection();
+        }
+        else {
+            CardDealer cardDealer = new CardDealer(getGame());
+            //In singlePlayer mode the Player has two privateObjectiveCards and
+            //the number of ToolCards depend on the level of difficulty chosen.
+            cardDealer.deal(3, 2, difficulty.getDifficulty());
+            getGame().terminateSetup();
+            //now to begin the Game the only missing thing is the choice of a Pattern.
+        }
     }
 
 
@@ -288,7 +294,7 @@ public class SinglePlayerController extends Controller {
     private class EndGameTask extends TimerTask{
         @Override
         public void run() {
-            //@TODO chiamare il metodo finalizeMatch che sarà nell'abstract controller
+            //@TODO invoke finalizeMatch methow that will be in the abstract controller 
         }
     }
 
@@ -312,9 +318,13 @@ public class SinglePlayerController extends Controller {
      */
     @Override
     protected void reconnectPlayer(ViewMessage message) {
-        if(message.getPlayerName().equals(getGame().getPlayers().get(0).getName()))
+        if(message.getPlayerName().equals(getGame().getPlayers().get(0).getName())) {
             timer.cancel();
-        getGame().getPlayers().get(0).setConnected(true);
+            getGame().getPlayers().get(0).setConnected(true);
+        }
+        else{
+            message.getView().showError("Your username doesn't match with the actual player's username");
+        }
     }
 
 

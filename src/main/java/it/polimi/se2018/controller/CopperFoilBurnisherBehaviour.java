@@ -20,17 +20,20 @@ public class CopperFoilBurnisherBehaviour implements ToolCardBehaviour {
     /**
      * Selects the view to let the user insert the couple of {@link Coordinates},
      * source and destination, for the movement of the die.
+     *
      * @param message The message sent by the view.
      */
     @Override
-    public void askParameters(ViewMessage message){
-            message.getView().showMoveSelection(1);
+    public void askParameters(ViewMessage message) {
+        message.getView().showMoveSelection(1);
     }
 
     /**
      * Applies the die movement and set the modified {@link it.polimi.se2018.model.Pattern}
-     * in the {@link Player}'s attribute if the movement is correct.
-     * @param game The game the effect has to be applied to.
+     * in the {@link Player}'s attribute if the movement is correct (respects all the
+     * restrictions with the exception of the value restrictions).
+     *
+     * @param game    The game the effect has to be applied to.
      * @param message The message sent by the view.
      */
     @Override
@@ -39,13 +42,14 @@ public class CopperFoilBurnisherBehaviour implements ToolCardBehaviour {
         Coordinates source = msg.getSource();
         Coordinates destination = msg.getDestination();
         Player player = game.getTurnManager().getCurrentTurn().getPlayer();
-        try{
+        try {
             player.setPattern(player.getPattern().moveDie(source, destination, Restriction.ONLY_COLOUR));
-        }
-        catch (PlacementErrorException ex){
+        } catch (PlacementErrorException ex) {
             message.getView().showError(ex.getMessage());
+        } catch (IndexOutOfBoundsException ex) {
+            message.getView().showError("The source or destination coordinates indicated are not valid");
         }
-
     }
-
 }
+
+
