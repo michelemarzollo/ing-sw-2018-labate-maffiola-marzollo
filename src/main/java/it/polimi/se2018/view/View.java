@@ -27,6 +27,7 @@ public abstract class View {
      */
     public abstract void showValueDestinationSelection();
     public abstract void showFinalView();
+    /*
     public abstract void handlePlacement(int index, Coordinates destination);
     public abstract void handleToolCardSelection(String name);
     public abstract void handleEndTurn();
@@ -37,7 +38,7 @@ public abstract class View {
     public abstract void handleToolCardUsage(String name, Coordinates source, Coordinates destination);
     public abstract void handleToolCardUsage(String name, Coordinates[] sources, Coordinates[] destinations);
     public abstract void handleDisconnect();
-
+*/
     public String getPlayerName() {
         return playerName;
     }

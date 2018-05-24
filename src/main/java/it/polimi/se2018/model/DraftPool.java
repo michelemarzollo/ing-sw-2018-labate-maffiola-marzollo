@@ -40,16 +40,16 @@ public class DraftPool {
      * A copy of the list is returned, in order not to expose
      * the rep.</p>
      *
-     * @return The list {@code dice}
+     * @return The list {@code dice}.
      */
     public List<Die> getDice() {
         return new ArrayList<>(dice);
     }
 
     /**
-     * The setter for {@code dice}
+     * The setter for {@code dice}.
      *
-     * @param dice The new list of dice to set
+     * @param dice The new list of dice to set.
      */
     public void setDice(List<Die> dice) {
         this.dice = dice;
