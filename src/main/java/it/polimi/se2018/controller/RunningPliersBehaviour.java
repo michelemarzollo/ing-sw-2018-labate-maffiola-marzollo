@@ -72,7 +72,9 @@ public class RunningPliersBehaviour implements ToolCardBehaviour {
 
     private void blockSecondTurn(Game game, PlaceDie message) {
         try {
-            game.getTurnManager().consumeSecondTurn(game.getTurnManager().getCurrentTurn().getPlayer());
+            game.getTurnManager().consumeSecondTurn(
+                    game.getTurnManager().getCurrentTurn().getPlayer()
+            );
         } catch (TurnManager.SecondTurnUnavailableException e) {
             message.getView().showError("You were not allowed to use the ToolCard" +
                     "in your second turn!");

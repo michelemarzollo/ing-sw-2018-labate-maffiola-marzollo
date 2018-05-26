@@ -8,9 +8,8 @@ import it.polimi.se2018.view.View;
  * This action is needed when using 'Flux Brush', 'Flux Remover',
  * 'Grinding Stone' and 'Running Pliers'
  * {@link it.polimi.se2018.model.ToolCard}.
- *
  */
-public class SelectDie extends ViewMessage{
+public class SelectDie extends ViewMessage {
 
     /**
      * Index of the chosen Die in the DraftPool
@@ -20,10 +19,12 @@ public class SelectDie extends ViewMessage{
 
     /**
      * Constructor of the class.
-     * @param dieIndex The position of the selected Die
-     *                 in the DraftPool.
-     * @param action The action that the Player wants
-     *               to perform.
+     *
+     * @param dieIndex   The position of the selected Die
+     *                   in the DraftPool.
+     * @param view       The view reference.
+     * @param action     The action that the Player wants
+     *                   to perform.
      * @param playerName The name of the player that
      *                   is performing the action.
      */
@@ -35,6 +36,7 @@ public class SelectDie extends ViewMessage{
 
     /**
      * Getter for the position of the selected Die.
+     *
      * @return The index of the selected Die in the DraftPool.
      */
     public int getDieIndex() {
