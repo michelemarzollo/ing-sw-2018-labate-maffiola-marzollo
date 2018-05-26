@@ -16,6 +16,19 @@ import it.polimi.se2018.model.events.ViewMessage;
 public class RunningPliersBehaviour implements ToolCardBehaviour {
 
     /**
+     * Tells if the tool card can be applied.
+     * <p>This tool card can only be applied if the player has a second
+     * turn this round.</p>
+     *
+     * @param game The game the tool card will be applied to.
+     * @return {@code true} if the player has a second turn this round.
+     */
+    @Override
+    public boolean areRequirementsSatisfied(Game game) {
+        return game.getTurnManager().isSecondTurnAvailable();
+    }
+
+    /**
      * Selects the correct view to gather the parameters the tool card
      * needs to be used.
      *
@@ -37,9 +50,11 @@ public class RunningPliersBehaviour implements ToolCardBehaviour {
      *
      * @param game    the game the effect has to be applied to.
      * @param message the message sent by the view.
+     * @return {@code true} if the tool card has been successfully applied;
+     * {@code false} otherwise.
      */
     @Override
-    public void useToolCard(Game game, ViewMessage message) {
+    public boolean useToolCard(Game game, ViewMessage message) {
 
         PlaceDie placeMessage = (PlaceDie) message;
 
@@ -57,7 +72,8 @@ public class RunningPliersBehaviour implements ToolCardBehaviour {
             game.getDraftPool().draft(placeMessage.getDieIndex());
             currentTurn.placeDie();
 
-            blockSecondTurn(game, placeMessage);
+            blockSecondTurn(game);
+            return true;
 
         } catch (IndexOutOfBoundsException e) {
             placeMessage.getView().showError("Invalid selection!");
@@ -67,17 +83,16 @@ public class RunningPliersBehaviour implements ToolCardBehaviour {
                     "Placement doesn't respect restrictions!\n" + e.getMessage()
             );
         }
-
+        return false;
     }
 
-    private void blockSecondTurn(Game game, PlaceDie message) {
+    private void blockSecondTurn(Game game) {
         try {
             game.getTurnManager().consumeSecondTurn(
                     game.getTurnManager().getCurrentTurn().getPlayer()
             );
-        } catch (TurnManager.SecondTurnUnavailableException e) {
-            message.getView().showError("You were not allowed to use the ToolCard" +
-                    "in your second turn!");
+        } catch (TurnManager.SecondTurnUnavailableException ignored) {
+            // cannot happen
         }
     }
 }

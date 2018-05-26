@@ -16,6 +16,19 @@ import it.polimi.se2018.model.events.ViewMessage;
 public class CorkBackedStraightedgeBehaviour implements ToolCardBehaviour {
 
     /**
+     * Tells if the tool card can be applied.
+     * <p>This tool card can only be applied if the player hasn't placed a die yet.</p>
+     *
+     * @param game The game the tool card will be applied to.
+     * @return {@code true} if the player hasn't already placed a die;
+     * {@code false} otherwise.
+     */
+    @Override
+    public boolean areRequirementsSatisfied(Game game) {
+        return !game.getTurnManager().getCurrentTurn().hasAlreadyPlacedDie();
+    }
+
+    /**
      * Does nothing.
      *
      * @param message The message sent by the view.
@@ -33,31 +46,34 @@ public class CorkBackedStraightedgeBehaviour implements ToolCardBehaviour {
      *
      * @param game    The game the effect has to be applied to.
      * @param message The message sent by th view.
+     * @return {@code true} if the tool card has been successfully applied;
+     * {@code false} otherwise.
      */
     @Override
-    public void useToolCard(Game game, ViewMessage message) {
+    public boolean useToolCard(Game game, ViewMessage message) {
         PlaceDie placeDie = (PlaceDie) message;
         try {
             Die selected = game.getDraftPool().select(placeDie.getDieIndex());
-            String playerName = placeDie.getPlayerName();
             Player player = game.getTurnManager().getCurrentTurn().getPlayer();
-            if (player.getName().equals(playerName)) {
-                Pattern currentPattern = player.getPattern();
-                Pattern newPattern = currentPattern.placeDie(
-                        selected,
-                        placeDie.getDestination(),
-                        Restriction.NOT_ADJACENT);
-                player.setPattern(newPattern);
-                game.getDraftPool().draft(placeDie.getDieIndex());
-                // consume placement also
-                game.getTurnManager().getCurrentTurn().placeDie();
-            } else {
-                placeDie.getView().showError("Not your turn!");
-            }
+
+            Pattern currentPattern = player.getPattern();
+            Pattern newPattern = currentPattern.placeDie(
+                    selected,
+                    placeDie.getDestination(),
+                    Restriction.NOT_ADJACENT);
+            player.setPattern(newPattern);
+            game.getDraftPool().draft(placeDie.getDieIndex());
+            // consume placement also
+            game.getTurnManager().getCurrentTurn().placeDie();
+
         } catch (PlacementErrorException e) {
             placeDie.getView().showError("Invalid placement: " + e.getMessage());
+            return false;
         } catch (IndexOutOfBoundsException e) {
             placeDie.getView().showError("Bad selection!");
+            return false;
         }
+
+        return true;
     }
 }

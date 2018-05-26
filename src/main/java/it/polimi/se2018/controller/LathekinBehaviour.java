@@ -17,6 +17,17 @@ import it.polimi.se2018.utils.Coordinates;
 public class LathekinBehaviour implements ToolCardBehaviour {
 
     /**
+     * Always returns true because this tool card has no specific requirements.
+     *
+     * @param game The game the tool card will be applied to.
+     * @return Always {@code true}.
+     */
+    @Override
+    public boolean areRequirementsSatisfied(Game game) {
+        return true;
+    }
+
+    /**
      * Selects the view to let the user insert the two couple of {@link Coordinates},
      * source and destination, for the movement of the dice.
      * @param message The message sent by the view.
@@ -31,9 +42,11 @@ public class LathekinBehaviour implements ToolCardBehaviour {
      * in the {@link Player}'s attribute if the movement are correct.
      * @param game The game the effect has to be applied to.
      * @param message The message sent by the view.
+     * @return {@code true} if the tool card has been successfully applied;
+     * {@code false} otherwise.
      */
     @Override
-    public void useToolCard(Game game, ViewMessage message) {
+    public boolean useToolCard(Game game, ViewMessage message) {
         MoveTwoDice msg = (MoveTwoDice) message;
         Coordinates[] sources = msg.getSources();
         Coordinates[] destinations = msg.getDestinations();
@@ -43,9 +56,13 @@ public class LathekinBehaviour implements ToolCardBehaviour {
         }
         catch (PlacementErrorException ex){
             message.getView().showError(ex.getMessage());
+            return false;
         }
         catch (IndexOutOfBoundsException ex){
-            message.getView().showError("The source or destination coordinates indicated are not valid");
+            message.getView().showError("The source or destination coordinates " +
+                    "indicated are not valid");
+            return false;
         }
+        return true;
     }
 }

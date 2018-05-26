@@ -19,6 +19,19 @@ import java.util.List;
 public class GrozingPliersBehaviour implements ToolCardBehaviour {
 
     /**
+     * Tells if the tool card can be applied.
+     * <p>This tool card can only be applied if the player hasn't placed a die yet.</p>
+     *
+     * @param game The game the tool card will be applied to.
+     * @return {@code true} if the player hasn't already placed a die;
+     * {@code false} otherwise.
+     */
+    @Override
+    public boolean areRequirementsSatisfied(Game game) {
+        return !game.getTurnManager().getCurrentTurn().hasAlreadyPlacedDie();
+    }
+
+    /**
      * Selects the view to let the user select a die from the draft pool.
      * @param message The message sent by the view.
      */
@@ -32,9 +45,11 @@ public class GrozingPliersBehaviour implements ToolCardBehaviour {
      * that die for the rest of his turn.
      * @param game The game the effect has to be applied to.
      * @param message The message sent by the view.
+     * @return {@code true} if the tool card has been successfully applied;
+     * {@code false} otherwise.
      */
     @Override
-    public void useToolCard(Game game, ViewMessage message) {
+    public boolean useToolCard(Game game, ViewMessage message) {
         IncrementDieValue msg = (IncrementDieValue) message;
         int dieIndex = msg.getDieIndex();
         List<Die> dice = game.getDraftPool().getDice();
@@ -53,9 +68,13 @@ public class GrozingPliersBehaviour implements ToolCardBehaviour {
         }
         catch(DieValueException ex){
             msg.getView().showError(ex.getMessage());
+            return false;
         }
         catch(IndexOutOfBoundsException ex){
             msg.getView().showError("The index of the selected die is not valid");
+            return false;
         }
+
+        return true;
     }
 }

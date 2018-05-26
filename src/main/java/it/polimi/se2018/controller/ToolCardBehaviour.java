@@ -9,6 +9,14 @@ import it.polimi.se2018.model.events.ViewMessage;
 public interface ToolCardBehaviour {
 
     /**
+     * Tells if the requirements to activate the tool card are met in the game.
+     *
+     * @param game The game the tool card will be applied to.
+     * @return {@code true} if all requirements are met; {@code false} otherwise.
+     */
+    boolean areRequirementsSatisfied(Game game);
+
+    /**
      * Selects the correct view to gather the parameters the tool card
      * needs to be used.
      *
@@ -21,6 +29,8 @@ public interface ToolCardBehaviour {
      *
      * @param game    the game the effect has to be applied to.
      * @param message the message sent by the view.
+     * @return {@code true} if the tool card has been successfully applied;
+     * {@code false} otherwise.
      */
-    void useToolCard(Game game, ViewMessage message);
+    boolean useToolCard(Game game, ViewMessage message);
 }

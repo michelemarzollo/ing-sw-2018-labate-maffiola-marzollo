@@ -17,6 +17,18 @@ import java.util.stream.Collectors;
  * as user-given parameters to be applied.</p>
  */
 public class TapWheelBehaviour implements ToolCardBehaviour {
+
+    /**
+     * Always returns true because this tool card has no specific requirements.
+     *
+     * @param game The game the tool card will be applied to.
+     * @return Always {@code true}.
+     */
+    @Override
+    public boolean areRequirementsSatisfied(Game game) {
+        return true;
+    }
+
     /**
      * Selects the view to let the user choose two dice.
      *
@@ -115,14 +127,16 @@ public class TapWheelBehaviour implements ToolCardBehaviour {
      *
      * @param game    The game the effect has to be applied to.
      * @param message The message sent by th view.
+     * @return {@code true} if the tool card has been successfully applied;
+     * {@code false} otherwise.
      */
     @Override
-    public void useToolCard(Game game, ViewMessage message) {
+    public boolean useToolCard(Game game, ViewMessage message) {
         MoveTwoDice moveTwoDice = (MoveTwoDice) message;
 
         if (!checkAmounts(moveTwoDice)) {
             moveTwoDice.getView().showError("Bad amount of selected positions");
-            return;
+            return false;
         }
 
         Player player = game.getTurnManager().getCurrentTurn().getPlayer();
@@ -131,7 +145,7 @@ public class TapWheelBehaviour implements ToolCardBehaviour {
 
         if (!isSelectionValid(selected, game.getRoundTrack().getLeftovers())) {
             moveTwoDice.getView().showError("Invalid selection: bad colours!");
-            return;
+            return false;
         }
 
         try {
@@ -139,8 +153,10 @@ public class TapWheelBehaviour implements ToolCardBehaviour {
                     moveTwoDice.getSources(),
                     moveTwoDice.getDestinations());
             player.setPattern(newPattern);
+            return true;
         } catch (PlacementErrorException e) {
             moveTwoDice.getView().showError("Bad selection: cannot move");
         }
+        return false;
     }
 }

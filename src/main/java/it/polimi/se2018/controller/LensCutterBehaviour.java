@@ -17,6 +17,19 @@ import java.util.List;
 public class LensCutterBehaviour implements ToolCardBehaviour {
 
     /**
+     * Tells if the tool card can be applied.
+     * <p>This tool card can only be applied if the player hasn't placed a die yet.</p>
+     *
+     * @param game The game the tool card will be applied to.
+     * @return {@code true} if the player hasn't already placed a die;
+     * {@code false} otherwise.
+     */
+    @Override
+    public boolean areRequirementsSatisfied(Game game) {
+        return !game.getTurnManager().getCurrentTurn().hasAlreadyPlacedDie();
+    }
+
+    /**
      * Selects the correct view to gather the parameters the tool card
      * needs to be used.
      *
@@ -37,9 +50,11 @@ public class LensCutterBehaviour implements ToolCardBehaviour {
      *
      * @param game    the game the effect has to be applied to.
      * @param message the message sent by the view.
+     * @return {@code true} if the tool card has been successfully applied;
+     * {@code false} otherwise.
      */
     @Override
-    public void useToolCard(Game game, ViewMessage message) {
+    public boolean useToolCard(Game game, ViewMessage message) {
 
         DiceSwap swapMessage = (DiceSwap) message;
 
@@ -57,6 +72,7 @@ public class LensCutterBehaviour implements ToolCardBehaviour {
                 //Setting of the forced selection in the current turn
                 game.getTurnManager().getCurrentTurn().setForcedSelectionIndex(
                         swapMessage.getSourceIndex());
+                return true;
             } else {
                 swapMessage.getView().showError(
                         "There is no die in that position in the Round Track!"
@@ -65,6 +81,6 @@ public class LensCutterBehaviour implements ToolCardBehaviour {
         } catch (IndexOutOfBoundsException e) {
             swapMessage.getView().showError("There is no die in that position in the Draft Pool!");
         }
-
+        return false;
     }
 }

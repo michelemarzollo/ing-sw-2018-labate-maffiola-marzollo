@@ -17,6 +17,19 @@ import java.util.List;
 public class GrindingStoneBehaviour implements ToolCardBehaviour {
 
     /**
+     * Tells if the tool card can be applied.
+     * <p>This tool card can only be applied if the player hasn't placed a die yet.</p>
+     *
+     * @param game The game the tool card will be applied to.
+     * @return {@code true} if the player hasn't already placed a die;
+     * {@code false} otherwise.
+     */
+    @Override
+    public boolean areRequirementsSatisfied(Game game) {
+        return !game.getTurnManager().getCurrentTurn().hasAlreadyPlacedDie();
+    }
+
+    /**
      * Selects the correct view to gather the parameters the tool card
      * needs to be used.
      *
@@ -36,9 +49,11 @@ public class GrindingStoneBehaviour implements ToolCardBehaviour {
      *
      * @param game    the game the effect has to be applied to.
      * @param message the message sent by the view.
+     * @return {@code true} if the tool card has been successfully applied;
+     * {@code false} otherwise.
      */
     @Override
-    public void useToolCard(Game game, ViewMessage message) {
+    public boolean useToolCard(Game game, ViewMessage message) {
 
         SelectDie selectMessage = (SelectDie) message;
         try {
@@ -57,7 +72,9 @@ public class GrindingStoneBehaviour implements ToolCardBehaviour {
                     selectMessage.getDieIndex());
         } catch (IndexOutOfBoundsException e) {
             selectMessage.getView().showError("Bad index!");
+            return false;
         }
 
+        return true;
     }
 }

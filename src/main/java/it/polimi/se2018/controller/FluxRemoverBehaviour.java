@@ -26,6 +26,19 @@ public class FluxRemoverBehaviour implements ToolCardBehaviour {
     private boolean firstStepDone = false;
 
     /**
+     * Tells if the tool card can be applied.
+     * <p>This tool card can only be applied if the player hasn't placed a die yet.</p>
+     *
+     * @param game The game the tool card will be applied to.
+     * @return {@code true} if the player hasn't already placed a die;
+     * {@code false} otherwise.
+     */
+    @Override
+    public boolean areRequirementsSatisfied(Game game) {
+        return !game.getTurnManager().getCurrentTurn().hasAlreadyPlacedDie();
+    }
+
+    /**
      * Selects the correct view to gather the parameters the tool card
      * needs to be used.
      *
@@ -45,16 +58,18 @@ public class FluxRemoverBehaviour implements ToolCardBehaviour {
      *
      * @param game    The game the effect has to be applied to.
      * @param message The message sent by th view.
+     * @return {@code true} if the tool card has been successfully applied;
+     * {@code false} otherwise.
      */
     @Override
-    public void useToolCard(Game game, ViewMessage message) {
+    public boolean useToolCard(Game game, ViewMessage message) {
 
         if (!firstStepDone) {
             SelectDie selectMessage = (SelectDie) message;
-            firstStep(game, selectMessage);
+            return firstStep(game, selectMessage);
         } else {
             ChooseValue chooseMessage = (ChooseValue) message;
-            secondStep(game, chooseMessage);
+            return secondStep(game, chooseMessage);
         }
 
     }
@@ -71,8 +86,10 @@ public class FluxRemoverBehaviour implements ToolCardBehaviour {
      * @param game          the reference to the {@link Game}.
      * @param selectMessage the message from the view, that contains the information
      *                      to make the move and the reference to the view.
+     * @return {@code true} if this step has been successfully applied;
+     * {@code false} otherwise.
      */
-    private void firstStep(Game game, SelectDie selectMessage) {
+    private boolean firstStep(Game game, SelectDie selectMessage) {
         try {
             List<Die> dice = game.getDraftPool().getDice();
 
@@ -91,7 +108,9 @@ public class FluxRemoverBehaviour implements ToolCardBehaviour {
             selectMessage.getView().showValueDestinationSelection();
         } catch (IndexOutOfBoundsException e) {
             selectMessage.getView().showError("Bad index!");
+            return false;
         }
+        return true;
     }
 
     /**
@@ -101,8 +120,10 @@ public class FluxRemoverBehaviour implements ToolCardBehaviour {
      * @param game          the reference to the {@link Game}.
      * @param chooseMessage the message from the view, that contains the information
      *                      to make the move and the reference to the view.
+     * @return always returns {@code false}, since this step doest't require resources
+     * to be consumed.
      */
-    private void secondStep(Game game, ChooseValue chooseMessage) {
+    private boolean secondStep(Game game, ChooseValue chooseMessage) {
 
         int forcedSelection = game.getTurnManager().getCurrentTurn().getForcedSelectionIndex();
         Die oldDie = game.getDraftPool().getDice().get(forcedSelection);
@@ -126,5 +147,6 @@ public class FluxRemoverBehaviour implements ToolCardBehaviour {
                     "Placement doesn't respect restrictions!\n" + e.getMessage()
             );
         }
+        return false;
     }
 }
