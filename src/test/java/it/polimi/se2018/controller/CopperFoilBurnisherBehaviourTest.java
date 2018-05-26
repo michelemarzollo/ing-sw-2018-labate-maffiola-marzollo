@@ -19,6 +19,13 @@ import java.util.Random;
 public class CopperFoilBurnisherBehaviourTest {
 
     @Test
+    public void testRequirements(){
+        Game game = GameUtils.getHalfwayGame();
+        CopperFoilBurnisherBehaviour behaviour = new CopperFoilBurnisherBehaviour();
+        Assert.assertTrue(behaviour.areRequirementsSatisfied(game));
+    }
+
+    @Test
     public void testAskParameters(){
         MockView mockView = new MockView("Pippo");
 
@@ -53,8 +60,9 @@ public class CopperFoilBurnisherBehaviourTest {
         );
 
         CopperFoilBurnisherBehaviour behaviour = new CopperFoilBurnisherBehaviour();
-        behaviour.useToolCard(game, message);
+        boolean success = behaviour.useToolCard(game, message);
 
+        Assert.assertTrue(success);
         Assert.assertEquals(0, mockView.getCalledMethods().size());
 
         Die yellow6 = new Die(6, new Random(), Colour.YELLOW);
@@ -80,8 +88,9 @@ public class CopperFoilBurnisherBehaviourTest {
         );
 
         CopperFoilBurnisherBehaviour behaviour = new CopperFoilBurnisherBehaviour();
-        behaviour.useToolCard(game, message);
+        boolean success = behaviour.useToolCard(game, message);
 
+        Assert.assertFalse(success);
         Assert.assertEquals(1, mockView.getCalledMethods().size());
         boolean isError = mockView.getCalledMethods().get(0).startsWith("showError");
         Assert.assertTrue(isError);
@@ -109,8 +118,9 @@ public class CopperFoilBurnisherBehaviourTest {
         );
 
         CopperFoilBurnisherBehaviour behaviour = new CopperFoilBurnisherBehaviour();
-        behaviour.useToolCard(game, message);
+        boolean success = behaviour.useToolCard(game, message);
 
+        Assert.assertFalse(success);
         Assert.assertEquals(1, mockView.getCalledMethods().size());
         boolean isError = mockView.getCalledMethods().get(0).startsWith("showError");
         Assert.assertTrue(isError);

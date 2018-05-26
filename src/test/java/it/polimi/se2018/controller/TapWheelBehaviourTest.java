@@ -16,6 +16,16 @@ import java.util.List;
 import java.util.Random;
 
 public class TapWheelBehaviourTest {
+
+    @Test
+    public void testRequirements(){
+        Game game = GameUtils.getHalfwayGame();
+        if(game == null)
+            Assert.fail("Error on game initialization");
+        TapWheelBehaviour behaviour = new TapWheelBehaviour();
+        Assert.assertTrue(behaviour.areRequirementsSatisfied(game));
+    }
+
     @Test
     public void testAskParameters() {
         MockView mockView = new MockView("Pippo");
@@ -65,7 +75,7 @@ public class TapWheelBehaviourTest {
                 "Pippo"
         );
 
-        return setupScenario(message, true);
+        return setupScenario(message, true, true);
     }
 
     private boolean placeSomeDice(Player player) {
@@ -97,7 +107,7 @@ public class TapWheelBehaviourTest {
     }
 
 
-    private Game setupScenario(MoveTwoDice message, boolean insertYellow){
+    private Game setupScenario(MoveTwoDice message, boolean insertYellow, boolean isSuccess){
         Game game = GameUtils.getHalfwayGame();
         if(game == null)
             Assert.fail("Error on game initialization");
@@ -108,7 +118,10 @@ public class TapWheelBehaviourTest {
         Assert.assertTrue("Error on placement", control);
 
         TapWheelBehaviour behaviour = new TapWheelBehaviour();
-        behaviour.useToolCard(game, message);
+        boolean success = behaviour.useToolCard(game, message);
+
+        Assert.assertEquals(isSuccess, success);
+
         return game;
     }
 
@@ -127,7 +140,7 @@ public class TapWheelBehaviourTest {
                 "Pippo"
         );
 
-        return setupScenario(message, false);
+        return setupScenario(message, false, false);
     }
 
     @Test
@@ -179,6 +192,6 @@ public class TapWheelBehaviourTest {
                 Action.APPLY_TOOL_CARD,
                 "Pippo"
         );
-        return setupScenario(message, true);
+        return setupScenario(message, true, false);
     }
 }

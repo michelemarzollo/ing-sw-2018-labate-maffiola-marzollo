@@ -16,6 +16,16 @@ import java.util.List;
 public class GrozingPliersBehaviourTest {
 
     @Test
+    public void testRequirements(){
+        Game game = GameUtils.getHalfwayGame();
+        if(game == null)
+            Assert.fail("Error on game initialization");
+        game.getTurnManager().getCurrentTurn().placeDie();
+        GrozingPliersBehaviour behaviour = new GrozingPliersBehaviour();
+        Assert.assertFalse(behaviour.areRequirementsSatisfied(game));
+    }
+
+    @Test
     public void testAskParameters(){
         MockView mockView = new MockView("Pippo");
 
@@ -48,8 +58,9 @@ public class GrozingPliersBehaviourTest {
         );
 
         GrozingPliersBehaviour behaviour = new GrozingPliersBehaviour();
-        behaviour.useToolCard(game, message);
+        boolean success = behaviour.useToolCard(game, message);
 
+        Assert.assertTrue(success);
         Assert.assertEquals(0, mockView.getCalledMethods().size());
 
         int actualIndex = game.getTurnManager().getCurrentTurn().getForcedSelectionIndex();
@@ -88,8 +99,9 @@ public class GrozingPliersBehaviourTest {
         );
 
         GrozingPliersBehaviour behaviour = new GrozingPliersBehaviour();
-        behaviour.useToolCard(game, message);
+        boolean success = behaviour.useToolCard(game, message);
 
+        Assert.assertFalse(success);
         Assert.assertEquals(1, mockView.getCalledMethods().size());
         boolean isError = mockView.getCalledMethods().get(0).startsWith("showError");
         Assert.assertTrue(isError);
@@ -127,8 +139,9 @@ public class GrozingPliersBehaviourTest {
         );
 
         GrozingPliersBehaviour behaviour = new GrozingPliersBehaviour();
-        behaviour.useToolCard(game, message);
+        boolean success = behaviour.useToolCard(game, message);
 
+        Assert.assertTrue(success);
         Assert.assertEquals(0, mockView.getCalledMethods().size());
 
         int actualIndex = game.getTurnManager().getCurrentTurn().getForcedSelectionIndex();

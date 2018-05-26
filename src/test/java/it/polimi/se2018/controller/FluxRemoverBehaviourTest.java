@@ -21,6 +21,16 @@ import java.util.Random;
 public class FluxRemoverBehaviourTest {
 
     @Test
+    public void testRequirements(){
+        Game game = GameUtils.getHalfwayGame();
+        if(game == null)
+            Assert.fail("Error on game initialization");
+        game.getTurnManager().getCurrentTurn().placeDie();
+        FluxRemoverBehaviour behaviour = new FluxRemoverBehaviour();
+        Assert.assertFalse(behaviour.areRequirementsSatisfied(game));
+    }
+
+    @Test
     public void testAskParameters(){
         MockView mockView = new MockView("Pippo");
 
@@ -49,7 +59,9 @@ public class FluxRemoverBehaviourTest {
         game.getDiceBag().draft(73);
 
         FluxRemoverBehaviour behaviour = new FluxRemoverBehaviour();
-        behaviour.useToolCard(game, message);
+        boolean success = behaviour.useToolCard(game, message);
+        Assert.assertFalse(success);
+
         return behaviour;
     }
 
@@ -93,8 +105,9 @@ public class FluxRemoverBehaviourTest {
         game.getDiceBag().draft(73);
 
         FluxRemoverBehaviour behaviour = new FluxRemoverBehaviour();
-        behaviour.useToolCard(game, message);
+        boolean success = behaviour.useToolCard(game, message);
 
+        Assert.assertFalse(success);
         List<Die> oldDraftPool = GameUtils.getDice(false);
         List<Die> newDraftPool = game.getDraftPool().getDice();
 
@@ -114,16 +127,12 @@ public class FluxRemoverBehaviourTest {
     public void testSecondStepSuccess(){
         MockView mockView = new MockView("Pippo");
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if(game == null) {
             Assert.fail("Error on game initialization");
+        }
         Player player = game.getPlayers().get(0);
 
         FluxRemoverBehaviour behaviour = applyFirstStep(game, mockView);
-        //reset draft pool, so drafted dice are known
-        game.getDraftPool().setDice(GameUtils.getDice(false));
-        //force select red die
-        game.getTurnManager().getCurrentTurn().setForcedSelectionIndex(0);
-        Die red2 = new Die(2, new Random(), Colour.RED);
 
         ChooseValue message = new ChooseValue(
                 mockView,
@@ -134,9 +143,18 @@ public class FluxRemoverBehaviourTest {
         );
 
 
-        behaviour.useToolCard(game, message);
+        //reset draft pool, so drafted dice are known
+        game.getDraftPool().setDice(GameUtils.getDice(false));
+        //force select red die
+        game.getTurnManager().getCurrentTurn().setForcedSelectionIndex(0);
+        Die red2 = new Die(2, new Random(), Colour.RED);
 
+        boolean success = behaviour.useToolCard(game, message);
+
+        Assert.assertTrue(success);
         Assert.assertEquals(1, mockView.getCalledMethods().size());
+        boolean isError = mockView.getCalledMethods().get(0).startsWith("showError");
+        Assert.assertFalse(isError);
 
         Assert.assertTrue(
                 DieUtils.areEqual(red2, player.getPattern().getGrid()[2][0].getDie()));
@@ -157,13 +175,8 @@ public class FluxRemoverBehaviourTest {
         if(game == null)
             Assert.fail("Error on game initialization");
         Player player = game.getPlayers().get(0);
-
         FluxRemoverBehaviour behaviour = applyFirstStep(game, mockView);
-        //reset draft pool, so drafted dice are known
-        game.getDraftPool().setDice(GameUtils.getDice(false));
-        //force select red die
-        game.getTurnManager().getCurrentTurn().setForcedSelectionIndex(0);
-        Die red2 = new Die(2, new Random(), Colour.RED);
+
 
         ChooseValue message = new ChooseValue(
                 mockView,
@@ -173,8 +186,15 @@ public class FluxRemoverBehaviourTest {
                 new Coordinates(50, 50)
         );
 
-        behaviour.useToolCard(game, message);
+        //reset draft pool, so drafted dice are known
+        game.getDraftPool().setDice(GameUtils.getDice(false));
+        //force select red die
+        game.getTurnManager().getCurrentTurn().setForcedSelectionIndex(0);
+        Die red2 = new Die(2, new Random(), Colour.RED);
 
+        boolean success = behaviour.useToolCard(game, message);
+
+        Assert.assertFalse(success);
         Assert.assertEquals(2, mockView.getCalledMethods().size());
         boolean isError = mockView.getCalledMethods().get(1).startsWith("showError");
         Assert.assertTrue(isError);

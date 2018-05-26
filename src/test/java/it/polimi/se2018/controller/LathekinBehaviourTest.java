@@ -14,6 +14,16 @@ import org.junit.Test;
 import java.util.Random;
 
 public class LathekinBehaviourTest {
+
+    @Test
+    public void testRequirements(){
+        Game game = GameUtils.getHalfwayGame();
+        if(game == null)
+            Assert.fail("Error on game initialization");
+        LathekinBehaviour behaviour = new LathekinBehaviour();
+        Assert.assertTrue(behaviour.areRequirementsSatisfied(game));
+    }
+
     @Test
     public void testAskParameters(){
         MockView mockView = new MockView("Pippo");
@@ -56,8 +66,9 @@ public class LathekinBehaviourTest {
         );
 
         LathekinBehaviour behaviour = new LathekinBehaviour();
-        behaviour.useToolCard(game, message);
+        boolean success = behaviour.useToolCard(game, message);
 
+        Assert.assertTrue(success);
         Assert.assertEquals(0, mockView.getCalledMethods().size());
 
         Cell[][] grid = player.getPattern().getGrid();
@@ -110,8 +121,9 @@ public class LathekinBehaviourTest {
         );
 
         LathekinBehaviour behaviour = new LathekinBehaviour();
-        behaviour.useToolCard(game, message);
+        boolean success = behaviour.useToolCard(game, message);
 
+        Assert.assertFalse(success);
         Assert.assertEquals(1, mockView.getCalledMethods().size());
         boolean isError = mockView.getCalledMethods().get(0).startsWith("showError");
         Assert.assertTrue(isError);
@@ -153,8 +165,9 @@ public class LathekinBehaviourTest {
         );
 
         LathekinBehaviour behaviour = new LathekinBehaviour();
-        behaviour.useToolCard(game, message);
+        boolean success = behaviour.useToolCard(game, message);
 
+        Assert.assertFalse(success);
         Assert.assertEquals(1, mockView.getCalledMethods().size());
         boolean isError = mockView.getCalledMethods().get(0).startsWith("showError");
         Assert.assertTrue(isError);

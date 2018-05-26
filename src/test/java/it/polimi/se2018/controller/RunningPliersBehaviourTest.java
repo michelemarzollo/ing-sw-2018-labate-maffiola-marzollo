@@ -17,6 +17,16 @@ import org.junit.Test;
 import java.util.List;
 
 public class RunningPliersBehaviourTest {
+
+    @Test
+    public void testRequirements(){
+        Game game = GameUtils.getRoundFinishedGame(false);
+        if(game == null)
+            Assert.fail("Error on game initialization");
+        RunningPliersBehaviour behaviour = new RunningPliersBehaviour();
+        Assert.assertFalse(behaviour.areRequirementsSatisfied(game));
+    }
+
     @Test
     public void testAskParameters() {
         MockView mockView = new MockView("Pippo");
@@ -51,8 +61,9 @@ public class RunningPliersBehaviourTest {
         );
 
         RunningPliersBehaviour behaviour = new RunningPliersBehaviour();
-        behaviour.useToolCard(game, message);
+        boolean success = behaviour.useToolCard(game, message);
 
+        Assert.assertTrue(success);
         Assert.assertEquals(0, mockView.getCalledMethods().size());
 
         Assert.assertTrue(game.getTurnManager().getCurrentTurn().hasAlreadyPlacedDie());
@@ -94,8 +105,9 @@ public class RunningPliersBehaviourTest {
         );
 
         RunningPliersBehaviour behaviour = new RunningPliersBehaviour();
-        behaviour.useToolCard(game, message);
+        boolean success = behaviour.useToolCard(game, message);
 
+        Assert.assertFalse(success);
         return game;
     }
 

@@ -86,8 +86,7 @@ public class FluxRemoverBehaviour implements ToolCardBehaviour {
      * @param game          the reference to the {@link Game}.
      * @param selectMessage the message from the view, that contains the information
      *                      to make the move and the reference to the view.
-     * @return {@code true} if this step has been successfully applied;
-     * {@code false} otherwise.
+     * @return always {@code false} since the application is not finished.
      */
     private boolean firstStep(Game game, SelectDie selectMessage) {
         try {
@@ -108,9 +107,8 @@ public class FluxRemoverBehaviour implements ToolCardBehaviour {
             selectMessage.getView().showValueDestinationSelection();
         } catch (IndexOutOfBoundsException e) {
             selectMessage.getView().showError("Bad index!");
-            return false;
         }
-        return true;
+        return false;
     }
 
     /**
@@ -120,8 +118,8 @@ public class FluxRemoverBehaviour implements ToolCardBehaviour {
      * @param game          the reference to the {@link Game}.
      * @param chooseMessage the message from the view, that contains the information
      *                      to make the move and the reference to the view.
-     * @return always returns {@code false}, since this step doest't require resources
-     * to be consumed.
+     * @return {@code true} if this step has been successfully applied;
+     * {@code false} otherwise.
      */
     private boolean secondStep(Game game, ChooseValue chooseMessage) {
 
@@ -141,6 +139,7 @@ public class FluxRemoverBehaviour implements ToolCardBehaviour {
 
             game.getDraftPool().draft(forcedSelection);
             currentTurn.placeDie();
+            return true;
 
         } catch (PlacementErrorException e) {
             chooseMessage.getView().showError(

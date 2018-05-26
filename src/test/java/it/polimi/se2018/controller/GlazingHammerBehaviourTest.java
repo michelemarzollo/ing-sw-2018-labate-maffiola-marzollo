@@ -15,6 +15,16 @@ import java.util.Random;
 public class GlazingHammerBehaviourTest {
 
     @Test
+    public void testRequirements(){
+        Game game = GameUtils.getHalfwayGame();
+        if(game == null)
+            Assert.fail("Error on game initialization");
+        game.getTurnManager().getCurrentTurn().placeDie();
+        GlazingHammerBehaviour behaviour = new GlazingHammerBehaviour();
+        Assert.assertFalse(behaviour.areRequirementsSatisfied(game));
+    }
+
+    @Test
     public void testAskParameters(){
         MockView mockView = new MockView("Pippo");
 
@@ -44,8 +54,9 @@ public class GlazingHammerBehaviourTest {
         );
 
         GlazingHammerBehaviour behaviour = new GlazingHammerBehaviour();
-        behaviour.useToolCard(game, message);
+        boolean success = behaviour.useToolCard(game, message);
 
+        Assert.assertTrue(success);
         Assert.assertEquals(0, mockView.getCalledMethods().size());
         List<Die> oldDraftPool = GameUtils.getDice(false);
         List<Die> newDraftPool = game.getDraftPool().getDice();

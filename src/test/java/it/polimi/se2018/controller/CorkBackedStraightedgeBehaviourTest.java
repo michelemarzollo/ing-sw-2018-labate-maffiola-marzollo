@@ -18,6 +18,16 @@ import java.util.List;
 public class CorkBackedStraightedgeBehaviourTest {
 
     @Test
+    public void testRequirements(){
+        Game game = GameUtils.getHalfwayGame();
+        if(game == null)
+            Assert.fail("Error on game initialization");
+        game.getTurnManager().getCurrentTurn().placeDie();
+        CorkBackedStraightedgeBehaviour behaviour = new CorkBackedStraightedgeBehaviour();
+        Assert.assertFalse(behaviour.areRequirementsSatisfied(game));
+    }
+
+    @Test
     public void testAskParameters() {
         MockView mockView = new MockView("Pippo");
 
@@ -51,8 +61,9 @@ public class CorkBackedStraightedgeBehaviourTest {
         );
 
         CorkBackedStraightedgeBehaviour behaviour = new CorkBackedStraightedgeBehaviour();
-        behaviour.useToolCard(game, message);
+        boolean success = behaviour.useToolCard(game, message);
 
+        Assert.assertTrue(success);
         Die expectedDie = GameUtils.getDice(false).get(1);
         Die actualDie = player.getPattern().getGrid()[3][3].getDie();
 
@@ -92,8 +103,9 @@ public class CorkBackedStraightedgeBehaviourTest {
         );
 
         CorkBackedStraightedgeBehaviour behaviour = new CorkBackedStraightedgeBehaviour();
-        behaviour.useToolCard(game, message);
+        boolean success = behaviour.useToolCard(game, message);
 
+        Assert.assertFalse(success);
         Assert.assertEquals(1, mockView.getCalledMethods().size());
         Assert.assertTrue(mockView.getCalledMethods().get(0).startsWith("showError: Invalid placement"));
 
@@ -127,8 +139,9 @@ public class CorkBackedStraightedgeBehaviourTest {
         );
 
         CorkBackedStraightedgeBehaviour behaviour = new CorkBackedStraightedgeBehaviour();
-        behaviour.useToolCard(game, message);
+        boolean success = behaviour.useToolCard(game, message);
 
+        Assert.assertFalse(success);
         Assert.assertEquals(1, mockView.getCalledMethods().size());
         Assert.assertEquals("showError: Bad selection!", mockView.getCalledMethods().get(0));
 

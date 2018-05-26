@@ -18,6 +18,18 @@ import java.util.List;
 import java.util.Random;
 
 public class LensCutterBehaviourTest {
+
+    @Test
+    public void testRequirements(){
+        Game game = GameUtils.getHalfwayGame();
+        if(game == null)
+            Assert.fail("Error on game initialization");
+        game.getTurnManager().getCurrentTurn().placeDie();
+        LensCutterBehaviour behaviour = new LensCutterBehaviour();
+        Assert.assertFalse(behaviour.areRequirementsSatisfied(game));
+    }
+
+
     @Test
     public void testAskParameters() {
         MockView mockView = new MockView("Pippo");
@@ -52,7 +64,9 @@ public class LensCutterBehaviourTest {
         );
 
         LensCutterBehaviour behaviour = new LensCutterBehaviour();
-        behaviour.useToolCard(game, message);
+        boolean success = behaviour.useToolCard(game, message);
+
+        Assert.assertTrue(success);
         return game;
     }
 
@@ -72,7 +86,9 @@ public class LensCutterBehaviourTest {
         );
 
         LensCutterBehaviour behaviour = new LensCutterBehaviour();
-        behaviour.useToolCard(game, message);
+        boolean success = behaviour.useToolCard(game, message);
+
+        Assert.assertFalse(success);
         return game;
     }
 
