@@ -41,14 +41,13 @@ public class GrozingPliersBehaviour implements ToolCardBehaviour {
         try {
             Die selectedDie = dice.remove(dieIndex);
             if (msg.isIncrement()) {
-                dice.add(selectedDie.increase());
-                //The draftPool is actually modified only if the increment has been successful.
-                game.getDraftPool().setDice(dice);
+                selectedDie = selectedDie.increase();
             } else {
-                dice.add(selectedDie.decrease());
-                //The draftPool is actually modified only if the decrement has been successful.
-                game.getDraftPool().setDice(dice);
+                selectedDie = selectedDie.decrease();
             }
+            dice.add(selectedDie);
+            //The draftPool is actually modified only if the increment has been successful.
+            game.getDraftPool().setDice(dice);
             int index = dice.indexOf(selectedDie);
             game.getTurnManager().getCurrentTurn().setForcedSelectionIndex(index);
         }

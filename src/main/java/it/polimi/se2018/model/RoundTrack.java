@@ -38,7 +38,7 @@ public class RoundTrack {
      * @param dice The collection of dice to be added.
      */
     public void addAllForRound(int round, List<? extends Die> dice) {
-        leftovers.get(round).addAll(dice);
+        leftovers.get(round - 1).addAll(dice);
     }
 
     /**

@@ -17,7 +17,7 @@ public class RoundTrackTest {
         draft.add(new Die(3, new Random(), Colour.GREEN));
         draft.add(new Die(6, new Random(), Colour.GREEN));
         track.addAllForRound(2, draft);
-        assertTrue(track.getLeftovers().get(2).equals(draft)); //verifies that draft has been
+        assertEquals(track.getLeftovers().get(1), draft); //verifies that draft has been
         //effectively added to the RoundTrack at the specified position
     }
 
@@ -47,14 +47,14 @@ public class RoundTrackTest {
         draft1.add(new Die(6, new Random(), Colour.GREEN));
         track.addAllForRound(2, draft1);
         Die substitute = new Die(3, new Random(), Colour.PURPLE);
-        Die old = track.getLeftovers().get(2).get(1);
+        Die old = track.getLeftovers().get(1).get(1);
         int oldSize = track.getLeftovers().size();
-        assertEquals(old, track.swap(new Coordinates(2,1), substitute)); //verifies that the swap method
+        assertEquals(old, track.swap(new Coordinates(1,1), substitute)); //verifies that the swap method
         //returns the correct value
-        assertTrue(track.getLeftovers().get(2).contains(substitute)); //verifies that the state of RoundTrack has changed in
+        assertTrue(track.getLeftovers().get(1).contains(substitute)); //verifies that the state of RoundTrack has changed in
         //the right way
         int newSize = track.getLeftovers().size();
-        assertTrue(oldSize == newSize); //verifies that the state of RoundTrack has changed in
+        assertEquals(oldSize, newSize); //verifies that the state of RoundTrack has changed in
         //the right way
     }
 
@@ -66,8 +66,8 @@ public class RoundTrackTest {
         draft1.add(new Die(6, new Random(), Colour.GREEN));
         track.addAllForRound(2, draft1);
         Die substitute = new Die(3, new Random(), Colour.PURPLE);
-        assertEquals(null, track.swap(new Coordinates(2,2), substitute));
-        assertEquals(draft1, track.getLeftovers().get(2));
+        assertNull(track.swap(new Coordinates(2, 2), substitute));
+        assertEquals(draft1, track.getLeftovers().get(1));
     }
 
 }

@@ -39,7 +39,7 @@ public class XmlPatternLoaderTest {
         File directory = null;
         try {
             directory = new File(getClass()
-                    .getResource("XmlPatternLoaderTest/sun_catcher")
+                    .getResource("patternSources/duomo")
                     .toURI()
             );
         } catch (URISyntaxException e) {
@@ -77,7 +77,7 @@ public class XmlPatternLoaderTest {
         try {
             directory = new File(
                     getClass()
-                            .getResource("XmlPatternLoaderTest/bad")
+                            .getResource("patternSources/bad")
                             .toURI()
             );
         } catch (URISyntaxException e) {
@@ -101,7 +101,7 @@ public class XmlPatternLoaderTest {
         File directory = null;
         try {
             directory = new File(getClass()
-                    .getResource("XmlPatternLoaderTest/sun_catcher")
+                    .getResource("patternSources/duomo")
                     .toURI()
             );
         } catch (URISyntaxException e) {

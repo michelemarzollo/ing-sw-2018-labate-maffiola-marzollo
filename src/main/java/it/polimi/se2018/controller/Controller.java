@@ -128,7 +128,7 @@ public abstract class Controller implements Observer<ViewMessage> {
         behaviors.put("Flux Brush", new FluxBrushBehaviour());
         behaviors.put("Glazing Hammer", new GlazingHammerBehaviour());
         behaviors.put("Running Pliers", new RunningPliersBehaviour());
-        behaviors.put("Cork-backed Straightedge", new CorkBackedSrtaightedgeBehaviour());
+        behaviors.put("Cork-backed Straightedge", new CorkBackedStraightedgeBehaviour());
         behaviors.put("Grinding Stone", new GrindingStoneBehaviour());
         behaviors.put("Flux Remover", new FluxRemoverBehaviour());
         behaviors.put("Tap Wheel", new TapWheelBehaviour());

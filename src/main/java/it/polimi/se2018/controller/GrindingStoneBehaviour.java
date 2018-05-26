@@ -41,20 +41,23 @@ public class GrindingStoneBehaviour implements ToolCardBehaviour {
     public void useToolCard(Game game, ViewMessage message) {
 
         SelectDie selectMessage = (SelectDie) message;
+        try {
+            //Update of the DraftPool inserting the flipped die
+            List<Die> dice = game.getDraftPool().getDice();
 
-        //Update of the DraftPool inserting the flipped die
-        List<Die> dice = game.getDraftPool().getDice();
+            Die die = dice.get(selectMessage.getDieIndex());
+            dice.remove(selectMessage.getDieIndex());
+            die = die.flip();
+            dice.add(selectMessage.getDieIndex(), die);
 
-        Die die = dice.get(selectMessage.getDieIndex());
-        dice.remove(selectMessage.getDieIndex());
-        die.flip();
-        dice.add(selectMessage.getDieIndex(), die);
+            game.getDraftPool().setDice(dice);
 
-        game.getDraftPool().setDice(dice);
-
-        //Setting of the forced selection in the current turn
-        game.getTurnManager().getCurrentTurn().setForcedSelectionIndex(
-                selectMessage.getDieIndex());
+            //Setting of the forced selection in the current turn
+            game.getTurnManager().getCurrentTurn().setForcedSelectionIndex(
+                    selectMessage.getDieIndex());
+        } catch (IndexOutOfBoundsException e) {
+            selectMessage.getView().showError("Bad index!");
+        }
 
     }
 }

@@ -13,7 +13,7 @@ import it.polimi.se2018.model.events.ViewMessage;
  * <p>This tool card requires the index of the die in the draft pool and
  * the destination coordinates on the pattern to be applied.</p>
  */
-public class CorkBackedSrtaightedgeBehaviour implements ToolCardBehaviour {
+public class CorkBackedStraightedgeBehaviour implements ToolCardBehaviour {
 
     /**
      * Does nothing.
@@ -22,7 +22,7 @@ public class CorkBackedSrtaightedgeBehaviour implements ToolCardBehaviour {
      */
     @Override
     public void askParameters(ViewMessage message) {
-        //do nothing
+        message.getView().showDieSelection();
     }
 
     /**

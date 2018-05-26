@@ -73,23 +73,25 @@ public class FluxRemoverBehaviour implements ToolCardBehaviour {
      *                      to make the move and the reference to the view.
      */
     private void firstStep(Game game, SelectDie selectMessage) {
+        try {
+            List<Die> dice = game.getDraftPool().getDice();
 
-        List<Die> dice = game.getDraftPool().getDice();
+            Die oldDie = dice.remove(selectMessage.getDieIndex());
+            game.getDiceBag().pushBack(oldDie);
+            //I draft 1 die from the diceBag and put it in the list of dice
+            Die newDie = game.getDiceBag().draft(1).get(0);
+            dice.add(selectMessage.getDieIndex(), newDie);
+            //I set the new DraftPool in the game
+            game.getDraftPool().setDice(dice);
+            //Setting of the forced selection in the current turn
+            game.getTurnManager().getCurrentTurn().setForcedSelectionIndex(
+                    selectMessage.getDieIndex());
 
-        Die oldDie = dice.remove(selectMessage.getDieIndex());
-        game.getDiceBag().pushBack(oldDie);
-        //I draft 1 die from the diceBag and put it in the list of dice
-        Die newDie = game.getDiceBag().draft(1).get(0);
-        dice.add(selectMessage.getDieIndex(), newDie);
-        //I set the new DraftPool in the game
-        game.getDraftPool().setDice(dice);
-        //Setting of the forced selection in the current turn
-        game.getTurnManager().getCurrentTurn().setForcedSelectionIndex(
-                selectMessage.getDieIndex());
-
-        firstStepDone = true;
-        selectMessage.getView().showValueDestinationSelection();
-
+            firstStepDone = true;
+            selectMessage.getView().showValueDestinationSelection();
+        } catch (IndexOutOfBoundsException e) {
+            selectMessage.getView().showError("Bad index!");
+        }
     }
 
     /**
