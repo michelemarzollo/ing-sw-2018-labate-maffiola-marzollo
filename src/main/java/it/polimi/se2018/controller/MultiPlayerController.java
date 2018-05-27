@@ -48,10 +48,12 @@ public class MultiPlayerController extends Controller {
      *                   wait before making the game start if there aren't still 4 players.
      * @param lobbyTimer The timer to be used in the lobby
      */
-    public MultiPlayerController(Game game, int timeOut, Timer lobbyTimer) {
+    public MultiPlayerController(Game game, int timeOut, Timer lobbyTimer, int turnDuration, Timer turnTimer) {
         super(game);
         this.timeOut = timeOut;
         this.lobbyTimer = lobbyTimer;
+        this.turnDuration = turnDuration;
+        this.turnTimer = turnTimer;
     }
 
     /**
@@ -105,26 +107,15 @@ public class MultiPlayerController extends Controller {
      * @return {@code true} if the ToolCard can be used, {@code false} otherwise.
      */
     @Override
-    protected boolean canUseToolCard(ViewMessage message) {
-        //If it's the player's turn
-        if (canMove(message.getPlayerName())) {
-            for (ToolCard toolCard : getGame().getToolCards()) {
-                //Checks in the array of the tool cards of the game if there is a tool card with
-                //the same name of the name of the event SelectCard.
-                if (toolCard.getName().equals(((SelectCard) message).getName()) &&
-                        playerHasEnoughTokens(toolCard)) {
-
-                    return (!toolCard.getName().equals("Running Pliers") &&
-                            !toolCard.getName().equals("Glazing Hammer")) ||
-                            (toolCard.getName().equals("Running Pliers") ?
-                                    canUseRunningPliers(message) : canUseGlazingHammer(message));
-
-                }
-            }
-        } else {
-            message.getView().showError("Not your turn!");
+    protected boolean canUseToolCard(ViewMessage message, ToolCard toolCard) {
+        SelectCard msg = (SelectCard) message;
+        if (playerHasEnoughTokens(toolCard)) {
+            return true;
         }
-        return false;
+        else {
+            msg.getView().showError("You don't have enough tokens.");
+            return false;
+        }
     }
 
     //HELPER METHODS FOR canUseToolCard, TO REDUCE IT'S READABILITY COMPLEXITY
@@ -141,39 +132,6 @@ public class MultiPlayerController extends Controller {
                 .getPlayer().getTokens() >= 1 + (toolCard.isUsed() ? 1 : 0);
     }
 
-    /**
-     * The method that says if the 'Running Pliers' {@link ToolCard} can be used.
-     *
-     * @param message the message from the view.
-     * @return {@code true} if the ToolCard can be used thanks to the
-     * turn, {@code false} otherwise.
-     */
-    private boolean canUseRunningPliers(ViewMessage message) {
-        if (getGame().getTurnManager().isSecondTurnAvailable())
-            return true;
-        else {
-            message.getView().showError("The Running Pliers Card can't be" +
-                    "used in the second turn.");
-            return false;
-        }
-    }
-
-    /**
-     * The method that says if the 'Glazing Hammer' {@link ToolCard} can be used.
-     *
-     * @param message the message from the view.
-     * @return {@code true} if the ToolCard can be used thanks to the
-     * turn, {@code false} otherwise.
-     */
-    private boolean canUseGlazingHammer(ViewMessage message) {
-        if (!getGame().getTurnManager().isSecondTurnAvailable())
-            return true;
-        else {
-            message.getView().showError("The Glazing Hammer Card can't be" +
-                    "used in the first turn.");
-            return false;
-        }
-    }
     //END OF HELPER METHODS
 
     /**
@@ -186,6 +144,7 @@ public class MultiPlayerController extends Controller {
      */
     @Override
     protected void performAction(ViewMessage message) {
+        turnTimer = new Timer();
         turnTimer.schedule(new EndTurnTask(getGame(), message), (long) turnDuration * 1000);
         super.performAction(message);
         //When the action finished, if the timer is still going on, it is cancelled
@@ -221,20 +180,22 @@ public class MultiPlayerController extends Controller {
      */
     @Override
     protected void consumeResources(ViewMessage message) {
-
+        ToolCard toolCard = getGame().getTurnManager().getCurrentTurn().getSelectedToolCard();
         Player player = getGame().getTurnManager().getCurrentTurn().getPlayer();
-
-        for (ToolCard toolCard : getGame().getToolCards()) {
-            if (toolCard.getName().equals(((SelectCard) message).getName())) {
-                if (toolCard.isUsed())
-                    player.setTokens(player.getTokens() - 2);
-                else {
-                    player.setTokens(player.getTokens() - 1);
-                    toolCard.use();
-                }
+        if (toolCard.isUsed())
+            try{
+            player.consumeTokens(2);
+        } catch (NotEnoughTokensException e) {
+                message.getView().showError("You don't have enough tokens");
+            }
+        else {
+            toolCard.use();
+            try{
+                player.consumeTokens(1);
+            } catch (NotEnoughTokensException e) {
+                message.getView().showError("You don't have enough tokens");
             }
         }
-
     }
 
     /**
@@ -293,7 +254,6 @@ public class MultiPlayerController extends Controller {
      */
     @Override
     protected void registerPlayer(ViewMessage message) {
-
         //When the method is called there is one player to add
         getGame().addPlayer(new Player(message.getPlayerName()));
 
@@ -327,7 +287,7 @@ public class MultiPlayerController extends Controller {
      */
     private void setUpGame() {
         CardDealer cardDealer = new CardDealer(getGame());
-        cardDealer.deal(getGame().getPlayers().size(), 3, 3);
+        cardDealer.deal(3, 1, 3);
         getGame().terminateSetup();
     }
 
