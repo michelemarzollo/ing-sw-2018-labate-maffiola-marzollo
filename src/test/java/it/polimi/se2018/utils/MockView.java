@@ -1,4 +1,5 @@
 package it.polimi.se2018.utils;
+import it.polimi.se2018.model.events.ModelUpdate;
 import it.polimi.se2018.view.View;
 
 import java.util.ArrayList;
@@ -125,4 +126,8 @@ public class MockView extends View {
         calledMethods.add("showFinalView");
     }
 
+    @Override
+    public void update(ModelUpdate message) {
+        calledMethods.add("update: " + message.getEventType());
+    }
 }

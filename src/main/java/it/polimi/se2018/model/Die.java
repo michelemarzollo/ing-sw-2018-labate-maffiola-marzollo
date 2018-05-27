@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import java.io.Serializable;
 import java.util.Random;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Random;
  *
  * @author giorgiolbt
  */
-public class Die {
+public class Die implements Serializable {
 
     /**
      * Value of the Die.
@@ -20,7 +21,7 @@ public class Die {
      * when the Die is rolled or drafted from the
      * {@link DiceBag}.
      */
-    private final Random random;
+    private final transient Random random;
 
     /**
      * Colour of the Die.

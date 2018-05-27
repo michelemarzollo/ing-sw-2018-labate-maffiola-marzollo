@@ -1,5 +1,7 @@
 package it.polimi.se2018.model;
 
+import java.io.Serializable;
+
 /**
  * The class represents a Cell of a {@link Pattern}.
  * Each Cell may have a value restriction, a Colour restriction
@@ -8,7 +10,7 @@ package it.polimi.se2018.model;
  *
  * @author giorgiolbt
  */
-public class Cell {
+public class Cell implements Serializable {
 
     /**
      * Value restriction (0 if there isn't a restriction of this type)

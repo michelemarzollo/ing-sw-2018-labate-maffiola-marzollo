@@ -46,7 +46,7 @@ public class SinglePlayerController extends Controller {
      *                still valid and after which the {@link Game} has to be
      *                deleted.
      */
-    protected SinglePlayerController(Game game, Timer timer, int timeOut) {
+    public SinglePlayerController(Game game, Timer timer, int timeOut) {
         super(game);
         this.timer = timer;
         this.timeOut = timeOut;

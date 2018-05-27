@@ -8,4 +8,6 @@ public interface ServerNetInterface {
     void send(Message message);
 
     void addClient(ClientNetInterface client);
+
+    void removeClient(ClientNetInterface client);
 }

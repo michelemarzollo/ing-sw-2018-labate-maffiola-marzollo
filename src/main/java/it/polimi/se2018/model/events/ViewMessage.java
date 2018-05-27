@@ -2,6 +2,8 @@ package it.polimi.se2018.model.events;
 
 import it.polimi.se2018.view.View;
 
+import java.io.Serializable;
+
 /**
  * This Class represents the event through
  * which the view(Observable) notifies the
@@ -12,12 +14,12 @@ import it.polimi.se2018.view.View;
  *
  * @author giorgiolabate
  */
-public class ViewMessage {
+public class ViewMessage implements Serializable {
 
     /**
      * {@link View} reference.
      */
-    private View view;
+    private transient View view;
 
     /**
      * Action that describes what the user want to do.

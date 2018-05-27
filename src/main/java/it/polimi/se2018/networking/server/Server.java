@@ -20,7 +20,9 @@ public abstract class Server {
 
     public abstract ClientNetInterface getClientFor(String name);
 
-    public abstract void addClients(ClientNetInterface client);
+    public abstract boolean addClient(ClientNetInterface client);
+
+    public abstract void removeClient(ClientNetInterface client);
 
     public abstract void start();
 
