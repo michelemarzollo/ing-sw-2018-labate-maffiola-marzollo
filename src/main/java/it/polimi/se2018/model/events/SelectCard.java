@@ -5,7 +5,8 @@ import it.polimi.se2018.view.View;
 /**
  * This class is used to encapsulate the data needed to
  * select a {@link it.polimi.se2018.model.ToolCard} that
- * the Player would like to use.
+ * the Player would like to use or to choose his {@link it.polimi.se2018.model.Pattern}
+ * among their candidates.
  */
 public class SelectCard extends ViewMessage{
 

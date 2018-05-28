@@ -53,7 +53,7 @@ public abstract class Controller implements Observer<ViewMessage> {
      * @return {@code true} if the specified tool card can be used;
      * {@code false} otherwise.
      */
-    protected abstract boolean canUseToolCard(ViewMessage message);
+    protected abstract boolean canUseToolCard(ViewMessage message, ToolCard toolCard);
 
     /**
      * Displays the correct game view.
@@ -287,13 +287,13 @@ public abstract class Controller implements Observer<ViewMessage> {
         }
 
         try {
-            Die die = getGame().getDraftPool().select(placeMessage.getDieIndex());
+            Die die = getGame().getDraftPool().select(getDieIndex(placeMessage));
             // place die
             Pattern currentPattern = currentTurn.getPlayer().getPattern();
             Pattern newPattern = currentPattern.placeDie(die, placeMessage.getDestination());
             currentTurn.getPlayer().setPattern(newPattern);
 
-            getGame().getDraftPool().draft(placeMessage.getDieIndex());
+            getGame().getDraftPool().draft(getDieIndex(placeMessage));
             currentTurn.placeDie();
         } catch (IndexOutOfBoundsException e) {
             placeMessage.getView().showError("Invalid selection!");
@@ -308,6 +308,27 @@ public abstract class Controller implements Observer<ViewMessage> {
     }
 
     /**
+     * Helper method for {@code placeDie} to get the right index in {@link DraftPool}
+     * when placing a die.
+     * @param placeMessage The message passed by {@code placeDie} and
+     *                     that contains the index inserted by the player.
+     * @return The index inserted by the player if there are no restriction on the
+     * choice or if it is equal to the forced index, -1 otherwise (the index inserted
+     * differs from the forced one).
+     */
+    private int getDieIndex(PlaceDie placeMessage) {
+        int forcedIndex = game.getTurnManager().getCurrentTurn().getForcedSelectionIndex();
+        if (forcedIndex != -1) {
+            if (forcedIndex == placeMessage.getDieIndex())
+                return forcedIndex;
+            else
+                return -1;
+        }
+        else //There is no forced selection on the die
+            return placeMessage.getDieIndex();
+    }
+
+    /**
      * Asks the view to gather the parameters to use a given tool card.
      * <p>The method selects the correct behavior and delegates to it
      * the handling of parameter request.</p>
@@ -316,15 +337,36 @@ public abstract class Controller implements Observer<ViewMessage> {
      */
     protected void activateToolCard(ViewMessage message) {
         SelectCard selectMessage = (SelectCard) message;
-        if (canMove(message.getPlayerName()) && canUseToolCard(selectMessage)) {
+        ToolCard selectedToolCard = null;
 
-            ToolCardBehaviour behavior = toolCardBehaviors.get(message.getAction());
-            if (behavior.areRequirementsSatisfied(game))
-                behavior.askParameters(message);
-            else
-                selectMessage.getView().showError("You can't use this tool card now");
-        } else
-            selectMessage.getView().showError("You can't use this tool card");
+        if(!canMove(message.getPlayerName())) {
+            selectMessage.getView().showError("Not your turn!");
+            return;
+        }
+
+        for (ToolCard toolCard : getGame().getToolCards()) {
+            //Checks in the array of the tool cards of the game if there is a tool card with
+            //the same name of the name of the event SelectCard.
+            if (toolCard.getName().equals(selectMessage.getName())) {
+                selectedToolCard = toolCard;
+            }
+        }
+
+        if(selectedToolCard == null){
+            selectMessage.getView().showError("The tool card doesn't exist.");
+            return;
+        }
+
+        ToolCardBehaviour behaviour = toolCardBehaviors.get(selectMessage.getName());
+        if(!behaviour.areRequirementsSatisfied(game)){
+            selectMessage.getView().showError("You can't use this tool card now.");
+            return;
+        }
+
+        if(canUseToolCard(selectMessage, selectedToolCard)){
+            getGame().getTurnManager().getCurrentTurn().setSelectedToolCard(selectedToolCard);
+            behaviour.askParameters(selectMessage);
+        }
     }
 
     /**
@@ -343,13 +385,21 @@ public abstract class Controller implements Observer<ViewMessage> {
             return;
         }
 
-        ToolCardBehaviour behavior = toolCardBehaviors.get(message.getAction());
+        if(game.getTurnManager().getCurrentTurn().getSelectedToolCard() == null) {
+            message.getView().showError("No toolCard has been activated yet");
+            return;
+        }
+
+        ToolCardBehaviour behavior = toolCardBehaviors.get(game.getTurnManager().getCurrentTurn().getSelectedToolCard().getName());
 
         if (behavior != null) {
             boolean success = behavior.useToolCard(getGame(), message);
             if(success){
                 getGame().getTurnManager().getCurrentTurn().useToolCard();
                 consumeResources(message);
+            }
+            else{
+                getGame().getTurnManager().getCurrentTurn().setSelectedToolCard(null);
             }
         }
 
@@ -399,8 +449,11 @@ public abstract class Controller implements Observer<ViewMessage> {
         boolean gameReady = getGame().getPlayers().stream()
                 .allMatch(p -> p.getPattern() != null);
 
-        if (gameReady)
+        if (gameReady) {
             getGame().start();
+            getGame().getTurnManager().updateTurn(); //otherwise in the first round would not be the turn of anyone.
+            refillDraftPool();
+        }
     }
 
     /**

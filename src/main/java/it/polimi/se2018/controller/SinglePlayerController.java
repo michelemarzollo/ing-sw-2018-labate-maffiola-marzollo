@@ -220,7 +220,7 @@ public class SinglePlayerController extends Controller {
      * otherwise.
      */
     @Override
-    protected boolean canUseToolCard(ViewMessage message) {
+    protected boolean canUseToolCard(ViewMessage message, ToolCard toolCard) {
         SelectCardSP selectionMessage = (SelectCardSP) message;
         int dieIndex = selectionMessage.getDieIndex();
         String playerName = message.getPlayerName();

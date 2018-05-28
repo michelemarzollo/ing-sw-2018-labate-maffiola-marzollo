@@ -28,25 +28,28 @@ public class ViewLinker {
     /**
      * Private constructor to force singleton behaviour.
      */
-    private ViewLinker() { }
+    private ViewLinker() {
+    }
 
     /**
      * Returns the only instance of ViewLinker.
+     *
      * @return The instance of ViewLinker.
      */
-    public static ViewLinker getInstance(){
-        if(instance == null)
+    public static ViewLinker getInstance() {
+        if (instance == null)
             instance = new ViewLinker();
         return instance;
     }
 
     /**
      * Links a view to a multi player controller.
+     *
      * @param view The view to be linked.
      */
-    public void linkMultiPlayer(View view){
-        if(multiPlayer == null)
-            multiPlayer = new MultiPlayerController(new Game(),150, new Timer());
+    public void linkMultiPlayer(View view) {
+        if (multiPlayer == null)
+            multiPlayer = new MultiPlayerController(new Game(), 150, new Timer(), 60, new Timer());
         view.registerObserver(multiPlayer);
         ViewMessage message = new ViewMessage(view, Action.REGISTER_PLAYER, view.getPlayerName());
         multiPlayer.update(message);
@@ -54,9 +57,10 @@ public class ViewLinker {
 
     /**
      * Links a view to a single player controller.
+     *
      * @param view The view to be linked.
      */
-    public void linkSinglePlayer(View view){
+    public void linkSinglePlayer(View view) {
         Controller singlePlayer = new SinglePlayerController(new Game(), new Timer(), 150);
         view.registerObserver(singlePlayer);
         ViewMessage message = new ViewMessage(view, Action.REGISTER_PLAYER, view.getPlayerName());

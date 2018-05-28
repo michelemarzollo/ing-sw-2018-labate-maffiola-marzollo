@@ -120,11 +120,11 @@ public class Cell implements Serializable {
         }
         if(restriction.checkColourConstraint() && hasBadColour(die)){
             throw new PlacementErrorException(
-                    "The placedDie's value is different from the value restriction of the cell");
+                    "The placedDie's colour is different from the colour restriction of the cell");
         }
         if(restriction.checkValueConstraint() && hasBadValue(die)){
             throw new PlacementErrorException(
-                    "The placedDie's colour is different from the colour restriction of the cell");
+                    "The placedDie's value is different from the value restriction of the cell");
         }
         placedDie = die;
     }

@@ -119,6 +119,9 @@ public class GameUtils {
 
 
         game.terminateSetup();
+        PublicObjectiveCard[] cards = {};
+        game.setPublicObjectiveCards(cards);
+
         return game;
     }
 
@@ -144,6 +147,9 @@ public class GameUtils {
         });
 
         game.start();
+        List<Die> dice = getDice(true);
+        game.getDraftPool().setDice(dice);
+        game.getTurnManager().updateTurn();
 
         return game;
     }
@@ -215,8 +221,7 @@ public class GameUtils {
         Game game = GameUtils.getStartedGame(false);
         if (game == null || !game.isStarted())
             return null;
-        if (!game.getTurnManager().updateTurn())
-            return null;
+
 
 
         Player player = game.getPlayers().get(0);

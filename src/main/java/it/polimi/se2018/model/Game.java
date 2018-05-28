@@ -192,6 +192,9 @@ public class Game extends Observable<ModelUpdate> {
      * Starts the game.
      * <p>All the components the game requires during its execution
      * are instantiated and game status updated to started.</p>
+     * After {@code start} execution is no one's turn yet:
+     * {@link it.polimi.se2018.controller.Controller} will set it.
+     *
      */
     public void start() {
         if (setupComplete && !started) {
