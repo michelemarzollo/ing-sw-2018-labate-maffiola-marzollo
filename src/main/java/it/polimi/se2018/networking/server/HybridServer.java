@@ -65,9 +65,9 @@ public class HybridServer extends Server {
      */
     @Override
     public boolean addClient(ClientNetInterface client) {
-        if(clients.containsKey(client.getUserName()))
+        if(clients.containsKey(client.getUsername()))
             return false;
-        clients.put(client.getUserName(), client);
+        clients.put(client.getUsername(), client);
         return true;
     }
 
@@ -77,7 +77,7 @@ public class HybridServer extends Server {
      */
     @Override
     public void removeClient(ClientNetInterface client) {
-        clients.remove(client.getUserName());
+        clients.remove(client.getUsername());
     }
 
     /**

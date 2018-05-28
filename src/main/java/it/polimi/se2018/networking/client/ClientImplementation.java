@@ -12,6 +12,7 @@ import java.util.Map;
  * This class defines what the client does when it receives a
  * message from the network.
  * <p>This class is immutable.</p>
+ *
  * @author dvdmff
  */
 public class ClientImplementation implements ClientNetInterface {
@@ -33,8 +34,9 @@ public class ClientImplementation implements ClientNetInterface {
 
     /**
      * Creates a new implementation relative to the specified client and view.
+     *
      * @param client The client the implementation is bound to.
-     * @param view The view the implementation is bound to.
+     * @param view   The view the implementation is bound to.
      */
     public ClientImplementation(Client client, View view) {
         this.client = client;
@@ -45,6 +47,7 @@ public class ClientImplementation implements ClientNetInterface {
 
     /**
      * Registers the show methods of the view to their identified.
+     *
      * @param showMethods The map where show methods are stored.
      */
     private void registerShowMethods(Map<String, ShowMethod> showMethods) {
@@ -64,15 +67,17 @@ public class ClientImplementation implements ClientNetInterface {
 
     /**
      * Getter for the username of the player.
+     *
      * @return The username of the player.
      */
     @Override
-    public String getUserName() {
+    public String getUsername() {
         return view.getPlayerName();
     }
 
     /**
      * Dispatches the received message to the correct handler.
+     *
      * @param message The message received from the network.
      */
     @Override
