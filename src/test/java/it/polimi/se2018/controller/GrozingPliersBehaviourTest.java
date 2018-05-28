@@ -13,20 +13,29 @@ import org.junit.Test;
 
 import java.util.List;
 
+/**
+ * Unit tests for GrozingPliersBehaviour class.
+ */
 public class GrozingPliersBehaviourTest {
 
+    /**
+     * Tests if requirements are not met when a player has already placed a die.
+     */
     @Test
-    public void testRequirements(){
+    public void testRequirements() {
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         game.getTurnManager().getCurrentTurn().placeDie();
         GrozingPliersBehaviour behaviour = new GrozingPliersBehaviour();
         Assert.assertFalse(behaviour.areRequirementsSatisfied(game));
     }
 
+    /**
+     * Tests that the correct view is selected when asking parameters.
+     */
     @Test
-    public void testAskParameters(){
+    public void testAskParameters() {
         MockView mockView = new MockView("Pippo");
 
         ViewMessage message = new ViewMessage(
@@ -42,11 +51,17 @@ public class GrozingPliersBehaviourTest {
         Assert.assertEquals("showDieSelection", mockView.getCalledMethods().get(0));
     }
 
+    /**
+     * Tests a case in which the usage of the tool card in increase mode is successful.
+     * <p>This means that no views are selected during the process and that the
+     * selected die is correctly increased and set as the only option for drafting,
+     * while the other dice in the draft pool are not altered.</p>
+     */
     @Test
-    public void testIncreaseUsageSuccess(){
+    public void testIncreaseUsageSuccess() {
         MockView mockView = new MockView("Pippo");
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
 
         IncrementDieValue message = new IncrementDieValue(
@@ -72,22 +87,29 @@ public class GrozingPliersBehaviourTest {
         Die expectedDie = oldDraftPool.remove(0).increase();
         Assert.assertTrue(DieUtils.areEqual(expectedDie, newDraftPool.get(actualIndex)));
 
-        for(Die die : oldDraftPool){
+        for (Die die : oldDraftPool) {
             boolean match = false;
-            for(int j = 0; j < newDraftPool.size() && !match; ++j){
+            for (int j = 0; j < newDraftPool.size() && !match; ++j) {
                 match = DieUtils.areEqual(die, newDraftPool.get(j));
-                if(match)
+                if (match)
                     newDraftPool.remove(j);
             }
             Assert.assertTrue(match);
         }
     }
 
+    /**
+     * Tests a case in which the usage of the tool card is unsuccessful
+     * because the value can't be decreased (it's a 1).
+     * <p>This means that an error view is selected during the process and that
+     * no die in the draft pool is altered nor set as the only option for
+     * drafting.</p>
+     */
     @Test
-    public void testUsageFailure(){
+    public void testUsageFailure() {
         MockView mockView = new MockView("Pippo");
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
 
         IncrementDieValue message = new IncrementDieValue(
@@ -112,22 +134,28 @@ public class GrozingPliersBehaviourTest {
         List<Die> oldDraftPool = GameUtils.getDice(false);
         List<Die> newDraftPool = game.getDraftPool().getDice();
 
-        for(Die die : oldDraftPool){
+        for (Die die : oldDraftPool) {
             boolean match = false;
-            for(int j = 0; j < newDraftPool.size() && !match; ++j){
+            for (int j = 0; j < newDraftPool.size() && !match; ++j) {
                 match = DieUtils.areEqual(die, newDraftPool.get(j));
-                if(match)
+                if (match)
                     newDraftPool.remove(j);
             }
             Assert.assertTrue(match);
         }
     }
 
+    /**
+     * Tests a case in which the usage of the tool card in decrease mode is successful.
+     * <p>This means that no views are selected during the process and that the
+     * selected die is correctly decreased and set as the only option for drafting,
+     * while the other dice in the draft pool are not altered.</p>
+     */
     @Test
-    public void testDecreaseUsageSuccess(){
+    public void testDecreaseUsageSuccess() {
         MockView mockView = new MockView("Pippo");
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
 
         IncrementDieValue message = new IncrementDieValue(
@@ -153,11 +181,11 @@ public class GrozingPliersBehaviourTest {
         Die expectedDie = oldDraftPool.remove(1).decrease();
         Assert.assertTrue(DieUtils.areEqual(expectedDie, newDraftPool.get(actualIndex)));
 
-        for(Die die : oldDraftPool){
+        for (Die die : oldDraftPool) {
             boolean match = false;
-            for(int j = 0; j < newDraftPool.size() && !match; ++j){
+            for (int j = 0; j < newDraftPool.size() && !match; ++j) {
                 match = DieUtils.areEqual(die, newDraftPool.get(j));
-                if(match)
+                if (match)
                     newDraftPool.remove(j);
             }
             Assert.assertTrue(match);

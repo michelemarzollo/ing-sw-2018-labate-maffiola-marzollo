@@ -15,18 +15,27 @@ import org.junit.Test;
 
 import java.util.List;
 
+/**
+ * Unit tests for CorkBackedStraightedgeBehaviour class.
+ */
 public class CorkBackedStraightedgeBehaviourTest {
 
+    /**
+     * Tests that the requirements are not met after a player has placed a die.
+     */
     @Test
-    public void testRequirements(){
+    public void testRequirements() {
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         game.getTurnManager().getCurrentTurn().placeDie();
         CorkBackedStraightedgeBehaviour behaviour = new CorkBackedStraightedgeBehaviour();
         Assert.assertFalse(behaviour.areRequirementsSatisfied(game));
     }
 
+    /**
+     * Tests that the correct view is selected when asking parameters.
+     */
     @Test
     public void testAskParameters() {
         MockView mockView = new MockView("Pippo");
@@ -42,12 +51,17 @@ public class CorkBackedStraightedgeBehaviourTest {
         Assert.assertEquals("showDieSelection", mockView.getCalledMethods().get(0));
     }
 
+    /**
+     * Tests a case in which the usage of the tool card is successful.
+     * <p>This means that no views are selected during the process and that the
+     * selected die is actually placed in the pattern and removed from the draft pool.</p>
+     */
     @Test
     public void testUsageSuccessful() {
         MockView mockView = new MockView("Pippo");
 
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
 
         Player player = game.getPlayers().get(0);
@@ -85,11 +99,17 @@ public class CorkBackedStraightedgeBehaviourTest {
         Assert.assertTrue(game.getTurnManager().getCurrentTurn().hasAlreadyPlacedDie());
     }
 
+    /**
+     * Tests a case in which the usage of the tool card is unsuccessful because of
+     * placement restrictions.
+     * <p>This means that an error view is selected during the process and that the
+     * selected die is not placed in the pattern and is still in the draft pool.</p>
+     */
     @Test
-    public void testUsageFailure(){
+    public void testUsageFailure() {
         MockView mockView = new MockView("Pippo");
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
 
         Player player = game.getPlayers().get(0);
@@ -122,11 +142,17 @@ public class CorkBackedStraightedgeBehaviourTest {
         Assert.assertFalse(game.getTurnManager().getCurrentTurn().hasAlreadyPlacedDie());
     }
 
+    /**
+     * Tests a case in which the usage of the tool card is unsuccessful because of
+     * bad destination coordinates.
+     * <p>This means that an error view is selected during the process and that the
+     * selected die is not placed in the pattern and is still in the draft pool.</p>
+     */
     @Test
-    public void testBadIndexUsageFailure(){
+    public void testBadIndexUsageFailure() {
         MockView mockView = new MockView("Pippo");
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Player player = game.getPlayers().get(0);
 

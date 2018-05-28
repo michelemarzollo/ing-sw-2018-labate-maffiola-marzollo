@@ -16,17 +16,26 @@ import org.junit.Test;
 
 import java.util.Random;
 
+/**
+ * Unit tests for CopperFoilBurnisherBehaviour class.
+ */
 public class CopperFoilBurnisherBehaviourTest {
 
+    /**
+     * Tests if the requirements are met in a case where it's the case.
+     */
     @Test
-    public void testRequirements(){
+    public void testRequirements() {
         Game game = GameUtils.getHalfwayGame();
         CopperFoilBurnisherBehaviour behaviour = new CopperFoilBurnisherBehaviour();
         Assert.assertTrue(behaviour.areRequirementsSatisfied(game));
     }
 
+    /**
+     * Tests that the correct view is selected when asking parameters.
+     */
     @Test
-    public void testAskParameters(){
+    public void testAskParameters() {
         MockView mockView = new MockView("Pippo");
 
         ViewMessage message = new ViewMessage(
@@ -42,12 +51,17 @@ public class CopperFoilBurnisherBehaviourTest {
         Assert.assertEquals("showMoveSelection1", mockView.getCalledMethods().get(0));
     }
 
+    /**
+     * Tests a case in which the usage of the tool card is successful.
+     * <p>This means that no views are selected during the process and that the
+     * selected die is actually moved.</p>
+     */
     @Test
-    public void testUsageSuccess(){
+    public void testUsageSuccess() {
         MockView mockView = new MockView("Pippo");
         Game game = GameUtils.getHalfwayGame();
 
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Player player = game.getPlayers().get(0);
 
@@ -70,12 +84,18 @@ public class CopperFoilBurnisherBehaviourTest {
         Assert.assertTrue(DieUtils.areEqual(yellow6, player.getPattern().getGrid()[3][3].getDie()));
     }
 
+    /**
+     * Tests a case in which the usage of the tool card is unsuccessful because of
+     * placement restrictions.
+     * <p>This means that an error view is selected during the process and that the
+     * pattern is not changed.</p>
+     */
     @Test
-    public void testUsageFailure(){
+    public void testUsageFailure() {
         MockView mockView = new MockView("Pippo");
         Game game = GameUtils.getHalfwayGame();
 
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Player player = game.getPlayers().get(0);
 
@@ -100,12 +120,18 @@ public class CopperFoilBurnisherBehaviourTest {
         Assert.assertTrue(DieUtils.areEqual(yellow6, player.getPattern().getGrid()[1][0].getDie()));
     }
 
+    /**
+     * Tests a case in which the usage of the tool card is unsuccessful because of
+     * bad destination coordinates.
+     * <p>This means that an error view is selected during the process and that the
+     * pattern is not changed.</p>
+     */
     @Test
-    public void testBadIndexUsageFailure(){
+    public void testBadIndexUsageFailure() {
         MockView mockView = new MockView("Pippo");
         Game game = GameUtils.getHalfwayGame();
 
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Player player = game.getPlayers().get(0);
 

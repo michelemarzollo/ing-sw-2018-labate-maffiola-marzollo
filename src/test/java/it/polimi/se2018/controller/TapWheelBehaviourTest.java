@@ -15,17 +15,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Unit tests for TapWheelBehaviour class.
+ */
 public class TapWheelBehaviourTest {
 
+    /**
+     * Tests if requirements are met.
+     */
     @Test
-    public void testRequirements(){
+    public void testRequirements() {
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         TapWheelBehaviour behaviour = new TapWheelBehaviour();
         Assert.assertTrue(behaviour.areRequirementsSatisfied(game));
     }
 
+    /**
+     * Tests that the correct view is selected when asking parameters.
+     */
     @Test
     public void testAskParameters() {
         MockView mockView = new MockView("Pippo");
@@ -43,13 +52,18 @@ public class TapWheelBehaviourTest {
         Assert.assertEquals("showMoveSelection2", mockView.getCalledMethods().get(0));
     }
 
+    /**
+     * Tests a case in which the usage of the tool card is successful.
+     * <p>This means that no views are selected during the process and that
+     * the selected dice are correctly moved (following all placement restrictions).</p>
+     */
     @Test
-    public void testUsageSuccess(){
+    public void testUsageSuccess() {
         MockView mockView = new MockView("Pippo");
         Game game = setupSuccessScenario(mockView);
         Player player = game.getPlayers().get(0);
 
-        Assert.assertEquals(0,mockView.getCalledMethods().size());
+        Assert.assertEquals(0, mockView.getCalledMethods().size());
 
         Die yellow6 = new Die(6, new Random(0), Colour.YELLOW);
         Die yellow3 = new Die(3, new Random(0), Colour.YELLOW);
@@ -60,7 +74,7 @@ public class TapWheelBehaviourTest {
 
     }
 
-    private Game setupSuccessScenario(MockView mockView){
+    private Game setupSuccessScenario(MockView mockView) {
         MoveTwoDice message = new MoveTwoDice(
                 new Coordinates[]{
                         new Coordinates(1, 0),
@@ -78,6 +92,18 @@ public class TapWheelBehaviourTest {
         return setupScenario(message, true, true);
     }
 
+    /**
+     * Helper method that places 2 dice on the pattern owned by the player.
+     * <p>These dice are:
+     * <ul>
+     * <li>a red 2 in position (1, 1)</li>
+     * <li>a yellow 3 in position (2, 2)</li>
+     * </ul></p>
+     *
+     * @param player The player owning the pattern to manipulate.
+     * @return {@code true} if the placement is successful; {@code false}
+     * otherwise.
+     */
     private boolean placeSomeDice(Player player) {
         Pattern pattern = player.getPattern();
         Die red2 = new Die(2, new Random(0), Colour.RED);
@@ -93,23 +119,52 @@ public class TapWheelBehaviourTest {
         return true;
     }
 
-    private List<Die> getLeftovers(boolean insertYellow){
+    /**
+     * Returns a well-defined list of dice.
+     * <p>The dice are, in order:
+     * <ul>
+     * <li>purple 2</li>
+     * <li>purple 5</li>
+     * <li>yellow 6 (if insertYellow flag is true)</li>
+     * </ul>
+     * </p>
+     *
+     * @param insertYellow Flag to indicate if a yellow die has to be inserted.
+     * @return A list of well-defined dice.
+     */
+    private List<Die> getLeftovers(boolean insertYellow) {
         List<Die> dice = new ArrayList<>();
         dice.add(new Die(2, new Random(0), Colour.PURPLE));
         dice.add(new Die(5, new Random(0), Colour.PURPLE));
-        if(insertYellow)
+        if (insertYellow)
             dice.add(new Die(6, new Random(0), Colour.YELLOW));
         return dice;
     }
 
-    private void fillRoundTrack(Game game, boolean insertYellow){
+    /**
+     * Fills the round track of the specified game with some well-defined dice.
+     *
+     * @param game         The game to be manipulated.
+     * @param insertYellow Flag to indicate if a yellow die has to be inserted.
+     * @see TapWheelBehaviourTest#getLeftovers(boolean)
+     */
+    private void fillRoundTrack(Game game, boolean insertYellow) {
         game.getRoundTrack().addAllForRound(1, getLeftovers(insertYellow));
     }
 
-
-    private Game setupScenario(MoveTwoDice message, boolean insertYellow, boolean isSuccess){
+    /**
+     * Helper method that sets up a custom scenario fot this test suite.
+     *
+     * @param message      The message to be used to apply the behaviour.
+     * @param insertYellow Flag to indicate whether a yellow die has to be inserted
+     *                     in the round track.
+     * @param isSuccess    Flag to indicate if the application of the behaviour has to
+     *                     be successful.
+     * @return An instance of Game just after the behaviour has been applied.
+     */
+    private Game setupScenario(MoveTwoDice message, boolean insertYellow, boolean isSuccess) {
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Player player = game.getPlayers().get(0);
 
@@ -125,7 +180,14 @@ public class TapWheelBehaviourTest {
         return game;
     }
 
-    private Game setupBadColourScenario(MockView mockView){
+    /**
+     * Helper method that sets up a failure scenario where the failure is caused
+     * by bad colour selection.
+     *
+     * @param mockView The mock view that registers view method calls.
+     * @return An instance of Game just after the behaviour has been applied.
+     */
+    private Game setupBadColourScenario(MockView mockView) {
         MoveTwoDice message = new MoveTwoDice(
                 new Coordinates[]{
                         new Coordinates(1, 0),
@@ -143,8 +205,14 @@ public class TapWheelBehaviourTest {
         return setupScenario(message, false, false);
     }
 
+    /**
+     * Tests a case in which the usage of the tool card is unsuccessful because
+     * the colour of the selected dice is not in the round track.
+     * <p>This means that an error view is selected during the process and that
+     * no die is moved.</p>
+     */
     @Test
-    public void testBadColourUsageFailure(){
+    public void testBadColourUsageFailure() {
         MockView mockView = new MockView("Pippo");
         Game game = setupBadColourScenario(mockView);
         Player player = game.getPlayers().get(0);
@@ -161,8 +229,14 @@ public class TapWheelBehaviourTest {
         Assert.assertTrue(DieUtils.areEqual(yellow3, grid[2][2].getDie()));
     }
 
+    /**
+     * Tests a case in which the usage of the tool card is unsuccessful because
+     * the number of selected dice doesn't correspond to the number of destinations.
+     * <p>This means that an error view is selected during the process and that
+     * no die is moved.</p>
+     */
     @Test
-    public void testBadAmountsUsageFailure(){
+    public void testBadAmountsUsageFailure() {
         MockView mockView = new MockView("Pippo");
         Game game = setupBadAmountScenario(mockView);
         Player player = game.getPlayers().get(0);
