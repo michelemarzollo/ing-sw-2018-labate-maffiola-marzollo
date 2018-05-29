@@ -46,7 +46,7 @@ public class MatchMaker {
      */
     public void makeMultiPlayerMatchFor(View view) {
         if (multiPlayer == null)
-            multiPlayer = new MultiPlayerController(new Game(), 150, new Timer(), 60, new Timer());
+            multiPlayer = new MultiPlayerController(new Game(), 150, 60);
         view.registerObserver(multiPlayer);
         ViewMessage message = new ViewMessage(view, Action.REGISTER_PLAYER, view.getPlayerName());
         multiPlayer.update(message);
@@ -58,7 +58,7 @@ public class MatchMaker {
      * @param view The view to be linked.
      */
     public void makeSinglePlayerMatchFor(View view) {
-        Controller singlePlayer = new SinglePlayerController(new Game(), new Timer(), 150);
+        Controller singlePlayer = new SinglePlayerController(new Game(), 150, 60);
         view.registerObserver(singlePlayer);
         ViewMessage message = new ViewMessage(view, Action.REGISTER_PLAYER, view.getPlayerName());
         singlePlayer.update(message);
