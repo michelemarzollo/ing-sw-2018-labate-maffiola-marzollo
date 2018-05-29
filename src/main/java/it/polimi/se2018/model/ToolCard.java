@@ -1,5 +1,7 @@
 package it.polimi.se2018.model;
 
+import java.io.Serializable;
+
 /**
  * This class represents a tool card in the game.
  * <p>Each tool card is defined by its name and its colour
@@ -7,7 +9,7 @@ package it.polimi.se2018.model;
  * <p>No thread-safety has yet been implemented.</p>
  * @author dvdmff
  */
-public class ToolCard {
+public class ToolCard implements Serializable {
     /**
      * The name of the tool card.
      */
@@ -31,6 +33,16 @@ public class ToolCard {
     public ToolCard(String name, Colour colour) {
         this.name = name;
         this.colour = colour;
+    }
+
+    /**
+     * Copy constructor.
+     * @param toolCard The tool card to copy.
+     */
+    public ToolCard(ToolCard toolCard){
+        this.name = toolCard.name;
+        this.colour = toolCard.colour;
+        this.used = toolCard.used;
     }
 
     /**

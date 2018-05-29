@@ -33,6 +33,7 @@ public class PrivateObjectiveCard implements ObjectiveCard {
     /**
      * The getter of the name.
      */
+    @Override
     public String getName() {
         return name;
     }

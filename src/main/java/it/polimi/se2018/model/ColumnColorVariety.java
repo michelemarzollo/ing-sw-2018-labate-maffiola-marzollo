@@ -65,4 +65,8 @@ public class ColumnColorVariety extends PublicObjectiveCard {
         return 5 * numOfColumns;
     }
 
+    @Override
+    public String getName() {
+        return "ColumnColorVariety";
+    }
 }

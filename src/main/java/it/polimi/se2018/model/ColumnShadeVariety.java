@@ -64,4 +64,9 @@ public class ColumnShadeVariety extends PublicObjectiveCard {
         return 4 * numOfColumns;
     }
 
+    @Override
+    public String getName() {
+        return "ColumnShadeVariety";
+    }
+
 }

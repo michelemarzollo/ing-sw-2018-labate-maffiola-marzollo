@@ -54,4 +54,9 @@ public class RowColorVariety extends PublicObjectiveCard {
         return 6 * numOfRows;
     }
 
+    @Override
+    public String getName() {
+        return "RowColorVariety";
+    }
+
 }

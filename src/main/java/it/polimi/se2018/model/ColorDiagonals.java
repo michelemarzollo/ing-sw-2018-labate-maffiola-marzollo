@@ -95,4 +95,8 @@ public class ColorDiagonals extends PublicObjectiveCard {
 
     }
 
+    @Override
+    public String getName() {
+        return "ColorDiagonals";
+    }
 }

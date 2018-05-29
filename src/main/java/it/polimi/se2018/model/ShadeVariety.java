@@ -48,4 +48,9 @@ public class ShadeVariety extends PublicObjectiveCard {
         return 5 * numberOfShades(grid, numbers);
     }
 
+    @Override
+    public String getName() {
+        return "ShadeVariety";
+    }
+
 }

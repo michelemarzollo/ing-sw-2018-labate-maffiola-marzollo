@@ -1,6 +1,8 @@
 package it.polimi.se2018.model.events;
 
-import it.polimi.se2018.model.Pattern;
+import it.polimi.se2018.model.*;
+
+import java.util.Arrays;
 
 
 /**
@@ -13,49 +15,54 @@ public class GameSetup extends ModelUpdate {
     /**
      * The array of players that will participate to the game.
      */
-    private String[] players;
+    private final String[] players;
 
     /**
      * The array of private objective cards.
      * There is a correspondence of indexes with the array {@code players} (each player
      * has one private objective card and vice versa).
      */
-    private String[] privateObjectives;
+    private final String[][] privateObjectives;
 
     /**
      * The array of the tool cards that can be used in the game.
      */
-    private String[] toolCards;
+    private final ToolCard[] toolCards;
 
     /**
      * The array of the public objective cards that will be used in the game.
      */
-    private String[] publicObjectives;
+    private final String[] publicObjectives;
 
     /**
      * The array of quartets of patterns. Each cell of {@code candidates[]} contains an
      * array of 4 pattern cards, among which the player will choose the one to use in
      * the game. There is a correspondence of indexes with the array {@code players}.
      */
-    private Pattern[][] candidates;
+    private final Pattern[][] candidates;
 
     /**
-     * The constructor of the class.
-     *
-     * @param players          The array of players that will participate to the game.
-     * @param toolCards        The array of private objective cards.
-     * @param publicObjectives The array of the public objective cards that will be used in the game.
-     * @param candidates       The array of quartets of patterns.
+     * Creates a game setup message taking information from the specified game.
+     * @param game The game containing the setup.
      */
-    public GameSetup(String[] players, String[] toolCards,
-                     String[] publicObjectives, Pattern[][] candidates) {
-
+    public GameSetup(Game game) {
         super(ModelEvent.GAME_SETUP);
-        this.players = players;
-        this.toolCards = toolCards;
-        this.publicObjectives = publicObjectives;
-        this.candidates = candidates;
-
+        this.players = game.getPlayers().stream()
+                .map(Player::getName)
+                .toArray(String[]::new);
+        this.toolCards = Arrays.stream(game.getToolCards())
+                .map(ToolCard::new)
+                .toArray(ToolCard[]::new);
+        this.publicObjectives = Arrays.stream(game.getPublicObjectiveCards())
+                .map(ObjectiveCard::getName)
+                .toArray(String[]::new);
+        this.candidates = game.getPlayers().stream()
+                .map(Player::getCandidates)
+                .toArray(Pattern[][]::new);
+        this.privateObjectives = game.getPlayers().stream()
+                .map(p -> Arrays.stream(p.getCards())
+                        .map(PrivateObjectiveCard::getName))
+                .toArray(String[][]::new);
     }
 
     /**
@@ -72,7 +79,7 @@ public class GameSetup extends ModelUpdate {
      *
      * @return {@code privateObjectives}
      */
-    public String[] getPrivateObjectives() {
+    public String[][] getPrivateObjectives() {
         return privateObjectives;
     }
 
@@ -81,7 +88,7 @@ public class GameSetup extends ModelUpdate {
      *
      * @return {@code toolCards}
      */
-    public String[] getToolCards() {
+    public ToolCard[] getToolCards() {
         return toolCards;
     }
 

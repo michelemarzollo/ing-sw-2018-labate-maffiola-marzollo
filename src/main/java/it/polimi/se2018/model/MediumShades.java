@@ -51,4 +51,9 @@ public class MediumShades extends PublicObjectiveCard {
         return 2 * numberOfShades(grid, numbers);
     }
 
+    @Override
+    public String getName() {
+        return "MediumShades";
+    }
+
 }

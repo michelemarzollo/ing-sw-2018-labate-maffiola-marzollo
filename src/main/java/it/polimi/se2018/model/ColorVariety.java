@@ -78,4 +78,8 @@ public class ColorVariety extends PublicObjectiveCard {
         return occurrences[0];
     }
 
+    @Override
+    public String getName() {
+        return "ColorVariety";
+    }
 }

@@ -2,6 +2,7 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.utils.Coordinates;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  *
  * @author giorgiolbt
  */
-public class Pattern {
+public class Pattern implements Serializable {
 
     public static final int ROWS = 4;
 

@@ -53,4 +53,9 @@ public class RowShadeVariety extends PublicObjectiveCard {
         return 5 * numOfRows;
     }
 
+    @Override
+    public String getName() {
+        return "RowShadeVariety";
+    }
+
 }

@@ -1,5 +1,7 @@
 package it.polimi.se2018.model.events;
 
+import it.polimi.se2018.model.Turn;
+
 /**
  * The event to update the view when the turn of a player is finished, and
  * another player must play it's turn.
@@ -8,19 +10,20 @@ package it.polimi.se2018.model.events;
  */
 public class NextTurn extends ModelUpdate {
 
+    private final boolean secondTurn;
     /**
      * The name of the player whose turn is the one following the event.
      */
-    private String nextPlayer;
+    private final String nextPlayer;
 
     /**
-     * The constructor of the class.
-     *
-     * @param nextPlayer The name of the next {@link it.polimi.se2018.model.Player}.
+     * Creates a message containing relevant information about the next turn.
+     * @param turn The next turn.
      */
-    public NextTurn(String nextPlayer) {
+    public NextTurn(Turn turn) {
         super(ModelEvent.NEXT_TURN);
-        this.nextPlayer = nextPlayer;
+        this.nextPlayer = turn.getPlayer().getName();
+        this.secondTurn = !turn.isSecondTurnAvailable();
     }
 
     /**
@@ -32,4 +35,7 @@ public class NextTurn extends ModelUpdate {
         return nextPlayer;
     }
 
+    public boolean isSecondTurn() {
+        return secondTurn;
+    }
 }

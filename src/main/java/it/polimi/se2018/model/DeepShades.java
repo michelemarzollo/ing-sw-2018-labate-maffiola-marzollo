@@ -50,4 +50,9 @@ public class DeepShades extends PublicObjectiveCard {
         int[] numbers = {5, 6};
         return 2 * numberOfShades(grid, numbers);
     }
+
+    @Override
+    public String getName() {
+        return "DeepShades";
+    }
 }

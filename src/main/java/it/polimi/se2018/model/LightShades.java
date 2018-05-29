@@ -51,4 +51,9 @@ public class LightShades extends PublicObjectiveCard {
         return 2 * numberOfShades(grid, numbers);
     }
 
+    @Override
+    public String getName() {
+        return "LightShades";
+    }
+
 }

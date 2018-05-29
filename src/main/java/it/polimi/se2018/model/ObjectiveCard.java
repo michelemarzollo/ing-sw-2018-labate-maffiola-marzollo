@@ -16,4 +16,6 @@ public interface ObjectiveCard {
      * @return The score
      */
     int getScore(Cell[][] grid);
+
+    String getName();
 }

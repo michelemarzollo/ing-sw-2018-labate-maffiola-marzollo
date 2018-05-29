@@ -5,7 +5,7 @@ package it.polimi.se2018.model.events;
  * status of a player.
  * @author dvdmff
  */
-public class PlayerConnection extends ModelUpdate {
+public class PlayerConnectionStatus extends ModelUpdate {
 
     /**
      * The name of the involved player.
@@ -21,8 +21,8 @@ public class PlayerConnection extends ModelUpdate {
      * @param playerName The name of the player who changed his connection status.
      * @param connected Flag for the new connection status.
      */
-    public PlayerConnection(String playerName, boolean connected) {
-        super(ModelEvent.PLAYER_CONNECTION);
+    public PlayerConnectionStatus(String playerName, boolean connected) {
+        super(ModelEvent.PLAYER_CONNECTION_STATUS);
         this.playerName = playerName;
         this.connected = connected;
     }

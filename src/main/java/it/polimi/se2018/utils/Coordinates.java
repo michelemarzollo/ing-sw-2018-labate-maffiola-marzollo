@@ -1,5 +1,7 @@
 package it.polimi.se2018.utils;
 
+import java.io.Serializable;
+
 /**
  * Class that encapsulates the pair of
  * coordinates to refer to a
@@ -8,7 +10,7 @@ package it.polimi.se2018.utils;
  *
  * @author giorgiolbt
  */
-public class Coordinates {
+public class Coordinates implements Serializable {
 
     /**
      * The coordinate that describes the row
