@@ -27,7 +27,7 @@ public class MultiPlayerControllerTest {
         Game game = GameUtils.getStartedGame(true);
         if(game == null)
             Assert.fail("Error on game initialization");
-        Controller controller = new MultiPlayerController(game, 100, new Timer(), 100, new Timer());
+        Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view = new MockView("Pippo");
         SelectDifficulty msg = new SelectDifficulty(3, view, Action.SELECT_DIFFICULTY, "Pippo");
         controller.performAction(msg);
@@ -35,7 +35,7 @@ public class MultiPlayerControllerTest {
         assertEquals(1, view.getCalledMethods().size());
     }
     /**
-     * Tests canUseToolCard method of Multiplayer Controller in
+     * Tests canUseToolCard method of MultiPlayer Controller in
      * a case in which is possible to use the ToolCard: it is Pippo's turn,
      * the requested toolCard is part of the game and Pippo has enough tokens.
      */
@@ -44,14 +44,14 @@ public class MultiPlayerControllerTest {
         Game game = GameUtils.getStartedGame(true);
         if(game == null)
             Assert.fail("Error on game initialization");
-        ToolCard[] toolcards = {new ToolCard("Grozing Pliers", Colour.PURPLE),
+        ToolCard[] toolCards = {new ToolCard("Grozing Pliers", Colour.PURPLE),
                 new ToolCard("Eglomise Brush", Colour.BLUE),
                 new ToolCard("Copper Foil Burnisher", Colour.RED)};
-        game.setToolCards(toolcards);
-        Controller controller = new MultiPlayerController(game, 100, new Timer(), 100, new Timer());
+        game.setToolCards(toolCards);
+        Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view = new MockView("Pippo");
         SelectCard msg = new SelectCard("Grozing Pliers", view, Action.ACTIVATE_TOOL_CARD, "Pippo");
-        controller.canUseToolCard(msg, toolcards[0]);
+        controller.canUseToolCard(msg, toolCards[0]);
         assertTrue(view.getCalledMethods().isEmpty());
     }
 
@@ -66,15 +66,15 @@ public class MultiPlayerControllerTest {
      Game game = GameUtils.getStartedGame(true);
      if(game == null)
          Assert.fail("Error on game initialization");
-     ToolCard[] toolcards = {new ToolCard("Grozing Pliers", Colour.PURPLE),
+     ToolCard[] toolCards = {new ToolCard("Grozing Pliers", Colour.PURPLE),
      new ToolCard("Eglomise Brush", Colour.BLUE),
      new ToolCard("Copper Foil Burnisher", Colour.RED)};
-     game.setToolCards(toolcards);
+     game.setToolCards(toolCards);
      game.getPlayers().get(0).setTokens(0);
-     Controller controller = new MultiPlayerController(game, 100, new Timer(), 100, new Timer());
+     Controller controller = new MultiPlayerController(game, 100, 100);
      MockView view = new MockView("Pippo");
      SelectCard msg = new SelectCard("Grozing Pliers", view, Action.ACTIVATE_TOOL_CARD, "Pippo");
-     controller.canUseToolCard(msg, toolcards[0]);
+     controller.canUseToolCard(msg, toolCards[0]);
      assertTrue(view.getCalledMethods().contains("showError: You don't have enough tokens."));
      assertEquals(1,view.getCalledMethods().size());
      }
@@ -90,17 +90,17 @@ public class MultiPlayerControllerTest {
      Game game = GameUtils.getStartedGame(true);
      if(game == null)
          Assert.fail("Error on game initialization");
-     ToolCard[] toolcards = {new ToolCard("Grozing Pliers", Colour.PURPLE),
+     ToolCard[] toolCards = {new ToolCard("Grozing Pliers", Colour.PURPLE),
      new ToolCard("Eglomise Brush", Colour.BLUE),
      new ToolCard("Copper Foil Burnisher", Colour.RED)};
-     game.setToolCards(toolcards);
+     game.setToolCards(toolCards);
      game.getPlayers().get(0).setTokens(1);
      game.getToolCards()[0].use();
      //now the ToolCard 'Grozing Pliers' costs two tokens.
-     Controller controller = new MultiPlayerController(game, 100, new Timer(), 100, new Timer());
+     Controller controller = new MultiPlayerController(game, 100, 100);
      MockView view = new MockView("Pippo");
      SelectCard msg = new SelectCard("Grozing Pliers", view, Action.ACTIVATE_TOOL_CARD, "Pippo");
-     controller.canUseToolCard(msg, toolcards[0]);
+     controller.canUseToolCard(msg, toolCards[0]);
      assertTrue(view.getCalledMethods().contains("showError: You don't have enough tokens."));
      assertEquals(1,view.getCalledMethods().size());
      }
@@ -111,11 +111,11 @@ public class MultiPlayerControllerTest {
         Game game = GameUtils.getStartedGame(true);
         if(game == null)
             Assert.fail("Error on game initialization");
-        ToolCard[] toolcards = {new ToolCard("Grozing Pliers", Colour.PURPLE),
+        ToolCard[] toolCards = {new ToolCard("Grozing Pliers", Colour.PURPLE),
                 new ToolCard("Eglomise Brush", Colour.BLUE),
                 new ToolCard("Copper Foil Burnisher", Colour.RED)};
-        game.setToolCards(toolcards);
-        Controller controller = new MultiPlayerController(game, 100, new Timer(), 100, new Timer());
+        game.setToolCards(toolCards);
+        Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view = new MockView("Pippo");
         ViewMessage msg = new ViewMessage(view, Action.END_TURN, "Pippo"); //generic action, just to have a ViewMessage
         controller.displayGame(msg);
@@ -128,11 +128,11 @@ public class MultiPlayerControllerTest {
         Game game = GameUtils.getStartedGame(true);
         if(game == null)
             Assert.fail("Error on game initialization");
-        ToolCard[] toolcards = {new ToolCard("Grozing Pliers", Colour.PURPLE),
+        ToolCard[] toolCards = {new ToolCard("Grozing Pliers", Colour.PURPLE),
                 new ToolCard("Eglomise Brush", Colour.BLUE),
                 new ToolCard("Copper Foil Burnisher", Colour.RED)};
-        game.setToolCards(toolcards);
-        Controller controller = new MultiPlayerController(game, 100, new Timer(), 100, new Timer());
+        game.setToolCards(toolCards);
+        Controller controller = new MultiPlayerController(game, 100, 100);
         assertEquals(5, controller.getDraftAmount());
     }
 
@@ -142,13 +142,13 @@ public class MultiPlayerControllerTest {
         Game game = GameUtils.getStartedGame(true);
         if(game == null)
             Assert.fail("Error on game initialization");
-        ToolCard[] toolcards = {new ToolCard("Grozing Pliers", Colour.PURPLE),
+        ToolCard[] toolCards = {new ToolCard("Grozing Pliers", Colour.PURPLE),
                 new ToolCard("Eglomise Brush", Colour.BLUE),
                 new ToolCard("Copper Foil Burnisher", Colour.RED)};
-        game.setToolCards(toolcards);
-        Controller controller = new MultiPlayerController(game, 100, new Timer(), 100, new Timer());
+        game.setToolCards(toolCards);
+        Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view = new MockView("Pippo");
-        game.getTurnManager().getCurrentTurn().setSelectedToolCard(toolcards[0]);
+        game.getTurnManager().getCurrentTurn().setSelectedToolCard(toolCards[0]);
         IncrementDieValue msg = new IncrementDieValue(2, true, view, Action.APPLY_TOOL_CARD, "Pippo");
         int previousTokens = game.getPlayers().get(0).getTokens();
         controller.consumeResources(msg);
@@ -161,16 +161,16 @@ public class MultiPlayerControllerTest {
         Game game = GameUtils.getStartedGame(true);
         if(game == null)
             Assert.fail("Error on game initialization");
-        ToolCard[] toolcards = {new ToolCard("Grozing Pliers", Colour.PURPLE),
+        ToolCard[] toolCards = {new ToolCard("Grozing Pliers", Colour.PURPLE),
                 new ToolCard("Eglomise Brush", Colour.BLUE),
                 new ToolCard("Copper Foil Burnisher", Colour.RED)};
-        game.setToolCards(toolcards);
-        Controller controller = new MultiPlayerController(game, 100, new Timer(), 100, new Timer());
+        game.setToolCards(toolCards);
+        Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view1 = new MockView("Pippo");
         MockView view2 = new MockView("Pluto");
-        game.getTurnManager().getCurrentTurn().setSelectedToolCard(toolcards[0]);
+        game.getTurnManager().getCurrentTurn().setSelectedToolCard(toolCards[0]);
         IncrementDieValue msg = new IncrementDieValue(2, true, view1, Action.APPLY_TOOL_CARD, "Pippo");
-        toolcards[0].use();
+        toolCards[0].use();
         controller.consumeResources(msg);
         int previousTokens = game.getPlayers().get(1).getTokens();
         assertEquals(previousTokens, game.getPlayers().get(0).getTokens() + 2 );
@@ -195,7 +195,7 @@ public class MultiPlayerControllerTest {
         Game game = GameUtils.getStartedGame(true);
         if(game == null)
             Assert.fail("Error on game initialization");
-        Controller controller = new MultiPlayerController(game, 100, new Timer(), 100, new Timer());
+        Controller controller = new MultiPlayerController(game, 100, 100);
         Die blue6 = new Die(6, new Random(), Colour.BLUE);
         Die red5 = new Die(5, new Random(), Colour.RED);
         Player pippo = game.getPlayers().get(0);
@@ -208,7 +208,7 @@ public class MultiPlayerControllerTest {
                     .placeDie(red5, new Coordinates(1, 0));
             pluto.setPattern(newPattern2);
         } catch (PlacementErrorException e) {
-            //will nevere enter here
+            //will never enter here
             fail();
         }
         controller.calculateScores();
@@ -220,7 +220,7 @@ public class MultiPlayerControllerTest {
     @Test
     public void testRegisterPlayerSetUpComplete() {
         Game game = new Game();
-        Controller controller = new MultiPlayerController(game, 100, new Timer(), 100, new Timer());
+        Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view1 = new MockView("Pippo");
         MockView view2 = new MockView("Pluto");
         MockView view3 = new MockView("Topolino");
@@ -239,7 +239,7 @@ public class MultiPlayerControllerTest {
     @Test
     public void testRegisterPlayerSetUpNotComplete() {
         Game game = new Game();
-        Controller controller = new MultiPlayerController(game, 100, new Timer(), 100, new Timer());
+        Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view1 = new MockView("Pippo");
         MockView view2 = new MockView("Pluto");
         MockView view3 = new MockView("Topolino");
@@ -257,7 +257,7 @@ public class MultiPlayerControllerTest {
         Game game = GameUtils.getStartedGame(true);
         if(game == null)
             Assert.fail("Error on game initialization");
-        Controller controller = new MultiPlayerController(game, 100, new Timer(), 100, new Timer());
+        Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view = new MockView("Pippo");
         //The endGame method is invoked as a consequence of EndRound when the Game is finished.
         //Its ViewMessage could be, for example, an EndTurn message.
@@ -267,7 +267,7 @@ public class MultiPlayerControllerTest {
         //ensures that the calculateScores method has been invoked.
         assertTrue(game.getPlayers().get(0).getScore() != 0);
         assertTrue(game.getPlayers().get(1).getScore() != 0);
-        //before endGame method invokation the scoreBoard is not even instantiated.
+        //before endGame method invocation the scoreBoard is not even instantiated.
         assertTrue(game.getScoreBoard() != null);
         assertTrue(view.getCalledMethods().contains("showFinalView"));
         assertEquals(1, view.getCalledMethods().size());
@@ -277,7 +277,7 @@ public class MultiPlayerControllerTest {
         Game game = GameUtils.getSetUpGame(true);
         if(game == null)
             Assert.fail("Error on game initialization");
-        Controller controller = new MultiPlayerController(game, 100, new Timer(), 100, new Timer());
+        Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view1 = new MockView("Pippo");
         ViewMessage msg = new ViewMessage(view1, Action.DISCONNECT_PLAYER, "Pippo");
         controller.disconnectPlayer(msg);
@@ -290,7 +290,7 @@ public class MultiPlayerControllerTest {
         Game game = new Game();
         Player player = new Player("Pippo");
         game.addPlayer(player);
-        Controller controller = new MultiPlayerController(game, 100, new Timer(), 100, new Timer());
+        Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view1 = new MockView("Pippo");
         ViewMessage msg = new ViewMessage(view1, Action.DISCONNECT_PLAYER, "Pippo");
         controller.disconnectPlayer(msg);
@@ -302,7 +302,7 @@ public class MultiPlayerControllerTest {
         Game game = GameUtils.getSetUpGame(true);
         if(game == null)
             Assert.fail("Error on game initialization");
-        Controller controller = new MultiPlayerController(game, 100, new Timer(), 100, new Timer());
+        Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view1 = new MockView("Pippo");
         game.getPlayers().get(0).setConnected(false);
         ViewMessage msg = new ViewMessage(view1, Action.RECONNECT_PLAYER, "Pippo");
@@ -315,7 +315,7 @@ public class MultiPlayerControllerTest {
         Game game = GameUtils.getSetUpGame(true);
         if(game == null)
             Assert.fail("Error on game initialization");
-        Controller controller = new MultiPlayerController(game, 100, new Timer(), 100, new Timer());
+        Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view1 = new MockView("Pippo");
         game.getPlayers().get(0).setConnected(false);
         ViewMessage msg = new ViewMessage(view1, Action.RECONNECT_PLAYER, "Paperino");
