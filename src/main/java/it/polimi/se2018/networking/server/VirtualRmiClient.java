@@ -4,6 +4,7 @@ import it.polimi.se2018.networking.client.ClientNetInterface;
 import it.polimi.se2018.networking.client.RmiClientImplementation;
 import it.polimi.se2018.networking.client.RmiClientInterface;
 import it.polimi.se2018.networking.messages.Message;
+import it.polimi.se2018.utils.Logger;
 
 import java.rmi.ConnectException;
 import java.rmi.RemoteException;
@@ -65,7 +66,7 @@ public class VirtualRmiClient implements ClientNetInterface {
         } catch (ConnectException e) {
             server.removeClient(this);
         } catch (RemoteException e) {
-            System.err.println("Connection error: " + e.getMessage() + "!");
+            Logger.getDefaultLogger().log("Connection error: " + e.getMessage() + "!");
         }
     }
 }
