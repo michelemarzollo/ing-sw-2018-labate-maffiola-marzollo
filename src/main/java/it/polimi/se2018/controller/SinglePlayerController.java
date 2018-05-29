@@ -72,6 +72,8 @@ public class SinglePlayerController extends Controller {
         actions.put(Action.DISCONNECT_PLAYER, this::disconnectPlayer);
         actions.put(Action.RECONNECT_PLAYER, this::reconnectPlayer);
         actions.put(Action.SELECT_PRIVATE_OBJECTIVE, this::selectPrivateObjective);
+        actions.put(Action.CHOOSE_VALUE, this::applyToolCard);
+
     }
 
     /**
@@ -220,37 +222,24 @@ public class SinglePlayerController extends Controller {
      * otherwise.
      */
     @Override
-    protected boolean canUseToolCard(ViewMessage message) {
+    protected boolean canUseToolCard(ViewMessage message, ToolCard toolCard) {
         SelectCardSP selectionMessage = (SelectCardSP) message;
         int dieIndex = selectionMessage.getDieIndex();
-        String playerName = message.getPlayerName();
-        Turn currentTurn = getGame().getTurnManager().getCurrentTurn();
-        if (!currentTurn.getPlayer().getName().equals(playerName)) {
-            selectionMessage.getView().showError("Not your turn!");
+        if (!toolCard.isUsed()) {
+            if (super.getGame().getDraftPool().getDice().get(dieIndex).getColour().
+                    equals(toolCard.getColour())) {
+                getGame().getTurnManager().getCurrentTurn().
+                        setSacrificeIndex(dieIndex);
+                return true;
+            } else {
+                selectionMessage.getView().showError("The requested die doesn't match the toolcard's colour.");
+                return false;
+            }
+        } else {
+            //The toolCard has been already used.
+            selectionMessage.getView().showError("The toolcard has already been used.");
             return false;
         }
-        for (ToolCard card : super.getGame().getToolCards()) {
-            if (selectionMessage.getName().equals(card.getName())) {
-                if (!card.isUsed()) {
-                    if (super.getGame().getDraftPool().getDice().get(dieIndex).getColour().
-                            equals(card.getColour())) {
-                        getGame().getTurnManager().getCurrentTurn().
-                                setSacrificeIndex(dieIndex);
-                        return true;
-                    } else {
-                        selectionMessage.getView().showError("The requested die doesn't match the toolcard's colour.");
-                        return false;
-                    }
-                } else {
-                    //The toolCard has been already used.
-                    selectionMessage.getView().showError("The toolcard has already been used.");
-                    return false;
-                }
-            }
-        }
-        //If the loop terminates no corresponding ToolCard to the one requested has been found.
-        selectionMessage.getView().showError("The toolcard doesn't exists.");
-        return false;
     }
 
     /**
@@ -294,7 +283,7 @@ public class SinglePlayerController extends Controller {
     private class EndGameTask extends TimerTask{
         @Override
         public void run() {
-            //@TODO invoke finalizeMatch methow that will be in the abstract controller 
+            //@TODO invoke finalizeMatch methow that will be in the abstract controller
         }
     }
 
