@@ -1,6 +1,7 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.utils.Coordinates;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -10,9 +11,16 @@ import static org.junit.Assert.*;
 
 public class RoundTrackTest {
 
+    private RoundTrack track;
+
+    @Before
+    public void setUp(){
+        Game game = new Game();
+        track = new RoundTrack(10, game);
+    }
+
     @Test
     public void testAddAllForRound() {
-        RoundTrack track = new RoundTrack(10);
         ArrayList<Die> draft = new ArrayList<>();
         draft.add(new Die(3, new Random(), Colour.GREEN));
         draft.add(new Die(6, new Random(), Colour.GREEN));
@@ -23,7 +31,6 @@ public class RoundTrackTest {
 
     @Test
     public void testGetSum() {
-        RoundTrack track = new RoundTrack(10);
         ArrayList<Die> draft1 = new ArrayList<>();
         draft1.add(new Die(3, new Random(), Colour.GREEN));
         draft1.add(new Die(6, new Random(), Colour.GREEN));
@@ -34,14 +41,12 @@ public class RoundTrackTest {
 
     @Test
     public void testGetSumWithNoDice() {
-        RoundTrack track = new RoundTrack(10);
         assertEquals(0, track.getSum()); //verifies that the sum is computed correctly
     }
 
 
     @Test
     public void testValidSwap() {
-        RoundTrack track = new RoundTrack(10);
         ArrayList<Die> draft1 = new ArrayList<>();
         draft1.add(new Die(3, new Random(), Colour.GREEN));
         draft1.add(new Die(6, new Random(), Colour.GREEN));
@@ -60,7 +65,6 @@ public class RoundTrackTest {
 
     @Test
     public void testInvalidSwap() {
-        RoundTrack track = new RoundTrack(10);
         ArrayList<Die> draft1 = new ArrayList<>();
         draft1.add(new Die(3, new Random(), Colour.GREEN));
         draft1.add(new Die(6, new Random(), Colour.GREEN));

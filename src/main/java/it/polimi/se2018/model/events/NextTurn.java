@@ -10,11 +10,10 @@ import it.polimi.se2018.model.Turn;
  */
 public class NextTurn extends ModelUpdate {
 
-    private final boolean secondTurn;
     /**
      * The name of the player whose turn is the one following the event.
      */
-    private final String nextPlayer;
+    private final Turn turn;
 
     /**
      * Creates a message containing relevant information about the next turn.
@@ -22,20 +21,15 @@ public class NextTurn extends ModelUpdate {
      */
     public NextTurn(Turn turn) {
         super(ModelEvent.NEXT_TURN);
-        this.nextPlayer = turn.getPlayer().getName();
-        this.secondTurn = !turn.isSecondTurnAvailable();
+        this.turn = new Turn(turn);
     }
 
     /**
-     * The getter for {@code nextPlayer}.
+     * The getter for {@code turn}.
      *
-     * @return The next player.
+     * @return The next turn.
      */
-    public String getNextPlayer() {
-        return nextPlayer;
-    }
-
-    public boolean isSecondTurn() {
-        return secondTurn;
+    public Turn getTurn() {
+        return turn;
     }
 }

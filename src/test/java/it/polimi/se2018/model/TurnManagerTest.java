@@ -11,7 +11,7 @@ public class TurnManagerTest {
     @Test
     public void testTurnManagerConstructorNull(){
         try{
-            TurnManager turnManager = new TurnManager(null);
+            TurnManager turnManager = new TurnManager(null, new Game());
             fail();
         }
         catch(NullPointerException ex){
@@ -23,7 +23,7 @@ public class TurnManagerTest {
     public void testTurnManagerConstructorEmpty(){
         try{
             ArrayList<Player> players = new ArrayList<>();
-            TurnManager turnManager = new TurnManager(players);
+            TurnManager turnManager = new TurnManager(players, new Game());
             fail();
         }
         catch(IllegalArgumentException ex){
@@ -37,7 +37,7 @@ public class TurnManagerTest {
         ArrayList<Player> players= new ArrayList<>();
         players.add(new Player("Player1"));
         players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players);
+        TurnManager manager = new TurnManager(players, new Game());
         for(int i = 0; i < 9; i++){
             try {
                 manager.setupNewRound();
@@ -58,7 +58,7 @@ public class TurnManagerTest {
         ArrayList<Player> players= new ArrayList<>();
         players.add(new Player("Player1"));
         players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players);
+        TurnManager manager = new TurnManager(players, new Game());
         for(int i = 0; i < 9; i++){
             try {
                 manager.setupNewRound();
@@ -79,7 +79,7 @@ public class TurnManagerTest {
         ArrayList<Player> players= new ArrayList<>();
         players.add(new Player("Player1"));
         players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players);
+        TurnManager manager = new TurnManager(players, new Game());
         try{
             manager.setupNewRound();
         }
@@ -102,7 +102,7 @@ public class TurnManagerTest {
         ArrayList<Player> players= new ArrayList<>();
         players.add(new Player("Player1"));
         players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players);
+        TurnManager manager = new TurnManager(players, new Game());
         for(int i = 0; i < 9; i++){
             try{
                 manager.setupNewRound();
@@ -130,7 +130,7 @@ public class TurnManagerTest {
         ArrayList<Player> players= new ArrayList<>();
         players.add(new Player("Player1"));
         players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players);
+        TurnManager manager = new TurnManager(players, new Game());
         manager.updateTurn();
         assertEquals("Player1",manager.getCurrentTurn().getPlayer().getName());
         assertEquals(true,manager.getCurrentTurn().isSecondTurnAvailable());
@@ -149,7 +149,7 @@ public class TurnManagerTest {
         ArrayList<Player> players= new ArrayList<>();
         players.add(new Player("Player1"));
         players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players);
+        TurnManager manager = new TurnManager(players, new Game());
         manager.updateTurn();
         manager.updateTurn();
         manager.updateTurn();
@@ -164,7 +164,7 @@ public class TurnManagerTest {
         players.add(new Player("Player0"));
         players.add(new Player("Player1"));
         players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players);
+        TurnManager manager = new TurnManager(players, new Game());
         manager.updateTurn();
         manager.updateTurn();
         try {
@@ -187,7 +187,7 @@ public class TurnManagerTest {
         players.add(new Player("Player0"));
         players.add(new Player("Player1"));
         players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players);
+        TurnManager manager = new TurnManager(players, new Game());
         manager.updateTurn();
         try {
             manager.consumeSecondTurn(manager.getCurrentTurn().getPlayer());
@@ -213,7 +213,7 @@ public class TurnManagerTest {
     public void testUpdateTurnSinglePlayer(){
         ArrayList<Player> players= new ArrayList<>();
         players.add(new Player("Player1"));
-        TurnManager manager = new TurnManager(players);
+        TurnManager manager = new TurnManager(players, new Game());
         manager.updateTurn();
         assertEquals("Player1", manager.getCurrentTurn().getPlayer().getName());
         assertEquals(true,manager.getCurrentTurn().isSecondTurnAvailable());
@@ -229,7 +229,7 @@ public class TurnManagerTest {
         ArrayList<Player> players= new ArrayList<>();
         players.add(new Player("Player1"));
         players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players);
+        TurnManager manager = new TurnManager(players, new Game());
         manager.updateTurn();
         manager.updateTurn();//limit case (last first turn of the last player in the list)
         assertTrue(manager.isSecondTurnAvailable());
@@ -240,7 +240,7 @@ public class TurnManagerTest {
         ArrayList<Player> players= new ArrayList<>();
         players.add(new Player("Player1"));
         players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players);
+        TurnManager manager = new TurnManager(players, new Game());
         manager.updateTurn();
         manager.updateTurn();
         manager.updateTurn();//limit case (first second turn of the last player in the list);
@@ -254,7 +254,7 @@ public class TurnManagerTest {
         ArrayList<Player> players= new ArrayList<>();
         players.add(new Player("Player1"));
         players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players);
+        TurnManager manager = new TurnManager(players, new Game());
         manager.updateTurn();
         manager.updateTurn();
         manager.updateTurn();
@@ -272,7 +272,7 @@ public class TurnManagerTest {
         ArrayList<Player> players= new ArrayList<>();
         players.add(new Player("Player1"));
         players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players);
+        TurnManager manager = new TurnManager(players, new Game());
         manager.updateTurn();
         manager.updateTurn();
         try{

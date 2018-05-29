@@ -23,6 +23,7 @@ public class TestPlayer {
     @Before
     public void setUp() {
         player = new Player("Michele");
+        player.setGame(new Game());
     }
 
     /**

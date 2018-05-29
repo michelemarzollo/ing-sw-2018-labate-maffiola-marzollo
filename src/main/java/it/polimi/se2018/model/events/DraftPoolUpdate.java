@@ -18,21 +18,13 @@ public class DraftPoolUpdate extends ModelUpdate {
     private final List<Die> dice;
 
     /**
-     * The index of the mandatory selection.
-     */
-    private final int forcedSelectionIndex;
-
-    /**
      * The constructor of the class.
      *
      * @param dice                 The dice in the draft pool.
-     * @param forcedSelectionIndex The index of the mandatory selection or -1
-     *                             if it isn't the case.
      */
-    public DraftPoolUpdate(List<Die> dice, int forcedSelectionIndex) {
+    public DraftPoolUpdate(List<Die> dice) {
         super(ModelEvent.DRAFT_POOL_UPDATE);
         this.dice = dice;
-        this.forcedSelectionIndex = forcedSelectionIndex;
     }
 
     /**
@@ -41,13 +33,5 @@ public class DraftPoolUpdate extends ModelUpdate {
      */
     public List<Die> getDice() {
         return dice;
-    }
-
-    /**
-     * Getter for the forced selection index.
-     * @return The index of the forced selection or -1 if it isn't the case.
-     */
-    public int getForcedSelectionIndex() {
-        return forcedSelectionIndex;
     }
 }

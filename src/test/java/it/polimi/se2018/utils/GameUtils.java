@@ -91,6 +91,24 @@ public class GameUtils {
     }
 
     /**
+     * Deals all tool cards to the specified game.
+     * @param game The game where to deal tool cards.
+     */
+    private static void dealToolCards(Game game){
+        ToolCard[] toolCards = new ToolCardFactory().newInstances(12);
+        game.setToolCards(toolCards);
+    }
+
+    /**
+     * Deals all public objective cards to the specified game.
+     * @param game The game where to public objective cards.
+     */
+    private static void dealPublicObjectives(Game game){
+        PublicObjectiveCard[] publicObjectives = new PublicObjectiveFactory().newInstances(10);
+        game.setPublicObjectiveCards(publicObjectives);
+    }
+
+    /**
      * Creates a fully set up game.
      * <p>In multi player mode, player one has private objective blue and player two
      * has red; in single player mode player one has blue and red private objectives,
@@ -112,6 +130,8 @@ public class GameUtils {
         }
 
         assignPrivateObjectives(playerOne, playerTwo, multiPlayer);
+        dealToolCards(game);
+        dealPublicObjectives(game);
 
         game.addPlayer(playerOne);
         if (multiPlayer)

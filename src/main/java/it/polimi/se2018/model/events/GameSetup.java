@@ -43,6 +43,7 @@ public class GameSetup extends ModelUpdate {
 
     /**
      * Creates a game setup message taking information from the specified game.
+     *
      * @param game The game containing the setup.
      */
     public GameSetup(Game game) {
@@ -61,7 +62,8 @@ public class GameSetup extends ModelUpdate {
                 .toArray(Pattern[][]::new);
         this.privateObjectives = game.getPlayers().stream()
                 .map(p -> Arrays.stream(p.getCards())
-                        .map(PrivateObjectiveCard::getName))
+                        .map(PrivateObjectiveCard::getName)
+                        .toArray(String[]::new))
                 .toArray(String[][]::new);
     }
 

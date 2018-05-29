@@ -1,5 +1,8 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.model.events.PlayerConnectionStatus;
+import it.polimi.se2018.model.events.PlayerStatus;
+
 /**
  * This class represents a Player
  * of the Game.
@@ -13,6 +16,8 @@ public class Player {
      * The Player's username.
      */
     private final String name;
+
+    private Game game;
 
     /**
      * The Player's score: it is
@@ -118,6 +123,8 @@ public class Player {
      */
     public void setConnected(boolean connected) {
         this.connected = connected;
+        PlayerConnectionStatus message = new PlayerConnectionStatus(getName(), connected);
+        game.notifyObservers(message);
     }
 
 
@@ -154,6 +161,8 @@ public class Player {
      *                that depends on the {@code difficulty} of the {@link Pattern}.
      */
     public void setPattern(Pattern pattern) {
+        PlayerStatus message = new PlayerStatus(this);
+        game.notifyObservers(message);
         this.pattern = pattern;
     }
 
@@ -190,4 +199,7 @@ public class Player {
         tokens -= n;
     }
 
+    public void setGame(Game game) {
+        this.game = game;
+    }
 }

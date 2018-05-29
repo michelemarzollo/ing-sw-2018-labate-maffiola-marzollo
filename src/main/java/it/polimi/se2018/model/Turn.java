@@ -1,14 +1,22 @@
 package it.polimi.se2018.model;
 
+import java.io.Serializable;
+
 /**
  * Class representing a turn in the game.
  * @author dvdmff
  */
-public class Turn {
+public class Turn implements Serializable {
     /**
      * The reference to the player whose turn this is.
      */
-    private final Player player;
+    private final transient Player player;
+
+    /**
+     * The name of the player.
+     */
+    private final String playerName;
+
     /**
      * Flag to indicate whether the player has a second
      * turn this round.
@@ -58,6 +66,22 @@ public class Turn {
         this.forcedSelectionIndex = -1;
         this.sacrificeIndex = -1;
         this.selectedToolCard = null;
+        this.playerName = player.getName();
+    }
+
+    /**
+     * Copy constructor.
+     * @param turn The turn to be copied.
+     */
+    public Turn(Turn turn){
+        this.player = turn.player;
+        this.secondTurnAvailable = turn.secondTurnAvailable;
+        this.alreadyPlacedDie = turn.alreadyPlacedDie;
+        this.alreadyUsedToolCard = turn.alreadyUsedToolCard;
+        this.forcedSelectionIndex = turn.forcedSelectionIndex;
+        this.sacrificeIndex = turn.sacrificeIndex;
+        this.selectedToolCard = turn.selectedToolCard;
+        this.playerName = turn.playerName;
     }
 
 

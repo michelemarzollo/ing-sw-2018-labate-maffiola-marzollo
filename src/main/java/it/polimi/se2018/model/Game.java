@@ -1,6 +1,7 @@
 package it.polimi.se2018.model;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import it.polimi.se2018.model.events.*;
 import it.polimi.se2018.utils.Observable;
@@ -88,6 +89,7 @@ public class Game extends Observable<ModelUpdate> {
      * @param player The new player.
      */
     public void addPlayer(Player player) {
+        player.setGame(this);
         players.add(player);
     }
 
@@ -178,6 +180,10 @@ public class Game extends Observable<ModelUpdate> {
      * @param scoreBoard The final ranking as an ordered array of players.
      */
     public void setScoreBoard(List<Player> scoreBoard) {
+        Map<String, Integer> scoreMap = scoreBoard.stream()
+                .collect(Collectors.toMap(Player::getName, Player::getScore));
+        GameEnd message = new GameEnd(scoreMap);
+        notifyObservers(message);
         this.scoreBoard = scoreBoard;
     }
 
@@ -185,6 +191,8 @@ public class Game extends Observable<ModelUpdate> {
      * Updates the game status so it's ready to start.
      */
     public void terminateSetup() {
+        GameSetup message = new GameSetup(this);
+        notifyObservers(message);
         setupComplete = true;
     }
 
@@ -199,10 +207,10 @@ public class Game extends Observable<ModelUpdate> {
     public void start() {
         if (setupComplete && !started) {
 
-            draftPool = new DraftPool();
+            draftPool = new DraftPool(this);
             diceBag = new DiceBag();
-            roundTrack = new RoundTrack(TurnManager.ROUNDS);
-            turnManager = new TurnManager(players);
+            roundTrack = new RoundTrack(TurnManager.ROUNDS, this);
+            turnManager = new TurnManager(players, this);
 
             started = true;
         }

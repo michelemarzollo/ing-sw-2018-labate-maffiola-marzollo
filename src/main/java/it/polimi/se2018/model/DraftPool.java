@@ -1,5 +1,7 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.model.events.DraftPoolUpdate;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,12 +19,15 @@ public class DraftPool {
      */
     private List<Die> dice;
 
+    private final Game game;
+
     /**
      * The constructor of the class. When the class is built there is no forced selection:
      * the attribute <code>forcedSelection</code> is set to a non valid value -1.
      */
-    public DraftPool() {
+    public DraftPool(Game game) {
         this.dice = null;
+        this.game = game;
     }
 
     /**
@@ -32,6 +37,11 @@ public class DraftPool {
      */
     public int getAmount() {
         return dice.size();
+    }
+
+    private void notifyChange(){
+        DraftPoolUpdate message = new DraftPoolUpdate(getDice());
+        game.notifyObservers(message);
     }
 
     /**
@@ -53,6 +63,7 @@ public class DraftPool {
      */
     public void setDice(List<Die> dice) {
         this.dice = dice;
+        notifyChange();
     }
 
     /**
@@ -63,6 +74,7 @@ public class DraftPool {
      */
     public void draft(int index) {
         dice.remove(index);
+        notifyChange();
     }
 
     /**

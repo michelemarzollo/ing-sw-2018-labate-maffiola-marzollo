@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.model.events.RoundTrackUpdate;
 import it.polimi.se2018.utils.Coordinates;
 
 import java.util.ArrayList;
@@ -20,15 +21,23 @@ public class RoundTrack {
      */
     private final List<List<Die>> leftovers;
 
+    private final Game game;
+
     /**
      * Creates a RoundTrack object able to manage the specified
      * number of rounds.
      * @param rounds The number of rounds in the game.
      */
-    public RoundTrack(int rounds) {
+    public RoundTrack(int rounds, Game game) {
         leftovers = new ArrayList<>(rounds);
         for (int i = 0; i < rounds; ++i)
             leftovers.add(new ArrayList<>());
+        this.game = game;
+    }
+
+    private void notifyChange(){
+        RoundTrackUpdate message = new RoundTrackUpdate(getLeftovers());
+        game.notifyObservers(message);
     }
 
     /**
@@ -39,6 +48,7 @@ public class RoundTrack {
      */
     public void addAllForRound(int round, List<? extends Die> dice) {
         leftovers.get(round - 1).addAll(dice);
+        notifyChange();
     }
 
     /**
@@ -93,6 +103,8 @@ public class RoundTrack {
                 .remove(toSwap);
         leftovers.get(coordinates.getRow())
                 .add(die);
+
+        notifyChange();
         return toSwap;
     }
 }
