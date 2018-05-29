@@ -1,5 +1,6 @@
 package it.polimi.se2018.networking.server;
 
+import it.polimi.se2018.controller.MatchMaker;
 import it.polimi.se2018.model.events.Action;
 import it.polimi.se2018.model.events.ViewMessage;
 import it.polimi.se2018.networking.client.ClientNetInterface;
@@ -69,7 +70,7 @@ public class DefaultNetInterface implements ServerNetInterface {
         if(view == null){
             view = new VirtualView(client.getUsername(), client);
             //TODO add single player
-            ViewLinker.getInstance().linkMultiPlayer(view);
+            MatchMaker.getInstance().makeMultiPlayerMatchFor(view);
         } else {
             view.setClient(client);
             // inform controller of reconnection

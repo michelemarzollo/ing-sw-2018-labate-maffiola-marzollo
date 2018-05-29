@@ -1,13 +1,10 @@
 package it.polimi.se2018.networking.server;
 
-import it.polimi.se2018.networking.client.ClientNetInterface;
-
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
-import java.util.List;
 
 public class RmiServer extends Server {
 
@@ -17,19 +14,14 @@ public class RmiServer extends Server {
     private static final int PORT = 1099;
 
     /**
-     * The list of clients connected to the server.
-     */
-    private List<ClientNetInterface> clients;
-
-    /**
      * The address of the server.
      */
-    private String address;
+    private final String address;
 
     /**
      * The name of the exposed RMI service.
      */
-    private String serviceName;
+    private final String serviceName;
 
     /**
      * The attribute that indicates if the rmi server is running:
@@ -40,67 +32,25 @@ public class RmiServer extends Server {
     /**
      * The constructor of the class.
      *
-     * @param serverNetInterface the server that handles the communication
-     *                           with the client independently from the connection.
      * @param address            the address.
      * @param serviceName        the name of the service.
      */
-    public RmiServer(ServerNetInterface serverNetInterface, String address, String serviceName) {
-        super(serverNetInterface);
+    public RmiServer(String address, String serviceName) {
+        super();
         this.address = address;
         this.serviceName = serviceName;
     }
 
     /**
-     * The getter for {@code clients} in the superclass.
+     * The constructor of the class.
      *
-     * @return {@code clients}.
+     * @param address            the address.
+     * @param serviceName        the name of the service.
      */
-    @Override
-    public List<ClientNetInterface> getClients() {
-        return clients;
-    }
-
-    /**
-     * The method that return the client corresponding to a certain username.
-     *
-     * @param name the name of the client to search.
-     * @return the client corresponding to the name.
-     */
-    @Override
-    public ClientNetInterface getClientFor(String name) {
-        for (ClientNetInterface client : clients) {
-            if (client.getUsername().equals(name))
-                return client;
-        }
-        return null;
-    }
-
-    /**
-     * The method to add a client to the server.
-     *
-     * @param client the client to add.
-     * @return {@code true} if the server was able to add a client,
-     * {@code} false otherwise.
-     */
-    @Override
-    public boolean addClient(ClientNetInterface client) {
-        for (ClientNetInterface c : clients) {
-            if (c.getUsername().equals(client.getUsername()))
-                return false;
-        }
-        clients.add(client);
-        return true;
-    }
-
-    /**
-     * The method to remove a client from the server.
-     *
-     * @param client the client to remove.
-     */
-    @Override
-    public void removeClient(ClientNetInterface client) {
-        clients.remove(client);
+    public RmiServer(Server superSystem, String address, String serviceName) {
+        super(superSystem);
+        this.address = address;
+        this.serviceName = serviceName;
     }
 
     /**
