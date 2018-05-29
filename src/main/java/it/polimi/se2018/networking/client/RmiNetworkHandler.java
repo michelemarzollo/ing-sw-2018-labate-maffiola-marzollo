@@ -3,6 +3,7 @@ package it.polimi.se2018.networking.client;
 import it.polimi.se2018.networking.messages.Message;
 import it.polimi.se2018.networking.server.RmiServerInterface;
 import it.polimi.se2018.networking.server.ServerNetInterface;
+import it.polimi.se2018.utils.Logger;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -74,11 +75,11 @@ public class RmiNetworkHandler implements ServerNetInterface {
             clientImplementation = new RmiClientImplementation(client);
 
         } catch (MalformedURLException e) {
-            System.err.println("URL not found!");
+            Logger.getDefaultLogger().log("URL not found!");
         } catch (RemoteException e) {
-            System.err.println(ERROR_STRING + e.getMessage() + "!");
+            Logger.getDefaultLogger().log(ERROR_STRING + e.getMessage() + "!");
         } catch (NotBoundException e) {
-            System.err.println("The reference passed isn't connected to anything!");
+            Logger.getDefaultLogger().log("The reference passed isn't connected to anything!");
         }
     }
 
@@ -92,7 +93,7 @@ public class RmiNetworkHandler implements ServerNetInterface {
         try {
             server.send(message);
         } catch (RemoteException e) {
-            System.err.println(ERROR_STRING + e.getMessage() + "!");
+            Logger.getDefaultLogger().log(ERROR_STRING + e.getMessage() + "!");
         }
     }
 
@@ -111,7 +112,7 @@ public class RmiNetworkHandler implements ServerNetInterface {
             server.addClient(remoteRef);
             server.addClient(clientImplementation);
         } catch (RemoteException e) {
-            System.err.println(ERROR_STRING + e.getMessage() + "!");
+            Logger.getDefaultLogger().log(ERROR_STRING + e.getMessage() + "!");
         }
     }
 
@@ -125,7 +126,7 @@ public class RmiNetworkHandler implements ServerNetInterface {
         try {
             server.removeClient(remoteRef);
         } catch (RemoteException e) {
-            System.err.println(ERROR_STRING + e.getMessage() + "!");
+            Logger.getDefaultLogger().log(ERROR_STRING + e.getMessage() + "!");
         }
     }
 }

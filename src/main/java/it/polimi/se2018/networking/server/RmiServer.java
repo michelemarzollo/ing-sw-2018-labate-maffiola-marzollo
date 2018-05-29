@@ -1,5 +1,7 @@
 package it.polimi.se2018.networking.server;
 
+import it.polimi.se2018.utils.Logger;
+
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -67,7 +69,7 @@ public class RmiServer extends Server {
         try {
             LocateRegistry.createRegistry(PORT);
         } catch (RemoteException e) {
-            System.out.println("Already present Registry!");
+            Logger.getDefaultLogger().log("Already present Registry!");
         }
 
         try {
@@ -75,9 +77,9 @@ public class RmiServer extends Server {
                     new RmiServerImplementation(getServerNetInterface());
             Naming.rebind("//localhost/MyServer", serverImplementation);
         } catch (MalformedURLException e) {
-            System.err.println("It is impossible to register the indicated object!");
+            Logger.getDefaultLogger().log("It is impossible to register the indicated object!");
         } catch (RemoteException e) {
-            System.err.println("Connection error: " + e.getMessage() + "!");
+            Logger.getDefaultLogger().log("Connection error: " + e.getMessage() + "!");
         }
 
     }
@@ -91,11 +93,11 @@ public class RmiServer extends Server {
         try {
             Naming.unbind("//localhost/MyServer");
         } catch (RemoteException e) {
-            System.err.println("Connection error: " + e.getMessage() + "!");
+            Logger.getDefaultLogger().log("Connection error: " + e.getMessage() + "!");
         } catch (NotBoundException e) {
-            System.err.println("No binding associated to that name!");
+            Logger.getDefaultLogger().log("No binding associated to that name!");
         } catch (MalformedURLException e) {
-            System.err.println("It is impossible to deregister the indicated object!");
+            Logger.getDefaultLogger().log("It is impossible to deregister the indicated object!");
         }
         isRunning = false;
     }
