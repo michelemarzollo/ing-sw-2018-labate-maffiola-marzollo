@@ -13,20 +13,29 @@ import org.junit.Test;
 
 import java.util.List;
 
+/**
+ * Unit tests for GrindingStoneBehaviour class.
+ */
 public class GrindingStoneBehaviourTest {
 
+    /**
+     * Tests id requirements are not met when a player has already placed a die.
+     */
     @Test
-    public void testRequirements(){
+    public void testRequirements() {
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         game.getTurnManager().getCurrentTurn().placeDie();
         GrindingStoneBehaviour behaviour = new GrindingStoneBehaviour();
         Assert.assertFalse(behaviour.areRequirementsSatisfied(game));
     }
 
+    /**
+     * Tests that the correct view is selected when asking parameters.
+     */
     @Test
-    public void testAskParameters(){
+    public void testAskParameters() {
         MockView mockView = new MockView("Pippo");
 
         ViewMessage message = new ViewMessage(
@@ -42,11 +51,17 @@ public class GrindingStoneBehaviourTest {
         Assert.assertEquals("showDieSelection", mockView.getCalledMethods().get(0));
     }
 
+    /**
+     * Tests a case in which the usage of the tool card is successful.
+     * <p>This means that no views are selected during the process and that the
+     * selected die is correctly flipped and set as the only option for drafting,
+     * while the other dice in the draft pool are not altered.</p>
+     */
     @Test
-    public void testUsageSuccess(){
+    public void testUsageSuccess() {
         MockView mockView = new MockView("Pippo");
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
 
         SelectDie message = new SelectDie(
@@ -73,11 +88,11 @@ public class GrindingStoneBehaviourTest {
         Die expectedDie = oldDraftPool.remove(0).flip();
         Assert.assertTrue(DieUtils.areEqual(expectedDie, newDraftPool.get(actualIndex)));
 
-        for(Die die : oldDraftPool){
+        for (Die die : oldDraftPool) {
             boolean match = false;
-            for(int j = 0; j < newDraftPool.size() && !match; ++j){
+            for (int j = 0; j < newDraftPool.size() && !match; ++j) {
                 match = DieUtils.areEqual(die, newDraftPool.get(j));
-                if(match)
+                if (match)
                     newDraftPool.remove(j);
             }
             Assert.assertTrue(match);
@@ -85,11 +100,17 @@ public class GrindingStoneBehaviourTest {
 
     }
 
+    /**
+     * Tests a case in which the usage of the tool card is unsuccessful
+     * because of a bad selection index.
+     * <p>This means that an error view is selected during the process and that
+     * no die in the draft pool is altered nor set as the only option for drafting.</p>
+     */
     @Test
-    public void testUsageFailure(){
+    public void testUsageFailure() {
         MockView mockView = new MockView("Pippo");
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
 
         SelectDie message = new SelectDie(
@@ -112,11 +133,11 @@ public class GrindingStoneBehaviourTest {
 
         Assert.assertEquals(expectedDraftPool.size(), actualDraftPool.size());
 
-        for(Die die : expectedDraftPool){
+        for (Die die : expectedDraftPool) {
             boolean match = false;
-            for(int j = 0; j < actualDraftPool.size() && !match; ++j){
+            for (int j = 0; j < actualDraftPool.size() && !match; ++j) {
                 match = DieUtils.areEqual(die, actualDraftPool.get(j));
-                if(match)
+                if (match)
                     actualDraftPool.remove(j);
             }
             Assert.assertTrue(match);

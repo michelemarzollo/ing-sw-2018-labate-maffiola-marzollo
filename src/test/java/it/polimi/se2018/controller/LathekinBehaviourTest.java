@@ -13,19 +13,28 @@ import org.junit.Test;
 
 import java.util.Random;
 
+/**
+ * Unit tests for LathekinBehaviour class.
+ */
 public class LathekinBehaviourTest {
 
+    /**
+     * Tests of requirements are met.
+     */
     @Test
-    public void testRequirements(){
+    public void testRequirements() {
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         LathekinBehaviour behaviour = new LathekinBehaviour();
         Assert.assertTrue(behaviour.areRequirementsSatisfied(game));
     }
 
+    /**
+     * Tests that the correct view is selected when asking parameters.
+     */
     @Test
-    public void testAskParameters(){
+    public void testAskParameters() {
         MockView mockView = new MockView("Pippo");
 
         ViewMessage message = new ViewMessage(
@@ -41,18 +50,23 @@ public class LathekinBehaviourTest {
         Assert.assertEquals("showMoveSelection2", mockView.getCalledMethods().get(0));
     }
 
+    /**
+     * Tests a case in which the usage of the tool card is successful.
+     * <p>This means that no views are selected during the process and that the
+     * exactly two dice are correctly moved.</p>
+     */
     @Test
-    public void testUsageSuccess(){
+    public void testUsageSuccess() {
         MockView mockView = new MockView("Pippo");
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Player player = game.getPlayers().get(0);
         boolean control = placeAnotherDie(player);
         Assert.assertTrue("Error on placement", control);
 
         MoveTwoDice message = new MoveTwoDice(
-                new Coordinates[] {
+                new Coordinates[]{
                         new Coordinates(1, 0),
                         new Coordinates(1, 1)
                 },
@@ -82,6 +96,14 @@ public class LathekinBehaviourTest {
         Assert.assertTrue(DieUtils.areEqual(red2, grid[0][4].getDie()));
     }
 
+    /**
+     * Helper method that places a red 2 in position (1,1).
+     *
+     * @param player The player owning the pattern where the dice has to
+     *               be placed.
+     * @return {@code true} if the placement is successful; {@code false}
+     * otherwise.
+     */
     private boolean placeAnotherDie(Player player) {
         Pattern pattern = player.getPattern();
         Die red2 = new Die(2, new Random(0), Colour.RED);
@@ -95,19 +117,24 @@ public class LathekinBehaviourTest {
         return true;
     }
 
-
+    /**
+     * Tests a case in which the usage of the tool card is unsuccessful because of
+     * placement restrictions.
+     * <p>This means that an error view is selected during the process and that no
+     * die is moved.</p>
+     */
     @Test
-    public void testUsageFailure(){
+    public void testUsageFailure() {
         MockView mockView = new MockView("Pippo");
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Player player = game.getPlayers().get(0);
         boolean control = placeAnotherDie(player);
         Assert.assertTrue("Error on placement", control);
 
         MoveTwoDice message = new MoveTwoDice(
-                new Coordinates[] {
+                new Coordinates[]{
                         new Coordinates(1, 0),
                         new Coordinates(1, 1)
                 },
@@ -140,18 +167,24 @@ public class LathekinBehaviourTest {
     }
 
 
+    /**
+     * Tests a case in which the usage of the tool card is unsuccessful because of
+     * bad destination coordinates.
+     * <p>This means that an error view is selected during the process and that no
+     * die is moved.</p>
+     */
     @Test
-    public void testBadIndexUsageFailure(){
+    public void testBadIndexUsageFailure() {
         MockView mockView = new MockView("Pippo");
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Player player = game.getPlayers().get(0);
         boolean control = placeAnotherDie(player);
         Assert.assertTrue("Error on placement", control);
 
         MoveTwoDice message = new MoveTwoDice(
-                new Coordinates[] {
+                new Coordinates[]{
                         new Coordinates(1, 0),
                         new Coordinates(1, 1)
                 },

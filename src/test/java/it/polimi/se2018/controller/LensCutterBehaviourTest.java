@@ -17,19 +17,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Unit tests for LensCutterBehaviour class.
+ */
 public class LensCutterBehaviourTest {
 
+    /**
+     * Tests if requirements are not met when the player has already placed a die.
+     */
     @Test
-    public void testRequirements(){
+    public void testRequirements() {
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         game.getTurnManager().getCurrentTurn().placeDie();
         LensCutterBehaviour behaviour = new LensCutterBehaviour();
         Assert.assertFalse(behaviour.areRequirementsSatisfied(game));
     }
 
-
+    /**
+     * Tests that the correct view is selected when asking parameters.
+     */
     @Test
     public void testAskParameters() {
         MockView mockView = new MockView("Pippo");
@@ -48,7 +56,14 @@ public class LensCutterBehaviourTest {
                 mockView.getCalledMethods().get(0));
     }
 
-    private Game setupSuccessScenario(MockView mockView){
+    /**
+     * Helper method that sets up a scenario where the application of the tool card
+     * is successful.
+     *
+     * @param mockView The mock view used to register method calls.
+     * @return A game instance where the application of the tool card is successful.
+     */
+    private Game setupSuccessScenario(MockView mockView) {
         Game game = GameUtils.getHalfwayGame();
         if (game == null)
             Assert.fail("Error on game initialization");
@@ -70,7 +85,14 @@ public class LensCutterBehaviourTest {
         return game;
     }
 
-    private Game setupFailureScenario(MockView mockView){
+    /**
+     * Helper method that sets up a scenario where the application of the tool card
+     * has failed.
+     *
+     * @param mockView The mock view used to register method calls.
+     * @return A game instance where the application of the tool card has failed.
+     */
+    private Game setupFailureScenario(MockView mockView) {
         Game game = GameUtils.getHalfwayGame();
         if (game == null)
             Assert.fail("Error on game initialization");
@@ -92,6 +114,12 @@ public class LensCutterBehaviourTest {
         return game;
     }
 
+    /**
+     * Tests a case in which the usage of the tool card is successful.
+     * <p>This means that no views are selected during the process and that
+     * the selected dice are correctly swapped while the rest of the round track
+     * and draft pool is not altered.</p>
+     */
     @Test
     public void testUsageSuccess() {
         MockView mockView = new MockView("Pippo");
@@ -137,6 +165,13 @@ public class LensCutterBehaviourTest {
         Assert.assertNotEquals(-1, actualIndex);
     }
 
+    /**
+     * Helper method that generates a well-known list of dice for the
+     * round one section of the round track.
+     * <p>The dice are a purple 4 and a purple 1.</p>
+     *
+     * @return A list of predefined dice.
+     */
     private List<Die> getRoundOneLeftovers() {
         List<Die> dice = new ArrayList<>();
         dice.add(new Die(4, new Random(0), Colour.PURPLE));
@@ -144,12 +179,24 @@ public class LensCutterBehaviourTest {
         return dice;
     }
 
+    /**
+     * Helper method that fills the first round of the round track with
+     * well-known dice.
+     *
+     * @param game The game owning the round track.
+     */
     private void fillRoundTrack(Game game) {
         game.getRoundTrack().addAllForRound(1, getRoundOneLeftovers());
     }
 
+    /**
+     * Tests a case in which the usage of the tool card is unsuccessful
+     * because of an invalid selection in the round track.
+     * <p>This means that an error view is selected during the process and that
+     * no die is swapped and the round track and draft pool are not altered.</p>
+     */
     @Test
-    public void testUsageFailure(){
+    public void testUsageFailure() {
         MockView mockView = new MockView("Pippo");
         Game game = setupFailureScenario(mockView);
 

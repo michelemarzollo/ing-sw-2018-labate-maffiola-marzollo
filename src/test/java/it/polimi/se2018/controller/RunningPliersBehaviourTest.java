@@ -16,17 +16,27 @@ import org.junit.Test;
 
 import java.util.List;
 
+/**
+ * Unit tests for RunningPliersBehaviour class.
+ */
 public class RunningPliersBehaviourTest {
 
+    /**
+     * Tests if requirements are not met when a player has no second turn
+     * in a round.
+     */
     @Test
-    public void testRequirements(){
+    public void testRequirements() {
         Game game = GameUtils.getRoundFinishedGame(false);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         RunningPliersBehaviour behaviour = new RunningPliersBehaviour();
         Assert.assertFalse(behaviour.areRequirementsSatisfied(game));
     }
 
+    /**
+     * Tests that the correct view is selected when asking parameters.
+     */
     @Test
     public void testAskParameters() {
         MockView mockView = new MockView("Pippo");
@@ -44,11 +54,17 @@ public class RunningPliersBehaviourTest {
         Assert.assertEquals("showDieSelection", mockView.getCalledMethods().get(0));
     }
 
+    /**
+     * Tests a case in which the usage of the tool card is successful.
+     * <p>This means that no views are selected during the process and that
+     * the selected die is correctly placed following all placement restrictions
+     * and that the second turn for the player is consumed.</p>
+     */
     @Test
-    public void testUsageSuccess(){
-        MockView mockView= new MockView("Pippo");
+    public void testUsageSuccess() {
+        MockView mockView = new MockView("Pippo");
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Player player = game.getPlayers().get(0);
 
@@ -75,11 +91,11 @@ public class RunningPliersBehaviourTest {
 
         List<Die> newDraftPool = game.getDraftPool().getDice();
 
-        for(Die die : oldDraftPool){
+        for (Die die : oldDraftPool) {
             boolean match = false;
-            for(int j = 0; j < newDraftPool.size() && !match; ++j){
+            for (int j = 0; j < newDraftPool.size() && !match; ++j) {
                 match = DieUtils.areEqual(die, newDraftPool.get(j));
-                if(match)
+                if (match)
                     newDraftPool.remove(j);
             }
             Assert.assertTrue(match);
@@ -87,12 +103,23 @@ public class RunningPliersBehaviourTest {
 
     }
 
-    private Game getFailure(MockView mockView, boolean badIndex){
+    /**
+     * Helper method that sets up a failure scenario.
+     * <p>The kind of failure that happens can be set through the {@code badIndex}
+     * parameter.</p>
+     *
+     * @param mockView The mock view that registers view method calls.
+     * @param badIndex {@code true} if the failure has to be caused by a bad index;
+     *                 {@code false} if it has to be caused by placement restrictions.
+     * @return An instance of Game that is in the state just after the behaviour has
+     * been applied.
+     */
+    private Game getFailure(MockView mockView, boolean badIndex) {
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Coordinates coordinates;
-        if(badIndex)
+        if (badIndex)
             coordinates = new Coordinates(500, 500);
         else
             coordinates = new Coordinates(0, 0);
@@ -111,7 +138,14 @@ public class RunningPliersBehaviourTest {
         return game;
     }
 
-    private void assertUnchanged(Game game, MockView mockView){
+    /**
+     * Helper method that asserts that the game is in the same state as at
+     * the beginning of the test.
+     *
+     * @param game     The game to be checked.
+     * @param mockView The mock view that registered view method calls.
+     */
+    private void assertUnchanged(Game game, MockView mockView) {
         Player player = game.getPlayers().get(0);
 
         Assert.assertEquals(1, mockView.getCalledMethods().size());
@@ -124,19 +158,26 @@ public class RunningPliersBehaviourTest {
         List<Die> oldDraftPool = GameUtils.getDice(false);
         List<Die> newDraftPool = game.getDraftPool().getDice();
 
-        for(Die die : oldDraftPool){
+        for (Die die : oldDraftPool) {
             boolean match = false;
-            for(int j = 0; j < newDraftPool.size() && !match; ++j){
+            for (int j = 0; j < newDraftPool.size() && !match; ++j) {
                 match = DieUtils.areEqual(die, newDraftPool.get(j));
-                if(match)
+                if (match)
                     newDraftPool.remove(j);
             }
             Assert.assertTrue(match);
         }
     }
 
+    /**
+     * Tests a case in which the usage of the tool card is unsuccessful because
+     * some placement placement restriction is not satisfied.
+     * <p>This means that an error view is selected during the process and that
+     * no new die is placed nor the draft pool is altered nor the second turn of
+     * the player is consumed.</p>
+     */
     @Test
-    public void testUsageFailure(){
+    public void testUsageFailure() {
         MockView mockView = new MockView("Pippo");
         Game game = getFailure(mockView, false);
 
@@ -147,8 +188,15 @@ public class RunningPliersBehaviourTest {
         Assert.assertNull(grid[0][0].getDie());
     }
 
+    /**
+     * Tests a case in which the usage of the tool card is unsuccessful because
+     * of bad destination coordinates.
+     * <p>This means that an error view is selected during the process and that
+     * no new die is placed nor the draft pool is altered nor the second turn of
+     * the player is consumed.</p>
+     */
     @Test
-    public void testBadIndexFailure(){
+    public void testBadIndexFailure() {
         MockView mockView = new MockView("Pippo");
         Game game = getFailure(mockView, true);
 

@@ -13,19 +13,28 @@ import org.junit.Test;
 
 import java.util.List;
 
+/**
+ * Unit tests for FluxBrushBehaviour class.
+ */
 public class FluxBrushBehaviourTest {
 
+    /**
+     * Tests if the requirements are met in a case where it's the case.
+     */
     @Test
-    public void testRequirements(){
+    public void testRequirements() {
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         FluxRemoverBehaviour behaviour = new FluxRemoverBehaviour();
         Assert.assertTrue(behaviour.areRequirementsSatisfied(game));
     }
 
+    /**
+     * Tests that the correct view is selected when asking parameters.
+     */
     @Test
-    public void testAskParameters(){
+    public void testAskParameters() {
         MockView mockView = new MockView("Pippo");
 
         ViewMessage message = new ViewMessage(
@@ -41,11 +50,17 @@ public class FluxBrushBehaviourTest {
         Assert.assertEquals("showDieSelection", mockView.getCalledMethods().get(0));
     }
 
+    /**
+     * Tests a case in which the usage of the tool card is successful.
+     * <p>This means that no views are selected during the process and that a
+     * die in the draft pool has been re-rolled and set as the only possible placement.
+     * Also the other dice must not be altered.</p>
+     */
     @Test
-    public void testUsageSuccess(){
+    public void testUsageSuccess() {
         MockView mockView = new MockView("Pippo");
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
 
         SelectDie message = new SelectDie(
@@ -84,20 +99,34 @@ public class FluxBrushBehaviourTest {
 
     }
 
+    /**
+     * Helper function to retrieve the index of a die among a list.
+     *
+     * @param die  The die to look for.
+     * @param dice The list of dice where to search.
+     * @return In case of success, the index of the die is returned, or -1
+     * in the case in which it can't be found.
+     */
     private int findIndex(Die die, List<Die> dice) {
         for (int i = 0; i < dice.size(); i++) {
-            if(DieUtils.areEqual(die, dice.get(i)))
+            if (DieUtils.areEqual(die, dice.get(i)))
                 return i;
         }
         return -1;
     }
 
-
+    /**
+     * Tests a case in which the usage of the tool card is unsuccessful because
+     * of a bad selection index.
+     * <p>This means that an error view is selected during the process and that
+     * no die in the draft pool have been re-rolled and that the forced selection
+     * is not set.</p>
+     */
     @Test
-    public void testUsageFailure(){
+    public void testUsageFailure() {
         MockView mockView = new MockView("Pippo");
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
 
         SelectDie message = new SelectDie(

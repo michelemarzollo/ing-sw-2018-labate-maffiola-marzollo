@@ -12,20 +12,29 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Unit tests for GlazinHammerBehaviour class.
+ */
 public class GlazingHammerBehaviourTest {
 
+    /**
+     * Tests if requirements are not met when a player has already placed a die.
+     */
     @Test
-    public void testRequirements(){
+    public void testRequirements() {
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         game.getTurnManager().getCurrentTurn().placeDie();
         GlazingHammerBehaviour behaviour = new GlazingHammerBehaviour();
         Assert.assertFalse(behaviour.areRequirementsSatisfied(game));
     }
 
+    /**
+     * Tests that the correct view is selected when asking parameters.
+     */
     @Test
-    public void testAskParameters(){
+    public void testAskParameters() {
         MockView mockView = new MockView("Pippo");
 
         ViewMessage message = new ViewMessage(
@@ -40,11 +49,16 @@ public class GlazingHammerBehaviourTest {
         Assert.assertEquals(0, mockView.getCalledMethods().size());
     }
 
+    /**
+     * Tests a case in which the usage of the tool card is successful.
+     * <p>This means that no views are selected during the process and that all
+     * dice in the draft pool have been re-rolled.</p>
+     */
     @Test
-    public void testUsageSuccess(){
+    public void testUsageSuccess() {
         MockView mockView = new MockView("Pippo");
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
 
         ViewMessage message = new ViewMessage(
@@ -63,15 +77,15 @@ public class GlazingHammerBehaviourTest {
 
         //check dice have been rolled
         int expectedValue = new Random(0).nextInt(5) + 1;
-        for(Die die : newDraftPool)
+        for (Die die : newDraftPool)
             Assert.assertEquals(expectedValue, die.getValue());
 
         // check all colours are kept
         for (Die expected : oldDraftPool) {
             boolean match = false;
-            for (int j = 0; j < newDraftPool.size() && !match; ++j){
+            for (int j = 0; j < newDraftPool.size() && !match; ++j) {
                 match = expected.getColour() == newDraftPool.get(j).getColour();
-                if(match)
+                if (match)
                     newDraftPool.remove(j);
             }
             Assert.assertTrue(match);

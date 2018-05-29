@@ -1,5 +1,6 @@
 package it.polimi.se2018.networking.server;
 
+import it.polimi.se2018.controller.MatchMaker;
 import it.polimi.se2018.model.events.Action;
 import it.polimi.se2018.model.events.ViewMessage;
 import it.polimi.se2018.networking.client.ClientNetInterface;
@@ -64,18 +65,18 @@ public class DefaultNetInterface implements ServerNetInterface {
      */
     private void associateView(ClientNetInterface client){
         VirtualView view = DisconnectedViewsRepository.getInstance()
-                .tryRetrieveViewFor(client.getUserName());
+                .tryRetrieveViewFor(client.getUsername());
 
         if(view == null){
-            view = new VirtualView(client.getUserName(), client);
+            view = new VirtualView(client.getUsername(), client);
             //TODO add single player
-            ViewLinker.getInstance().linkMultiPlayer(view);
+            MatchMaker.getInstance().makeMultiPlayerMatchFor(view);
         } else {
             view.setClient(client);
             // inform controller of reconnection
-            view.handle(new ViewMessage(view, Action.RECONNECT_PLAYER, client.getUserName()));
+            view.handle(new ViewMessage(view, Action.RECONNECT_PLAYER, client.getUsername()));
         }
-        views.put(client.getUserName(), view);
+        views.put(client.getUsername(), view);
     }
 
     /**
@@ -102,7 +103,7 @@ public class DefaultNetInterface implements ServerNetInterface {
      */
     @Override
     public void removeClient(ClientNetInterface client) {
-        VirtualView view = views.remove(client.getUserName());
+        VirtualView view = views.remove(client.getUsername());
         if(view != null)
             DisconnectedViewsRepository.getInstance().addView(view);
 

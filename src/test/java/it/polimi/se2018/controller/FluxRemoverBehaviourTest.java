@@ -18,20 +18,29 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Unit tests for FluxRemoverBehaviour class.
+ */
 public class FluxRemoverBehaviourTest {
 
+    /**
+     * Tests if the requirements are not met when a player has already placed a die.
+     */
     @Test
-    public void testRequirements(){
+    public void testRequirements() {
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         game.getTurnManager().getCurrentTurn().placeDie();
         FluxRemoverBehaviour behaviour = new FluxRemoverBehaviour();
         Assert.assertFalse(behaviour.areRequirementsSatisfied(game));
     }
 
+    /**
+     * Tests that the correct view is selected when asking parameters.
+     */
     @Test
-    public void testAskParameters(){
+    public void testAskParameters() {
         MockView mockView = new MockView("Pippo");
 
         ViewMessage message = new ViewMessage(
@@ -47,7 +56,14 @@ public class FluxRemoverBehaviourTest {
         Assert.assertEquals("showDieSelection", mockView.getCalledMethods().get(0));
     }
 
-    private FluxRemoverBehaviour applyFirstStep(Game game, MockView mockView){
+    /**
+     * Helper function used to apply the first step of the tool card.
+     *
+     * @param game     The game the tool card is applied to.
+     * @param mockView The mock view used to register method calls.
+     * @return A FluxRemoverBehaviour that is ready for the second stage.
+     */
+    private FluxRemoverBehaviour applyFirstStep(Game game, MockView mockView) {
         SelectDie message = new SelectDie(
                 1,
                 mockView,
@@ -65,11 +81,16 @@ public class FluxRemoverBehaviourTest {
         return behaviour;
     }
 
+    /**
+     * Tests a case in which the application of the first step is successful.
+     * <p>This means that a die is put back and re-draft from the dice bag,
+     * while all other dice in the draft pool are not altered.</p>
+     */
     @Test
-    public void testFirstStepSuccessful(){
+    public void testFirstStepSuccessful() {
         MockView mockView = new MockView("Pippo");
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
 
         applyFirstStep(game, mockView);
@@ -87,11 +108,16 @@ public class FluxRemoverBehaviourTest {
         Assert.assertNotEquals(-1, forcedSelectionIndex);
     }
 
+    /**
+     * Tests a case in which the application of the first step is unsuccessful
+     * because of a bad selection index.
+     * <p>This means that no die in the draft pool is altered.</p>
+     */
     @Test
-    public void testFirstStepFailure(){
+    public void testFirstStepFailure() {
         MockView mockView = new MockView("Pippo");
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
 
         SelectDie message = new SelectDie(
@@ -116,18 +142,23 @@ public class FluxRemoverBehaviourTest {
         Assert.assertTrue(isError);
 
         Assert.assertEquals(oldDraftPool.size(), newDraftPool.size());
-        for(int i = 0; i < oldDraftPool.size(); ++i)
+        for (int i = 0; i < oldDraftPool.size(); ++i)
             Assert.assertTrue(DieUtils.areEqual(oldDraftPool.get(i), newDraftPool.get(i)));
 
         int forcedSelectionIndex = game.getTurnManager().getCurrentTurn().getForcedSelectionIndex();
         Assert.assertEquals(-1, forcedSelectionIndex);
     }
 
+    /**
+     * Tests a case in which the application of the second step is successful.
+     * <p>This means that the previously selected die is set with the new value and that
+     * is correctly placed.</p>
+     */
     @Test
-    public void testSecondStepSuccess(){
+    public void testSecondStepSuccess() {
         MockView mockView = new MockView("Pippo");
         Game game = GameUtils.getHalfwayGame();
-        if(game == null) {
+        if (game == null) {
             Assert.fail("Error on game initialization");
         }
         Player player = game.getPlayers().get(0);
@@ -168,11 +199,17 @@ public class FluxRemoverBehaviourTest {
 
     }
 
+    /**
+     * Tests a case in which the application of the second step is unsuccessful
+     * because of bad destination coordinates.
+     * <p>This means that the previously selected die is set with the new value and
+     * that it isn't placed but left in the draft pool.</p>
+     */
     @Test
-    public void testSecondStepFailure(){
+    public void testSecondStepFailure() {
         MockView mockView = new MockView("Pippo");
         Game game = GameUtils.getHalfwayGame();
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Player player = game.getPlayers().get(0);
         FluxRemoverBehaviour behaviour = applyFirstStep(game, mockView);

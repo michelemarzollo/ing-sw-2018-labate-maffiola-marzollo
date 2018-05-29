@@ -1,5 +1,11 @@
 package it.polimi.se2018.networking.messages;
 
+/**
+ * The enumeration that describes which commands can be brought
+ * by the {@link Message} in the network.
+ *
+ * @author michelemarzollo
+ */
 public enum Command {
 
     SHOW,
@@ -7,4 +13,4 @@ public enum Command {
     MODEL_UPDATE,
     VIEW_MESSAGE
 
-    }
+}
