@@ -75,7 +75,7 @@ public class MockView extends View {
      */
     @Override
     public void showScoreBoard() {
-        calledMethods.add("showScoreBoar");
+        calledMethods.add("showScoreBoard");
     }
 
     /**
