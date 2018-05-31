@@ -196,7 +196,7 @@ public class TestPattern {
 
         // Tries to put the new die in a non adjacent cell
         try {
-            sunCatcher = sunCatcher.placeDie(d2, new Coordinates(1, 0));
+            sunCatcher = sunCatcher.placeDie(d2, new Coordinates(0, 3));
             fail();
         } catch (PlacementErrorException e) {
             assertEquals("The die is not adjacent to a previously placed die",

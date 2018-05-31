@@ -29,7 +29,7 @@ public class RmiServer extends Server {
      * The attribute that indicates if the rmi server is running:
      * it's set to {@code true} if it is running, to {@code false} otherwise.
      */
-    private boolean isRunning;
+    private boolean isRunning = false;
 
     /**
      * The constructor of the class.
@@ -64,8 +64,6 @@ public class RmiServer extends Server {
     @Override
     public void start() {
 
-        isRunning = true;
-
         try {
             LocateRegistry.createRegistry(PORT);
         } catch (RemoteException e) {
@@ -76,6 +74,7 @@ public class RmiServer extends Server {
             RmiServerImplementation serverImplementation =
                     new RmiServerImplementation(getServerNetInterface());
             Naming.rebind("//localhost/MyServer", serverImplementation);
+            isRunning = true;
         } catch (MalformedURLException e) {
             Logger.getDefaultLogger().log("It is impossible to register the indicated object!");
         } catch (RemoteException e) {
