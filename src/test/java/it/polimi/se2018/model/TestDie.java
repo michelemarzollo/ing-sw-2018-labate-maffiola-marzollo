@@ -2,6 +2,7 @@ package it.polimi.se2018.model;
 
 import org.junit.Test;
 
+import java.util.Objects;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -113,4 +114,15 @@ public class TestDie {
             assertTrue(true);
         }
     }
+
+    /**
+     * Tests the method {@code hashCode()}.
+     */
+    @Test
+    public void testHashCode(){
+        Die die = new Die(3, new Random(), Colour.YELLOW);
+        int hashCode = Objects.hash(die.getValue(), die.getColour());
+        assertEquals(hashCode, die.hashCode());
+    }
+
 }

@@ -5,6 +5,7 @@ import it.polimi.se2018.networking.messages.Message;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Objects;
 
 /**
  * The RMI server implementation, which extends {@link UnicastRemoteObject}, for
@@ -70,6 +71,29 @@ public class RmiServerImplementation extends UnicastRemoteObject implements RmiS
     @Override
     public void send(Message message) throws RemoteException {
         server.send(message);
+    }
+
+    /**
+     * The method that overrides the method of {@link Object}, to see
+     * if two objects are equals.
+     *
+     * @param o the object to compare.
+     * @return {@code true}, if they are the same object, {@code false} otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+        return o == this;
+    }
+
+    /**
+     * The override of hashCode in Object.
+     *
+     * @return the hashCode.
+     * @see Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(server);
     }
 
 }

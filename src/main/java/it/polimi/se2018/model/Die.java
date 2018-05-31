@@ -1,6 +1,7 @@
 package it.polimi.se2018.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -119,5 +120,24 @@ public class Die implements Serializable {
         else{
                 return new Die(value + 1, random, colour);
         }
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if (o == this)
+            return true;
+        if (o == null)
+            return false;
+        if(!(o instanceof Die))
+            return false;
+
+        Die die = (Die) o;
+        return this.getValue() == die.getValue() && this.getColour() == die.getColour();
+
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value, colour);
     }
 }

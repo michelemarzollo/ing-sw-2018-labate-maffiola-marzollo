@@ -5,7 +5,6 @@ import it.polimi.se2018.model.events.Action;
 import it.polimi.se2018.model.events.ViewMessage;
 import it.polimi.se2018.view.View;
 
-import java.util.Timer;
 
 /**
  * Singleton used to link a view to a controller.

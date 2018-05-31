@@ -22,8 +22,8 @@ public class SelectPrivateObjective extends ViewMessage{
      * @param view       The view reference.
      * @param action     The action that the Player wants
      *                   to perform.
-     * @param playerName The name of the player that
-     * @param colour The colour of the{@link it.polimi.se2018.model.PrivateObjectiveCard}
+     * @param playerName The name of the player that has to choose.
+     * @param colour The colour of the {@link it.polimi.se2018.model.PrivateObjectiveCard}
      *               that the Player wishes to choose.
      */
     public SelectPrivateObjective(View view, Action action, String playerName, Colour colour) {

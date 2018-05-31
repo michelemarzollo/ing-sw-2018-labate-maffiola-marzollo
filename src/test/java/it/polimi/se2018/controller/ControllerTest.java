@@ -560,5 +560,15 @@ public class ControllerTest {
         assertEquals(5, game.getDraftPool().getDice().size());
     }
 
+    @Test
+    public void finalizeMatch(){
+        Game game = GameUtils.getStartedGame(true);
+        if(game == null)
+            Assert.fail("Error on game initialization");
+        Controller controller = new MultiPlayerController(game, 100, 100);
+        assertFalse(controller.getGame() == null);
+        controller.finalizeMatch();
+        assertTrue(controller.getGame() == null);
+    }
 
 }

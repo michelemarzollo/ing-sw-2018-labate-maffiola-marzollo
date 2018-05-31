@@ -218,17 +218,20 @@ public class MultiPlayerController extends Controller {
      */
     @Override
     protected void registerPlayer(ViewMessage message) {
-        //When the method is called there is one player to add
-        getGame().addPlayer(new Player(message.getPlayerName()));
+        if(getGame().getPlayers().size()<4){
+            //When the method is called there is one player to add
+            getGame().addPlayer(new Player(message.getPlayerName()));
 
-        if (getGame().getPlayers().size() == 2) {
-            lobbyTimer.schedule(new StartingTask(getGame()), (long) timeOut * 1000);
-        }
+            if (getGame().getPlayers().size() == 2) {
+                lobbyTimer.schedule(new StartingTask(getGame()), (long) timeOut * 1000);
+            }
 
-        if (getGame().getPlayers().size() == 4) {
-            lobbyTimer.cancel();
-            setUpGame();
+            if (getGame().getPlayers().size() == 4) {
+                lobbyTimer.cancel();
+                setUpGame();
+            }
         }
+        else message.getView().showError("There are already four registered players!");
 
     }
 
@@ -239,7 +242,7 @@ public class MultiPlayerController extends Controller {
      */
     @Override
     protected void endGame(ViewMessage message) {
-        cleanDraftPool();   //is it necessary?
+        cleanDraftPool();
         calculateScores();
         fillScoreBoard();
         message.getView().showFinalView();
@@ -273,6 +276,18 @@ public class MultiPlayerController extends Controller {
             player.ifPresent(p -> p.setConnected(false));
         else
             player.ifPresent(p -> getGame().removePlayer(p));
+
+        //checks if there is any connceted player
+        boolean connectedPlayers = false;
+
+        for (Player p: getGame().getPlayers()){
+            if (p.isConnected()){
+                connectedPlayers = true;
+                break;
+            }
+        }
+        if (!connectedPlayers)
+            finalizeMatch();
 
     }
 
