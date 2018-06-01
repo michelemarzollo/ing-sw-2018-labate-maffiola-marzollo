@@ -1,8 +1,6 @@
 package it.polimi.se2018.model;
 
 
-import it.polimi.se2018.model.events.NextTurn;
-
 import java.util.*;
 
 
@@ -109,8 +107,6 @@ public class TurnManager {
         }
     }
 
-    private final Game game;
-
     /**
      * The counter for the round number.
      */
@@ -144,7 +140,7 @@ public class TurnManager {
      *                the game; can be modified by some methods.
      * @throws NullPointerException if the list of players is null.
      */
-    public TurnManager(List<Player> players, Game game) {
+    public TurnManager(List<Player> players) {
         if(players == null )
             throw new NullPointerException();
         if(players.isEmpty())
@@ -153,7 +149,6 @@ public class TurnManager {
         turnIterator = new TurnIterator();
         playersToSkip = new ArrayList<>();
         round = 1;
-        this.game = game;
     }
 
     /**
@@ -239,9 +234,6 @@ public class TurnManager {
 
         //this player can move, set new turn
         currentTurn = new Turn(nextPlayer, isSecondTurnAvailable());
-
-        NextTurn message = new NextTurn(currentTurn);
-        game.notifyObservers(message);
 
         return true;
 

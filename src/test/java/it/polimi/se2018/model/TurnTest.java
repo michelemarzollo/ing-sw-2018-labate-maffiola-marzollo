@@ -1,21 +1,29 @@
 package it.polimi.se2018.model;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class TurnTest {
 
+    private Player player;
+
+    @Before
+    public void setUp(){
+        Game game = new Game();
+        player = new Player("Giocatore");
+        game.addPlayer(player);
+    }
+
     @Test
     public void testGetPlayer() {
-        Player player = new Player("Giocatore");
         Turn turn = new Turn(player, true);
         assertEquals(player, turn.getPlayer());
     }
 
     @Test
     public void testIsSecondTurnAvailable() {
-        Player player = new Player("Giocatore");
         Turn turn = new Turn(player, true);
         assertTrue(turn.isSecondTurnAvailable());
     }
@@ -23,7 +31,6 @@ public class TurnTest {
 
     @Test
     public void testPositivePlaceDie() {
-        Player player = new Player("Giocatore");
         Turn turn = new Turn(player, true);
         turn.placeDie();
         assertTrue(turn.hasAlreadyPlacedDie());
@@ -32,7 +39,6 @@ public class TurnTest {
 
     @Test
     public void testPositiveUseToolCard() {
-        Player player = new Player("Giocatore");
         Turn turn = new Turn(player, true);
         turn.useToolCard();
         assertTrue(turn.hasAlreadyUsedToolCard());

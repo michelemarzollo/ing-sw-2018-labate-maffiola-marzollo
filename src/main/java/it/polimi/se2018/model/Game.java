@@ -210,7 +210,7 @@ public class Game extends Observable<ModelUpdate> {
             draftPool = new DraftPool(this);
             diceBag = new DiceBag();
             roundTrack = new RoundTrack(TurnManager.ROUNDS, this);
-            turnManager = new TurnManager(players, this);
+            turnManager = new TurnManager(players);
 
             started = true;
         }

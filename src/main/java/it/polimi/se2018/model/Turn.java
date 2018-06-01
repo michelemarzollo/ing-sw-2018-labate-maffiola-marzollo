@@ -1,21 +1,16 @@
 package it.polimi.se2018.model;
 
-import java.io.Serializable;
+import it.polimi.se2018.model.events.NextTurn;
 
 /**
  * Class representing a turn in the game.
  * @author dvdmff
  */
-public class Turn implements Serializable {
+public class Turn {
     /**
      * The reference to the player whose turn this is.
      */
-    private final transient Player player;
-
-    /**
-     * The name of the player.
-     */
-    private final String playerName;
+    private final Player player;
 
     /**
      * Flag to indicate whether the player has a second
@@ -66,24 +61,13 @@ public class Turn implements Serializable {
         this.forcedSelectionIndex = -1;
         this.sacrificeIndex = -1;
         this.selectedToolCard = null;
-        this.playerName = player.getName();
+        notifyChange();
     }
 
-    /**
-     * Copy constructor.
-     * @param turn The turn to be copied.
-     */
-    public Turn(Turn turn){
-        this.player = turn.player;
-        this.secondTurnAvailable = turn.secondTurnAvailable;
-        this.alreadyPlacedDie = turn.alreadyPlacedDie;
-        this.alreadyUsedToolCard = turn.alreadyUsedToolCard;
-        this.forcedSelectionIndex = turn.forcedSelectionIndex;
-        this.sacrificeIndex = turn.sacrificeIndex;
-        this.selectedToolCard = turn.selectedToolCard;
-        this.playerName = turn.playerName;
+    private void notifyChange(){
+        NextTurn message = new NextTurn(this);
+        player.getGame().notifyObservers(message);
     }
-
 
     /**
      * Getter for the player who can move.
@@ -117,6 +101,7 @@ public class Turn implements Serializable {
      */
     public void placeDie() {
         this.alreadyPlacedDie = true;
+        notifyChange();
     }
 
     /**
@@ -134,6 +119,7 @@ public class Turn implements Serializable {
      */
     public void useToolCard() {
         this.alreadyUsedToolCard = true;
+        notifyChange();
     }
 
     /**
@@ -155,6 +141,7 @@ public class Turn implements Serializable {
      */
     public void setForcedSelectionIndex(int forcedSelectionIndex) {
         this.forcedSelectionIndex = forcedSelectionIndex;
+        notifyChange();
     }
 
     /**
@@ -172,6 +159,7 @@ public class Turn implements Serializable {
      */
     public void setSacrificeIndex(int sacrificeIndex) {
         this.sacrificeIndex = sacrificeIndex;
+        notifyChange();
     }
 
     /**
@@ -192,5 +180,6 @@ public class Turn implements Serializable {
      */
     public void setSelectedToolCard(ToolCard selectedToolCard) {
         this.selectedToolCard = selectedToolCard;
+        notifyChange();
     }
 }

@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -8,10 +9,20 @@ import static org.junit.Assert.*;
 
 public class TurnManagerTest {
 
+    private TurnManager twoPlayersManager;
+
+    @Before
+    public void setUp(){
+        Game game = new Game();
+        game.addPlayer(new Player("Player1"));
+        game.addPlayer(new Player("Player2"));
+        twoPlayersManager = new TurnManager(game.getPlayers());
+    }
+
     @Test
     public void testTurnManagerConstructorNull(){
         try{
-            TurnManager turnManager = new TurnManager(null, new Game());
+            TurnManager turnManager = new TurnManager(null);
             fail();
         }
         catch(NullPointerException ex){
@@ -23,7 +34,7 @@ public class TurnManagerTest {
     public void testTurnManagerConstructorEmpty(){
         try{
             ArrayList<Player> players = new ArrayList<>();
-            TurnManager turnManager = new TurnManager(players, new Game());
+            TurnManager turnManager = new TurnManager(players);
             fail();
         }
         catch(IllegalArgumentException ex){
@@ -34,89 +45,73 @@ public class TurnManagerTest {
 
     @Test
     public void testValidIsLastTurnOfGame() {
-        ArrayList<Player> players= new ArrayList<>();
-        players.add(new Player("Player1"));
-        players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players, new Game());
         for(int i = 0; i < 9; i++){
             try {
-                manager.setupNewRound();
+                twoPlayersManager.setupNewRound();
             }
             catch(TurnManager.GameFinishedException ex){
                 assertTrue(true);
             }
         }
-        manager.updateTurn();
-        manager.updateTurn();
-        manager.updateTurn();
-        manager.updateTurn();
-        assertTrue(manager.isLastTurnOfGame());
+        twoPlayersManager.updateTurn();
+        twoPlayersManager.updateTurn();
+        twoPlayersManager.updateTurn();
+        twoPlayersManager.updateTurn();
+        assertTrue(twoPlayersManager.isLastTurnOfGame());
     }
 
     @Test
     public void testInvalidIsGameFinished() {
-        ArrayList<Player> players= new ArrayList<>();
-        players.add(new Player("Player1"));
-        players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players, new Game());
         for(int i = 0; i < 9; i++){
             try {
-                manager.setupNewRound();
+                twoPlayersManager.setupNewRound();
             }
             catch(TurnManager.GameFinishedException ex){
                 assertTrue(true);
             }
         }
-        manager.updateTurn();
-        manager.updateTurn();
-        manager.updateTurn();
-        assertFalse(manager.isLastTurnOfGame());//the first player has still to make his last turn
+        twoPlayersManager.updateTurn();
+        twoPlayersManager.updateTurn();
+        twoPlayersManager.updateTurn();
+        assertFalse(twoPlayersManager.isLastTurnOfGame());//the first player has still to make his last turn
     }
 
     
     @Test
     public void testSetUpNewRound() {
-        ArrayList<Player> players= new ArrayList<>();
-        players.add(new Player("Player1"));
-        players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players, new Game());
         try{
-            manager.setupNewRound();
+            twoPlayersManager.setupNewRound();
         }
         catch(TurnManager.GameFinishedException ex){
             fail();
         }
-        assertEquals(2, manager.getRound());
-        assertTrue(manager.getPlayersToSkip().isEmpty());
-        manager.updateTurn();
+        assertEquals(2, twoPlayersManager.getRound());
+        assertTrue(twoPlayersManager.getPlayersToSkip().isEmpty());
+        twoPlayersManager.updateTurn();
         //Verifies that the rotation of the order has been applied
-        assertTrue(manager.getCurrentTurn().getPlayer().getName().equals("Player2"));
-        manager.updateTurn();
-        assertTrue(manager.getCurrentTurn().getPlayer().getName().equals("Player1"));
+        assertEquals("Player2", twoPlayersManager.getCurrentTurn().getPlayer().getName());
+        twoPlayersManager.updateTurn();
+        assertEquals("Player1", twoPlayersManager.getCurrentTurn().getPlayer().getName());
 
 
     }
 
     @Test
     public void setUpNewRoundButGameFinished() {
-        ArrayList<Player> players= new ArrayList<>();
-        players.add(new Player("Player1"));
-        players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players, new Game());
         for(int i = 0; i < 9; i++){
             try{
-                manager.setupNewRound();
+                twoPlayersManager.setupNewRound();
             }
             catch(TurnManager.GameFinishedException ex){
                 fail();
             }
         }
-        manager.updateTurn();
-        manager.updateTurn();
-        manager.updateTurn();
-        manager.updateTurn();
+        twoPlayersManager.updateTurn();
+        twoPlayersManager.updateTurn();
+        twoPlayersManager.updateTurn();
+        twoPlayersManager.updateTurn();
         try{
-            manager.setupNewRound();
+            twoPlayersManager.setupNewRound();
             fail();
         }
         catch(TurnManager.GameFinishedException ex){
@@ -127,44 +122,36 @@ public class TurnManagerTest {
 
     @Test
     public void testUpdateTurnLimitCase(){
-        ArrayList<Player> players= new ArrayList<>();
-        players.add(new Player("Player1"));
-        players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players, new Game());
-        manager.updateTurn();
-        assertEquals("Player1",manager.getCurrentTurn().getPlayer().getName());
-        assertEquals(true,manager.getCurrentTurn().isSecondTurnAvailable());
-        manager.updateTurn();
-        assertEquals("Player2",manager.getCurrentTurn().getPlayer().getName());
-        assertEquals(true,manager.getCurrentTurn().isSecondTurnAvailable());
-        manager.updateTurn();
-        assertEquals("Player2",manager.getCurrentTurn().getPlayer().getName());
-        assertEquals(false,manager.getCurrentTurn().isSecondTurnAvailable());
-        assertTrue(manager.updateTurn()); //limit case because the next is the last turn remaining in the round
-        assertEquals("Player1",manager.getCurrentTurn().getPlayer().getName());
-        assertEquals(false,manager.getCurrentTurn().isSecondTurnAvailable());
+        twoPlayersManager.updateTurn();
+        assertEquals("Player1", twoPlayersManager.getCurrentTurn().getPlayer().getName());
+        assertTrue(twoPlayersManager.getCurrentTurn().isSecondTurnAvailable());
+        twoPlayersManager.updateTurn();
+        assertEquals("Player2", twoPlayersManager.getCurrentTurn().getPlayer().getName());
+        assertTrue(twoPlayersManager.getCurrentTurn().isSecondTurnAvailable());
+        twoPlayersManager.updateTurn();
+        assertEquals("Player2", twoPlayersManager.getCurrentTurn().getPlayer().getName());
+        assertFalse(twoPlayersManager.getCurrentTurn().isSecondTurnAvailable());
+        assertTrue(twoPlayersManager.updateTurn()); //limit case because the next is the last turn remaining in the round
+        assertEquals("Player1", twoPlayersManager.getCurrentTurn().getPlayer().getName());
+        assertFalse(twoPlayersManager.getCurrentTurn().isSecondTurnAvailable());
     }
     @Test
     public void testUpdateTurnNoTurnLeft(){
-        ArrayList<Player> players= new ArrayList<>();
-        players.add(new Player("Player1"));
-        players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players, new Game());
-        manager.updateTurn();
-        manager.updateTurn();
-        manager.updateTurn();
-        manager.updateTurn();
-        assertFalse(manager.updateTurn());
+        twoPlayersManager.updateTurn();
+        twoPlayersManager.updateTurn();
+        twoPlayersManager.updateTurn();
+        twoPlayersManager.updateTurn();
+        assertFalse(twoPlayersManager.updateTurn());
     }
 
 
     @Test
     public void testUpdateTurnSkippingOnePlayer(){
-        ArrayList<Player> players= new ArrayList<>();
-        players.add(new Player("Player0"));
-        players.add(new Player("Player1"));
-        players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players, new Game());
+        Game game = new Game();
+        game.addPlayer(new Player("Player0"));
+        game.addPlayer(new Player("Player1"));
+        game.addPlayer(new Player("Player2"));
+        TurnManager manager = new TurnManager(game.getPlayers());
         manager.updateTurn();
         manager.updateTurn();
         try {
@@ -183,11 +170,11 @@ public class TurnManagerTest {
 
     @Test
     public void testUpdateTurnSkippingAllRemainingPlayer(){
-        ArrayList<Player> players= new ArrayList<>();
-        players.add(new Player("Player0"));
-        players.add(new Player("Player1"));
-        players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players, new Game());
+        Game game = new Game();
+        game.addPlayer(new Player("Player0"));
+        game.addPlayer(new Player("Player1"));
+        game.addPlayer(new Player("Player2"));
+        TurnManager manager = new TurnManager(game.getPlayers());
         manager.updateTurn();
         try {
             manager.consumeSecondTurn(manager.getCurrentTurn().getPlayer());
@@ -211,55 +198,43 @@ public class TurnManagerTest {
 
     @Test
     public void testUpdateTurnSinglePlayer(){
-        ArrayList<Player> players= new ArrayList<>();
-        players.add(new Player("Player1"));
-        TurnManager manager = new TurnManager(players, new Game());
+        Game game = new Game();
+        game.addPlayer(new Player("Player1"));
+        TurnManager manager = new TurnManager(game.getPlayers());
         manager.updateTurn();
         assertEquals("Player1", manager.getCurrentTurn().getPlayer().getName());
-        assertEquals(true,manager.getCurrentTurn().isSecondTurnAvailable());
+        assertTrue(manager.getCurrentTurn().isSecondTurnAvailable());
         manager.updateTurn();
         assertEquals("Player1",manager.getCurrentTurn().getPlayer().getName());
-        assertEquals(false,manager.getCurrentTurn().isSecondTurnAvailable());
+        assertFalse(manager.getCurrentTurn().isSecondTurnAvailable());
         assertFalse(manager.updateTurn());
     }
 
 
     @Test
     public void testPositiveIsSecondTurnAvailable() {
-        ArrayList<Player> players= new ArrayList<>();
-        players.add(new Player("Player1"));
-        players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players, new Game());
-        manager.updateTurn();
-        manager.updateTurn();//limit case (last first turn of the last player in the list)
-        assertTrue(manager.isSecondTurnAvailable());
+        twoPlayersManager.updateTurn();
+        twoPlayersManager.updateTurn();//limit case (last first turn of the last player in the list)
+        assertTrue(twoPlayersManager.isSecondTurnAvailable());
     }
 
     @Test
     public void testNegativeIsSecondTurnAvailable() {
-        ArrayList<Player> players= new ArrayList<>();
-        players.add(new Player("Player1"));
-        players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players, new Game());
-        manager.updateTurn();
-        manager.updateTurn();
-        manager.updateTurn();//limit case (first second turn of the last player in the list);
-        assertFalse(manager.isSecondTurnAvailable());
+        twoPlayersManager.updateTurn();
+        twoPlayersManager.updateTurn();
+        twoPlayersManager.updateTurn();//limit case (first second turn of the last player in the list);
+        assertFalse(twoPlayersManager.isSecondTurnAvailable());
     }
 
 
 
     @Test
     public void testExceptionalConsumeSecondTurn() {
-        ArrayList<Player> players= new ArrayList<>();
-        players.add(new Player("Player1"));
-        players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players, new Game());
-        manager.updateTurn();
-        manager.updateTurn();
-        manager.updateTurn();
+        twoPlayersManager.updateTurn();
+        twoPlayersManager.updateTurn();
+        twoPlayersManager.updateTurn();
         try{
-            manager.consumeSecondTurn(manager.getCurrentTurn().getPlayer());
+            twoPlayersManager.consumeSecondTurn(twoPlayersManager.getCurrentTurn().getPlayer());
             fail();
         }
         catch(TurnManager.SecondTurnUnavailableException ex){
@@ -269,14 +244,10 @@ public class TurnManagerTest {
 
     @Test
     public void testSuccessfulConsumeSecondTurn() {
-        ArrayList<Player> players= new ArrayList<>();
-        players.add(new Player("Player1"));
-        players.add(new Player("Player2"));
-        TurnManager manager = new TurnManager(players, new Game());
-        manager.updateTurn();
-        manager.updateTurn();
+        twoPlayersManager.updateTurn();
+        twoPlayersManager.updateTurn();
         try{
-            manager.consumeSecondTurn(manager.getCurrentTurn().getPlayer());
+            twoPlayersManager.consumeSecondTurn(twoPlayersManager.getCurrentTurn().getPlayer());
         }
         catch(TurnManager.SecondTurnUnavailableException ex){
             fail();

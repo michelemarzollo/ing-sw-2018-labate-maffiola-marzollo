@@ -17,6 +17,9 @@ public class Player {
      */
     private final String name;
 
+    /**
+     * The game the player is bound to.
+     */
     private Game game;
 
     /**
@@ -199,7 +202,19 @@ public class Player {
         tokens -= n;
     }
 
-    public void setGame(Game game) {
+    /**
+     * Setter for the game the player is bound to.
+     * @param game The game the player is bound to.
+     */
+    void setGame(Game game) {
         this.game = game;
+    }
+
+    /**
+     * Getter for the game the player is bound to.
+     * @return The game the player is bound to.
+     */
+    Game getGame(){
+        return game;
     }
 }
