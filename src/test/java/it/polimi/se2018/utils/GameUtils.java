@@ -21,7 +21,6 @@ import java.util.Random;
  * <li>game at the end of a round</li>
  * <li>game finished</li>
  * </ul>
- * </p>
  *
  * @author dvdmff
  */
@@ -270,7 +269,7 @@ public class GameUtils {
      * <li>Yellow 6</li>
      * <li>Red 2</li>
      * <li>Green 4 (if in multi player mode)</li>
-     * </p>
+     * </ul>
      * <p>All dice have been independently initialized with a random with seed 0,
      * meaning that they have a well-known future set of values.</p>
      *

@@ -2,7 +2,7 @@ package it.polimi.se2018.utils;
 
 /**
  * An {@code Observer<T>} is an object that observes one or more
- * {@link Observable<T>} objects.
+ * {@link Observable} objects.
  * @param <T> The type of the message the observable object
  *           can notify to the observer.
  * @author dvdmff
