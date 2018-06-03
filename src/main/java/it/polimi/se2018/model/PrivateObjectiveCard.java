@@ -30,8 +30,12 @@ public class PrivateObjectiveCard implements ObjectiveCard {
         this.colour = c;
     }
 
+
+
     /**
      * The getter of the name.
+     *
+     * @return the card's name.
      */
     @Override
     public String getName() {
@@ -40,6 +44,8 @@ public class PrivateObjectiveCard implements ObjectiveCard {
 
     /**
      * The getter of the colour.
+     *
+     * @return the card's colour.
      */
     public Colour getColour() {
         return colour;

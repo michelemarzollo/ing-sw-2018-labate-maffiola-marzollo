@@ -42,6 +42,7 @@ public class SinglePlayerController extends Controller {
      *
      * @param game    The game that has to be bound
      *                to the controller.
+     * @param turnDuration The time that the player have to consume his turn.
      * @param timeOut Period that has to be waited keeping the current {@link Game}
      *                still valid and after which the {@link Game} has to be
      *                deleted.

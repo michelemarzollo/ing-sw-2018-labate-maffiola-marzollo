@@ -85,8 +85,11 @@ public abstract class Controller implements Observer<ViewMessage> {
      */
     protected abstract int getDraftAmount();
 
+
     /**
      * Consumes resources after the usage of a tool card.
+     *
+     * @param message The message sent by the view.
      */
     protected abstract void consumeResources(ViewMessage message);
 

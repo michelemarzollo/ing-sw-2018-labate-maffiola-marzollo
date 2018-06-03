@@ -14,7 +14,7 @@ import java.util.*;
  * first turn this round, then the correct distribution of turns will be
  * {1, 2, 3, 3, 2, 1}.</p>
  * <p>The class is mutable.</p>
- * <note>No thread safety mechanism has yet been introduced.</note>
+ * No thread safety mechanism has yet been introduced.
  * @author dvdmff
  */
 public class TurnManager {
@@ -196,6 +196,8 @@ public class TurnManager {
      * the previous one and the correct rotation of the first player
      * to have the turn.</p>
      *
+     * @throws GameFinishedException if it's the last turn of the game
+     * and it is asked to setup a new round: the game is finished.
      */
     public void setupNewRound() throws GameFinishedException {
         if (isLastTurnOfGame()) throw new GameFinishedException();
