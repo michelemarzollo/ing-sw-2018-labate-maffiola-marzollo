@@ -16,15 +16,7 @@ public abstract class View extends Observable<ViewMessage>
     /**
      * The name of the player the view is associated with.
      */
-    private final String playerName;
-
-    /**
-     * Creates a new view for the specified player.
-     * @param playerName The name of the player.
-     */
-    protected View(String playerName) {
-        this.playerName = playerName;
-    }
+    private String playerName;
 
     /**
      * Shows the multi player game view.
@@ -86,25 +78,21 @@ public abstract class View extends Observable<ViewMessage>
      * Shows the game finished view.
      */
     public abstract void showFinalView();
-    /*
-    public abstract void handlePlacement(int index, Coordinates destination);
-    public abstract void handleToolCardSelection(String name);
-    public abstract void handleEndTurn();
-    public abstract void handlePatternSelection(String patternName);
-    public abstract void handleToolCardUsage(String name, int index, boolean increment);
-    public abstract void handleToolCardUsage(String name, int index);
-    public abstract void handleToolCardUsage(String name, int index, Coordinates destination);
-    public abstract void handleToolCardUsage(String name, Coordinates source, Coordinates destination);
-    public abstract void handleToolCardUsage(String name, Coordinates[] sources, Coordinates[] destinations);
-    public abstract void handleDisconnect();
-*/
 
     /**
-     * Getter for the player name associated with he view.
-     * @return The name of the player associated with he view
+     * Getter for the player name associated with the view.
+     * @return The name of the player associated with the view
      */
     public String getPlayerName() {
         return playerName;
+    }
+
+    /**
+     * Setter for the player name associated with the view.
+     * @param playerName The name of the player associated with the view.
+     */
+    public void setPlayerName(String playerName){
+        this.playerName = playerName;
     }
 
 }

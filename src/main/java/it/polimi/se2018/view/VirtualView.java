@@ -27,16 +27,16 @@ public class VirtualView extends View {
      * Creates a new virtual view with the specified player name that is
      * associated with the given client.
      *
-     * @param playerName The name of the player.
      * @param client     The client connection the player is using to communicate
      *                   with the server.
      * @throws IllegalArgumentException if {@code client} is null.
      */
-    public VirtualView(String playerName, ClientNetInterface client) {
-        super(playerName);
-
-        if (client == null)
+    public VirtualView(ClientNetInterface client) {
+        if (client == null) {
             throw new IllegalArgumentException("client can't be null");
+        }
+
+        setPlayerName(client.getUsername());
         this.client = new WeakReference<>(client);
     }
 

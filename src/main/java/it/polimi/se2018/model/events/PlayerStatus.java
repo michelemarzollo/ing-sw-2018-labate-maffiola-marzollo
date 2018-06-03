@@ -2,6 +2,7 @@ package it.polimi.se2018.model.events;
 
 import it.polimi.se2018.model.Pattern;
 import it.polimi.se2018.model.Player;
+import it.polimi.se2018.view.ViewDataOrganizer;
 
 /**
  * Represents a message containing information about a player status, excluded
@@ -60,5 +61,14 @@ public class PlayerStatus extends ModelUpdate {
      */
     public Pattern getPattern() {
         return pattern;
+    }
+
+    /**
+     * Pushes this instance of PlayerStatus into the organizer.
+     * @param organizer The organizer where the message will be pushed into.
+     */
+    @Override
+    public void pushInto(ViewDataOrganizer organizer) {
+        organizer.push(this);
     }
 }

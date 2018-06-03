@@ -1,6 +1,8 @@
 package it.polimi.se2018.model.events;
 
 
+import it.polimi.se2018.view.ViewDataOrganizer;
+
 import java.util.Map;
 
 /**
@@ -39,4 +41,12 @@ public class GameEnd extends ModelUpdate {
         return scoreBoard;
     }
 
+    /**
+     * Pushes this instance of GameEnd into the organizer.
+     * @param organizer The organizer where the message will be pushed into.
+     */
+    @Override
+    public void pushInto(ViewDataOrganizer organizer) {
+        organizer.push(this);
+    }
 }

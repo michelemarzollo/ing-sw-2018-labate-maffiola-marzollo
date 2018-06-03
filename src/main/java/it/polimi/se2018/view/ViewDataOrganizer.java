@@ -1,10 +1,8 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.Die;
-
 import it.polimi.se2018.model.events.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -13,8 +11,8 @@ public class ViewDataOrganizer {
 
     private GameSetup gameSetup;
     private GameEnd gameEnd;
-    private PlayerStatus[] playerStatusList;
-    private PlayerConnectionStatus[] connectionStatusList;
+    private List<PlayerStatus> playerStatusList;
+    private List<PlayerConnectionStatus> connectionStatusList;
     private NextTurn nextTurn;
     private RoundTrackUpdate roundTrack;
     private DraftPoolUpdate draftPool;
@@ -33,13 +31,13 @@ public class ViewDataOrganizer {
     }
 
     private Optional<PlayerStatus> findPlayerStatus(String name) {
-        return Arrays.stream(playerStatusList)
+        return playerStatusList.stream()
                 .filter(p -> p.getPlayerName().equals(name))
                 .findFirst();
 
     }
 
-    public PlayerStatus[] getAllPlayerStatus() {
+    public List<PlayerStatus> getAllPlayerStatus() {
         return playerStatusList;
     }
 
@@ -50,12 +48,12 @@ public class ViewDataOrganizer {
 
 
     private Optional<PlayerConnectionStatus> findConnectionStatus(String name) {
-        return Arrays.stream(connectionStatusList)
+        return connectionStatusList.stream()
                 .filter(p -> p.getPlayerName().equals(name))
                 .findFirst();
 
     }
-    public PlayerConnectionStatus[] getAllConnectionStatus() {
+    public List<PlayerConnectionStatus> getAllConnectionStatus() {
         return connectionStatusList;
     }
 
@@ -80,12 +78,17 @@ public class ViewDataOrganizer {
         this.gameEnd = gameEnd;
     }
 
-    public void push(PlayerStatus[] playerStatusList) {
-        this.playerStatusList = playerStatusList;
+    public void push(PlayerStatus playerStatus) {
+
+        this.playerStatusList
+                .removeIf(p -> p.getPlayerName().equals(playerStatus.getPlayerName()));
+        this.playerStatusList.add(playerStatus);
     }
 
-    public void push(PlayerConnectionStatus[] connectionStatusList) {
-        this.connectionStatusList = connectionStatusList;
+    public void push(PlayerConnectionStatus connectionStatus) {
+        this.playerStatusList
+                .removeIf(p -> p.getPlayerName().equals(connectionStatus.getPlayerName()));
+        this.connectionStatusList.add(connectionStatus);
     }
 
     public void push(NextTurn nextTurn) {
@@ -98,5 +101,9 @@ public class ViewDataOrganizer {
 
     public void push(DraftPoolUpdate draftPool) {
         this.draftPool = draftPool;
+    }
+
+    public void push(ModelUpdate update){
+        update.pushInto(this);
     }
 }

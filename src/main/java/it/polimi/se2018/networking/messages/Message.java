@@ -7,7 +7,7 @@ import java.io.Serializable;
  *
  * @author michelemarzollo
  */
-public class Message {
+public class Message implements Serializable {
 
     /**
      * The body of the message.

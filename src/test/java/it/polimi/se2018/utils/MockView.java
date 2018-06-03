@@ -15,10 +15,10 @@ import java.util.List;
  */
 public class MockView extends View {
 
-    private List<String> calledMethods = new ArrayList<String>();
+    private List<String> calledMethods = new ArrayList<>();
 
     public MockView(String playerName) {
-        super(playerName);
+        setPlayerName(playerName);
     }
 
     /**

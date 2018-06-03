@@ -21,19 +21,9 @@ import java.net.UnknownHostException;
 public class TcpNetworkHandler implements ServerNetInterface, Runnable {
 
     /**
-     * The IP address where to find the server.
-     */
-    private String address;
-
-    /**
      * The client implementation to which the TcpNetworkHandler is bounded.
      */
     private ClientNetInterface client;
-
-    /**
-     * The port associated to the server.
-     */
-    private int port;
 
     /**
      * The client socket that represents the ending point of the connection with
@@ -47,13 +37,9 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
      * and creates the client socket connecting to the server socket at the {@code address} and
      * {@code port} specified.
      * @param address The IP address where to find the server socket.
-     * @param client The client to which the handler has to refer.
      * @param port The port where to find the server socket.
      */
-    public TcpNetworkHandler(String address, ClientNetInterface client, int port) {
-        this.address = address;
-        this.client = client;
-        this.port = port;
+    public TcpNetworkHandler(String address, int port) {
 
         try {
             this.clientConnection = new Socket(address, port);
@@ -124,6 +110,8 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
      */
     @Override
     public void addClient(ClientNetInterface client) {
+        this.client = client;
+        //TODO authentication
         //does nothing because this operation is handled server side by the TcpGatherer.
     }
 

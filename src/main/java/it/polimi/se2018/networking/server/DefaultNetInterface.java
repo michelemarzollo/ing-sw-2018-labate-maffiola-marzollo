@@ -68,7 +68,7 @@ public class DefaultNetInterface implements ServerNetInterface {
                 .tryRetrieveViewFor(client.getUsername());
 
         if(view == null){
-            view = new VirtualView(client.getUsername(), client);
+            view = new VirtualView(client);
             //TODO add single player
             MatchMaker.getInstance().makeMultiPlayerMatchFor(view);
         } else {

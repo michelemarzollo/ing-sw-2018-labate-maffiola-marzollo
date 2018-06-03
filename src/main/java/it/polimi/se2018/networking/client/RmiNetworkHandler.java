@@ -22,24 +22,9 @@ import java.rmi.server.UnicastRemoteObject;
 public class RmiNetworkHandler implements ServerNetInterface {
 
     /**
-     * The client that is connected to the server.
-     */
-    private ClientNetInterface client;
-
-    /**
      * The server interface to exchange message with.
      */
     private RmiServerInterface server;
-
-    /**
-     * The address of the server.
-     */
-    private String address;
-
-    /**
-     * The name of the exposed RMI service.
-     */
-    private String serviceName;
 
     /**
      * The {@link RmiClientImplementation} on the server linked to the
@@ -62,17 +47,13 @@ public class RmiNetworkHandler implements ServerNetInterface {
      * The constructor of the class: it asks the Stub of the server and creates
      * the RMI client.
      *
-     * @param client      the interface of the 'general' client
      * @param address     the address.
      * @param serviceName the name of the service.
      */
-    public RmiNetworkHandler(ClientNetInterface client, String address, String serviceName) {
-        this.client = client;
-        this.address = address;
-        this.serviceName = serviceName;
+    public RmiNetworkHandler(String address, String serviceName) {
+
         try {
-            server = (RmiServerInterface) Naming.lookup("//localhost/MyServer");
-            clientImplementation = new RmiClientImplementation(client);
+            server = (RmiServerInterface) Naming.lookup("//" + address + "/" + serviceName);
 
         } catch (MalformedURLException e) {
             Logger.getDefaultLogger().log("URL not found!");
@@ -107,6 +88,7 @@ public class RmiNetworkHandler implements ServerNetInterface {
     @Override
     public void addClient(ClientNetInterface client) {
         try {
+            clientImplementation = new RmiClientImplementation(client);
             remoteRef = (RmiClientInterface) UnicastRemoteObject.exportObject(
                     clientImplementation, 0);
             server.addClient(remoteRef);

@@ -1,5 +1,7 @@
 package it.polimi.se2018.model.events;
 
+import it.polimi.se2018.view.ViewDataOrganizer;
+
 /**
  * Event to update views about the change in the connection
  * status of a player.
@@ -42,5 +44,14 @@ public class PlayerConnectionStatus extends ModelUpdate {
      */
     public boolean isConnected() {
         return connected;
+    }
+
+    /**
+     * Pushes this instance of PlayerConnectionStatus into the organizer.
+     * @param organizer The organizer where the message will be pushed into.
+     */
+    @Override
+    public void pushInto(ViewDataOrganizer organizer) {
+        organizer.push(this);
     }
 }

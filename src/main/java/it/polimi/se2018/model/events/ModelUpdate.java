@@ -1,6 +1,8 @@
 package it.polimi.se2018.model.events;
 
 
+import it.polimi.se2018.view.ViewDataOrganizer;
+
 import java.io.Serializable;
 
 /**
@@ -10,7 +12,7 @@ import java.io.Serializable;
  *
  * @author michelemarzollo
  */
-public class ModelUpdate implements Serializable {
+public abstract class ModelUpdate implements Serializable {
 
     /**
      * The type of message it is
@@ -35,4 +37,9 @@ public class ModelUpdate implements Serializable {
         return eventType;
     }
 
+    /**
+     * Pushed the update message into the organizer.
+     * @param organizer The organizer where the message will be pushed into.
+     */
+    public abstract void pushInto(ViewDataOrganizer organizer);
 }

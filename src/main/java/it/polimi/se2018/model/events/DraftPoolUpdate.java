@@ -1,6 +1,7 @@
 package it.polimi.se2018.model.events;
 
 import it.polimi.se2018.model.Die;
+import it.polimi.se2018.view.ViewDataOrganizer;
 
 import java.util.List;
 
@@ -33,5 +34,14 @@ public class DraftPoolUpdate extends ModelUpdate {
      */
     public List<Die> getDice() {
         return dice;
+    }
+
+    /**
+     * Pushes this instance of DraftPoolUpdate into the organizer.
+     * @param organizer The organizer where the message will be pushed into.
+     */
+    @Override
+    public void pushInto(ViewDataOrganizer organizer) {
+        organizer.push(this);
     }
 }
