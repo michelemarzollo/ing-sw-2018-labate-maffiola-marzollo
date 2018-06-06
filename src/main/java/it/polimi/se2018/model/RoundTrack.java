@@ -27,6 +27,7 @@ public class RoundTrack {
      * Creates a RoundTrack object able to manage the specified
      * number of rounds.
      * @param rounds The number of rounds in the game.
+     * @param game The game to which the RoundTrack has to be bound.
      */
     public RoundTrack(int rounds, Game game) {
         leftovers = new ArrayList<>(rounds);

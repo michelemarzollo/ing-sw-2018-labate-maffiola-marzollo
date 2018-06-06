@@ -21,9 +21,11 @@ public class DraftPool {
 
     private final Game game;
 
+
     /**
      * The constructor of the class. When the class is built there is no forced selection:
      * the attribute <code>forcedSelection</code> is set to a non valid value -1.
+     * @param game The game to which the DraftPool has to be bound.
      */
     public DraftPool(Game game) {
         this.dice = null;

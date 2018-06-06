@@ -246,6 +246,7 @@ public class Pattern implements Serializable {
      *                    on the Pattern.
      * @param destination The position in which the Player
      *                    wants to move the Die.
+     * @param restriction The restriction that has to be respected.
      * @return A new pattern that is a copy of
      * the present one, but with the chosen Die that was placed
      * in the position {@code source} in the

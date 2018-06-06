@@ -29,7 +29,8 @@ public abstract class View extends Observable<ViewMessage>
     public abstract void showSinglePlayerGame();
 
     /**
-     * Shows an error message.
+     * Shows an error message
+     * @param error the message that has to be displayed
      */
     public abstract void showError(String error);
 
