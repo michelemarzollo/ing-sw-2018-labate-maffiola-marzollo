@@ -69,14 +69,21 @@ public interface Displayer {
     void refreshDisplayedData();
 
     /**
-     * Sets the data organizer that keeps track of received messages.
-     * @param organizer The data organizer.
+     * The getter for the {@link ViewDataOrganizer}, that keeps the track
+     * of model messages.
+     * @return the organizer.
      */
-    void setDataOrganizer(ViewDataOrganizer organizer);
+    ViewDataOrganizer getDataOrganizer();
 
     /**
      * Sets the client view that will handle requests.
      * @param view The view that will handle requests.
      */
     void setView(ClientView view);
+
+    /**
+     * The getter for the client view that handles the requests.
+     * @return the client view.
+     */
+    ClientView getView();
 }

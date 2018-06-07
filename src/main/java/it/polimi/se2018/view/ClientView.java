@@ -35,16 +35,7 @@ public class ClientView extends View {
     public ClientView(Displayer displayer) {
         organizer = new ViewDataOrganizer();
         this.displayer = displayer;
-        this.displayer.setDataOrganizer(organizer);
         this.displayer.setView(this);
-    }
-
-    /**
-     * The getter for the {@link ViewDataOrganizer} of the view.
-     * @return the {@link ViewDataOrganizer} of the view.
-     */
-    public ViewDataOrganizer getOrganizer() {
-        return organizer;
     }
 
     @Override
@@ -74,7 +65,7 @@ public class ClientView extends View {
 
     @Override
     public void showScoreBoard() {
-        displayer.displayScoreBoard(organizer.getScoreBoard());
+        displayer.displayScoreBoard();
     }
 
     @Override
@@ -277,6 +268,7 @@ public class ClientView extends View {
      */
     public void handleLogin(String playerName, String serverAddress, String serviceName) {
         setPlayerName(playerName);
+        organizer.setLocalPlayer(playerName);
         client = new Client(this, new RmiNetworkHandler(serverAddress, serviceName));
 
 
@@ -296,6 +288,7 @@ public class ClientView extends View {
      */
     public void handleLogin(String playerName, String serverAddress, int port) {
         setPlayerName(playerName);
+        organizer.setLocalPlayer(playerName);
         client = new Client(this, new TcpNetworkHandler(serverAddress, port));
 
         notifyObservers(new ViewMessage(
@@ -319,4 +312,12 @@ public class ClientView extends View {
         ));
     }
 
+
+    /**
+     * The getter for {@code organizer}.
+     * @return the organizer.
+     */
+    public ViewDataOrganizer getDataOrganizer() {
+        return organizer;
+    }
 }
