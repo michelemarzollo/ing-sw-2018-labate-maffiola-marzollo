@@ -23,7 +23,7 @@ public class GameSetup extends ModelUpdate {
      * There is a correspondence of indexes with the array {@code players} (each player
      * has one private objective card and vice versa).
      */
-    private final String[][] privateObjectives;
+    private final PrivateObjectiveCard[][] privateObjectives;
 
     /**
      * The array of the tool cards that can be used in the game.
@@ -33,7 +33,7 @@ public class GameSetup extends ModelUpdate {
     /**
      * The array of the public objective cards that will be used in the game.
      */
-    private final String[] publicObjectives;
+    private final PublicObjectiveCard[] publicObjectives;
 
     /**
      * The array of quartets of patterns. Each cell of {@code candidates[]} contains an
@@ -55,17 +55,16 @@ public class GameSetup extends ModelUpdate {
         this.toolCards = Arrays.stream(game.getToolCards())
                 .map(ToolCard::new)
                 .toArray(ToolCard[]::new);
-        this.publicObjectives = Arrays.stream(game.getPublicObjectiveCards())
-                .map(ObjectiveCard::getName)
-                .toArray(String[]::new);
+        this.publicObjectives = Arrays.copyOf(
+                game.getPublicObjectiveCards(),
+                game.getPublicObjectiveCards().length);
         this.candidates = game.getPlayers().stream()
                 .map(Player::getCandidates)
                 .toArray(Pattern[][]::new);
         this.privateObjectives = game.getPlayers().stream()
                 .map(p -> Arrays.stream(p.getCards())
-                        .map(PrivateObjectiveCard::getName)
-                        .toArray(String[]::new))
-                .toArray(String[][]::new);
+                        .toArray(PrivateObjectiveCard[]::new))
+                .toArray(PrivateObjectiveCard[][]::new);
     }
 
     /**
@@ -82,7 +81,7 @@ public class GameSetup extends ModelUpdate {
      *
      * @return {@code privateObjectives}
      */
-    public String[][] getPrivateObjectives() {
+    public PrivateObjectiveCard[][] getPrivateObjectives() {
         return privateObjectives;
     }
 
@@ -100,7 +99,7 @@ public class GameSetup extends ModelUpdate {
      *
      * @return {@code publicObjectives}
      */
-    public String[] getPublicObjectives() {
+    public PublicObjectiveCard[] getPublicObjectives() {
         return publicObjectives;
     }
 

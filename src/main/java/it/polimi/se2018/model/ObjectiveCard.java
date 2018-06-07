@@ -1,12 +1,14 @@
 package it.polimi.se2018.model;
 
+import java.io.Serializable;
+
 /**
  * ObjectiveCard represents the common features of both public and private
  * objective cards
  *
  * @author michelemarzollo
  */
-public interface ObjectiveCard {
+public interface ObjectiveCard extends Serializable {
 
     /**
      * The method that calculates the score
