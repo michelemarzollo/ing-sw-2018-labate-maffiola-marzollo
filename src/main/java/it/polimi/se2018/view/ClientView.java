@@ -39,6 +39,14 @@ public class ClientView extends View {
         this.displayer.setView(this);
     }
 
+    /**
+     * The getter for the {@link ViewDataOrganizer} of the view.
+     * @return the {@link ViewDataOrganizer} of the view.
+     */
+    public ViewDataOrganizer getOrganizer() {
+        return organizer;
+    }
+
     @Override
     public void showMultiPlayerGame() {
         displayer.displayMultiPlayerGame();
@@ -66,7 +74,7 @@ public class ClientView extends View {
 
     @Override
     public void showScoreBoard() {
-        displayer.displayScoreBoard();
+        displayer.displayScoreBoard(organizer.getScoreBoard());
     }
 
     @Override
@@ -293,6 +301,20 @@ public class ClientView extends View {
         notifyObservers(new ViewMessage(
                 this,
                 Action.REGISTER_PLAYER,
+                getPlayerName()
+        ));
+    }
+
+    /**
+     * The method to notify the controller after the selection of the
+     * {@link it.polimi.se2018.model.PrivateObjectiveCard}.
+     * @param name the name of the card.
+     */
+    public void handlePrivateSelection(String name){
+        notifyObservers(new SelectCard(
+                name,
+                this,
+                Action.SELECT_PRIVATE_OBJECTIVE,
                 getPlayerName()
         ));
     }

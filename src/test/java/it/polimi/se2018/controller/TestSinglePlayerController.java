@@ -242,16 +242,16 @@ public class TestSinglePlayerController {
 
         //the colour is initialized to avoid compilation errors, but i know that
         //it will be substituted by the for loop
-        Colour colour = Colour.YELLOW;
+        String name = "ShadesOfYellow";
         //chooses a colour that is not the colour of one of the Private Cards of the game
         for (Colour col : Colour.values()) {
             if (col != game.getPlayers().get(0).getCards()[0].getColour() &&
                     col != game.getPlayers().get(0).getCards()[1].getColour())
-                colour = col;
+                name = "ShadesOf" + col.toString();
         }
         //the message to send to choose the card
-        ViewMessage msg2 = new SelectPrivateObjective(
-                view, Action.SELECT_PRIVATE_OBJECTIVE, playerName, colour);
+        ViewMessage msg2 = new SelectCard(
+                name, view, Action.SELECT_PRIVATE_OBJECTIVE, playerName);
         controller.performAction(msg2);
 
         assertEquals("showError: The chosen private objective card is not available!",
@@ -272,10 +272,10 @@ public class TestSinglePlayerController {
         controller.endGame(msg);
 
         //gets the colour of the first Private Objective of the game
-        Colour colour = game.getPlayers().get(0).getCards()[0].getColour();
+        String name = game.getPlayers().get(0).getCards()[0].getName();
         //the message to send to choose the card
-        ViewMessage msg2 = new SelectPrivateObjective(
-                view, Action.SELECT_PRIVATE_OBJECTIVE, playerName, colour);
+        ViewMessage msg2 = new SelectCard(
+                name, view, Action.SELECT_PRIVATE_OBJECTIVE, playerName);
         controller.performAction(msg2);
         assertTrue(game.getDraftPool().getDice().isEmpty());
         assertTrue(game.getPlayers().get(1).getName().equals("RoundTrack"));
@@ -304,10 +304,10 @@ public class TestSinglePlayerController {
         controller.endGame(msg);
 
         //gets the colour of the first Private Objective of the game
-        Colour colour = game.getPlayers().get(0).getCards()[0].getColour();
+        String name = game.getPlayers().get(0).getCards()[0].getName();
         //the message to send to choose the card
-        ViewMessage msg2 = new SelectPrivateObjective(
-                view, Action.SELECT_PRIVATE_OBJECTIVE, playerName, colour);
+        ViewMessage msg2 = new SelectCard(
+                name, view, Action.SELECT_PRIVATE_OBJECTIVE, playerName);
         controller.performAction(msg2);
         assertTrue(game.getDraftPool().getDice().isEmpty());
         assertEquals(-21, game.getPlayers().get(0).getScore());

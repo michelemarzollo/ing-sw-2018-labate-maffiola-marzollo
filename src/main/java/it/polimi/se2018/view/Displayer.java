@@ -1,10 +1,17 @@
 package it.polimi.se2018.view;
 
+import java.util.Map;
+
 /**
  * Interface for a display manager.
  * <p>It's used by the view to display data on screen.</p>
  */
 public interface Displayer {
+
+    /**
+     * Displays the request of the information needed to start the game.
+     */
+    void displayLoginView();
 
     /**
      * Displays the multi player board.
@@ -35,7 +42,7 @@ public interface Displayer {
     /**
      * Displays the score board.
      */
-    void displayScoreBoard();
+    void displayScoreBoard(Map<String, Integer> scoreBoard);
 
     /**
      * Lets the player select a die from the draft pool.
@@ -79,4 +86,10 @@ public interface Displayer {
      * @param view The view that will handle requests.
      */
     void setView(ClientView view);
+
+    /**
+     * Gets the client view that handles requests.
+     * @return the view that handles requests.
+     */
+    ClientView getView();
 }
