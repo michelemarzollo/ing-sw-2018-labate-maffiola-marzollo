@@ -166,12 +166,12 @@ public class SinglePlayerController extends Controller {
      *                contains the colour of the card chosen.
      */
     private void selectPrivateObjective(ViewMessage message) {
-        SelectPrivateObjective selectPrivateObjective = (SelectPrivateObjective) message;
+        SelectCard selectPrivateObjective = (SelectCard) message;
         //Colour of the chosen PrivateObjectiveCard.
-        Colour colour = selectPrivateObjective.getColour();
+        String name = selectPrivateObjective.getName();
         Player player = getGame().getPlayers().get(0);
         for (PrivateObjectiveCard card : getGame().getPlayers().get(0).getCards()) {
-            if (card.getColour().equals(colour)) {
+            if (card.getName().equals(name)) {
                 player.getCards()[0] = card;
                 getGame().addPlayer(new Player("RoundTrack"));
                 calculateScores();

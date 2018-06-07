@@ -298,6 +298,25 @@ public class ClientView extends View {
         ));
     }
 
+    /**
+     * The method to notify the controller after the selection of the
+     * {@link it.polimi.se2018.model.PrivateObjectiveCard}.
+     * @param name the name of the card.
+     */
+    public void handlePrivateSelection(String name){
+        notifyObservers(new SelectCard(
+                name,
+                this,
+                Action.SELECT_PRIVATE_OBJECTIVE,
+                getPlayerName()
+        ));
+    }
+
+
+    /**
+     * The getter for {@code organizer}.
+     * @return the organizer.
+     */
     public ViewDataOrganizer getDataOrganizer() {
         return organizer;
     }
