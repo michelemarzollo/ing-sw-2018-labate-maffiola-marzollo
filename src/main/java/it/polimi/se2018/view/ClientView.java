@@ -249,6 +249,21 @@ public class ClientView extends View {
     }
 
     /**
+     * Handles the event in which the player wants to use a tool card.
+     * @param destination The destination of the die on the pattern.
+     * @param value The selected value of the die.
+     */
+    public void handleToolCardUsage(Coordinates destination, int value){
+        notifyObservers(new ChooseValue(
+                this,
+                Action.APPLY_TOOL_CARD,
+                getPlayerName(),
+                value,
+                destination
+        ));
+    }
+
+    /**
      * Handles the event in which the player willingly disconnects.
      */
     public void handleDisconnect() {
