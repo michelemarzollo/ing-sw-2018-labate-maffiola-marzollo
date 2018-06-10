@@ -51,9 +51,32 @@ public class MediumShades extends PublicObjectiveCard {
         return 2 * numberOfShades(grid, numbers);
     }
 
+    /**
+     * Getter for the name of the Objective Card.
+     * @return the card's name.
+     */
     @Override
     public String getName() {
-        return "MediumShades";
+        return "Medium Shades";
     }
 
+
+    /**
+     * Getter for the description of the Objective Card.
+     * @return the card's description.
+     */
+    @Override
+    public String getDescription() {
+        return "Sets of 3 & 4 values anywhere";
+    }
+
+    /**
+     * Getter for the victory point of the Public Objective Card.
+     * @return the number of points that a player gains every
+     * time that he pursue the objective indicated.
+     */
+    @Override
+    public int getVictoryPoint() {
+        return 2;
+    }
 }

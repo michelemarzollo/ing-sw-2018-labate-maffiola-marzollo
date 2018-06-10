@@ -19,5 +19,15 @@ public interface ObjectiveCard extends Serializable {
      */
     int getScore(Cell[][] grid);
 
+    /**
+     * Getter for the name of the Objective Card.
+     * @return the card's name.
+     */
     String getName();
+
+    /**
+     * Getter for the description of the Objective Card.
+     * @return the card's description.
+     */
+    String getDescription();
 }

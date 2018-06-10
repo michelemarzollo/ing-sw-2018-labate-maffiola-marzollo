@@ -53,9 +53,32 @@ public class RowShadeVariety extends PublicObjectiveCard {
         return 5 * numOfRows;
     }
 
+    /**
+     * Getter for the name of the Objective Card.
+     * @return the card's name.
+     */
     @Override
     public String getName() {
-        return "RowShadeVariety";
+        return "Row Shade Variety";
     }
 
+
+    /**
+     * Getter for the description of the Objective Card.
+     * @return the card's description.
+     */
+    @Override
+    public String getDescription() {
+        return "Rows with no repeated values";
+    }
+
+    /**
+     * Getter for the victory point of the Public Objective Card.
+     * @return the number of points that a player gains every
+     * time that he pursue the objective indicated.
+     */
+    @Override
+    public int getVictoryPoint() {
+        return 5;
+    }
 }

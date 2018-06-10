@@ -51,9 +51,32 @@ public class LightShades extends PublicObjectiveCard {
         return 2 * numberOfShades(grid, numbers);
     }
 
+    /**
+     * Getter for the name of the Objective Card.
+     * @return the card's name.
+     */
     @Override
     public String getName() {
-        return "LightShades";
+        return "Light Shades";
     }
 
+
+    /**
+     * Getter for the description of the Objective Card.
+     * @return the card's description.
+     */
+    @Override
+    public String getDescription() {
+        return "Sets of 1 & 2 values anywhere";
+    }
+
+    /**
+     * Getter for the victory point of the Public Objective Card.
+     * @return the number of points that a player gains every
+     * time that he pursue the objective indicated.
+     */
+    @Override
+    public int getVictoryPoint() {
+        return 2;
+    }
 }

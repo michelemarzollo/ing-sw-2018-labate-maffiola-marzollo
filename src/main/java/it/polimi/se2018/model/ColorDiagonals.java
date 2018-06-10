@@ -95,8 +95,32 @@ public class ColorDiagonals extends PublicObjectiveCard {
 
     }
 
+    /**
+     * Getter for the name of the Objective Card.
+     * @return the card's name.
+     */
     @Override
     public String getName() {
-        return "ColorDiagonals";
+        return "Color Diagonals";
+    }
+
+
+    /**
+     * Getter for the description of the Objective Card.
+     * @return the card's description.
+     */
+    @Override
+    public String getDescription() {
+        return "Count of diagonally adjacent same-color dice";
+    }
+
+    /**
+     * Getter for the victory point of the Public Objective Card.
+     * @return the number of points that a player gains every
+     * time that he pursue the objective indicated.
+     */
+    @Override
+    public int getVictoryPoint() {
+        return 0; //@TODO it is ok?
     }
 }

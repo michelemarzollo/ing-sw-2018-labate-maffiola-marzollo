@@ -48,9 +48,32 @@ public class ShadeVariety extends PublicObjectiveCard {
         return 5 * numberOfShades(grid, numbers);
     }
 
+    /**
+     * Getter for the name of the Objective Card.
+     * @return the card's name.
+     */
     @Override
     public String getName() {
-        return "ShadeVariety";
+        return "Shade Variety";
     }
 
+
+    /**
+     * Getter for the description of the Objective Card.
+     * @return the card's description.
+     */
+    @Override
+    public String getDescription() {
+        return "Sets of one of each value anywhere";
+    }
+
+    /**
+     * Getter for the victory point of the Public Objective Card.
+     * @return the number of points that a player gains every
+     * time that he pursue the objective indicated.
+     */
+    @Override
+    public int getVictoryPoint() {
+        return 5;
+    }
 }

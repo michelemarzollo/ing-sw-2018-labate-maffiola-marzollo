@@ -33,6 +33,37 @@ public class ToolCardFactory {
     };
 
     /**
+     * Array of all the possible description of the tool cards.
+     */
+    private static final String[] descriptions = {
+            "After drafting, increase or decrease the value of the drafted die by 1\n" +
+                    "1 may not change to 6, or 6 to 1",
+            "Move any one die in your window ignoring color restrictions\n" +
+                    "You must obey all other placement restrictions",
+            "Move any one die in your window ignoring value restrictions\n" +
+                    "You must obey all other placement restrictions",
+            "Move exactly two dice, obeying all placement restrictions",
+            "After drafting, swap the drafted die with a die from the Round Track",
+            "After drafting, re-roll the drafted die\n" +
+                    "If it cannot be placed, return it to the Draft Pool",
+            "Re-roll all dice in the Draft Pool\n" +
+                    "This may only be used on your second turn before drafting",
+            "After your first turn, immediately draft a die\n" +
+                    "Skip your next turn this round",
+            "After drafting, place the die in a spot that is not adjacent to another die\n" +
+                    "You must obey all other placement restrictions",
+            "After drafting, flip the die to its opposite side\n" +
+                    "6 flips to 1, 5 to 2, 4 to 3, etc.",
+            "After drafting, return the die to the Dice Bag and pull 1 die from the bag\n" +
+                    "Choose a value and place the new die, obeying all placement restrictions, or\n" +
+                    "return it to the Draft Pool",
+            "Move up to two dice of the same color that match the color of a die\n" +
+                    "on the Round Track\n" +
+                    "You must obey all placement restrictions"
+
+    };
+
+    /**
      * The colour restrictions on the tool cards. The index is the same
      * as the one for the name of the card.
      */
@@ -66,7 +97,7 @@ public class ToolCardFactory {
 
         return ints.stream()
                 .limit(n)
-                .map(i -> new ToolCard(names[i], colours[i]))
+                .map(i -> new ToolCard(names[i], descriptions[i], colours[i]))
                 .toArray(ToolCard[]::new);
 
     }
