@@ -221,7 +221,7 @@ public class MultiPlayerController extends Controller {
         if(getGame().getPlayers().size()<4){
             //When the method is called there is one player to add
             getGame().addPlayer(new Player(message.getPlayerName()));
-
+            message.getView().showPatternSelection();
             if (getGame().getPlayers().size() == 2) {
                 lobbyTimer.schedule(new StartingTask(getGame()), (long) timeOut * 1000);
             }
@@ -245,7 +245,6 @@ public class MultiPlayerController extends Controller {
         cleanDraftPool();
         calculateScores();
         fillScoreBoard();
-        message.getView().showFinalView();
     }
 
     /**

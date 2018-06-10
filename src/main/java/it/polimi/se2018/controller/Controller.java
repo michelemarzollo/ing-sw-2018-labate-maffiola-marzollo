@@ -442,7 +442,6 @@ public abstract class Controller implements Observer<ViewMessage> {
         }
 
         // return to game view
-        displayGame(message);
 
         if (checkTurnEnd())
             endTurn(message);
@@ -482,7 +481,7 @@ public abstract class Controller implements Observer<ViewMessage> {
 
         player.setPattern(pattern);
         player.setTokens(pattern.getDifficulty());
-        displayGame(message);
+        displayGame(message); //selectGameView
 
         boolean gameReady = getGame().getPlayers().stream()
                 .allMatch(p -> p.getPattern() != null);
@@ -502,7 +501,7 @@ public abstract class Controller implements Observer<ViewMessage> {
         List<Player> scoreboard = getGame().getPlayers().stream()
                 .sorted((player1, player2) -> player2.getScore() - player1.getScore())
                 .collect(Collectors.toList());
-        getGame().setScoreBoard(scoreboard);
+        getGame().setScoreBoard(scoreboard); //this invocation in Game generates the GAME_END message
     }
 
     /**
