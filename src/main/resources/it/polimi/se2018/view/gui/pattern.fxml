@@ -28,7 +28,7 @@
       </VBox>
    </top>
    <center>
-      <GridPane fx:id="patternGrid" hgap="2.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="190.0" minWidth="235.0" prefHeight="310.0" prefWidth="385.0" vgap="2.0" BorderPane.alignment="CENTER">
+      <GridPane fx:id="patternGrid" gridLinesVisible="true" hgap="2.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="190.0" minWidth="235.0" prefHeight="310.0" prefWidth="385.0" vgap="2.0" BorderPane.alignment="CENTER">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="50.0" percentWidth="20.0" prefWidth="75.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="50.0" percentWidth="20.0" prefWidth="75.0" />

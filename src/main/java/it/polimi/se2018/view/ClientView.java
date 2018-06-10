@@ -286,7 +286,6 @@ public class ClientView extends View {
         organizer.setLocalPlayer(playerName);
         client = new Client(this, new RmiNetworkHandler(serverAddress, serviceName));
 
-
         notifyObservers(new ViewMessage(
                 this,
                 Action.REGISTER_PLAYER,
@@ -327,6 +326,18 @@ public class ClientView extends View {
         ));
     }
 
+    /**
+     * Handles the selection of the difficulty at the beginning of a single-player
+     * game.
+     * @param difficulty the chosen difficulty.
+     */
+    public void handleDifficultySelection(int difficulty){
+        notifyObservers(new SelectDifficulty(
+                difficulty,
+                this,
+                getPlayerName()
+        ));
+    }
 
     /**
      * The getter for {@code organizer}.

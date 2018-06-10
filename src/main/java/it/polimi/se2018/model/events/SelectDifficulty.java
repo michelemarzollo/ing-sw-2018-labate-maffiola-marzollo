@@ -24,14 +24,12 @@ public class SelectDifficulty extends ViewMessage{
      * Constructor of the class.
      * @param difficulty The level of difficulty.
      * @param view The view reference.
-     * @param action The action that the Player wants
-     *               to perform.
      * @param playerName The name of the player that
      *                   is performing the action.
      */
     public SelectDifficulty(int difficulty,
-                            View view, Action action, String playerName){
-        super(view, action, playerName);
+                            View view, String playerName){
+        super(view, Action.SELECT_DIFFICULTY, playerName);
         this.difficulty = difficulty;
     }
 

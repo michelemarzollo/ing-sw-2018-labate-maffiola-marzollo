@@ -29,7 +29,7 @@ public class MultiPlayerControllerTest {
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view = new MockView("Pippo");
-        SelectDifficulty msg = new SelectDifficulty(3, view, Action.SELECT_DIFFICULTY, "Pippo");
+        SelectDifficulty msg = new SelectDifficulty(3, view, "Pippo");
         controller.performAction(msg);
         assertTrue(view.getCalledMethods().contains("showError: An invalid message was sent"));
         assertEquals(1, view.getCalledMethods().size());

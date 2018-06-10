@@ -123,7 +123,7 @@ public class TestSinglePlayerController {
         ViewMessage msg1 = new ViewMessage(view, Action.REGISTER_PLAYER, playerName);
         controller.performAction(msg1);
 
-        SelectDifficulty msg2 = new SelectDifficulty(4, view, Action.SELECT_DIFFICULTY, playerName);
+        SelectDifficulty msg2 = new SelectDifficulty(4, view, playerName);
         controller.performAction(msg2);
         //the number of cards must be the correct one
         assertEquals(3, game.getPublicObjectiveCards().length);
@@ -142,7 +142,7 @@ public class TestSinglePlayerController {
     public void testSetUpGameBeforeRegisterPlayer() {
         game = new Game();
         controller = new SinglePlayerController(game, 100, 100);
-        SelectDifficulty msg = new SelectDifficulty(4, view, Action.SELECT_DIFFICULTY, playerName);
+        SelectDifficulty msg = new SelectDifficulty(4, view, playerName);
         controller.performAction(msg);
         assertTrue(view.getCalledMethods().contains("showError: There is no registered player!"));
         //cards shouldn't have been added
@@ -169,7 +169,7 @@ public class TestSinglePlayerController {
         controller = new SinglePlayerController(game, 100, 100);
         ViewMessage msg1 = new ViewMessage(view, Action.REGISTER_PLAYER, playerName);
         controller.performAction(msg1);
-        SelectDifficulty msg2 = new SelectDifficulty(0, view, Action.SELECT_DIFFICULTY, playerName);
+        SelectDifficulty msg2 = new SelectDifficulty(0, view, playerName);
         controller.performAction(msg2);
         assertTrue(view.getCalledMethods().contains(
                 "showError: The level of difficulty must be in 1-5 range: choose another one"));
@@ -178,7 +178,7 @@ public class TestSinglePlayerController {
         assertNull(game.getPublicObjectiveCards());
         assertNull(game.getPlayers().get(0).getCards());
         //a second message to select the difficulty is sent
-        SelectDifficulty msg3 = new SelectDifficulty(3, view, Action.SELECT_DIFFICULTY, playerName);
+        SelectDifficulty msg3 = new SelectDifficulty(3, view, playerName);
         controller.performAction(msg3);
         assertEquals(3, game.getPublicObjectiveCards().length);
         assertEquals(2, game.getPlayers().get(0).getCards().length);
@@ -199,7 +199,7 @@ public class TestSinglePlayerController {
         controller = new SinglePlayerController(game, 100, 100);
         ViewMessage msg1 = new ViewMessage(view, Action.REGISTER_PLAYER, playerName);
         controller.performAction(msg1);
-        SelectDifficulty msg2 = new SelectDifficulty(7, view, Action.SELECT_DIFFICULTY, playerName);
+        SelectDifficulty msg2 = new SelectDifficulty(7, view, playerName);
         controller.performAction(msg2);
         assertTrue(view.getCalledMethods().contains(
                 "showError: The level of difficulty must be in 1-5 range: choose another one"));

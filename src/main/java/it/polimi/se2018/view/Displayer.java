@@ -7,6 +7,11 @@ package it.polimi.se2018.view;
 public interface Displayer {
 
     /**
+     * Displays the login window.
+     */
+    void displayLoginView();
+
+    /**
      * Displays the multi player board.
      */
     void displayMultiPlayerGame();

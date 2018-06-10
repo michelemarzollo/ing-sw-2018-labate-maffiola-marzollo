@@ -142,9 +142,11 @@ public class Pattern {
     private ImageView makeRestrictionAt(Cell cell) {
         ImageView image = new ImageView();
         if (cell.getColour() == null && cell.getValue() != 0)
-            image.setImage(new Image("dice/Gray" + cell.getValue() + ".jpg"));
+            image.setImage(new Image(
+                    this.getClass().getResource("images/dice/Gray" + cell.getValue() + ".jpg").toString()));
         else if (cell.getValue() == 0 && cell.getColour() != null)
-            image.setImage(new Image("dice/" + cell.getColour() + "Restriction.jpg"));
+            image.setImage(new Image(
+                    this.getClass().getResource("images/dice/" + cell.getColour() + "Restriction.jpg").toString()));
 
         image.setPreserveRatio(true);
 

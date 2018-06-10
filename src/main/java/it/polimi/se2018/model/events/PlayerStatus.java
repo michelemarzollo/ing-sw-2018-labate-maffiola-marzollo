@@ -40,6 +40,22 @@ public class PlayerStatus extends ModelUpdate {
     }
 
     /**
+     * A second constructor, to create a mock PlayerStatus without
+     * using a {@link Player}.
+     * @param name the name of the player.
+     * @param difficulty the number of tokens of the player (in the
+     *                   use of this constructor it will be the difficulty
+     *                   of the pattern).
+     * @param pattern the pattern.
+     */
+    public PlayerStatus(String name, int difficulty, Pattern pattern) {
+        super(ModelEvent.PLAYER_STATUS);
+        this.playerName = name;
+        this.tokens = difficulty;
+        this.pattern = pattern;
+    }
+
+    /**
      * Getter for the player name.
      * @return The player name.
      */
