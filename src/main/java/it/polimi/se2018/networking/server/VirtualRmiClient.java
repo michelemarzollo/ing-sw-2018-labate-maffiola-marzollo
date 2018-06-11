@@ -1,7 +1,6 @@
 package it.polimi.se2018.networking.server;
 
 import it.polimi.se2018.networking.client.ClientNetInterface;
-import it.polimi.se2018.networking.client.RmiClientImplementation;
 import it.polimi.se2018.networking.client.RmiClientInterface;
 import it.polimi.se2018.networking.messages.Message;
 import it.polimi.se2018.utils.Logger;
@@ -19,17 +18,12 @@ public class VirtualRmiClient implements ClientNetInterface {
     /**
      * The interface of the server.
      */
-    private ServerNetInterface server;
-
-    /**
-     * The username of the client that the VirtualRmiClient represents.
-     */
-    private String username;
+    private final ServerNetInterface server;
 
     /**
      * The interface of the real client.
      */
-    private RmiClientInterface client;
+    private final RmiClientInterface client;
 
     /**
      * The constructor of the class.
@@ -40,8 +34,6 @@ public class VirtualRmiClient implements ClientNetInterface {
     public VirtualRmiClient(ServerNetInterface server, RmiClientInterface client) {
         this.server = server;
         this.client = client;
-        RmiClientImplementation clientImplementation = (RmiClientImplementation) client;
-        this.username = clientImplementation.getClient().getUsername();
     }
 
     /**
@@ -51,7 +43,11 @@ public class VirtualRmiClient implements ClientNetInterface {
      */
     @Override
     public String getUsername() {
-        return username;
+        try {
+            return client.getUsername();
+        } catch (RemoteException e) {
+            return "";
+        }
     }
 
     /**

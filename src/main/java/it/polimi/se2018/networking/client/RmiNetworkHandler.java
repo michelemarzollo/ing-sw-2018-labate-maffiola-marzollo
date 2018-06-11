@@ -27,17 +27,10 @@ public class RmiNetworkHandler implements ServerNetInterface {
     private RmiServerInterface server;
 
     /**
-     * The {@link RmiClientImplementation} on the server linked to the
-     * network handler.
-     */
-    private RmiClientImplementation clientImplementation;
-
-    /**
      * The remote reference to the {@link RmiClientImplementation}.
      */
     private RmiClientInterface remoteRef;
 
-    //TO BE REMOVED AFTER THE CORRECT IMPLEMENTATION OF THE HANDLING OF EXCEPTIONS
     /**
      * The string to print in case of {@link RemoteException}.
      */
@@ -86,16 +79,16 @@ public class RmiNetworkHandler implements ServerNetInterface {
      * @param client the client to connect.
      */
     @Override
-    public void addClient(ClientNetInterface client) {
+    public boolean addClient(ClientNetInterface client) {
         try {
-            clientImplementation = new RmiClientImplementation(client);
+            RmiClientImplementation clientImplementation = new RmiClientImplementation(client);
             remoteRef = (RmiClientInterface) UnicastRemoteObject.exportObject(
                     clientImplementation, 0);
-            server.addClient(remoteRef);
-            server.addClient(clientImplementation);
+            return server.addClient(remoteRef);
         } catch (RemoteException e) {
             Logger.getDefaultLogger().log(ERROR_STRING + e.getMessage() + "!");
         }
+        return false;
     }
 
     /**

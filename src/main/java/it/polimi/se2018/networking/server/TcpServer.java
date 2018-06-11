@@ -12,17 +12,12 @@ import java.io.IOException;
  */
 public class TcpServer extends Server {
 
-
-    //private ArrayList<ClientNetInterface> clients; //remove?
-    /**
-     * The IP address where to find the server.
-     */
-    private String address;
-
     /**
      * The port associated to the server.
      */
     private int port;
+
+    private Thread gathererThread;
 
     /**
      * Reference to a {@link TcpGatherer} instance whose role is to take care
@@ -38,30 +33,25 @@ public class TcpServer extends Server {
 
     /**
      * Constructor to make this server a super-server.
-     * @param address The IP address of the server.
-     * @param port The port at which the server is bound.
+     *
+     * @param port    The port at which the server is bound.
      */
-    public TcpServer(String address, int port) {
+    public TcpServer(int port) {
         super();
-        this.address = address;
         this.port = port;
-       // clients = new ArrayList<>();
     }
 
     /**
-     * Constructor to make this server a slave-server. It will be invoked by the
-     * {@link HybridServer} that will be its master-server.
-     * @param server The master-server
-     * @param address The IP address of the server.
-     * @param port The port at which the server is bound.
+     * Constructor to make this server a slave-server.
+     *
+     * @param server  The master-server
+     * @param port    The port at which the server is bound.
      */
-    public TcpServer(Server server, String address, int port) {
+    public TcpServer(Server server, int port) {
         //The super class constructor instantiates also the serverNetInterface
         //for this server. For the TcpServer it will be the DelegateNetInterface.
         super(server);
-        this.address = address;
         this.port = port;
-        //clients = new ArrayList<>();
     }
 
     /**
@@ -70,9 +60,14 @@ public class TcpServer extends Server {
      */
     @Override
     public void start() {
-        gatherer = new TcpGatherer(getServerNetInterface(), port);
-        gatherer.run();
-        isRunning = true;
+        try {
+            gatherer = new TcpGatherer(getServerNetInterface(), port);
+            gathererThread = new Thread(gatherer);
+            gathererThread.start();
+            isRunning = true;
+        } catch (IOException e) {
+            Logger.getDefaultLogger().log(e.getMessage());
+        }
     }
 
     /**
@@ -84,16 +79,20 @@ public class TcpServer extends Server {
     @Override
     public void stop() {
         try {
-            gatherer.getThreadPool().shutdown();
-            gatherer.getServerSocket().close();
-        } catch (IOException e) {
-            Logger.getDefaultLogger().log("An error occurred when stopping the server");
+            if(gatherer != null)
+                gatherer.close();
+            if (gathererThread != null)
+                gathererThread.join();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
+
         isRunning = false;
     }
 
     /**
      * Tells if the server is active or not.
+     *
      * @return {@code true} if the server has been correctly started creating
      * a {@link java.net.ServerSocket} through the gatherer, {@code false} otherwise.
      */

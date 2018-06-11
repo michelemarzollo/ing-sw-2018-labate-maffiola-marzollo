@@ -17,6 +17,7 @@ import java.util.Map;
  * with a virtual view. Such view can either be created from scratch or retrieved from
  * the disconnected views repository. The latter case happens when a connection dies
  * during a match.</p>
+ *
  * @author dvdmff
  */
 public class DefaultNetInterface implements ServerNetInterface {
@@ -35,6 +36,7 @@ public class DefaultNetInterface implements ServerNetInterface {
     /**
      * Creates a new DefaultNetInterface that uses the specified server as
      * the connection handler.
+     *
      * @param server The server that handles the connections.
      */
     public DefaultNetInterface(Server server) {
@@ -45,6 +47,7 @@ public class DefaultNetInterface implements ServerNetInterface {
      * Handles the receiving of messages from the clients.
      * <p>Here, only ViewMessages are received, since clients can only generate
      * such messages.</p>
+     *
      * @param message The message sent over the network by the client.
      */
     @Override
@@ -52,7 +55,7 @@ public class DefaultNetInterface implements ServerNetInterface {
         ViewMessage viewMessage = (ViewMessage) message.getBody();
         String playerName = viewMessage.getPlayerName();
         VirtualView view = views.get(playerName);
-        if(view != null)
+        if (view != null)
             view.handle(viewMessage);
     }
 
@@ -61,13 +64,14 @@ public class DefaultNetInterface implements ServerNetInterface {
      * <p>If the player was previously playing a game and got disconnected,
      * the view relative to the match is retrieved from the disconnected views
      * repository. Otherwise a new view is created and is linked to a controller.</p>
+     *
      * @param client The client to be associated with a view.
      */
-    private void associateView(ClientNetInterface client){
+    private void associateView(ClientNetInterface client) {
         VirtualView view = DisconnectedViewsRepository.getInstance()
                 .tryRetrieveViewFor(client.getUsername());
 
-        if(view == null){
+        if (view == null) {
             view = new VirtualView(client);
             //TODO add single player
             MatchMaker.getInstance().makeMultiPlayerMatchFor(view);
@@ -81,30 +85,32 @@ public class DefaultNetInterface implements ServerNetInterface {
 
     /**
      * Adds a new client and associates it with a view.
+     *
      * @param client The newly connected client.
+     * @return {@code true} if the client has been added; {@code false} otherwise.
      */
     @Override
-    public void addClient(ClientNetInterface client) {
+    public boolean addClient(ClientNetInterface client) {
         boolean clientAdded = server.addClient(client);
 
-        if(!clientAdded){
-            client.notify(new Message(Command.SHOW_ERROR, "Username already taken"));
-            return;
-        }
+        if (!clientAdded)
+            return false;
 
         associateView(client);
+        return true;
     }
 
     /**
      * Removes and disconnects a client.
      * <p>The view relative to the dead connection is moved to the disconnected view
      * repository.</p>
+     *
      * @param client The client to remove.
      */
     @Override
     public void removeClient(ClientNetInterface client) {
         VirtualView view = views.remove(client.getUsername());
-        if(view != null)
+        if (view != null)
             DisconnectedViewsRepository.getInstance().addView(view);
 
         server.removeClient(client);

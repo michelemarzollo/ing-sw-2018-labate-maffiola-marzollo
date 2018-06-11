@@ -1,5 +1,6 @@
 package it.polimi.se2018.networking.client;
 
+import it.polimi.se2018.networking.messages.Command;
 import it.polimi.se2018.networking.messages.Message;
 import it.polimi.se2018.networking.server.ServerNetInterface;
 import it.polimi.se2018.utils.Logger;
@@ -8,7 +9,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 /**
  * This class represents the server on client side. It is the access point to
@@ -33,22 +33,28 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
     private Socket clientConnection;
 
     /**
+     * The input stream used to read from socket.
+     */
+    private final ObjectInputStream inputStream;
+    /**
+     * The output stream used to write to socket.
+     */
+    private final ObjectOutputStream outputStream;
+
+    /**
      * The constructor of the class. It bounds this handler to the {@code client} specified
      * and creates the client socket connecting to the server socket at the {@code address} and
      * {@code port} specified.
+     *
      * @param address The IP address where to find the server socket.
-     * @param port The port where to find the server socket.
+     * @param port    The port where to find the server socket.
      */
-    public TcpNetworkHandler(String address, int port) {
-
-        try {
-            this.clientConnection = new Socket(address, port);
-            this.run();
-        } catch (UnknownHostException e) {
-            Logger.getDefaultLogger().log("The IP address of the host could not be determined " + e.getMessage());
-        } catch (IOException e) {
-            Logger.getDefaultLogger().log("an I/O error occurs when creating the clientConnection " + e.getMessage());
-        }
+    public TcpNetworkHandler(String address, int port) throws IOException {
+        this.clientConnection = new Socket(address, port);
+        inputStream = new ObjectInputStream(clientConnection.getInputStream());
+        outputStream = new ObjectOutputStream(clientConnection.getOutputStream());
+        Thread networkThread = new Thread(this);
+        networkThread.start();
     }
 
     /**
@@ -64,14 +70,12 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
     public void run() {
         try {
             while (!this.clientConnection.isClosed()) {
-                ObjectInputStream inputStream = new ObjectInputStream(clientConnection.getInputStream());
                 Message message = (Message) inputStream.readObject();
-                if (message == null) { //the server has been closed
+                if (message == null)
+                    //the connection has been closed
                     clientConnection.close();
-                    break;
-                } else {
+                else
                     client.notify(message);
-                }
             }
         } catch (IOException e) {
             Logger.getDefaultLogger().log("An error occurred: " + e.getMessage());
@@ -80,22 +84,18 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
         }
     }
 
-    //la send viene invocata dalla update della ClientImplementation che è observer dei viewMessage e quindi
-    //viene notificata quando la View viene aggiornata
-
     /**
      * This method send through the connection the messages from this client
      * to the server (that will be {@link it.polimi.se2018.model.events.ViewMessage}).
      * It is invoked from the {@code update} of the {@link ClientImplementation}
      * that is {@link it.polimi.se2018.utils.Observer} of the {@link it.polimi.se2018.view.View}
      * and so is notified when the {@link it.polimi.se2018.view.View} is updated.
+     *
      * @param message the message to send.
      */
     @Override
     public void send(Message message) {
         try {
-
-            ObjectOutputStream outputStream = new ObjectOutputStream(clientConnection.getOutputStream());
             outputStream.writeObject(message);
             outputStream.flush();
 
@@ -106,22 +106,34 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
 
     /**
      * The method to add a client to the server.
+     *
      * @param client the client to add.
+     * @return {@code true} if the client had been added; {@code false} otherwise.
      */
     @Override
-    public void addClient(ClientNetInterface client) {
+    public boolean addClient(ClientNetInterface client) {
         this.client = client;
-        //TODO authentication
-        //does nothing because this operation is handled server side by the TcpGatherer.
+        send(new Message(Command.LOGIN, client.getUsername()));
+        try {
+            Message ack = (Message) inputStream.readObject();
+            return ack.getCommand() == Command.ACK;
+        } catch (IOException | ClassNotFoundException e) {
+            return false;
+        }
     }
 
     /**
      * The method to remove a client from the server.
+     *
      * @param client the client to remove.
      */
     @Override
     public void removeClient(ClientNetInterface client) {
-        //does nothing because this operation is handled server side by the VirtualTcpClient.
+        try {
+            clientConnection.close();
+        } catch (IOException ignored) {
+            //Do nothing
+        }
     }
 
 }

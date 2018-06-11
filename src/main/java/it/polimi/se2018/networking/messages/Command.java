@@ -11,6 +11,8 @@ public enum Command {
     SHOW,
     SHOW_ERROR,
     MODEL_UPDATE,
-    VIEW_MESSAGE
+    VIEW_MESSAGE,
+    ACK,
+    LOGIN
 
 }

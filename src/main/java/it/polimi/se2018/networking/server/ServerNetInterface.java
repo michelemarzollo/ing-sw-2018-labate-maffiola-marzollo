@@ -20,8 +20,9 @@ public interface ServerNetInterface {
      * The method to add a client to the server.
      *
      * @param client the client to add.
+     * @return {@code true} if the client has been added; {@code false} otherwise.
      */
-    void addClient(ClientNetInterface client);
+    boolean addClient(ClientNetInterface client);
 
     /**
      * The method to remove a client from the server.

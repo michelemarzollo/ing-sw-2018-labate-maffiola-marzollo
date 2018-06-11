@@ -23,7 +23,7 @@ public class HybridServer extends Server {
         super();
         subServers = new ArrayList<>();
         subServers.add(new RmiServer(this, address, serviceName));
-        //subServers.add(new TcpServer(this, address, port));
+        subServers.add(new TcpServer(this, port));
     }
 
     /**

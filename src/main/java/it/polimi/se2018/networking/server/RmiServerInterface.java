@@ -17,10 +17,11 @@ public interface RmiServerInterface extends Remote {
      * The method to add a client to the server.
      *
      * @param client the client to add.
+     * @return {@code true} if the client has been added; {@code false} otherwise.
      * @throws RemoteException if there were problems of communication during
      *                         a remote method call.
      */
-    void addClient(RmiClientInterface client) throws RemoteException;
+    boolean addClient(RmiClientInterface client) throws RemoteException;
 
     /**
      * The method to remove a client from the server.

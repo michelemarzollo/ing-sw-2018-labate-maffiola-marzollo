@@ -27,12 +27,12 @@ public class RmiClientImplementation implements RmiClientInterface {
     }
 
     /**
-     * The getter for {@code client}.
+     * The getter for the username.
      *
      * @return {@code client}.
      */
-    public ClientNetInterface getClient() {
-        return client;
+    public String getUsername() throws RemoteException{
+        return client.getUsername();
     }
 
     /**

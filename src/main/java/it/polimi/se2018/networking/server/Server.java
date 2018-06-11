@@ -62,7 +62,7 @@ public abstract class Server {
      *
      * @return The net interface of the server.
      */
-    public ServerNetInterface getServerNetInterface() {
+    public final ServerNetInterface getServerNetInterface() {
         return serverNetInterface;
     }
 
@@ -71,7 +71,7 @@ public abstract class Server {
      *
      * @return A list of all the connected clients the server is responsible for.
      */
-    public synchronized List<ClientNetInterface> getClients() {
+    public final synchronized List<ClientNetInterface> getClients() {
         return new ArrayList<>(clients.values());
     }
 
@@ -81,7 +81,7 @@ public abstract class Server {
      * @param name The name that is associated with the desired connection.
      * @return The connection associated with {@code name}.
      */
-    public synchronized ClientNetInterface getClientFor(String name) {
+    public final synchronized ClientNetInterface getClientFor(String name) {
         return clients.get(name);
     }
 
@@ -93,7 +93,7 @@ public abstract class Server {
      * @return {@code true} if the client has been successfully added;
      * {@code false} otherwise.
      */
-    public synchronized boolean addClient(ClientNetInterface client) {
+    public final synchronized boolean addClient(ClientNetInterface client) {
         if (clients.containsKey(client.getUsername()))
             return false;
         clients.put(client.getUsername(), client);
@@ -105,7 +105,7 @@ public abstract class Server {
      *
      * @param client The client connection to be removed.
      */
-    public synchronized void removeClient(ClientNetInterface client) {
+    public final synchronized void removeClient(ClientNetInterface client) {
         clients.remove(client.getUsername());
     }
 
@@ -132,7 +132,7 @@ public abstract class Server {
      * @return The reference to the super system, or {@code null} if it doesn't
      * exist.
      */
-    public Server getMasterServer() {
+    public final Server getMasterServer() {
         return masterServer;
     }
 }

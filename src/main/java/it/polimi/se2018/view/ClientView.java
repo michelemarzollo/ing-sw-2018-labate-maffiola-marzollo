@@ -6,6 +6,8 @@ import it.polimi.se2018.networking.client.RmiNetworkHandler;
 import it.polimi.se2018.networking.client.TcpNetworkHandler;
 import it.polimi.se2018.utils.Coordinates;
 
+import java.io.IOException;
+
 /**
  * This class represents the client-side view.
  */
@@ -303,7 +305,11 @@ public class ClientView extends View {
     public void handleLogin(String playerName, String serverAddress, int port) {
         setPlayerName(playerName);
         organizer.setLocalPlayer(playerName);
-        client = new Client(this, new TcpNetworkHandler(serverAddress, port));
+        try {
+            client = new Client(this, new TcpNetworkHandler(serverAddress, port));
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage());
+        }
 
         notifyObservers(new ViewMessage(
                 this,

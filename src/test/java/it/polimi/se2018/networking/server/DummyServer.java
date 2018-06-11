@@ -28,6 +28,7 @@ public class DummyServer implements ServerNetInterface {
     /**
      * Adds the client in the client list.
      * @param client the client to add.
+     * @return {@code true} if the client has been added; {@code false} otherwise.
      */
     @Override
     public boolean addClient(ClientNetInterface client) {

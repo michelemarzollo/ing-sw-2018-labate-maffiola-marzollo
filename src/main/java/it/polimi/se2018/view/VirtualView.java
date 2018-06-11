@@ -1,6 +1,7 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.events.Action;
+import it.polimi.se2018.model.events.ModelEvent;
 import it.polimi.se2018.model.events.ModelUpdate;
 import it.polimi.se2018.model.events.ViewMessage;
 import it.polimi.se2018.networking.client.ClientNetInterface;
@@ -17,6 +18,11 @@ import java.lang.ref.WeakReference;
  * @author dvdmff
  */
 public class VirtualView extends View {
+
+    /**
+     * Flag to indicate if the view has expired.
+     */
+    private boolean expired = false;
 
     /**
      * Weak reference to the client associated with this view.
@@ -203,7 +209,16 @@ public class VirtualView extends View {
     @Override
     public void update(ModelUpdate message) {
         ClientNetInterface clientNetInterface = getClient();
+        expired |= message.getEventType() == ModelEvent.GAME_END;
         if (clientNetInterface != null)
             clientNetInterface.notify(new Message(Command.MODEL_UPDATE, message));
+    }
+
+    /**
+     * Getter for the expired flag.
+     * @return {@code true} if the view has expired; {@code false} otherwise.
+     */
+    public boolean isNotExpired() {
+        return !expired;
     }
 }

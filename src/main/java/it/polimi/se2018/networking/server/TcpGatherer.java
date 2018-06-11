@@ -5,6 +5,7 @@ import it.polimi.se2018.utils.Logger;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -18,18 +19,12 @@ import java.util.concurrent.Executors;
  * execution when launching TcpGatherer because the accept method of
  * {@link ServerSocket} is a blocking method.
  */
-public class TcpGatherer implements Runnable{
+public class TcpGatherer implements Runnable {
 
     /**
      * The server implementation, will be {@link DelegateNetInterface}.
      */
     private ServerNetInterface server;
-
-    /**
-     * The port associated to the server and so to his
-     * gatherer.
-     */
-    private int port;
 
     /**
      * The {@link ServerSocket} of the server: it represents the ending point
@@ -43,40 +38,20 @@ public class TcpGatherer implements Runnable{
      * If incoming requests are submitted when all threads are active,
      * they will wait in a queue until a thread is available.
      */
-    private ExecutorService threadPool =
-            Executors.newFixedThreadPool(256);
-    /**
-     * Getter for serverSocket.
-     * @return The socket that represents the server's side of the connection.
-     */
-    public ServerSocket getServerSocket(){
-        return serverSocket;
-    }
-
-    /**
-     * Getter for the threadPool.
-     * @return The threadPool of the running server.
-     */
-    public ExecutorService getThreadPool() {
-        return threadPool;
-    }
+    private ExecutorService threadPool = Executors.newFixedThreadPool(256);
 
     /**
      * Constructor of the class.
+     *
      * @param server The {@link ServerNetInterface} of the TcpServer that
      *               represent the server implementation.
-     * @param port The port of the server to which the gatherer has to bind
-     *             the {@link ServerSocket}.
+     * @param port   The port of the server to which the gatherer has to bind
+     *               the {@link ServerSocket}.
      */
-    public TcpGatherer(ServerNetInterface server, int port) {
+    public TcpGatherer(ServerNetInterface server, int port) throws IOException {
         this.server = server;
-        this.port = port;
-        try {
-            //Creates the serverSocket binding it to the specified port.
-            this.serverSocket = new ServerSocket(port);
-        } catch (IOException e) {
-            Logger.getDefaultLogger().log("An error occurred opening the server socket: " + e.getMessage());
-        }
+        //Creates the serverSocket binding it to the specified port.
+        this.serverSocket = new ServerSocket(port);
     }
 
     /**
@@ -87,26 +62,38 @@ public class TcpGatherer implements Runnable{
      * sure that the userName has been correctly set, so this action is made in {@link VirtualTcpClient}
      * constructor.
      */
-    public void run(){
+    public void run() {
 
-        while(!serverSocket.isClosed()) {
+        while (!serverSocket.isClosed()) {
             try {
                 Socket clientSocket;
                 clientSocket = serverSocket.accept();
                 //Creates a new VirtualTcpClient binding it to its socket and to the server implementation.
-                VirtualTcpClient vc = new VirtualTcpClient(server, clientSocket);
-                //Invokes the addClient method of its serverImplementation (DelegateNetInterface)
-                //that delegates the task to the DefaultNetInterface that actually adds the client
-                //and associates a VirtualView to it.
-                server.addClient(vc);
+                VirtualTcpClient client = new VirtualTcpClient(server, clientSocket);
                 //The VirtualTcpClient is not executed a priori, but only if a
-                //thread is currently idle.
-                this.threadPool.execute(vc);
+                //thread is currently idle to avoid server overloading.
+                this.threadPool.execute(client);
 
+            } catch (SocketException e) {
+                Logger.getDefaultLogger().log("Shutting down TCP gatherer.");
+                close();
             } catch (IOException e) {
-                Logger.getDefaultLogger().log("An error occurred when waiting for a connection: " + e.getMessage());
+                Logger.getDefaultLogger().log("An error occurred when waiting for a connection: " +
+                        e.getMessage());
             }
         }
 
+    }
+
+    /**
+     * Terminates the loop in TcpGatherer and frees resources.
+     */
+    public void close(){
+        try {
+            serverSocket.close();
+        } catch (IOException ignored) {
+            //Do nothing
+        }
+        threadPool.shutdown();
     }
 }

@@ -5,6 +5,7 @@ import it.polimi.se2018.networking.messages.Message;
 
 /**
  * This class is used by sub-servers to delegate the master server.
+ *
  * @author dvdmff
  */
 public class DelegateNetInterface implements ServerNetInterface {
@@ -16,6 +17,7 @@ public class DelegateNetInterface implements ServerNetInterface {
 
     /**
      * Creates a new DelegateNetInterface for the given server.
+     *
      * @param server The sub-server that has to delegate its net interface.
      */
     public DelegateNetInterface(Server server) {
@@ -24,6 +26,7 @@ public class DelegateNetInterface implements ServerNetInterface {
 
     /**
      * Delegates the master server to send a message.
+     *
      * @param message the message to send.
      */
     @Override
@@ -33,15 +36,18 @@ public class DelegateNetInterface implements ServerNetInterface {
 
     /**
      * Delegates the master server to send a message.
+     *
      * @param client the client to be added.
+     * @return {@code true} if the client has been added; {@code false} otherwise.
      */
     @Override
-    public void addClient(ClientNetInterface client) {
-        server.getMasterServer().getServerNetInterface().addClient(client);
+    public boolean addClient(ClientNetInterface client) {
+        return server.getMasterServer().getServerNetInterface().addClient(client);
     }
 
     /**
      * Delegates the master server to send a message.
+     *
      * @param client the client to be removed.
      */
     @Override

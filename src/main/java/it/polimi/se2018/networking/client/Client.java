@@ -28,6 +28,7 @@ public class Client {
     public Client(View view, ServerNetInterface server){
         netInterface = new ClientImplementation(this, view);
         this.server = server;
+        server.addClient(getNetInterface());
     }
 
     /**

@@ -39,13 +39,14 @@ public class RmiServerImplementation extends UnicastRemoteObject implements RmiS
      * The method to ad a client to the server.
      *
      * @param client the client to add.
+     * @return {@code true} if the client has been added; {@code false} otherwise.
      * @throws RemoteException if there were problems of communication during
      *                         the remote method call.
      */
     @Override
-    public void addClient(RmiClientInterface client) throws RemoteException {
+    public boolean addClient(RmiClientInterface client) throws RemoteException {
         VirtualRmiClient virtualClient = new VirtualRmiClient(server, client);
-        server.addClient(virtualClient);
+        return server.addClient(virtualClient);
     }
 
     /**
@@ -93,7 +94,7 @@ public class RmiServerImplementation extends UnicastRemoteObject implements RmiS
      */
     @Override
     public int hashCode() {
-        return Objects.hash(server);
+        return super.hashCode();
     }
 
 }

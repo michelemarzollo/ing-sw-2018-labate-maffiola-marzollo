@@ -16,14 +16,9 @@ public class RmiServer extends Server {
     private static final int PORT = 1099;
 
     /**
-     * The address of the server.
+     * The url of the server.
      */
-    private final String address;
-
-    /**
-     * The name of the exposed RMI service.
-     */
-    private final String serviceName;
+    private final String url;
 
     /**
      * The attribute that indicates if the rmi server is running:
@@ -34,31 +29,28 @@ public class RmiServer extends Server {
     /**
      * The constructor of the class.
      *
-     * @param address            the address.
-     * @param serviceName        the name of the service.
+     * @param address     the address.
+     * @param serviceName the name of the service.
      */
     public RmiServer(String address, String serviceName) {
         super();
-        this.address = address;
-        this.serviceName = serviceName;
+        this.url = "//" + address + "/" + serviceName;
     }
 
     /**
      * The constructor of the class.
      *
-     * @param address            the address.
-     * @param serviceName        the name of the service.
+     * @param address     the address.
+     * @param serviceName the name of the service.
      */
     public RmiServer(Server superSystem, String address, String serviceName) {
         super(superSystem);
-        this.address = address;
-        this.serviceName = serviceName;
+        this.url = "//" + address + "/" + serviceName;
     }
 
     /**
      * The method to start the RMI server.
-     * <p>
-     * It starts the Registry and makes it listen at the port {@code PORT}.
+     * <p>It starts the Registry and makes it listen at the port {@code PORT}.
      * It creates an instance of the server, that offers the service to the client.</p>
      */
     @Override
@@ -73,7 +65,7 @@ public class RmiServer extends Server {
         try {
             RmiServerImplementation serverImplementation =
                     new RmiServerImplementation(getServerNetInterface());
-            Naming.rebind("//localhost/MyServer", serverImplementation);
+            Naming.rebind(url, serverImplementation);
             isRunning = true;
         } catch (MalformedURLException e) {
             Logger.getDefaultLogger().log("It is impossible to register the indicated object!");
@@ -84,16 +76,17 @@ public class RmiServer extends Server {
     }
 
     /**
-     * The method to interrupt the sever.
+     * The method to interrupt the server.
      * <p>It unbinds the remote object.</p>
      */
     @Override
     public void stop() {
         try {
-            Naming.unbind("//localhost/MyServer");
+            Naming.unbind(url);
         } catch (RemoteException e) {
             Logger.getDefaultLogger().log("Connection error: " + e.getMessage() + "!");
         } catch (NotBoundException e) {
+            //Unreachable
             Logger.getDefaultLogger().log("No binding associated to that name!");
         } catch (MalformedURLException e) {
             Logger.getDefaultLogger().log("It is impossible to deregister the indicated object!");
