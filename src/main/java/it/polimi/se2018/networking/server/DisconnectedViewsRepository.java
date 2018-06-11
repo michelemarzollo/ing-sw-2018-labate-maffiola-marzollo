@@ -11,6 +11,8 @@ import java.util.WeakHashMap;
  * <p>The class <strong>doesn't own</strong> the views, so they live only
  * as long as some other element has a reference to them. This behaviour
  * allows to safely free resources when a match ends.</p>
+ * <p>This class is thread-safe.</p>
+ *
  * @author dvdmff
  */
 public class DisconnectedViewsRepository {
@@ -29,39 +31,57 @@ public class DisconnectedViewsRepository {
     /**
      * Private constructor to force singleton behaviour.
      */
-    private DisconnectedViewsRepository() { }
+    private DisconnectedViewsRepository() {
+    }
 
     /**
      * Returns the only instance of DisconnectedViewsRepository.
+     *
      * @return The instance of DisconnectedViewsRepository.
      */
-    public static DisconnectedViewsRepository getInstance(){
-        if(instance == null)
+    public static synchronized DisconnectedViewsRepository getInstance() {
+        if (instance == null)
             instance = new DisconnectedViewsRepository();
         return instance;
     }
 
     /**
      * Adds a view to the disconnected views repository.
+     * <p>If the view is marked as not to store, nothing is done.</p>
+     *
      * @param view The view to be added.
      */
-    public void addView(VirtualView view){
-        views.put(view.getPlayerName(), new WeakReference<>(view));
+    public synchronized void addView(VirtualView view) {
+        if (view.isNotExpired())
+            views.put(view.getPlayerName(), new WeakReference<>(view));
     }
 
     /**
      * Tries to retrieve the view with the specified player name among
      * the ones that are marked disconnected.
+     *
      * @param playerName The name of the player to search a view for.
      * @return A reference to the view that the player owned prior to
-     * disconnection if it exists or {@code null} otherwise.
+     * disconnection if it exists and can be used or {@code null} otherwise.
      */
-    public VirtualView tryRetrieveViewFor(String playerName){
-        WeakReference<VirtualView> view = views.remove(playerName);
-        if(view == null)
+    public synchronized VirtualView tryRetrieveViewFor(String playerName) {
+        WeakReference<VirtualView> maybeView = views.remove(playerName);
+
+        if (maybeView == null)
             return null;
+
+        VirtualView view = maybeView.get();
+        if (view != null && view.isNotExpired())
+            return view;
         else
-            return view.get();
+            return null;
+    }
+
+    /**
+     * Force to drop all stored views.
+     */
+    public synchronized void flush(){
+        views.clear();
     }
 
 }
