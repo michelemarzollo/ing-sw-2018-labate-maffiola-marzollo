@@ -118,13 +118,6 @@ public class MockView extends View {
         calledMethods.add("showValueDestinationSelection");
     }
 
-    /**
-     * The method to simulate the corresponding method in the view.
-     */
-    @Override
-    public void showFinalView() {
-        calledMethods.add("showFinalView");
-    }
 
     @Override
     public void update(ModelUpdate message) {

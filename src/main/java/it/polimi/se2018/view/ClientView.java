@@ -12,7 +12,6 @@ import java.io.IOException;
  * This class represents the client-side view.
  */
 public class ClientView extends View {
-
     /**
      * The display system the class uses for data representation.
      */
@@ -29,6 +28,20 @@ public class ClientView extends View {
     private Client client;
 
     /**
+     * This boolean represents the game's state: it becomes true only when all
+     * the players have chosen their pattern and the game is started, so when
+     * the showGame method(showMultiPlayerGame or showSinglePlayerGame) is invoked.
+     */
+    private boolean gameRunning;
+
+    /**
+     * This boolean represents the game's stat in Single Player mode: it becomes
+     * true only at the end of the game when the player has to choose between its
+     * two Private Objective cards.
+     */
+    private boolean gameEndSinglePlayer;
+
+    /**
      * Creates a ClientView instance that uses the given Displayer to
      * represent data on screen.
      *
@@ -37,16 +50,46 @@ public class ClientView extends View {
     public ClientView(Displayer displayer) {
         organizer = new ViewDataOrganizer();
         this.displayer = displayer;
+        this.displayer.setDataOrganizer(organizer); //teoricamente basta aggiungere un getter per l'organizer qua
+        //e il displayer non avrà bisogno del riferimento all'organizer, ma potrà accedervi tramite questa classe
         this.displayer.setView(this);
+    }
+
+    /**
+     * Getter for {@code gameRunning}
+     * @return {@code true} if {@code gameRunning} has been set with the show method,
+     * {@code false} otherwise.
+     */
+    public boolean isGameRunning(){
+        return gameRunning;
+    }
+
+    /**
+     * Getter for {@code gameEndSinglePlayer}
+     * @return {@code true} if {@code gameEndSinglePlayer} has been set
+     * with the {@code showPrivateObjective} method, {@code false} otherwise.
+     */
+    public boolean isGameEndSinglePlayer() {
+        return gameEndSinglePlayer;
+    }
+
+    /**
+     * The getter for {@code organizer}.
+     * @return the organizer.
+     */
+    public ViewDataOrganizer getDataOrganizer() {
+        return organizer;
     }
 
     @Override
     public void showMultiPlayerGame() {
+        gameRunning = true;
         displayer.displayMultiPlayerGame();
     }
 
     @Override
     public void showSinglePlayerGame() {
+        gameRunning = true;
         displayer.displaySinglePlayerGame();
     }
 
@@ -57,11 +100,12 @@ public class ClientView extends View {
 
     @Override
     public void showPatternSelection() {
-        displayer.askPattern();
+        displayer.displayWaitMessage();
     }
 
     @Override
     public void showPrivateObjectiveSelection() {
+        gameEndSinglePlayer = true;
         displayer.askPrivateObjective();
     }
 
@@ -95,14 +139,11 @@ public class ClientView extends View {
         displayer.askValueDestination();
     }
 
-    @Override
-    public void showFinalView() {
-        //???????
-    }
 
     @Override
     public void update(ModelUpdate message) {
-        message.pushInto(organizer);
+        message.pushInto(organizer);//Why not organizer.push(message)?
+        organizer.push(message);
         displayer.refreshDisplayedData();
     }
 
@@ -284,6 +325,7 @@ public class ClientView extends View {
      * @param serviceName The name of the RMI service on the server.
      */
     public void handleLogin(String playerName, String serverAddress, String serviceName) {
+        //@TODO add a parameter for the game mode
         setPlayerName(playerName);
         organizer.setLocalPlayer(playerName);
         client = new Client(this, new RmiNetworkHandler(serverAddress, serviceName));
@@ -303,6 +345,7 @@ public class ClientView extends View {
      * @param port The port on the server where the service is listening on.
      */
     public void handleLogin(String playerName, String serverAddress, int port) {
+        //@TODO add a parameter for the game mode
         setPlayerName(playerName);
         organizer.setLocalPlayer(playerName);
         try {
@@ -343,13 +386,5 @@ public class ClientView extends View {
                 this,
                 getPlayerName()
         ));
-    }
-
-    /**
-     * The getter for {@code organizer}.
-     * @return the organizer.
-     */
-    public ViewDataOrganizer getDataOrganizer() {
-        return organizer;
     }
 }

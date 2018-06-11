@@ -381,4 +381,15 @@ public class JavaFxDisplayer extends Application implements Displayer {
     public ClientView getView() {
         return clientView;
     }
+
+    @Override
+    public void setDataOrganizer(ViewDataOrganizer organizer) {
+
+    }
+
+    @Override
+    public void displayWaitMessage() {
+
+    }
+
 }

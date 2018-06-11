@@ -72,7 +72,6 @@ public class ClientImplementation  extends Observable<ModelUpdate>
         showMethods.put("showDifficultySelection", view::showDifficultySelection);
         showMethods.put("showLensCutterSelection", view::showLensCutterSelection);
         showMethods.put("showValueDestinationSelection", view::showValueDestinationSelection);
-        showMethods.put("showFinalView", view::showFinalView);
     }
 
     /**

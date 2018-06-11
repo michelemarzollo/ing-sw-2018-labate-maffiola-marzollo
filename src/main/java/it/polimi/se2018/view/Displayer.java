@@ -5,7 +5,6 @@ package it.polimi.se2018.view;
  * <p>It's used by the view to display data on screen.</p>
  */
 public interface Displayer {
-
     /**
      * Displays the login window.
      */
@@ -26,6 +25,11 @@ public interface Displayer {
      * @param error The error message.
      */
     void displayError(String error);
+
+    /**
+     * Displays a wait message before the starting of the game.
+     */
+    void displayWaitMessage();
 
     /**
      * Asks the player to select a pattern among candidates.
@@ -72,6 +76,14 @@ public interface Displayer {
      * Forces the displayed data to be refreshed.
      */
     void refreshDisplayedData();
+
+    /**
+     * Sets the {@link ViewDataOrganizer} from which the Model's informations
+     * will be retrieved.
+     * @param organizer the {@link ViewDataOrganizer} that will be bound to the
+     *                  Displayer.
+     */
+    void setDataOrganizer(ViewDataOrganizer organizer);
 
     /**
      * The getter for the {@link ViewDataOrganizer}, that keeps the track

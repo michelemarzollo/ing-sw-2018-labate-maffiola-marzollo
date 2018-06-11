@@ -16,6 +16,11 @@ public class ViewDataOrganizer {
     private NextTurn nextTurn;
     private RoundTrackUpdate roundTrack;
     private DraftPoolUpdate draftPool;
+
+    /**
+     * The last {@link ModelUpdate} received.
+     */
+    private ModelUpdate lastUpdate;
     private String localPlayer;
 
     public GameSetup getGameSetup() {
@@ -70,6 +75,9 @@ public class ViewDataOrganizer {
         return roundTrack.getRoundTrack();
     }
 
+    public ModelUpdate getLastUpdate() {
+        return lastUpdate;
+    }
 
     public void push(GameSetup gameSetup){
         this.gameSetup = gameSetup;
@@ -106,7 +114,9 @@ public class ViewDataOrganizer {
 
     public void push(ModelUpdate update){
         update.pushInto(this);
+        this.lastUpdate = update;
     }
+
 
     public void setLocalPlayer(String playerName) {
         this.localPlayer = playerName;

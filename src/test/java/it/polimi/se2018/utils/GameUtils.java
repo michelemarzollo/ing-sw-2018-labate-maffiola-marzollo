@@ -43,10 +43,10 @@ public class GameUtils {
         XmlPatternLoader loader = new XmlPatternLoader(directory);
         Pattern pattern = loader.load(1)[0];
         first.setCandidates(new Pattern[]{
-                pattern
+                pattern, pattern
         });
         second.setCandidates(new Pattern[]{
-                pattern
+                pattern, pattern
         });
 
     }
@@ -351,8 +351,8 @@ public class GameUtils {
         game.setPublicObjectiveCards(publicObjectiveCards);
         game.getPlayers().get(0).setCards(privateObjectiveCards);
 
-        ToolCard[] toolCards = {new ToolCard("Grozing Pliers", Colour.PURPLE),
-                new ToolCard("Eglomise Brush", Colour.BLUE)};
+        ToolCard[] toolCards = {new ToolCard("Grozing Pliers", "Description", Colour.PURPLE),
+                new ToolCard("Eglomise Brush", "Description", Colour.BLUE)};
         game.setToolCards(toolCards);
         game.terminateSetup();
         game.start();
