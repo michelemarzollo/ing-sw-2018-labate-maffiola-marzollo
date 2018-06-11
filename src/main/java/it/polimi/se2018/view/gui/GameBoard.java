@@ -48,47 +48,102 @@ public abstract class GameBoard {
     private Map<String, Pattern> patterns = new HashMap<>();
 
     /**
-     * Getter for the public card container node.
-     * @return The public card HBox container.
+     * The BorderPane used to display the local player pattern.
      */
-    abstract HBox getPublicCardContainer();
+    @FXML
+    private BorderPane playerPatternContainer;
 
     /**
-     * Getter for the private card container node.
-     * @return The private card HBox container.
+     * The HBox used to display the round track.
      */
-    abstract HBox getPrivateCardContainer();
+    @FXML
+    private HBox roundTrackContainer;
 
     /**
-     * Getter for the tool card container node.
-     * @return The tool card HBox container.
+     * The HBox used to display the draft pool.
      */
-    abstract HBox getToolCardContainer();
+    @FXML
+    private HBox draftPoolContainer;
 
     /**
-     * Getter for the draft pool container node.
-     * @return The draft pool HBox container.
+     * The HBox used to display tool cards.
      */
-    abstract HBox getDraftPoolContainer();
+    @FXML
+    private HBox toolCardContainer;
 
     /**
-     * Getter for the round track container node.
-     * @return The round track HBox container.
+     * The HBox used to display private cards.
      */
-    abstract HBox getRoundTrackContainer();
+    @FXML
+    private HBox privateCardContainer;
 
     /**
-     * Getter for the player pattern container node.
-     * @return The player pattern BorderPane container.
+     * The HBox used to display public cards.
      */
-    abstract BorderPane getPlayerPatternContainer();
+    @FXML
+    private HBox publicCardContainer;
 
     /**
-     * Getter for the label used to represent turns.
+     * The label to show the player who has the current turn.
+     */
+    @FXML
+    private Label turnLabel;
+
+    /**
+     * Getter for the public card container
+     * @return The public card container.
+     */
+    private HBox getPublicCardContainer() {
+        return publicCardContainer;
+    }
+
+    /**
+     * Getter for the private card container
+     * @return The private card container.
+     */
+    private HBox getPrivateCardContainer() {
+        return privateCardContainer;
+    }
+
+    /**
+     * Getter for the tool card container
+     * @return The tool card container.
+     */
+    HBox getToolCardContainer() {
+        return toolCardContainer;
+    }
+
+    /**
+     * Getter for the daft pool container
+     * @return The draft pool container.
+     */
+    HBox getDraftPoolContainer() {
+        return draftPoolContainer;
+    }
+
+    /**
+     * Getter for the round track container
+     * @return The round track container.
+     */
+    private HBox getRoundTrackContainer() {
+        return roundTrackContainer;
+    }
+
+    /**
+     * Getter for the player pattern container
+     * @return The player pattern container.
+     */
+    BorderPane getPlayerPatternContainer() {
+        return playerPatternContainer;
+    }
+
+    /**
+     * Getter for the turn label.
      * @return The turn label.
      */
-    abstract Label getTurnLabel();
-
+    private Label getTurnLabel() {
+        return turnLabel;
+    }
     /**
      * Tells if it's the turn of the local player.
      * @return {@code true} if it's the turn of the local player; {@code false} otherwise.

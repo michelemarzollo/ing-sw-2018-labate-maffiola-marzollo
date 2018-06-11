@@ -4,7 +4,6 @@ import it.polimi.se2018.model.events.PlayerConnectionStatus;
 import it.polimi.se2018.model.events.PlayerStatus;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -19,48 +18,6 @@ public class MultiPlayerBoard extends GameBoard {
      */
     @FXML
     private HBox opponentsContainer;
-
-    /**
-     * The HBox used to display public cards.
-     */
-    @FXML
-    private HBox publicCardContainer;
-
-    /**
-     * The HBox used to display tool cards.
-     */
-    @FXML
-    private HBox toolCardContainer;
-
-    /**
-     * The HBox used to display private cards.
-     */
-    @FXML
-    private HBox privateCardContainer;
-
-    /**
-     * The HBox used to display the draft pool.
-     */
-    @FXML
-    private HBox draftPoolContainer;
-
-    /**
-     * The HBox used to display the round track.
-     */
-    @FXML
-    private HBox roundTrackContainer;
-
-    /**
-     * The BorderPane used to display the local player pattern.
-     */
-    @FXML
-    private BorderPane playerPatternContainer;
-
-    /**
-     * The label to show the player who has the current turn.
-     */
-    @FXML
-    private Label turnLabel;
 
     /**
      * Loads the pattern layout for an opponent.
@@ -125,39 +82,5 @@ public class MultiPlayerBoard extends GameBoard {
     @Override
     boolean isMultiPlayer() {
         return true;
-    }
-
-    @Override
-    HBox getPublicCardContainer() {
-        return publicCardContainer;
-    }
-
-    @Override
-    HBox getPrivateCardContainer() {
-        return privateCardContainer;
-    }
-
-    @Override
-    HBox getToolCardContainer() {
-        return toolCardContainer;
-    }
-
-    HBox getDraftPoolContainer(){
-        return draftPoolContainer;
-    }
-
-    @Override
-    HBox getRoundTrackContainer() {
-        return roundTrackContainer;
-    }
-
-    @Override
-    BorderPane getPlayerPatternContainer() {
-        return playerPatternContainer;
-    }
-
-    @Override
-    Label getTurnLabel() {
-        return turnLabel;
     }
 }

@@ -85,11 +85,7 @@ public class JavaFxDisplayer extends Application implements Displayer {
             loader.setLocation(this.getClass().getResource("login.fxml"));
             AnchorPane view = loader.load();
 
-            primaryStage.setMaxWidth(623);
-            primaryStage.setMaxHeight(440);
-            primaryStage.setMinWidth(623);
-            primaryStage.setMinHeight(440);
-
+            setStageSize(623, 440);
             root.setCenter(view);
             primaryStage.setTitle("Sagrada - Login");
 
@@ -244,10 +240,7 @@ public class JavaFxDisplayer extends Application implements Displayer {
             loader.setLocation(this.getClass().getResource("ask_difficulty.fxml"));
             AnchorPane view = loader.load();
 
-            primaryStage.setMaxWidth(623);
-            primaryStage.setMaxHeight(440);
-            primaryStage.setMinWidth(623);
-            primaryStage.setMinHeight(440);
+            setStageSize(623, 440);
 
             root.setCenter(view);
             primaryStage.setTitle("Sagrada - Difficulty selection");
@@ -289,6 +282,18 @@ public class JavaFxDisplayer extends Application implements Displayer {
     }
 
     /**
+     * Resizes the stage.
+     * @param width The new width.
+     * @param height The new height.
+     */
+    private void setStageSize(int width, int height) {
+        primaryStage.setMaxWidth(width);
+        primaryStage.setMaxHeight(height);
+        primaryStage.setMinWidth(width);
+        primaryStage.setMinHeight(height);
+    }
+
+    /**
      * Displays a window where it's written that the player must wait for
      * some reason.
      *
@@ -303,10 +308,7 @@ public class JavaFxDisplayer extends Application implements Displayer {
             loader.setLocation(this.getClass().getResource("waiting_view.fxml"));
             AnchorPane view = loader.load();
 
-            primaryStage.setMaxWidth(623);
-            primaryStage.setMaxHeight(440);
-            primaryStage.setMinWidth(623);
-            primaryStage.setMinHeight(440);
+            setStageSize(623, 440);
 
             WaitingView controller = loader.getController();
             controller.setText(reason);
