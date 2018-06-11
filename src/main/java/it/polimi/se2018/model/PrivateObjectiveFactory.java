@@ -37,7 +37,9 @@ public class PrivateObjectiveFactory {
             Colour colour = listOfColours.get(i);
             arrayOfCards[i] = new PrivateObjectiveCard(
                     "ShadesOf" + colour.toString(),
-                    colour);
+                    colour,
+                    "Sum of values on " + colour.toString().toLowerCase() + " dice"
+            );
         }
 
         return arrayOfCards;

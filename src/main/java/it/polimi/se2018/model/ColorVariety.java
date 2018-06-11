@@ -78,8 +78,32 @@ public class ColorVariety extends PublicObjectiveCard {
         return occurrences[0];
     }
 
+    /**
+     * Getter for the name of the Objective Card.
+     * @return the card's name.
+     */
     @Override
     public String getName() {
-        return "ColorVariety";
+        return "Color Variety";
+    }
+
+
+    /**
+     * Getter for the description of the Objective Card.
+     * @return the card's description.
+     */
+    @Override
+    public String getDescription() {
+        return "Sets of one of each color anywhere";
+    }
+
+    /**
+     * Getter for the victory point of the Public Objective Card.
+     * @return the number of points that a player gains every
+     * time that he pursue the objective indicated.
+     */
+    @Override
+    public int getVictoryPoint() {
+        return 4;
     }
 }

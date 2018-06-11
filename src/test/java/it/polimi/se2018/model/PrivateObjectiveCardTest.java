@@ -18,9 +18,11 @@ public class PrivateObjectiveCardTest {
     public void testConstructor() {
         String name = "TestCard";
         Colour colour = Colour.BLUE;
-        PrivateObjectiveCard card = new PrivateObjectiveCard(name, colour);
+        String description = "TestDescription";
+        PrivateObjectiveCard card = new PrivateObjectiveCard(name, colour, description);
         Assert.assertEquals(name, card.getName());
         Assert.assertEquals(colour, card.getColour());
+        Assert.assertEquals(description, card.getDescription());
     }
 
     /**
@@ -43,7 +45,7 @@ public class PrivateObjectiveCardTest {
             Assert.fail();
         }
 
-        PrivateObjectiveCard card = new PrivateObjectiveCard("Test", Colour.RED);
+        PrivateObjectiveCard card = new PrivateObjectiveCard("Test", Colour.RED, "TestDescription");
         int actualScore = card.getScore(grid);
         int expectedScore = 4 * 5;
 
@@ -57,7 +59,7 @@ public class PrivateObjectiveCardTest {
     public void testEmptyGridScore() {
         Cell[][] grid = GridUtils.getEmptyUnrestrictedGrid(4, 5);
 
-        PrivateObjectiveCard card = new PrivateObjectiveCard("Test", Colour.GREEN);
+        PrivateObjectiveCard card = new PrivateObjectiveCard("Test", Colour.GREEN, "TestDescription");
         int actualScore = card.getScore(grid);
 
         Assert.assertEquals(0, actualScore);

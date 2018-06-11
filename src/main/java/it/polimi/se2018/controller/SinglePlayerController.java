@@ -119,8 +119,9 @@ public class SinglePlayerController extends Controller {
                 //In singlePlayer mode the Player has two privateObjectiveCards and
                 //the number of ToolCards depend on the level of difficulty chosen.
                 cardDealer.deal(3, 2, difficulty.getDifficulty());
-                getGame().terminateSetup();
+                getGame().terminateSetup(); //this invocation in Game generates the GAME_SET_UP message
                 //now to begin the Game the only missing thing is the choice of a Pattern.
+                message.getView().showPatternSelection();
             }
         }
         else message.getView().showError("There is no registered player!");
@@ -175,7 +176,7 @@ public class SinglePlayerController extends Controller {
                 player.getCards()[0] = card;
                 getGame().addPlayer(new Player("RoundTrack"));
                 calculateScores();
-                fillScoreBoard();
+                fillScoreBoard(); //this invocation in Game generates the GAME_END message
                 message.getView().showScoreBoard();
                 return;
             }

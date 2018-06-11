@@ -331,9 +331,9 @@ public class TestSinglePlayerController {
         if (game == null)
             Assert.fail("Error on game initialization");
 
-        ToolCard[] toolCards = {new ToolCard("Grozing Pliers", Colour.PURPLE),
-                new ToolCard("Eglomise Brush", Colour.BLUE),
-                new ToolCard("Copper Foil Burnisher", Colour.RED)};
+        ToolCard[] toolCards = {new ToolCard("Grozing Pliers", "Description", Colour.PURPLE),
+                new ToolCard("Eglomise Brush", "Description", Colour.BLUE),
+                new ToolCard("Copper Foil Burnisher", "Description", Colour.RED)};
         game.setToolCards(toolCards);
 
         List<Die> dice = new ArrayList<>(Arrays.asList(
@@ -363,9 +363,9 @@ public class TestSinglePlayerController {
         if (game == null)
             Assert.fail("Error on game initialization");
 
-        ToolCard[] toolCards = {new ToolCard("Grozing Pliers", Colour.PURPLE),
-                new ToolCard("Eglomise Brush", Colour.BLUE),
-                new ToolCard("Copper Foil Burnisher", Colour.RED)};
+        ToolCard[] toolCards = {new ToolCard("Grozing Pliers", "Description", Colour.PURPLE),
+                new ToolCard("Eglomise Brush", "Description", Colour.BLUE),
+                new ToolCard("Copper Foil Burnisher", "Description", Colour.RED)};
         game.setToolCards(toolCards);
 
         List<Die> dice = new ArrayList<>(Arrays.asList(
@@ -397,9 +397,9 @@ public class TestSinglePlayerController {
         if (game == null)
             Assert.fail("Error on game initialization");
 
-        ToolCard[] toolCards = {new ToolCard("Grozing Pliers", Colour.PURPLE),
-                new ToolCard("Eglomise Brush", Colour.BLUE),
-                new ToolCard("Copper Foil Burnisher", Colour.RED)};
+        ToolCard[] toolCards = {new ToolCard("Grozing Pliers", "Description", Colour.PURPLE),
+                new ToolCard("Eglomise Brush", "Description", Colour.BLUE),
+                new ToolCard("Copper Foil Burnisher", "Description", Colour.RED)};
         game.setToolCards(toolCards);
 
         List<Die> dice = new ArrayList<>(Arrays.asList(
@@ -457,9 +457,9 @@ public class TestSinglePlayerController {
         if (game == null)
             Assert.fail("Error on game initialization");
 
-        ToolCard[] toolCards = {new ToolCard("Grozing Pliers", Colour.PURPLE),
-                new ToolCard("Eglomise Brush", Colour.BLUE),
-                new ToolCard("Copper Foil Burnisher", Colour.RED)};
+        ToolCard[] toolCards = {new ToolCard("Grozing Pliers", "Description", Colour.PURPLE),
+                new ToolCard("Eglomise Brush", "Description", Colour.BLUE),
+                new ToolCard("Copper Foil Burnisher", "Description", Colour.RED)};
         game.setToolCards(toolCards);
 
         List<Die> dice = new ArrayList<>(Arrays.asList(

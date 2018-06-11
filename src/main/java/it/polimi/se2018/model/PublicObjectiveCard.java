@@ -86,4 +86,11 @@ public abstract class PublicObjectiveCard implements ObjectiveCard {
         return occurrences[0];
     }
 
+    /**
+     * Getter for the victory point of the Public Objective Card.
+     * @return the number of points that a player gains every
+     * time that he pursue the objective indicated.
+     */
+    public abstract int getVictoryPoint();
+
 }

@@ -21,13 +21,19 @@ public class PrivateObjectiveCard implements ObjectiveCard {
     private final Colour colour;
 
     /**
+     * The description of the card.
+     */
+    private final String description;
+
+    /**
      * The constructor of the class.
      *
      * @param c the colour of the card.
      */
-    PrivateObjectiveCard(String name, Colour c) {
+    PrivateObjectiveCard(String name, Colour c, String description) {
         this.name = name;
         this.colour = c;
+        this.description = description;
     }
 
 
@@ -40,6 +46,15 @@ public class PrivateObjectiveCard implements ObjectiveCard {
     @Override
     public String getName() {
         return name;
+    }
+
+    /**
+     * Getter for the description of the Objective Card.
+     * @return the card's description.
+     */
+    @Override
+    public String getDescription() {
+        return description;
     }
 
     /**

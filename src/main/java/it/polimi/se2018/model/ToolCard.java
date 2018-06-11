@@ -14,6 +14,11 @@ public class ToolCard implements Serializable {
      * The name of the tool card.
      */
     private final String name;
+
+    /**
+     * The description of the card.
+     */
+    private final String description;
     /**
      * The colour restriction on the tool card.
      */
@@ -24,14 +29,16 @@ public class ToolCard implements Serializable {
      */
     private boolean used;
 
+
     /**
      * Creates a tool card with the given name and colour
      * restriction.
      * @param name The name of the tool card.
      * @param colour The colour restriction on the tool card.
      */
-    public ToolCard(String name, Colour colour) {
+    public ToolCard(String name, String description, Colour colour) {
         this.name = name;
+        this.description = description;
         this.colour = colour;
     }
 
@@ -41,6 +48,7 @@ public class ToolCard implements Serializable {
      */
     public ToolCard(ToolCard toolCard){
         this.name = toolCard.name;
+        this.description = toolCard.description;
         this.colour = toolCard.colour;
         this.used = toolCard.used;
     }
