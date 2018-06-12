@@ -164,9 +164,9 @@ public class Player {
      *                that depends on the {@code difficulty} of the {@link Pattern}.
      */
     public void setPattern(Pattern pattern) {
+        this.pattern = pattern;
         PlayerStatus message = new PlayerStatus(this);
         game.notifyObservers(message);
-        this.pattern = pattern;
     }
 
     /**

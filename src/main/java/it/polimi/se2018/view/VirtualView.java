@@ -7,6 +7,7 @@ import it.polimi.se2018.model.events.ViewMessage;
 import it.polimi.se2018.networking.client.ClientNetInterface;
 import it.polimi.se2018.networking.messages.Command;
 import it.polimi.se2018.networking.messages.Message;
+import it.polimi.se2018.utils.Logger;
 
 import java.lang.ref.WeakReference;
 
@@ -198,7 +199,7 @@ public class VirtualView extends View {
      * @param message The message received from the network.
      */
     public void handle(ViewMessage message) {
-        //TODO set virtual view.
+        message.setView(this);
         notifyObservers(message);
     }
 

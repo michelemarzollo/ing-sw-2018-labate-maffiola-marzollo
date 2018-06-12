@@ -57,7 +57,7 @@ public class XmlPatternLoader implements PatternLoader {
 
         SchemaFactory schemaFactory =
                 SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        Schema schema = schemaFactory.newSchema(getClass().getResource("pattern.xsd"));
+        Schema schema = schemaFactory.newSchema(getClass().getResource("patterns/pattern.xsd"));
         validator = schema.newValidator();
 
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();

@@ -80,4 +80,8 @@ public class ViewMessage implements Serializable {
     public String getPlayerName() {
         return playerName;
     }
+
+    public void setView(View view){
+        this.view = view;
+    }
 }
