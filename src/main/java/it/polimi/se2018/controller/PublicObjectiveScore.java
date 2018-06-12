@@ -19,20 +19,20 @@ public abstract class PublicObjectiveScore {
     protected final int victoryPoints;
 
     /**
-     * The property of the die on which the card works. It can be either the value
-     * or the colour of the die.
+     * The dice's property on which the card works. If it's {@code true} the property
+     * is the colour of the die, otherwise the property is the value of the die.
      */
-    protected final Property property;
+    protected final boolean propertyIsColour;
 
     /**
      * The constructor of the class.
      *
      * @param victoryPoints the victory points related to the card.
-     * @param property      the property of the die on which the card works.
+     * @param propertyIsColour      the die's property on which the card works.
      */
-    PublicObjectiveScore(int victoryPoints, Property property) {
+    PublicObjectiveScore(int victoryPoints, boolean propertyIsColour) {
         this.victoryPoints = victoryPoints;
-        this.property = property;
+        this.propertyIsColour = propertyIsColour;
     }
 
     /**
@@ -52,7 +52,7 @@ public abstract class PublicObjectiveScore {
      * @return the colour or value of the die.
      */
     protected Object getProperty(Die die) {
-        if (property == Property.COLOUR)
+        if (propertyIsColour)
             return die.getColour();
         else return die.getValue();
     }

@@ -16,10 +16,10 @@ public class DiagonalScore extends PublicObjectiveScore {
      * The constructor of the class.
      *
      * @param victoryPoints the victory points related to the card.
-     * @param property      the property of the die on which the card works.
+     * @param propertyIsColour the property of the die on which the card works.
      */
-    DiagonalScore(int victoryPoints, Property property) {
-        super(victoryPoints, property);
+    DiagonalScore(int victoryPoints, boolean propertyIsColour) {
+        super(victoryPoints, propertyIsColour);
     }
 
     /**

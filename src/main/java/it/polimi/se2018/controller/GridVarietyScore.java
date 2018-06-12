@@ -25,11 +25,11 @@ public class GridVarietyScore extends PublicObjectiveScore {
      * The constructor of the class.
      *
      * @param victoryPoints the victory points related to the card.
-     * @param property      the property of the die on which the card works.
+     * @param propertyIsColour the property of the die on which the card works.
      * @param elements      the elements on which
      */
-    GridVarietyScore(int victoryPoints, Property property, Object[] elements) {
-        super(victoryPoints, property);
+    GridVarietyScore(int victoryPoints, boolean propertyIsColour, Object[] elements) {
+        super(victoryPoints, propertyIsColour);
         this.elements = elements;
     }
 

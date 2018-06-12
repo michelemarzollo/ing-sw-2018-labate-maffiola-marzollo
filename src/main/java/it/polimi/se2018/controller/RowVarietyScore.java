@@ -21,10 +21,10 @@ public class RowVarietyScore extends ArrayVarietyScore {
      * The constructor of the class.
      *
      * @param victoryPoints the victory points related to the card.
-     * @param property      the property of the die on which the card works.
+     * @param propertyIsColour the property of the die on which the card works.
      */
-    RowVarietyScore(int victoryPoints, Property property) {
-        super(victoryPoints, property);
+    RowVarietyScore(int victoryPoints, boolean propertyIsColour) {
+        super(victoryPoints, propertyIsColour);
     }
 
     /**
@@ -40,7 +40,7 @@ public class RowVarietyScore extends ArrayVarietyScore {
         int numOfRows = 0;
 
         for (Cell[] row : grid) {
-            if (allDifferentValues(row, property))
+            if (allDifferentValues(row))
                 numOfRows++;
         }
         return victoryPoints * numOfRows;

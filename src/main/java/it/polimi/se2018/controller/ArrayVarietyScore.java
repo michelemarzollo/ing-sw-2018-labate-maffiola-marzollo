@@ -17,11 +17,11 @@ public abstract class ArrayVarietyScore extends PublicObjectiveScore {
     /**
      * The constructor of the class.
      *
-     * @param victoryPoints the victory points related to the card.
-     * @param property      the property of the die on which the card works.
+     * @param victoryPoints    the victory points related to the card.
+     * @param propertyIsColour the property of the die on which the card works.
      */
-    ArrayVarietyScore(int victoryPoints, Property property) {
-        super(victoryPoints, property);
+    ArrayVarietyScore(int victoryPoints, boolean propertyIsColour) {
+        super(victoryPoints, propertyIsColour);
     }
 
     /**
@@ -32,7 +32,7 @@ public abstract class ArrayVarietyScore extends PublicObjectiveScore {
      * @return {@code true} if all cells are not null and have dice with different
      * values or colours, {@code false} otherwise.
      */
-    protected boolean allDifferentValues(Cell[] cellArray, Property property) {
+    protected boolean allDifferentValues(Cell[] cellArray) {
         for (int i = 0; i < cellArray.length - 1; i++) {
             for (int j = i + 1; j < cellArray.length; j++) {
                 Die die1 = cellArray[i].getDie();
