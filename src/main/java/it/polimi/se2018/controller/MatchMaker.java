@@ -1,8 +1,6 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.Game;
-import it.polimi.se2018.model.events.Action;
-import it.polimi.se2018.model.events.ViewMessage;
 import it.polimi.se2018.view.View;
 
 
@@ -45,10 +43,8 @@ public class MatchMaker {
      */
     public void makeMultiPlayerMatchFor(View view) {
         if (multiPlayer == null)
-            multiPlayer = new MultiPlayerController(new Game(), 150, 60);
+            multiPlayer = new MultiPlayerController(new Game(), 60, 5);
         view.registerObserver(multiPlayer);
-        ViewMessage message = new ViewMessage(view, Action.REGISTER_PLAYER, view.getPlayerName());
-        multiPlayer.update(message);
     }
 
     /**
@@ -59,7 +55,5 @@ public class MatchMaker {
     public void makeSinglePlayerMatchFor(View view) {
         Controller singlePlayer = new SinglePlayerController(new Game(), 150, 60);
         view.registerObserver(singlePlayer);
-        ViewMessage message = new ViewMessage(view, Action.REGISTER_PLAYER, view.getPlayerName());
-        singlePlayer.update(message);
     }
 }

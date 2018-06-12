@@ -89,6 +89,7 @@ public class SinglePlayerController extends Controller {
     @Override
     protected void registerPlayer(ViewMessage message) {
         if (getGame().getPlayers().isEmpty()){
+            getGame().registerObserver(message.getView());
             getGame().addPlayer(new Player(message.getPlayerName()));
             message.getView().showDifficultySelection();
         }
