@@ -394,7 +394,7 @@ public class ControllerTest {
         MockView view = new MockView("Pippo");
         SelectCard msg = new SelectCard("Grozing Pliers", view, Action.ACTIVATE_TOOL_CARD, "Pippo");
         controller.activateToolCard(msg);
-        assertTrue(view.getCalledMethods().contains("showDieSelection"));
+        assertTrue(view.getCalledMethods().contains("showDieAndIncrementSelection"));
         assertEquals("Grozing Pliers", game.getTurnManager().getCurrentTurn().getSelectedToolCard().getName());
     }
 
