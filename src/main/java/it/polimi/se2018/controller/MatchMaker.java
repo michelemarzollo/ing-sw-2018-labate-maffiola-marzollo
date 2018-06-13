@@ -42,7 +42,7 @@ public class MatchMaker {
      * @param view The view to be linked.
      */
     public void makeMultiPlayerMatchFor(View view) {
-        if (multiPlayer == null)
+        if (multiPlayer == null || !multiPlayer.acceptsNewPlayers())
             multiPlayer = new MultiPlayerController(new Game(), 60, 5);
         view.registerObserver(multiPlayer);
     }

@@ -261,6 +261,7 @@ public abstract class Controller implements Observer<ViewMessage> {
     protected void endRound(ViewMessage message) {
         try {
             getGame().getTurnManager().setupNewRound();
+            cleanDraftPool();
             refillDraftPool();
             getGame().getTurnManager().updateTurn();
         } catch (TurnManager.GameFinishedException e) {
@@ -542,5 +543,9 @@ public abstract class Controller implements Observer<ViewMessage> {
         }
     }
 
+
+    boolean acceptsNewPlayers(){
+        return !getGame().isSetupComplete();
+    }
 
 }
