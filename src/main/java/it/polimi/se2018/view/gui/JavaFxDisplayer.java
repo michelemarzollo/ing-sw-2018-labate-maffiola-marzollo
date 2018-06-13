@@ -392,4 +392,10 @@ public class JavaFxDisplayer extends Application implements Displayer {
 
     }
 
+    @Override
+    public void selectDieAndIncrement() {
+        //@TODO add implementation: it's the view dedicated to Grozing Pliers.
+    }
+
+
 }

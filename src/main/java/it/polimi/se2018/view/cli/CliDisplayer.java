@@ -612,7 +612,8 @@ public class CliDisplayer implements Displayer {
     /**
      * Displays the possibility of swapping two dice between the Draft Pool
      * and the RoundTrack inserting an appropriate input. It is invoked
-     * by the {@link it.polimi.se2018.controller.LensCutterBehaviour}.
+     * by the {@link it.polimi.se2018.controller.LensCutterBehaviour}, it
+     * is the dedicated view for it.
      */
     @Override
     public void askDiceToSwap() {
@@ -631,7 +632,8 @@ public class CliDisplayer implements Displayer {
     /**
      * Displays the possibility of choosing a value for a die drafted from the
      * {@link DiceBag} and to put it on the user's Pattern inserting an appropriate input.
-     * It is invoked from the {@link it.polimi.se2018.controller.FluxRemoverBehaviour}.
+     * It is invoked from the {@link it.polimi.se2018.controller.FluxRemoverBehaviour}, it
+     * is the dedicated view for the second step of its usage.
      */
     @Override
     public void askValueDestination() {
@@ -646,6 +648,33 @@ public class CliDisplayer implements Displayer {
         output.printTextNewLine("Enter the coordinates of the space in your pattern where you want to place the die:");
         coordinates = readCoordinates();
         view.handleToolCardUsage(value, coordinates);
+    }
+
+    /**
+     * Displays the selection of a die and the choice about incrementin or
+     * decrementing its value inserting an appropriate input.
+     * It is invoked by the {@link it.polimi.se2018.controller.GrozingPliersBehaviour},
+     * it is the dedicated view for it.
+     */
+    @Override
+    public void selectDieAndIncrement() {
+        int index;
+        int choice;
+        output.printDraftPool(getDraftPool());
+        output.printTextNewLine("Enter the index of the die you wish to use: \n");
+        index = input.readInputInt();
+        output.printTextNewLine("Enter 1 to increment the value of the selected die, 2 to decrement it:");
+        choice = input.readInputInt();
+        if(choice == 1){
+            view.handleToolCardUsage(index, true);
+            return;
+        }
+        if(choice == 2){
+            view.handleToolCardUsage(index, false);
+            return;
+        }
+        output.printTextNewLine("Invalid input!");
+        selectDieAndIncrement();
     }
 
     /**

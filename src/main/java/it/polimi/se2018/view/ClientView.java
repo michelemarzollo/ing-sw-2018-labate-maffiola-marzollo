@@ -139,6 +139,9 @@ public class ClientView extends View {
         displayer.askValueDestination();
     }
 
+    @Override
+    public void showDieAndIncrementSelection() { displayer.selectDieAndIncrement();}
+
 
     @Override
     public void update(ModelUpdate message) {

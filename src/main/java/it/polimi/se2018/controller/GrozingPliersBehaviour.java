@@ -32,12 +32,13 @@ public class GrozingPliersBehaviour implements ToolCardBehaviour {
     }
 
     /**
-     * Selects the view to let the user select a die from the draft pool.
+     * Selects the view to let the user select a die from the draft pool
+     * and to choose whether to increment or decrement its value.
      * @param message The message sent by the view.
      */
     @Override
     public void askParameters(ViewMessage message) {
-        message.getView().showDieSelection();
+        message.getView().showDieAndIncrementSelection();
     }
 
     /**

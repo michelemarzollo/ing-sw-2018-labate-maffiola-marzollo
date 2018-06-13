@@ -187,6 +187,12 @@ public class VirtualView extends View {
     }
 
     /**
+     * Informs the associated client to show the view dedicated to the Grozing Pliers Tool Card.
+     */
+    @Override
+    public void showDieAndIncrementSelection() { show("showDieAndIncrementSelection");}
+
+    /**
      * Propagates messages received from the network to the rest of the MVC architecture.
      * @param message The message received from the network.
      */

@@ -73,6 +73,13 @@ public interface Displayer {
     void askValueDestination();
 
     /**
+     * Asks the player to select a die from the Draft Pool and to choose whether
+     * to increment or decrement its value.
+     */
+    void selectDieAndIncrement();
+
+
+    /**
      * Forces the displayed data to be refreshed.
      */
     void refreshDisplayedData();
@@ -103,4 +110,5 @@ public interface Displayer {
      * @return the client view.
      */
     ClientView getView();
+
 }
