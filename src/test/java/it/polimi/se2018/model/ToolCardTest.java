@@ -25,4 +25,10 @@ public class ToolCardTest {
         card.use();
         assertEquals(true, card.isUsed());
     }
+
+    @Test
+    public void testGetDescription(){
+        ToolCard card = new ToolCard("Trial", "Description", Colour.PURPLE);
+        assertEquals("Description", card.getDescription());
+    }
 }

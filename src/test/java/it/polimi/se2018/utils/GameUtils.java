@@ -43,10 +43,10 @@ public class GameUtils {
         XmlPatternLoader loader = new XmlPatternLoader(directory);
         Pattern pattern = loader.load(1)[0];
         first.setCandidates(new Pattern[]{
-                pattern
+                pattern, pattern
         });
         second.setCandidates(new Pattern[]{
-                pattern
+                pattern, pattern
         });
 
     }
@@ -344,21 +344,23 @@ public class GameUtils {
 
         Player player = new Player("Pippo");
         Game game = new Game();
-        PublicObjectiveCard[] publicObjectiveCards = {ColorVariety.getInstance(), DeepShades.getInstance()};
+        PublicObjectiveCard[] publicObjectiveCards = {
+                new PublicObjectiveCard("Color Variety", "TestDescription", 4),
+                new PublicObjectiveCard("Deep Shades", "TestDescription", 2)
+        };
         PrivateObjectiveFactory privateObjectiveFactory = new PrivateObjectiveFactory();
         PrivateObjectiveCard[] privateObjectiveCards = privateObjectiveFactory.newInstances(2);
         game.addPlayer(player);
         game.setPublicObjectiveCards(publicObjectiveCards);
         game.getPlayers().get(0).setCards(privateObjectiveCards);
 
-        ToolCard[] toolCards = {new ToolCard("Grozing Pliers", Colour.PURPLE),
-                new ToolCard("Eglomise Brush", Colour.BLUE)};
+        ToolCard[] toolCards = {new ToolCard("Grozing Pliers", "Description", Colour.PURPLE),
+                new ToolCard("Eglomise Brush", "Description", Colour.BLUE)};
         game.setToolCards(toolCards);
         game.terminateSetup();
         game.start();
         game.getPlayers().get(0).setPattern(sunCatcher);
 
-        //the draft pool can't have
         List<Die> dice = new ArrayList<>(Arrays.asList(
                 new Die(4, random, Colour.YELLOW),
                 new Die(5, random, Colour.RED),

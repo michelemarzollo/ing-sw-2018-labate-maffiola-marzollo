@@ -1,5 +1,6 @@
-package it.polimi.se2018.model;
+package it.polimi.se2018.controller;
 
+import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.GridUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -7,19 +8,9 @@ import org.junit.Test;
 import java.util.Random;
 
 /**
- * Unit tests for ColorDiagonals class.
+ * Unit tests for DiagonalScore class.
  */
-public class ColorDiagonalsTest {
-
-    /**
-     * Tests if the class handles instantiation as a singleton.
-     */
-    @Test
-    public void testMultipleInstantiation() {
-        ColorDiagonals firstInstance = ColorDiagonals.getInstance();
-        ColorDiagonals secondInstance = ColorDiagonals.getInstance();
-        Assert.assertSame(firstInstance, secondInstance);
-    }
+public class DiagonalScoreTest {
 
     /**
      * Tests if the score is calculated correctly in a simple case.
@@ -37,8 +28,8 @@ public class ColorDiagonalsTest {
                 Assert.fail("PlacementErrorException has occurred: "
                         + e.getMessage());
             }
-
-        int actualScore = ColorDiagonals.getInstance().getScore(grid);
+        DiagonalScore diagonalScore =  new DiagonalScore(1, true);
+        int actualScore = diagonalScore.getScore(grid);
         int expectedScore = 3;
         Assert.assertEquals(expectedScore, actualScore);
     }
@@ -69,7 +60,8 @@ public class ColorDiagonalsTest {
                         + e.getMessage());
             }
 
-        int actualScore = ColorDiagonals.getInstance().getScore(grid);
+        DiagonalScore diagonalScore =  new DiagonalScore(1, true);
+        int actualScore = diagonalScore.getScore(grid);
         int expectedScore = 3 * 4;
         Assert.assertEquals(expectedScore, actualScore);
     }
@@ -95,7 +87,8 @@ public class ColorDiagonalsTest {
                     + e.getMessage());
         }
 
-        int actualScore = ColorDiagonals.getInstance().getScore(grid);
+        DiagonalScore diagonalScore =  new DiagonalScore(1, true);
+        int actualScore = diagonalScore.getScore(grid);
         int expectedScore = 4;
         Assert.assertEquals(expectedScore, actualScore);
     }
@@ -117,12 +110,46 @@ public class ColorDiagonalsTest {
             grid[1][4].place(blueDie);
 
         } catch (PlacementErrorException e) {
+
+
             Assert.fail("PlacementErrorException has occurred: "
                     + e.getMessage());
         }
 
-        int actualScore = ColorDiagonals.getInstance().getScore(grid);
+        DiagonalScore diagonalScore =  new DiagonalScore(1, true);
+        int actualScore = diagonalScore.getScore(grid);
         int expectedScore = 0;
+        Assert.assertEquals(expectedScore, actualScore);
+    }
+
+    /**
+     * Tests if the score is calculated correctly in a tricky case and with value
+     * diagonals instead of colour diagonals. It's a case that can't happen in the
+     * game, but the algorithm should be able to support it.
+     * <p>In this case, the grid has a zig-zag pattern of dice of
+     * the same value.</p>
+     */
+    @Test
+    public void testZigZagScoreCalculationValues() {
+        Cell[][] grid = GridUtils.getEmptyUnrestrictedGrid(4, 5);
+
+        Die die1 = new Die(3, new Random(), Colour.BLUE);
+        Die die2 = new Die(3, new Random(), Colour.GREEN);
+        Die die3 = new Die(3, new Random(), Colour.BLUE);
+        Die die4 = new Die(3, new Random(), Colour.RED);
+        try {
+            grid[0][0].place(die1);
+            grid[0][2].place(die2);
+            grid[1][1].place(die3);
+            grid[1][3].place(die4);
+        } catch (PlacementErrorException e) {
+            Assert.fail("PlacementErrorException has occurred: "
+                    + e.getMessage());
+        }
+
+        DiagonalScore diagonalScore =  new DiagonalScore(1, false);
+        int actualScore = diagonalScore.getScore(grid);
+        int expectedScore = 4;
         Assert.assertEquals(expectedScore, actualScore);
     }
 }

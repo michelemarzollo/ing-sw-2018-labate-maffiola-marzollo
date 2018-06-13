@@ -1,46 +1,34 @@
-package it.polimi.se2018.model;
+package it.polimi.se2018.controller;
 
+import it.polimi.se2018.model.Cell;
 
 /**
- * The Singleton for the Color Diagonals Objective Card.
- * <p>
- * See the documentation of {@link PublicObjectiveCard} for
- * further information.</p>
+ * The class to calculate the score given by the dice which are diagonally
+ * adjacent for a certain property on the grid.
+ * It's used by the card 'Color Diagonals'.
  *
  * @author michelemarzollo
+ * @see this#getScore(Cell[][])
  */
-public class ColorDiagonals extends PublicObjectiveCard {
+public class DiagonalScore extends PublicObjectiveScore {
 
     /**
-     * The instance of the Singleton.
-     */
-    private static ColorDiagonals instance = null;
-
-    /**
-     * The private constructor.
-     */
-    private ColorDiagonals() {
-    }
-
-    /**
-     * The method to return the new instance of the class,
-     * or whether it already exists, the already existing one.
+     * The constructor of the class.
      *
-     * @return the instance.
+     * @param victoryPoints the victory points related to the card.
+     * @param propertyIsColour the property of the die on which the card works.
      */
-    public static ColorDiagonals getInstance() {
-        if (instance == null)
-            instance = new ColorDiagonals();
-        return instance;
+    DiagonalScore(int victoryPoints, boolean propertyIsColour) {
+        super(victoryPoints, propertyIsColour);
     }
 
     /**
      * The method that calculates the score associated to the card.
      * <p>
      * The score is given by the number of dice in the grid that are
-     * diagonally adjacent to at least one other die of the same colour.
+     * diagonally adjacent to at least one other die with the same property.
      * To be clearer, each die of the grid in position (i, j) adds one (and only one)
-     * point to the score if there is a die of the same colour in at least one of the
+     * point to the score if there is a die with the same property in at least one of the
      * following positions: (i-1, j-1), (i+1, j-1), (i-1, j+1), (i+1, j+1).</p>
      * <p>
      * The method uses an auxiliary matrix of the same dimension of {@code grid},
@@ -55,20 +43,20 @@ public class ColorDiagonals extends PublicObjectiveCard {
     @Override
     public int getScore(Cell[][] grid) {
 
-        //Number of dice that have a diagonally adjacent die of the same colour
+        //Number of dice that have a diagonally adjacent die of the same property
         int numOfCells = 0;
 
         //A matrix of the same dimension of grid, that contains 0 if the die in the corresponding
         //cell wasn't still counted, 1 otherwise. Every cell is initialized to 0 by default
         byte[][] countedCells = new byte[grid.length][grid[0].length];
 
-        //If a die in the following row and precedent or following column has the same colour of the
+        //If a die in the following row and precedent or following column has the same property of the
         //current one they are both set to 1 in the corresponding cell in countedCells
         for (int row = 0; row < grid.length; row++) {
             for (int col = 0; col < grid[0].length; col++) {
                 if (row + 1 < grid.length && col - 1 > 0 && grid[row][col].getDie() != null
                         && grid[row + 1][col - 1].getDie() != null &&
-                        grid[row][col].getDie().getColour().equals(grid[row + 1][col - 1].getDie().getColour())) {
+                        getProperty(grid[row][col].getDie()).equals(getProperty((grid[row + 1][col - 1].getDie())))) {
 
                     countedCells[row][col] = 1;
                     countedCells[row + 1][col - 1] = 1;
@@ -77,7 +65,7 @@ public class ColorDiagonals extends PublicObjectiveCard {
 
                 if (row + 1 < grid.length && col + 1 < grid[0].length && grid[row][col].getDie() != null
                         && grid[row + 1][col + 1].getDie() != null &&
-                        grid[row][col].getDie().getColour().equals(grid[row + 1][col + 1].getDie().getColour())) {
+                        getProperty(grid[row][col].getDie()).equals(getProperty((grid[row + 1][col + 1].getDie())))) {
 
                     countedCells[row][col] = 1;
                     countedCells[row + 1][col + 1] = 1;
@@ -91,36 +79,7 @@ public class ColorDiagonals extends PublicObjectiveCard {
                 numOfCells += (int) elem;
         }
 
-        return numOfCells;
+        return victoryPoints * numOfCells;
 
-    }
-
-    /**
-     * Getter for the name of the Objective Card.
-     * @return the card's name.
-     */
-    @Override
-    public String getName() {
-        return "Color Diagonals";
-    }
-
-
-    /**
-     * Getter for the description of the Objective Card.
-     * @return the card's description.
-     */
-    @Override
-    public String getDescription() {
-        return "Count of diagonally adjacent same-color dice";
-    }
-
-    /**
-     * Getter for the victory point of the Public Objective Card.
-     * @return the number of points that a player gains every
-     * time that he pursue the objective indicated.
-     */
-    @Override
-    public int getVictoryPoint() {
-        return 0; //@TODO it is ok?
     }
 }

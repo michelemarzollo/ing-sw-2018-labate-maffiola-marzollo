@@ -89,6 +89,10 @@ public class ToolCardFactory {
      *         tool cards.
      */
     public ToolCard[] newInstances(int n){
+
+        if (n > names.length)
+            throw new IllegalArgumentException();
+
         List<Integer> ints = IntStream.range(0, 12)
                 .boxed()
                 .collect(Collectors.toList());

@@ -187,14 +187,6 @@ public class VirtualView extends View {
     }
 
     /**
-     * Informs the associated client to show the game ending view.
-     */
-    @Override
-    public void showFinalView() {
-        show("showFinalView");
-    }
-
-    /**
      * Propagates messages received from the network to the rest of the MVC architecture.
      * @param message The message received from the network.
      */

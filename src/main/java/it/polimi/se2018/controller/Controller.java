@@ -57,6 +57,10 @@ public abstract class Controller implements Observer<ViewMessage> {
      */
     private Timer turnTimer;
 
+    private final Map<String, PublicObjectiveScore> scoreStrategy = new HashMap<>();
+
+    protected PrivateObjectiveScore privateScoreCalculator;
+
     //ABSTRACT METHODS
 
     /**
@@ -158,7 +162,25 @@ public abstract class Controller implements Observer<ViewMessage> {
 
         actionMap = new EnumMap<>(Action.class);
         registerActions(actionMap);
+        privateScoreCalculator = new PrivateObjectiveScore();
+        registerPublicObjectiveScores();
+    }
 
+    /**
+     * Creates a map in which for each {@link PublicObjectiveCard} name
+     * there is an object to calculate the score for it in the proper way.
+     */
+    private void registerPublicObjectiveScores(){
+        scoreStrategy.put("Row Color Variety", new RowVarietyScore(6, true));
+        scoreStrategy.put("Column Color Variety", new ColumnVarietyScore(5, true));
+        scoreStrategy.put("Row Shade Variety", new RowVarietyScore(5, true));
+        scoreStrategy.put("Column Shade Variety", new ColumnVarietyScore(2, true));
+        scoreStrategy.put("Light Shades", new GridVarietyScore(2, false, new Integer[]{1,2}));
+        scoreStrategy.put("Medium Shades", new GridVarietyScore(2, false, new Integer[]{3,4}));
+        scoreStrategy.put("Deep Shades", new GridVarietyScore(2, false, new Integer[]{5,6}));
+        scoreStrategy.put("Shade Variety", new GridVarietyScore(5, false, new Integer[]{1,2,3,4,5,6}));
+        scoreStrategy.put("Color Diagonals", new DiagonalScore(1, true));
+        scoreStrategy.put("Color Variety", new GridVarietyScore(4, true, Colour.values()));
     }
 
     /**
@@ -513,6 +535,14 @@ public abstract class Controller implements Observer<ViewMessage> {
         game = null;
     }
 
+    /**
+     * The method that returns the object to calculate the score for a certain {@link PublicObjectiveCard}.
+     * @param name the name of the {@link PublicObjectiveCard}
+     * @return the class to calculate the score.
+     */
+    protected PublicObjectiveScore getPublicStrategy(String name){
+        return scoreStrategy.get(name);
+    }
     /**
      * The task to end the turn when the turnTimer ends because the player
      * spent to much time to make the move.

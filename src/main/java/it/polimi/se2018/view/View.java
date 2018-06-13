@@ -76,11 +76,6 @@ public abstract class View extends Observable<ViewMessage>
     public abstract void showValueDestinationSelection();
 
     /**
-     * Shows the game finished view.
-     */
-    public abstract void showFinalView();
-
-    /**
      * Getter for the player name associated with the view.
      * @return The name of the player associated with the view
      */

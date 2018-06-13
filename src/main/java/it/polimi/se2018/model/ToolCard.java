@@ -61,6 +61,8 @@ public class ToolCard implements Serializable {
         return name;
     }
 
+    public String getDescription() { return description; }
+
     /**
      * Getter for the colour restriction on the tool card.
      * @return The colour restriction on the tool card.

@@ -45,7 +45,7 @@ public class MultiPlayerControllerTest {
         Game game = GameUtils.getStartedGame(true);
         if (game == null)
             Assert.fail("Error on game initialization");
-        ToolCard[] toolCards = {new ToolCard("Grozing Pliers", "Description",  Colour.PURPLE),
+        ToolCard[] toolCards = {new ToolCard("Grozing Pliers", "Description", Colour.PURPLE),
                 new ToolCard("Eglomise Brush", "Description", Colour.BLUE),
                 new ToolCard("Copper Foil Burnisher", "Description", Colour.RED)};
         game.setToolCards(toolCards);
@@ -229,7 +229,11 @@ public class MultiPlayerControllerTest {
         Die red5 = new Die(5, new Random(), Colour.RED);
         Player pippo = game.getPlayers().get(0);
         Player pluto = game.getPlayers().get(1);
-        PublicObjectiveCard[] publicObjectiveCards = {ColorVariety.getInstance(), DeepShades.getInstance()};
+        PublicObjectiveCard[] publicObjectiveCards = {
+                new PublicObjectiveCard("Color Variety", "TestDescription", 4),
+                new PublicObjectiveCard("Deep Shades", "TestDescription", 2),
+                new PublicObjectiveCard("Row Color Variety", "TestDescription", 6)
+        };
         game.setPublicObjectiveCards(publicObjectiveCards);
         try {
             Pattern newPattern1 = pippo.getPattern()
@@ -329,7 +333,7 @@ public class MultiPlayerControllerTest {
         assertTrue(game.getPlayers().get(1).getScore() != 0);
         //before endGame method invocation the scoreBoard is not even instantiated.
         assertTrue(game.getScoreBoard() != null);
-       // assertTrue(view.getCalledMethods().contains("showFinalView"));
+        // assertTrue(view.getCalledMethods().contains("showFinalView"));
         assertEquals(0, view.getCalledMethods().size());
     }
 
