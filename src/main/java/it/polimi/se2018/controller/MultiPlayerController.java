@@ -187,10 +187,11 @@ public class MultiPlayerController extends Controller {
             int score = 0;
             //Each PublicObjectiveCard gives an additional score
             for (PublicObjectiveCard publicCard : getGame().getPublicObjectiveCards()) {
-                score += publicCard.getScore(player.getPattern().getGrid());
+                score += getPublicStrategy(publicCard.getName()).getScore(player.getPattern().getGrid());
             }
             //The score given by the PrivateObjectiveCard
-            score += player.getCards()[0].getScore(player.getPattern().getGrid());
+            privateScoreCalculator.setColour(player.getCards()[0].getColour());
+            score += privateScoreCalculator.getScore(player.getPattern().getGrid());
             //The score given by the unused tokens
             score += player.getTokens();
             //The score subtracted by the empty cells

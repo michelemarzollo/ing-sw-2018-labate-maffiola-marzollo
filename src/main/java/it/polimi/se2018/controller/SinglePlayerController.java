@@ -193,19 +193,22 @@ public class SinglePlayerController extends Controller {
      */
     @Override
     protected void calculateScores() {
-        int publicObjectiveScore = 0;
-        int privateObjectiveScore;
+        int publicScore = 0;
+        int privateScore;
         int emptySpacePenalty;
         Cell[][] pattern = getGame().getPlayers().get(0).getPattern().getGrid();
         for (PublicObjectiveCard card : getGame().getPublicObjectiveCards()) {
-            publicObjectiveScore += card.getScore(pattern);
+            publicScore += getPublicStrategy(card.getName()).getScore(pattern);
         }
         //The chosen PrivateObjectiveCard is placed in the first position of the array (0).
-        privateObjectiveScore = getGame().getPlayers().get(0).getCards()[0].getScore(pattern);
+        Colour privateObjectiveColour = getGame().getPlayers().get(0).getCards()[0].getColour();
+        privateScoreCalculator.setColour(privateObjectiveColour);
+        privateScore = privateScoreCalculator.getScore(pattern);
+
         emptySpacePenalty = 3 * getGame().getPlayers().get(0).getPattern().emptyCells();
         //Player in position 0 is the user.
         getGame().getPlayers().get(0).
-                setScore(publicObjectiveScore + privateObjectiveScore - emptySpacePenalty);
+                setScore(publicScore + privateScore - emptySpacePenalty);
         //Player in position 1 is the RoundTrack.
         getGame().getPlayers().get(1).
                 setScore(getGame().getRoundTrack().getSum());

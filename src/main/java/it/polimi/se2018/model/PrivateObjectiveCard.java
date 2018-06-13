@@ -4,7 +4,7 @@ package it.polimi.se2018.model;
  * PrivateObjectiveCard represents all private objective cards.
  * <p>
  * The card, if it is assigned, is associated to a player, and it gives
- * the player a score at the and of the game, through the method {@code getScore()}.</p>
+ * the player a score at the and of the game.</p>
  *
  * @author michelemarzollo
  */
@@ -14,9 +14,9 @@ public class PrivateObjectiveCard implements ObjectiveCard {
      * The name of the card.
      */
     private final String name;
+
     /**
-     * The colour of the shades.
-     * <p>It's the only difference between the different cards.</p>
+     * The colour of the dice that will count int the score of the card.
      */
     private final Colour colour;
 
@@ -28,18 +28,18 @@ public class PrivateObjectiveCard implements ObjectiveCard {
     /**
      * The constructor of the class.
      *
-     * @param c the colour of the card.
+     * @param name        the name of the card.
+     * @param colour      the colour of the card.
+     * @param description the description of the card.
      */
-    PrivateObjectiveCard(String name, Colour c, String description) {
+    public PrivateObjectiveCard(String name, Colour colour, String description) {
         this.name = name;
-        this.colour = c;
+        this.colour = colour;
         this.description = description;
     }
 
-
-
     /**
-     * The getter of the name.
+     * The getter for the name.
      *
      * @return the card's name.
      */
@@ -50,6 +50,7 @@ public class PrivateObjectiveCard implements ObjectiveCard {
 
     /**
      * Getter for the description of the Objective Card.
+     *
      * @return the card's description.
      */
     @Override
@@ -58,34 +59,12 @@ public class PrivateObjectiveCard implements ObjectiveCard {
     }
 
     /**
-     * The getter of the colour.
+     * The getter for the colour.
      *
      * @return the card's colour.
      */
     public Colour getColour() {
         return colour;
-    }
-
-    /**
-     * The method to calculate the score dealing with the PrivateObjectiveCard.
-     * <p>The score is given by the number of dice with colour {@code colour}.</p>
-     *
-     * @param grid the grid on which the score must be calculated.
-     * @return the score.
-     */
-    @Override
-    public int getScore(Cell[][] grid) {
-        int count = 0;
-
-        //Counts all dice with colour "colour"
-        for (Cell[] row : grid) {
-            for (Cell cell : row) {
-                Die die = cell.getDie();
-                if (die != null && die.getColour() == getColour())
-                    count += cell.getDie().getValue();
-            }
-        }
-        return count;
     }
 
 }

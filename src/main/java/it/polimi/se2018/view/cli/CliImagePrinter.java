@@ -292,7 +292,7 @@ public class CliImagePrinter {
         stream.print("Description: ");
         stream.println(card.getDescription());
         stream.print("VictoryPoint: ");
-        stream.println(card.getVictoryPoint());
+        stream.println(card.getVictoryPoints());
         stream.print("\n");
     }
 

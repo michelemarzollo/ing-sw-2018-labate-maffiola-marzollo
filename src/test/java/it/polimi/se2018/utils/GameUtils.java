@@ -344,7 +344,10 @@ public class GameUtils {
 
         Player player = new Player("Pippo");
         Game game = new Game();
-        PublicObjectiveCard[] publicObjectiveCards = {ColorVariety.getInstance(), DeepShades.getInstance()};
+        PublicObjectiveCard[] publicObjectiveCards = {
+                new PublicObjectiveCard("Color Variety", "TestDescription", 4),
+                new PublicObjectiveCard("Deep Shades", "TestDescription", 2)
+        };
         PrivateObjectiveFactory privateObjectiveFactory = new PrivateObjectiveFactory();
         PrivateObjectiveCard[] privateObjectiveCards = privateObjectiveFactory.newInstances(2);
         game.addPlayer(player);
@@ -358,7 +361,6 @@ public class GameUtils {
         game.start();
         game.getPlayers().get(0).setPattern(sunCatcher);
 
-        //the draft pool can't have
         List<Die> dice = new ArrayList<>(Arrays.asList(
                 new Die(4, random, Colour.YELLOW),
                 new Die(5, random, Colour.RED),
