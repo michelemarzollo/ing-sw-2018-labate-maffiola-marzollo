@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<public_objective xmlns="http://se2018.polimi.it/public_objective"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://se2018.polimi.it/public_objective  public_objective.xsd">
+
+    <name>Column Color Variety</name>
+    <description>Columns with no repeated colors</description>
+    <victoryPoints>5</victoryPoints>
+    <otherInformation>
+        <noParam>
+            <worksOn>colour</worksOn>
+            <strategy>Column</strategy>
+        </noParam>
+    </otherInformation>
+
+</public_objective>
