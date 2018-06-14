@@ -59,7 +59,7 @@ public class PrivateSelection {
      */
     @FXML
     public void selectLeftCard() {
-        boolean confirmed = parentController.displayConfirmationView(
+        boolean confirmed = parentController.displayConfirm(
                 "You chose the " + leftCardName + " card.");
         if (confirmed) {
             parentController.displayWaitingView("Calculating the score...");
@@ -75,7 +75,7 @@ public class PrivateSelection {
      */
     @FXML
     public void selectRightCard() {
-        boolean confirmed = parentController.displayConfirmationView(
+        boolean confirmed = parentController.displayConfirm(
                 "You chose the " + rightCardName + " card.");
         if (confirmed) {
             parentController.displayWaitingView("Calculating the score...");

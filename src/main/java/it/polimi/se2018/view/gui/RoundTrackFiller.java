@@ -4,9 +4,8 @@ import it.polimi.se2018.model.Die;
 import it.polimi.se2018.utils.Coordinates;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -48,9 +47,15 @@ public class RoundTrackFiller {
      * @deprecated Use a url manager instead.
      */
     @Deprecated
-    private Image loadDieImage(Die die) {
-        String url = "/dice/" + die.getColour() + die.getValue() + ".jpg";
-        return new Image(url);
+    private AnchorPane loadDieImage(Die die) {
+        String url = getClass().getResource("images/dice/" + die.getColour() + die.getValue() + ".jpg").toString();
+        AnchorPane dieImage = new AnchorPane();
+        dieImage.setStyle(
+                "-fx-background-image:url('" + url + "');" +
+                        "-fx-background-position: center center;" +
+                        "-fx-background-repeat: stretch;" +
+                        "-fx-background-size: cover");
+        return dieImage;
     }
 
     /**
@@ -84,14 +89,41 @@ public class RoundTrackFiller {
         for (List<Die> column : leftovers) {
             VBox container = new VBox();
             container.setAlignment(Pos.TOP_CENTER);
+            fitColumn(container, leftovers.size());
             for (Die die : column) {
-                ImageView dieImage = new ImageView(loadDieImage(die));
-                dieImage.setPreserveRatio(true);
+                AnchorPane dieImage = loadDieImage(die);
+                fitDie(container, dieImage);
                 container.getChildren().add(dieImage);
                 dieImage.setOnMouseClicked(this::onClick);
             }
             columnContainer.getChildren().add(container);
         }
+    }
+
+    private void fitColumn(VBox column, int num) {
+        column.minWidthProperty().bind(
+                columnContainer.widthProperty()
+                        .subtract(columnContainer.getSpacing() * num)
+                        .divide(num)
+        );
+        column.maxWidthProperty().bind(
+                columnContainer.widthProperty()
+                        .subtract(columnContainer.getSpacing() * num)
+                        .divide(num)
+        );
+
+    }
+
+    private void fitDie(VBox container, AnchorPane dieImage) {
+        dieImage.minHeightProperty().bind(dieImage.minWidthProperty());
+        dieImage.maxHeightProperty().bind(dieImage.maxWidthProperty());
+
+        dieImage.minWidthProperty().bind(
+                        container.widthProperty()
+        );
+        dieImage.maxWidthProperty().bind(
+                        container.widthProperty()
+        );
     }
 
     /**

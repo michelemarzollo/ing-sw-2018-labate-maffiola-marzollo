@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
@@ -85,7 +86,7 @@ public class PatternSelection {
                 FXMLLoader loader = new FXMLLoader();
 
                 loader.setLocation(this.getClass().getResource("pattern.fxml"));
-                BorderPane patternView = loader.load();
+                AnchorPane patternView = loader.load();
                 patternView.setMinHeight(500);      //to change when controller.minimize() will be usable
                 Pattern controller = loader.getController();
 
@@ -120,7 +121,7 @@ public class PatternSelection {
         Integer rowIndex = GridPane.getRowIndex(source);
         int patterNumber = colIndex + rowIndex * 2;
 
-        boolean confirmed = parentController.displayConfirmationView("You chose the " +
+        boolean confirmed = parentController.displayConfirm("You chose the " +
                 patterns[patterNumber].getName() + " pattern.");
 
         if (confirmed) {

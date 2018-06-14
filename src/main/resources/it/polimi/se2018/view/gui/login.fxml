@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -22,7 +23,7 @@
       </ImageView>
       <ImageView fitHeight="127.0" fitWidth="433.0" layoutX="113.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@images/log_in_title.PNG" />
+            <Image url="@images/log_in_title.png" />
          </image>
       </ImageView>
       <Button fx:id="startButton" layoutX="464.0" layoutY="337.0" mnemonicParsing="false" onAction="#login" prefHeight="25.0" prefWidth="72.0" text="Start" />
@@ -48,10 +49,16 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <RadioButton fx:id="rmiButton" mnemonicParsing="false" selected="true" text="RMI" GridPane.rowIndex="1" />
-            <RadioButton fx:id="socketButton" mnemonicParsing="false" text="Socket" GridPane.rowIndex="2" />
-            <RadioButton fx:id="multiPlayerButton" mnemonicParsing="false" selected="true" text="Multiplayer" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <RadioButton fx:id="singlePlayerButton" mnemonicParsing="false" text="Single player" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <RadioButton fx:id="rmiButton" mnemonicParsing="false" selected="true" text="RMI" GridPane.rowIndex="1">
+               <toggleGroup>
+                  <ToggleGroup fx:id="networkingTechnology" />
+               </toggleGroup></RadioButton>
+            <RadioButton fx:id="socketButton" mnemonicParsing="false" text="Socket" toggleGroup="$networkingTechnology" GridPane.rowIndex="2" />
+            <RadioButton fx:id="multiPlayerButton" mnemonicParsing="false" selected="true" text="Multiplayer" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <toggleGroup>
+                  <ToggleGroup fx:id="gameMode" />
+               </toggleGroup></RadioButton>
+            <RadioButton fx:id="singlePlayerButton" mnemonicParsing="false" text="Single player" toggleGroup="$gameMode" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
       <TextField fx:id="usernameText" layoutX="195.0" layoutY="189.0" promptText="Username" />

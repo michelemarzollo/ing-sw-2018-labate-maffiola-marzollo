@@ -1,10 +1,9 @@
 package it.polimi.se2018.view.gui;
 
 import it.polimi.se2018.model.events.PlayerConnectionStatus;
-import it.polimi.se2018.model.events.PlayerStatus;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
@@ -21,11 +20,11 @@ public class MultiPlayerBoard extends GameBoard {
 
     /**
      * Loads the pattern layout for an opponent.
-     * @param playerStatus The status of the opponent.
+     * @param playerName The status of the opponent.
      * @return The pattern layout for the opponent.
      */
-    private BorderPane loadOpponentPattern(PlayerStatus playerStatus) {
-        BorderPane pattern = loadPatternFor(playerStatus, true);
+    private AnchorPane loadOpponentPattern(String playerName) {
+        AnchorPane pattern = loadPatternFor(playerName, true);
         HBox.setHgrow(pattern, Priority.ALWAYS);
         return pattern;
     }
@@ -34,15 +33,15 @@ public class MultiPlayerBoard extends GameBoard {
      * Initializes the patterns for the opponents.
      */
     private void initializeOpponents() {
-        if (getDisplayer().getDataOrganizer().getAllPlayerStatus() == null)
+        if (getDisplayer().getDataOrganizer().getGameSetup() == null)
             return;
 
         String localPlayer = getDisplayer().getDataOrganizer().getLocalPlayer();
         opponentsContainer.getChildren().clear();
-        for (PlayerStatus player : getDisplayer().getDataOrganizer().getAllPlayerStatus()) {
-            if (!player.getPlayerName().equals(localPlayer)) {
-                BorderPane pattern = loadOpponentPattern(player);
-                checkConnected(pattern, player.getPlayerName());
+        for (String playerName : getDisplayer().getDataOrganizer().getGameSetup().getPlayers()) {
+            if (!playerName.equals(localPlayer)) {
+                AnchorPane pattern = loadOpponentPattern(playerName);
+                checkConnected(pattern, playerName);
                 opponentsContainer.getChildren().addAll(pattern);
             }
         }
@@ -56,14 +55,14 @@ public class MultiPlayerBoard extends GameBoard {
      * @param pattern The pattern layout of the player.
      * @param playerName The name of the player to be checked.
      */
-    private void checkConnected(BorderPane pattern, String playerName) {
+    private void checkConnected(AnchorPane pattern, String playerName) {
         PlayerConnectionStatus connectionStatus =
                 getDisplayer().getDataOrganizer().getConnectionStatus(playerName);
 
-        if (connectionStatus == null || !connectionStatus.isConnected())
-            pattern.setDisable(true);
-        else
+        if (connectionStatus == null || connectionStatus.isConnected())
             pattern.setDisable(false);
+        else
+            pattern.setDisable(true);
     }
 
     /**

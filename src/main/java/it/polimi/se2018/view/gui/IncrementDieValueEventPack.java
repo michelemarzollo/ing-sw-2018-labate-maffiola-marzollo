@@ -2,6 +2,10 @@ package it.polimi.se2018.view.gui;
 
 import it.polimi.se2018.utils.Coordinates;
 import it.polimi.se2018.view.ClientView;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+
+import java.util.Optional;
 
 /**
  * Set of events that are used when the player has to choose a die and
@@ -10,19 +14,12 @@ import it.polimi.se2018.view.ClientView;
 public class IncrementDieValueEventPack extends BoardEventPack {
 
     /**
-     * The dialog used to ask the player whether to increment or decrement,
-     */
-    private final IncrementDialog dialog;
-
-    /**
      * Creates a new instance that uses the specified client view as request handler
      * and the given dialog to interact with the user.
      * @param clientView The client view responsible for requests.
-     * @param dialog The increment dialog to use.
      */
-    public IncrementDieValueEventPack(ClientView clientView, IncrementDialog dialog) {
+    public IncrementDieValueEventPack(ClientView clientView) {
         super(clientView);
-        this.dialog = dialog;
     }
 
     /**
@@ -32,8 +29,17 @@ public class IncrementDieValueEventPack extends BoardEventPack {
      */
     @Override
     public void draftPoolHandler(int index) {
-        dialog.askUser();
-        getClientView().handleToolCardUsage(index, dialog.isIncrement());
+        ButtonType increment = new ButtonType("Increment");
+        ButtonType decrement = new ButtonType("Decrement");
+        Alert alert = new Alert(
+                Alert.AlertType.NONE,
+                "What do you want to do?",
+                increment,
+                decrement);
+
+        Optional<ButtonType> response = alert.showAndWait();
+        boolean isIncrement = response.orElse(increment) == increment;
+        getClientView().handleToolCardUsage(index, isIncrement);
     }
 
     /**

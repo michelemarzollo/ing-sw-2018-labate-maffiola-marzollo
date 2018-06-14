@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -11,23 +12,23 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2018.view.gui.MultiPlayerBoard">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2018.view.gui.MultiPlayerBoard">
    <children>
       <GridPane layoutX="142.0" layoutY="163.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="33.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="30.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" percentWidth="33.0" />
+          <ColumnConstraints hgrow="SOMETIMES" percentWidth="30.0" />
+            <ColumnConstraints hgrow="SOMETIMES" percentWidth="37.0" />
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints minHeight="10.0" percentHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" percentHeight="45.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints percentHeight="25.0" vgrow="SOMETIMES" />
+          <RowConstraints percentHeight="45.0" vgrow="SOMETIMES" />
+          <RowConstraints percentHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <BorderPane style="-fx-border-color: black;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1">
                <center>
-                  <HBox fx:id="opponentsContainer" prefHeight="100.0" prefWidth="200.0" spacing="25.0" BorderPane.alignment="CENTER" />
+                  <HBox fx:id="opponentsContainer" alignment="CENTER" spacing="25.0" BorderPane.alignment="CENTER" />
                </center>
                <top>
                   <Label text="Opponents" BorderPane.alignment="CENTER">
@@ -42,7 +43,7 @@
             </BorderPane>
             <BorderPane style="-fx-border-color: black;" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <center>
-                  <HBox fx:id="publicCardContainer" prefHeight="100.0" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER" />
+                  <HBox fx:id="publicCardContainer" alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER" />
                </center>
                <top>
                   <Label text="Public Objective Cards" BorderPane.alignment="CENTER">
@@ -54,7 +55,7 @@
             </BorderPane>
             <BorderPane style="-fx-border-color: black;" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <center>
-                  <HBox fx:id="toolCardContainer" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                  <HBox fx:id="toolCardContainer" alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER" />
                </center>
                <top>
                   <Label text="Tool Cards" BorderPane.alignment="CENTER">
@@ -64,9 +65,9 @@
                   </Label>
                </top>
             </BorderPane>
-            <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;" GridPane.columnIndex="1">
+            <BorderPane style="-fx-border-color: black;" GridPane.columnIndex="1">
                <center>
-                  <HBox fx:id="draftPoolContainer" prefHeight="100.0" prefWidth="200.0" spacing="10.0" BorderPane.alignment="CENTER" />
+                  <HBox fx:id="draftPoolContainer" alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER" />
                </center>
                <top>
                   <Label text="Draft Pool" BorderPane.alignment="CENTER">
@@ -79,9 +80,13 @@
                   </Label>
                </top>
             </BorderPane>
-            <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;" GridPane.columnIndex="2">
+            <BorderPane style="-fx-border-color: black;" GridPane.columnIndex="2">
                <center>
-                  <HBox fx:id="roundTrackContainer" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                  <ScrollPane fx:id="scroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
+                     <content>
+                        <HBox fx:id="roundTrackContainer" alignment="CENTER" minHeight="${scroll.viewportBounds.width}" />
+                     </content>
+                  </ScrollPane>
                </center>
                <top>
                   <Label text="Round Track" BorderPane.alignment="CENTER">
@@ -96,7 +101,7 @@
             </BorderPane>
             <BorderPane style="-fx-border-color: black;" GridPane.rowIndex="2">
                <center>
-                  <HBox fx:id="privateCardContainer" prefHeight="100.0" prefWidth="200.0" />
+                  <HBox fx:id="privateCardContainer" alignment="CENTER" />
                </center>
                <top>
                   <Label text="Private Objective Card" BorderPane.alignment="CENTER">
@@ -106,7 +111,7 @@
                   </Label>
                </top>
             </BorderPane>
-            <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;" GridPane.rowSpan="2">
+            <BorderPane style="-fx-border-color: black;" GridPane.rowSpan="2">
                <top>
                   <HBox alignment="CENTER" spacing="50.0" BorderPane.alignment="CENTER">
                      <BorderPane.margin>
@@ -123,7 +128,7 @@
                   </HBox>
                </top>
                <center>
-                  <BorderPane fx:id="playerPatternContainer" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                  <BorderPane fx:id="playerPatternContainer" BorderPane.alignment="CENTER" />
                </center></BorderPane>
          </children>
       </GridPane>

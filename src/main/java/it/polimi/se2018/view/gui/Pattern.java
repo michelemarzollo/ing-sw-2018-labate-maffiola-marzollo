@@ -4,12 +4,13 @@ import it.polimi.se2018.model.Cell;
 import it.polimi.se2018.model.Die;
 import it.polimi.se2018.model.events.PlayerStatus;
 import it.polimi.se2018.utils.Coordinates;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -49,6 +50,12 @@ public class Pattern {
     private GridPane patternGrid;
 
     /**
+     * The container of the grid.
+     */
+    @FXML
+    private BorderPane container;
+
+    /**
      * The state of the displayed player.
      */
     private PlayerStatus playerStatus;
@@ -57,6 +64,26 @@ public class Pattern {
      * The handler that is called upon click events.
      */
     private Consumer<Coordinates> handler;
+
+    @FXML
+    private void initialize(){
+
+        patternGrid.minHeightProperty().bind(patternGrid.minWidthProperty().multiply(0.8));
+        patternGrid.maxHeightProperty().bind(patternGrid.maxWidthProperty().multiply(0.8));
+
+        patternGrid.minWidthProperty().bind(
+                Bindings.min(
+                        container.widthProperty().multiply(0.9),
+                        container.heightProperty().multiply(0.9)
+                )
+        );
+        patternGrid.maxWidthProperty().bind(
+                Bindings.min(
+                        container.widthProperty().multiply(0.9),
+                        container.heightProperty().multiply(0.9)
+                )
+        );
+    }
 
     /**
      * Hides or displays the player name label.
@@ -72,9 +99,6 @@ public class Pattern {
      * Reduces the size of the pattern to the minimum possible.
      */
     public void minimize() {
-        patternGrid.prefWidthProperty().bind(patternGrid.minWidthProperty());
-        patternGrid.prefHeightProperty().bind(patternGrid.minHeightProperty());
-
         playerNameLabel.setFont(new Font(20));
         patternNameLabel.setFont(new Font(15));
     }
@@ -107,13 +131,13 @@ public class Pattern {
         for (int row = 0; row < grid.length; row++) {
             for (int col = 0; col < grid[row].length; col++) {
                 Cell cell = grid[row][col];
-                ImageView image;
+                AnchorPane cellRepresentation;
                 if (cell.getDie() == null)
-                    image = makeRestrictionAt(cell);
+                    cellRepresentation = makeRestrictionAt(cell);
                 else
-                    image = makeDieAt(cell.getDie());
+                    cellRepresentation = makeDieAt(cell.getDie());
 
-                insert(image, row, col);
+                insert(cellRepresentation, row, col);
             }
         }
     }
@@ -124,13 +148,17 @@ public class Pattern {
      * @param die The die to be represented.
      * @return An image view filled with the proper die image.
      */
-    private ImageView makeDieAt(Die die) {
-        String url = "dice/" + die.getColour().toString() + die.getValue() + ".jpg";
-        ImageView image = new ImageView();
-        image.setImage(new Image(url));
-        image.setPreserveRatio(true);
+    private AnchorPane makeDieAt(Die die) {
 
-        return image;
+        AnchorPane dieRepresentation = new AnchorPane();
+        String url = getClass().getResource("images/dice/"+ die.getColour() + die.getValue() + ".jpg").toString();
+        dieRepresentation.setStyle(
+                "-fx-background-image:url('" + url + "');" +
+                        "-fx-background-position: center center;" +
+                        "-fx-background-repeat: stretch;" +
+                        "-fx-background-size: cover");
+
+        return dieRepresentation;
     }
 
     /**
@@ -139,18 +167,22 @@ public class Pattern {
      * @param cell The cell containing the restriction to display.
      * @return An image view filled with the proper restriction image.
      */
-    private ImageView makeRestrictionAt(Cell cell) {
-        ImageView image = new ImageView();
+    private AnchorPane makeRestrictionAt(Cell cell) {
+        AnchorPane restrictionRepresentation = new AnchorPane();
+        String url = "";
         if (cell.getColour() == null && cell.getValue() != 0)
-            image.setImage(new Image(
-                    this.getClass().getResource("images/dice/Gray" + cell.getValue() + ".jpg").toString()));
+            url = this.getClass().getResource("images/dice/Gray" + cell.getValue() + ".jpg").toString();
         else if (cell.getValue() == 0 && cell.getColour() != null)
-            image.setImage(new Image(
-                    this.getClass().getResource("images/dice/" + cell.getColour() + "Restriction.jpg").toString()));
+            url = this.getClass().getResource("images/dice/" + cell.getColour() + "Restriction.jpg").toString();
 
-        image.setPreserveRatio(true);
+        if(!url.isEmpty())
+            restrictionRepresentation.setStyle(
+                "-fx-background-image:url('" + url + "');" +
+                        "-fx-background-position: center center;" +
+                        "-fx-background-repeat: stretch;" +
+                        "-fx-background-size: cover");
 
-        return image;
+        return restrictionRepresentation;
     }
 
     /**
@@ -161,11 +193,8 @@ public class Pattern {
      * @param row  The row index.
      * @param col  The column index.
      */
-    private void insert(ImageView cell, int row, int col) {
-        cell.fitWidthProperty()
-                .bind(patternGrid.getColumnConstraints().get(col).prefWidthProperty());
-        cell.fitHeightProperty()
-                .bind(patternGrid.getRowConstraints().get(row).prefHeightProperty());
+    private void insert(AnchorPane cell, int row, int col) {
+        cell.prefHeightProperty().bindBidirectional(cell.prefWidthProperty());
         cell.setOnMouseClicked(this::onCellClick);
         patternGrid.add(cell, col, row);
     }

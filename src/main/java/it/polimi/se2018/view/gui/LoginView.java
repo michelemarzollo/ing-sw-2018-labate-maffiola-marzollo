@@ -4,9 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.*;
-
-import java.io.IOException;
 
 /**
  * The controller to show the login view, which asks the username, the game
@@ -84,9 +81,9 @@ public class LoginView {
             parentController.displayError("You must insert a username!");
         else {
             if (rmi) {
-                parentController.getView().handleLogin(username, "//localhost/MyServer", 1099);
+                parentController.getView().handleLogin(username, "localhost", "MyServer");
             } else {
-                parentController.getView().handleLogin(username, "//localhost/MyServer", "servicename");
+                parentController.getView().handleLogin(username, "localhost", 7777);
             }
             parentController.displayWaitingView("Waiting for connection...");
         }

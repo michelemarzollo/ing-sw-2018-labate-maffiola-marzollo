@@ -34,7 +34,7 @@ public class SwapDiceEventPack extends BoardEventPack {
      */
     private void trySwap() {
         if (index != -1 && roundTrackSelection != null) {
-            getClientView().handleToolCardUsage(index, roundTrackSelection);
+            getClientView().handleToolCardUsage(index, roundTrackSelection, true);
             reset();
         }
     }

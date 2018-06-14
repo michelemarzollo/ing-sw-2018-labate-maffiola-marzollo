@@ -1,17 +1,21 @@
 package it.polimi.se2018.view.gui;
 
 import it.polimi.se2018.model.Die;
+import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 
 import java.util.List;
 import java.util.function.Consumer;
 
 /**
  * This class handles the display of the draft pool.
+ *
  * @author dvdmff
  */
 public class DraftPoolFiller {
@@ -44,9 +48,15 @@ public class DraftPoolFiller {
      * @deprecated Use a url manager instead.
      */
     @Deprecated
-    private Image loadDieImage(Die die) {
-        String url = "/dice/" + die.getColour() + die.getValue() + ".jpg";
-        return new Image(url);
+    private AnchorPane loadDieImage(Die die) {
+        String url = this.getClass().getResource("images/dice/" + die.getColour() + die.getValue() + ".jpg").toString();
+        AnchorPane dieImage = new AnchorPane();
+        dieImage.setStyle(
+                "-fx-background-image:url('" + url + "');" +
+                        "-fx-background-position: center center;" +
+                        "-fx-background-repeat: stretch;" +
+                        "-fx-background-size: cover");
+        return dieImage;
     }
 
     /**
@@ -71,12 +81,34 @@ public class DraftPoolFiller {
     public void setDice(List<Die> dice) {
         diceContainer.getChildren().clear();
         for (Die die : dice) {
-            ImageView dieImage = new ImageView(loadDieImage(die));
-            diceContainer.getChildren().add(dieImage);
-            dieImage.setPreserveRatio(true);
-            dieImage.setFitHeight(diceContainer.getHeight()); //check
+            AnchorPane dieImage = loadDieImage(die);
+            fitDie(dieImage, dice.size());
             dieImage.setOnMouseClicked(this::onClick);
+            diceContainer.getChildren().add(dieImage);
         }
+    }
+
+    private void fitDie(AnchorPane dieImage, int num) {
+        dieImage.minHeightProperty().bind(dieImage.minWidthProperty());
+        dieImage.maxHeightProperty().bind(dieImage.maxWidthProperty());
+
+        dieImage.minWidthProperty().bind(
+                Bindings.min(
+                        diceContainer.widthProperty()
+                                .subtract(diceContainer.getSpacing() * num)
+                                .divide(num),
+                        diceContainer.heightProperty().multiply(0.9)
+                )
+        );
+        dieImage.maxWidthProperty().bind(
+                Bindings.min(
+                        diceContainer.widthProperty()
+                                .subtract(diceContainer.getSpacing() * num)
+                                .divide(num),
+                        diceContainer.heightProperty().multiply(0.9)
+                )
+        );
+        HBox.setHgrow(dieImage, Priority.ALWAYS);
     }
 
     /**
