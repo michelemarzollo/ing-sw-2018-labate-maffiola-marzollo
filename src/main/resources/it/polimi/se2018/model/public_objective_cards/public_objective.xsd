@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:pub="http://se2018.polimi.it/public_objective"
+            targetNamespace="http://se2018.polimi.it/public_objective"
+            elementFormDefault="qualified">
+    
+    <xsd:simpleType name="victoryPoints">
+        <xsd:restriction base="xsd:int">
+            <xsd:minInclusive value="1"/>
+            <xsd:maxInclusive value="6"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="worksOn">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="colour"/>
+            <xsd:enumeration value="value"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="strategy">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Row"/>
+            <xsd:enumeration value="Column"/>
+            <xsd:enumeration value="Grid"/>
+            <xsd:enumeration value="Diagonals"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="range1to6">
+        <xsd:restriction base="xsd:int">
+            <xsd:minInclusive value="1"/>
+            <xsd:maxInclusive value="6"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="dieColour">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="BLUE"/>
+            <xsd:enumeration value="GREEN"/>
+            <xsd:enumeration value="PURPLE"/>
+            <xsd:enumeration value="RED"/>
+            <xsd:enumeration value="YELLOW"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!--a list of integers between 1 and 6-->
+    <xsd:simpleType name="valueList">
+        <xsd:list itemType="pub:range1to6"/>
+    </xsd:simpleType>
+
+    <!--a list of at most 6 integers between 1 and 6-->
+    <xsd:simpleType name="valueListOfMax6">
+        <xsd:restriction base="pub:valueList">
+            <xsd:maxLength value="6"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!--a list of the allowed colours-->
+    <xsd:simpleType name="colourList">
+        <xsd:list itemType="pub:dieColour"/>
+    </xsd:simpleType>
+
+    <!--a list of at most 5 colours-->
+    <xsd:simpleType name="colourListOfMax5">
+        <xsd:restriction base="pub:colourList">
+            <xsd:maxLength value="5"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+
+    <!--for cards that don't require special parameters in the constructor-->
+    <xsd:complexType name="noParam">
+        <xsd:all>
+            <xsd:element name="worksOn" type="pub:worksOn"/>
+            <xsd:element name="strategy" type="pub:strategy"/>
+        </xsd:all>
+    </xsd:complexType>
+
+
+    <!--a special definition for cards that require a list of colours as a
+    parameter in the constructor of the strategy-->
+    <xsd:complexType name="colourGrid">
+        <xsd:all>
+            <xsd:element name="worksOn" type="pub:worksOn" fixed="colour"/>
+            <xsd:element name="strategy" type="pub:strategy" fixed="Grid"/>
+            <xsd:element name="colourArray" type="pub:colourListOfMax5"/>
+        </xsd:all>
+    </xsd:complexType>
+
+    <!--a special definition for cards that require a list of values as a
+    parameter in the constructor of the strategy-->
+    <xsd:complexType name="valueGrid">
+        <xsd:all>
+            <xsd:element name="worksOn" type="pub:worksOn" fixed="value"/>
+            <xsd:element name="strategy" type="pub:strategy" fixed="Grid"/>
+            <xsd:element name="colourArray" type="pub:valueListOfMax6"/>
+        </xsd:all>
+    </xsd:complexType>
+
+    <!--for cards that require special parameters: they mey either be an array of colours or
+    a list of values, coherently with the attribute "worksOn", and only if the strategy is "Grid"-->
+    <xsd:complexType name="withParam">
+        <xsd:choice>
+            <xsd:element name="colourGrid" type="pub:colourGrid"/>
+            <xsd:element name="valueGrid" type="pub:valueGrid"/>
+        </xsd:choice>
+    </xsd:complexType>
+
+
+    <xsd:complexType name="withOrWithoutParameters">
+        <xsd:choice>
+            <xsd:element name="noParam" type="pub:noParam"/>
+            <xsd:element name="withParam" type="pub:withParam"/>
+        </xsd:choice>
+    </xsd:complexType>
+    
+    <xsd:element name="public_objective">
+        <xsd:complexType>
+            <xsd:all>
+                <xsd:element name="name" type="xsd:string"/>
+                <xsd:element name="description" type="xsd:string"/>
+                <xsd:element name="victoryPoints" type="pub:victoryPoints"/>
+                <xsd:element name="otherInformation" type="pub:withOrWithoutParameters"/>
+            </xsd:all>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>
