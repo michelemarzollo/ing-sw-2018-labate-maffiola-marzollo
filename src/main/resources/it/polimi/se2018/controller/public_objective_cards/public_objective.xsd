@@ -95,7 +95,7 @@
         <xsd:all>
             <xsd:element name="worksOn" type="pub:worksOn" fixed="value"/>
             <xsd:element name="strategy" type="pub:strategy" fixed="Grid"/>
-            <xsd:element name="colourArray" type="pub:valueListOfMax6"/>
+            <xsd:element name="valueArray" type="pub:valueListOfMax6"/>
         </xsd:all>
     </xsd:complexType>
 

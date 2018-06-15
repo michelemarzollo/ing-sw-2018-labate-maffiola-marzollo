@@ -119,7 +119,7 @@ public class SinglePlayerController extends Controller {
                 CardDealer cardDealer = new CardDealer(getGame());
                 //In singlePlayer mode the Player has two privateObjectiveCards and
                 //the number of ToolCards depend on the level of difficulty chosen.
-                cardDealer.deal(3, 2, difficulty.getDifficulty());
+                cardDealer.deal(3, 2, difficulty.getDifficulty(), this);
                 getGame().terminateSetup(); //this invocation in Game generates the GAME_SET_UP message
                 //now to begin the Game the only missing thing is the choice of a Pattern.
                 message.getView().showPatternSelection();
@@ -198,8 +198,8 @@ public class SinglePlayerController extends Controller {
         int privateScore;
         int emptySpacePenalty;
         Cell[][] pattern = getGame().getPlayers().get(0).getPattern().getGrid();
-        for (PublicObjectiveCard card : getGame().getPublicObjectiveCards()) {
-            publicScore += getPublicStrategy(card.getName()).getScore(pattern);
+        for (PublicObjectiveScore publicScoreCalculator : getPublicScoreCalculators()) {
+            publicScore += publicScoreCalculator.getScore(pattern);
         }
         //The chosen PrivateObjectiveCard is placed in the first position of the array (0).
         Colour privateObjectiveColour = getGame().getPlayers().get(0).getCards()[0].getColour();

@@ -16,7 +16,7 @@ public class ToolCardFactoryTest {
         int instances = 20;
         ToolCardFactory factory = new ToolCardFactory();
         try {
-            ToolCard[] cards = factory.newInstances(instances);
+            factory.newInstances(instances);
             Assert.fail();
         } catch (IllegalArgumentException ignored) {
 

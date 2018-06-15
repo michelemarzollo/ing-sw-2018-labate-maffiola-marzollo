@@ -1,10 +1,7 @@
 package it.polimi.se2018.model;
 
-import it.polimi.se2018.utils.GridUtils;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.Random;
 
 /**
  * Unit tests for PrivateObjectiveCard class.

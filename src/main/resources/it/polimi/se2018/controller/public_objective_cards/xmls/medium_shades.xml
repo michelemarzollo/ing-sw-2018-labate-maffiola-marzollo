@@ -2,17 +2,17 @@
 
 <public_objective xmlns="http://se2018.polimi.it/public_objective"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xsi:schemaLocation="http://se2018.polimi.it/public_objective  public_objective.xsd">
+                  xsi:schemaLocation="http://se2018.polimi.it/public_objective  ../public_objective.xsd">
 
-    <name>Shade Variety</name>
-    <description>Sets of one of each value anywhere</description>
-    <victoryPoints>5</victoryPoints>
+    <name>Medium Shades</name>
+    <description>Sets of 3 &amp; 4 values anywhere</description>
+    <victoryPoints>2</victoryPoints>
     <otherInformation>
         <withParam>
             <valueGrid>
                 <worksOn>value</worksOn>
                 <strategy>Grid</strategy>
-                <colourArray>1 2 3 4 5 6</colourArray>
+                <valueArray>3 4</valueArray>
             </valueGrid>
         </withParam>
     </otherInformation>

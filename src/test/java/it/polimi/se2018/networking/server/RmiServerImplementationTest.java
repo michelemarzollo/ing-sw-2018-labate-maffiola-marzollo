@@ -6,7 +6,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.rmi.RemoteException;
-import java.util.Objects;
 
 /**
  * Unit tests for RmiServerImplementation.

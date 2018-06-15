@@ -28,7 +28,7 @@ public class GridVarietyScore extends PublicObjectiveScore {
      * @param propertyIsColour the property of the die on which the card works.
      * @param elements      the elements on which
      */
-    GridVarietyScore(int victoryPoints, boolean propertyIsColour, Object[] elements) {
+    public GridVarietyScore(int victoryPoints, boolean propertyIsColour, Object[] elements) {
         super(victoryPoints, propertyIsColour);
         this.elements = elements;
     }
@@ -61,7 +61,6 @@ public class GridVarietyScore extends PublicObjectiveScore {
         //Sorts the occurrences array, so that the minimum (the value on which the result depends)
         //is in position 0
         Arrays.sort(occurrences);
-        System.out.println(occurrences[0]);
         return victoryPoints * occurrences[0];
     }
 

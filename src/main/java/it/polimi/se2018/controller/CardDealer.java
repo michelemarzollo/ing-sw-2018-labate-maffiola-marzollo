@@ -1,7 +1,11 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.utils.Logger;
+import org.xml.sax.SAXException;
 
+import java.io.File;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -51,12 +55,23 @@ public class CardDealer {
      *                   to be dealt.
      * @param toolCards The number of {@link ToolCard} to be dealt.
      */
-    public void deal(int publicObj, int privateObj, int toolCards){
-        PublicObjectiveFactory publicObjectiveFactory = new PublicObjectiveFactory();
+    public void deal(int publicObj, int privateObj, int toolCards, Controller controller){
+        try {
+            File directory = new File(getClass()
+                    .getResource("public_objective_cards/xmls")
+                    .toURI()
+            );
+            XmlPublicObjectiveLoader publicObjectiveFactory = new XmlPublicObjectiveLoader(directory, controller);
+            this.getGame().setPublicObjectiveCards(publicObjectiveFactory.load(publicObj));
+        } catch (URISyntaxException e) {
+            Logger.getDefaultLogger().log("URISyntaxException " + e);
+        } catch (SAXException e) {
+            Logger.getDefaultLogger().log("USAXException " + e);
+        }
+
         ToolCardFactory toolCardFactory = new ToolCardFactory();
         PrivateObjectiveFactory privateObjectiveFactory = new PrivateObjectiveFactory();
         List<Player> players = game.getPlayers();
-        this.getGame().setPublicObjectiveCards(publicObjectiveFactory.newInstances(publicObj));
         this.getGame().setToolCards(toolCardFactory.newInstances(toolCards));
         PrivateObjectiveCard[] cards = privateObjectiveFactory.newInstances(players.size()*privateObj);
         for(int i = 0; i < players.size(); i++){

@@ -189,8 +189,8 @@ public class MultiPlayerController extends Controller {
             //The score of one player
             int score = 0;
             //Each PublicObjectiveCard gives an additional score
-            for (PublicObjectiveCard publicCard : getGame().getPublicObjectiveCards()) {
-                score += getPublicStrategy(publicCard.getName()).getScore(player.getPattern().getGrid());
+            for (PublicObjectiveScore publicScore : getPublicScoreCalculators()) {
+                score += publicScore.getScore(player.getPattern().getGrid());
             }
             //The score given by the PrivateObjectiveCard
             privateScoreCalculator.setColour(player.getCards()[0].getColour());
@@ -258,7 +258,7 @@ public class MultiPlayerController extends Controller {
      */
     private void setUpGame() {
         CardDealer cardDealer = new CardDealer(getGame());
-        cardDealer.deal(3, 1, 3);
+        cardDealer.deal(3, 1, 3, this);
         getGame().terminateSetup();
     }
 

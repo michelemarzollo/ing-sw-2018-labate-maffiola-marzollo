@@ -46,7 +46,7 @@ public class TestDiceBag {
      */
     @Test
     public void testPushBack() {
-        List<Die> list = bag.draft(90);
+        bag.draft(90);
         Die die = new Die(4, new Random(), Colour.GREEN);
         bag.pushBack(die);
         List<Die> list1 = bag.draft(1);
@@ -60,13 +60,13 @@ public class TestDiceBag {
     @Test
     public void testDimension() {
         try {
-            List<Die> list = bag.draft(90);
+            bag.draft(90);
         } catch (IllegalArgumentException e) {
             fail();
         }
         //Tries to draft a die when the bag is empty
         try {
-            List<Die> list2 = bag.draft(1);
+            bag.draft(1);
         } catch (IllegalArgumentException e) {
             assertTrue(true);
         }
@@ -78,13 +78,13 @@ public class TestDiceBag {
     @Test
     public void testDraftException() {
         try {
-            List<Die> list = bag.draft(40);
+            bag.draft(40);
         } catch (IllegalArgumentException e) {
             fail();
         }
         //Tries to draft more dice than the ones contained in the DiceBag
         try {
-            List<Die> list = bag.draft(60);
+            bag.draft(60);
             fail();
         } catch (IllegalArgumentException e) {
             assertTrue(true);

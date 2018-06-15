@@ -4,13 +4,15 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.events.*;
 import it.polimi.se2018.utils.Coordinates;
 import it.polimi.se2018.utils.GameUtils;
+import it.polimi.se2018.utils.Logger;
 import it.polimi.se2018.utils.MockView;
-import it.polimi.se2018.view.View;
 import org.junit.Assert;
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
+import java.io.File;
+import java.net.URISyntaxException;
 import java.util.Random;
-import java.util.Timer;
 
 import static org.junit.Assert.*;
 
@@ -172,7 +174,6 @@ public class MultiPlayerControllerTest {
         game.setToolCards(toolCards);
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view1 = new MockView("Pippo");
-        MockView view2 = new MockView("Pluto");
         game.getTurnManager().getCurrentTurn().setSelectedToolCard(toolCards[0]);
         IncrementDieValue msg = new IncrementDieValue(2, true, view1, Action.APPLY_TOOL_CARD, "Pippo");
         toolCards[0].use();
@@ -219,6 +220,9 @@ public class MultiPlayerControllerTest {
         assertEquals(5 - 19 + 4, pluto.getScore());
     }
 
+    /**
+     * Same as the previous one, but also with points given by the public objective cards.
+     */
     @Test
     public void testCalculateScoresWithCards() {
         Game game = GameUtils.getStartedGame(true);
@@ -229,12 +233,22 @@ public class MultiPlayerControllerTest {
         Die red5 = new Die(5, new Random(), Colour.RED);
         Player pippo = game.getPlayers().get(0);
         Player pluto = game.getPlayers().get(1);
-        PublicObjectiveCard[] publicObjectiveCards = {
-                new PublicObjectiveCard("Color Variety", "TestDescription", 4),
-                new PublicObjectiveCard("Deep Shades", "TestDescription", 2),
-                new PublicObjectiveCard("Row Color Variety", "TestDescription", 6)
-        };
-        game.setPublicObjectiveCards(publicObjectiveCards);
+
+        //sets the public Objective Cards in the game
+        try {
+            File directory = new File(getClass()
+                    .getResource("public_objective_cards/xmls")
+                    .toURI()
+            );
+            XmlPublicObjectiveLoader publicObjectiveFactory = new XmlPublicObjectiveLoader(directory, controller);
+            game.setPublicObjectiveCards(publicObjectiveFactory.load(3));
+        } catch (URISyntaxException e) {
+            Logger.getDefaultLogger().log("URISyntaxException " + e);
+        } catch (SAXException e) {
+            Logger.getDefaultLogger().log("USAXException " + e);
+        }
+
+        //sets patterns
         try {
             Pattern newPattern1 = pippo.getPattern()
                     .placeDie(blue6, new Coordinates(1, 0));
@@ -249,9 +263,19 @@ public class MultiPlayerControllerTest {
             //will never enter here
             fail();
         }
+
+        //calculates the scores given by the public objective cards
+        int pippoPublicScore = 0;
+        int plutoPublicScore = 0;
+        for(PublicObjectiveScore publicObjectiveScore: controller.getPublicScoreCalculators()){
+            pippoPublicScore += publicObjectiveScore.getScore(pippo.getPattern().getGrid());
+            plutoPublicScore += publicObjectiveScore.getScore(pluto.getPattern().getGrid());
+        }
+
+
         controller.calculateScores();
-        assertEquals(6 - 18 + 4 + 2, pippo.getScore());
-        assertEquals(5 - 19 + 4, pluto.getScore());
+        assertEquals(6 - 18 + 4 + pippoPublicScore, pippo.getScore());
+        assertEquals(5 - 19 + 4 + plutoPublicScore, pluto.getScore());
     }
 
     @Test

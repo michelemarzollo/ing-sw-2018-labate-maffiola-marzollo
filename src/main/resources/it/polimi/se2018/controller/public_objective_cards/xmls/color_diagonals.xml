@@ -2,7 +2,7 @@
 
 <public_objective xmlns="http://se2018.polimi.it/public_objective"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xsi:schemaLocation="http://se2018.polimi.it/public_objective  public_objective.xsd">
+                  xsi:schemaLocation="http://se2018.polimi.it/public_objective  ../public_objective.xsd">
 
     <name>Color Diagonals</name>
     <description>Count of diagonally adjacent same color dice</description>

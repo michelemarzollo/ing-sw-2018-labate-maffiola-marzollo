@@ -1,7 +1,8 @@
 package it.polimi.se2018.utils;
 
+import it.polimi.se2018.controller.Controller;
+import it.polimi.se2018.controller.XmlPublicObjectiveLoader;
 import it.polimi.se2018.model.*;
-import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import java.io.File;
@@ -285,99 +286,5 @@ public class GameUtils {
         if (multiPlayer)
             dice.add(new Die(4, new Random(0), Colour.GREEN));
         return dice;
-    }
-
-    /**
-     * Creates a more complete game, with a real window pattern and 5 placed dice,
-     * but where the setUp is not done casually and it is easy to see how it should behave.
-     * (For single player configuration).
-     * <p>
-     * The dice are chosen so that the sum of the values for each colour is always six, so that
-     * independently from the Private Objective chosen, the score related to it
-     * will always be 6.
-     * There is just one purple and just one 6, so it's easy to calculate also the score associated
-     * to the chosen Public Objective Cards.</p>
-     *
-     * @return the game
-     * @author michelemarzollo
-     */
-    public static Game getCompleteSinglePlayerGame() {
-
-        Cell[][] grid = new Cell[4][5];
-        Pattern sunCatcher;
-
-        //The cycle instantiates a grid of cell with no restrictions
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[i].length; j++) {
-                grid[i][j] = new Cell();
-            }
-        }
-        //Some cell have a restriction
-        grid[0][1] = new Cell(Colour.BLUE);
-        grid[0][2] = new Cell(2);
-        grid[0][4] = new Cell(Colour.YELLOW);
-        grid[1][1] = new Cell(4);
-        grid[1][3] = new Cell(Colour.RED);
-        grid[2][2] = new Cell(5);
-        grid[2][3] = new Cell(Colour.YELLOW);
-        grid[3][0] = new Cell(Colour.GREEN);
-        grid[3][1] = new Cell(3);
-        grid[3][4] = new Cell(Colour.PURPLE);
-
-        sunCatcher = new Pattern("SunCatcher", 3, grid);
-
-        Random random = new Random();
-
-        try {
-            sunCatcher = sunCatcher.placeDie(new Die(6, random, Colour.PURPLE), new Coordinates(3, 4));
-            sunCatcher = sunCatcher.placeDie(new Die(4, random, Colour.YELLOW), new Coordinates(2, 3));
-            sunCatcher = sunCatcher.placeDie(new Die(5, random, Colour.RED), new Coordinates(2, 2));
-            sunCatcher = sunCatcher.placeDie(new Die(3, random, Colour.BLUE), new Coordinates(3, 1));
-            sunCatcher = sunCatcher.placeDie(new Die(1, random, Colour.GREEN), new Coordinates(3, 0));
-            sunCatcher = sunCatcher.placeDie(new Die(1, random, Colour.RED), new Coordinates(1, 3));
-            sunCatcher = sunCatcher.placeDie(new Die(2, random, Colour.YELLOW), new Coordinates(0, 3));
-            sunCatcher = sunCatcher.placeDie(new Die(5, random, Colour.GREEN), new Coordinates(1, 4));
-            sunCatcher = sunCatcher.placeDie(new Die(3, random, Colour.BLUE), new Coordinates(2, 0));
-        } catch (PlacementErrorException e) {
-            System.out.println("Placement error");
-        }
-
-        Player player = new Player("Pippo");
-        Game game = new Game();
-        PublicObjectiveCard[] publicObjectiveCards = {
-                new PublicObjectiveCard("Color Variety", "TestDescription", 4),
-                new PublicObjectiveCard("Deep Shades", "TestDescription", 2)
-        };
-        PrivateObjectiveFactory privateObjectiveFactory = new PrivateObjectiveFactory();
-        PrivateObjectiveCard[] privateObjectiveCards = privateObjectiveFactory.newInstances(2);
-        game.addPlayer(player);
-        game.setPublicObjectiveCards(publicObjectiveCards);
-        game.getPlayers().get(0).setCards(privateObjectiveCards);
-
-        ToolCard[] toolCards = {new ToolCard("Grozing Pliers", "Description", Colour.PURPLE),
-                new ToolCard("Eglomise Brush", "Description", Colour.BLUE)};
-        game.setToolCards(toolCards);
-        game.terminateSetup();
-        game.start();
-        game.getPlayers().get(0).setPattern(sunCatcher);
-
-        List<Die> dice = new ArrayList<>(Arrays.asList(
-                new Die(4, random, Colour.YELLOW),
-                new Die(5, random, Colour.RED),
-                new Die(3, random, Colour.BLUE),
-                new Die(6, random, Colour.PURPLE)));
-
-        game.getDraftPool().setDice(dice);
-
-        //setting of the roundtrack
-        game.getRoundTrack().addAllForRound(1, new ArrayList<>(Arrays.asList(
-                new Die(6, random, Colour.PURPLE),
-                new Die(4, random, Colour.YELLOW))));
-        game.getRoundTrack().addAllForRound(2, new ArrayList<>(Arrays.asList(
-                new Die(5, random, Colour.RED),
-                new Die(3, random, Colour.BLUE),
-                new Die(1, random, Colour.GREEN))));
-
-        return game;
     }
 }
