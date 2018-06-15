@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
  *
  * @author michelemarzollo
  */
-public class TestDie {
+public class DieTest {
 
     /**
      * Tests that it's not allowed to create a die with invalid value

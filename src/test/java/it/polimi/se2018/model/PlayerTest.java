@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
  *
  * @author michelemarzollo
  */
-public class TestPlayer {
+public class PlayerTest {
 
     /**
      * The player that will be used for tests.

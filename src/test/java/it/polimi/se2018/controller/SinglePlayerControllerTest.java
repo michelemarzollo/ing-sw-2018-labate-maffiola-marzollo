@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
  *
  * @author michelemarzollo
  */
-public class TestSinglePlayerController {
+public class SinglePlayerControllerTest {
 
     private Game game;
     private SinglePlayerController controller;

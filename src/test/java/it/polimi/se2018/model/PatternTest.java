@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
  *
  * @author michelemarzollo
  */
-public class TestPattern {
+public class PatternTest {
 
     /**
      * The grid that will be used in many methods

@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
  *
  * @author michelemarzollo
  */
-public class TestDiceBag {
+public class DiceBagTest {
 
     /**
      * The DiceBag that will be used for all tests.
