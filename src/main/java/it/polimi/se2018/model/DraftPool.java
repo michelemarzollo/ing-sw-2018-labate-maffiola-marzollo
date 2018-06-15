@@ -19,12 +19,15 @@ public class DraftPool {
      */
     private List<Die> dice;
 
+    /**
+     * The reference to the {@link Game} to which the DraftPool belongs.
+     */
     private final Game game;
-
 
     /**
      * The constructor of the class. When the class is built there is no forced selection:
      * the attribute <code>forcedSelection</code> is set to a non valid value -1.
+     *
      * @param game The game to which the DraftPool has to be bound.
      */
     public DraftPool(Game game) {
@@ -33,15 +36,9 @@ public class DraftPool {
     }
 
     /**
-     * Returns the current amount of dice in the draft pool.
-     *
-     * @return The number of dice currently in the draft pool.
+     * The method to notify the view of a change of its status.
      */
-    public int getAmount() {
-        return dice.size();
-    }
-
-    private void notifyChange(){
+    private void notifyChange() {
         DraftPoolUpdate message = new DraftPoolUpdate(getDice());
         game.notifyObservers(message);
     }
@@ -90,23 +87,4 @@ public class DraftPool {
         return dice.get(index);
     }
 
-
-    /**
-     * Method that returns {@code true} if {@code colour}
-     * corresponds to at least a Die's colour in {@code draftPool}.
-     * This method is useful to detect if a {@link ToolCard} can be used or not
-     * in single player mode: Tool Cards may be used only by spending
-     * a Die from the {@link DraftPool} that matches the ToolCard's Colour.
-     *
-     * @param colour The colour of the toolCard that the Player is
-     *               trying to use.
-     * @return {@code true} if a Die in the {@code draftPool} is
-     * of the {@code colour} requested, {@code false} otherwise.
-     */
-    public boolean isPresent(Colour colour) {
-        for (Die die : getDice()) {
-            if (die.getColour().equals(colour)) return true;
-        }
-        return false;
-    }
 }
