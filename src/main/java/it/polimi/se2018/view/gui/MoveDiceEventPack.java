@@ -2,6 +2,12 @@ package it.polimi.se2018.view.gui;
 
 import it.polimi.se2018.utils.Coordinates;
 import it.polimi.se2018.view.ClientView;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Set of events used when the player has to move two dices on its pattern.
@@ -11,19 +17,27 @@ public class MoveDiceEventPack extends BoardEventPack {
     /**
      * The selected source positions.
      */
-    private Coordinates[] sources;
+    private List<Coordinates> sources = new ArrayList<>();
     /**
      * The selected destination positions.
      */
-    private Coordinates[] destinations;
+    private List<Coordinates> destinations = new ArrayList<>();
+
+    private int currentIndex = 0;
+
+    private boolean moveAll;
+
+    private int amount;
 
     /**
      * Creates a new instance that uses the specified client view to handle
      * requests.
      * @param clientView The client view responsible for requests.
      */
-    public MoveDiceEventPack(ClientView clientView) {
+    public MoveDiceEventPack(ClientView clientView, int amount, boolean moveAll) {
         super(clientView);
+        this.amount = amount;
+        this.moveAll = moveAll;
         reset();
     }
 
@@ -55,18 +69,33 @@ public class MoveDiceEventPack extends BoardEventPack {
      */
     @Override
     public void patternHandler(Coordinates coordinates) {
-        if(sources[0] == null)
-            sources[0] = coordinates;
-        else if(destinations[0] == null)
-            destinations[0] = coordinates;
-        else if(sources[1] == null)
-            sources[1] = coordinates;
-        else {
-            destinations[1] = coordinates;
-            getClientView().handleToolCardUsage(sources, destinations);
+        boolean goOn = true;
+        if(sources.size() == currentIndex)
+            sources.add(coordinates);
+        else if(destinations.size() == currentIndex) {
+            destinations.add(coordinates);
+            ++currentIndex;
+            if(currentIndex != amount && !moveAll)
+                goOn = askContinue();
+        }
+        if(!goOn || currentIndex == amount){
+            if(amount == 1)
+                getClientView().handleToolCardUsage(sources.get(0), destinations.get(0));
+            else
+                getClientView().handleToolCardUsage(
+                        sources.toArray(new Coordinates[0]),
+                        destinations.toArray(new Coordinates[0]));
             reset();
         }
     }
+
+    private boolean askContinue() {
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setContentText("Move another die?");
+        Optional<ButtonType> response = confirm.showAndWait();
+        return response.orElse(ButtonType.CANCEL) == ButtonType.OK;
+    }
+
 
     /**
      * Disables every control but the player pattern.
@@ -92,7 +121,7 @@ public class MoveDiceEventPack extends BoardEventPack {
      * Resets the collected player selections.
      */
     private void reset() {
-        sources = new Coordinates[2];
-        destinations = new Coordinates[2];
+        sources.clear();
+        destinations.clear();
     }
 }

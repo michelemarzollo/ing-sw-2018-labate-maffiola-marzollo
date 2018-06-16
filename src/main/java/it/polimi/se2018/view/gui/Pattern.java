@@ -21,6 +21,7 @@ import java.util.function.Consumer;
 
 /**
  * This class is the JavaFX controller used when a pattern is displayed.
+ *
  * @author dvdmff
  */
 public class Pattern {
@@ -66,17 +67,11 @@ public class Pattern {
     private Consumer<Coordinates> handler;
 
     @FXML
-    private void initialize(){
+    private void initialize() {
 
         patternGrid.minHeightProperty().bind(patternGrid.minWidthProperty().multiply(0.8));
         patternGrid.maxHeightProperty().bind(patternGrid.maxWidthProperty().multiply(0.8));
 
-        patternGrid.minWidthProperty().bind(
-                Bindings.min(
-                        container.widthProperty().multiply(0.9),
-                        container.heightProperty().multiply(0.9)
-                )
-        );
         patternGrid.maxWidthProperty().bind(
                 Bindings.min(
                         container.widthProperty().multiply(0.9),
@@ -128,6 +123,7 @@ public class Pattern {
      */
     private void fillGrid() {
         Cell[][] grid = playerStatus.getPattern().getGrid();
+        patternGrid.getChildren().clear();
         for (int row = 0; row < grid.length; row++) {
             for (int col = 0; col < grid[row].length; col++) {
                 Cell cell = grid[row][col];
@@ -142,6 +138,20 @@ public class Pattern {
         }
     }
 
+    private void setCellStyle(AnchorPane cell, String url) {
+        if (!url.isEmpty())
+            cell.setStyle(
+                    "-fx-background-image:url('" + url + "');" +
+                            "-fx-background-position: center center;" +
+                            "-fx-background-repeat: stretch;" +
+                            "-fx-background-size: cover;" +
+                            "-fx-border-color:black;" +
+                            "-fx-border-width: 2px");
+        else
+            cell.setStyle("-fx-border-color:black;" +
+                    "-fx-border-width: 2px");
+    }
+
     /**
      * Creates a new ImageView that represents the specified die.
      *
@@ -151,12 +161,8 @@ public class Pattern {
     private AnchorPane makeDieAt(Die die) {
 
         AnchorPane dieRepresentation = new AnchorPane();
-        String url = getClass().getResource("images/dice/"+ die.getColour() + die.getValue() + ".jpg").toString();
-        dieRepresentation.setStyle(
-                "-fx-background-image:url('" + url + "');" +
-                        "-fx-background-position: center center;" +
-                        "-fx-background-repeat: stretch;" +
-                        "-fx-background-size: cover");
+        String url = getClass().getResource("images/dice/" + die.getColour() + die.getValue() + ".jpg").toString();
+        setCellStyle(dieRepresentation, url);
 
         return dieRepresentation;
     }
@@ -175,12 +181,7 @@ public class Pattern {
         else if (cell.getValue() == 0 && cell.getColour() != null)
             url = this.getClass().getResource("images/dice/" + cell.getColour() + "Restriction.jpg").toString();
 
-        if(!url.isEmpty())
-            restrictionRepresentation.setStyle(
-                "-fx-background-image:url('" + url + "');" +
-                        "-fx-background-position: center center;" +
-                        "-fx-background-repeat: stretch;" +
-                        "-fx-background-size: cover");
+        setCellStyle(restrictionRepresentation, url);
 
         return restrictionRepresentation;
     }

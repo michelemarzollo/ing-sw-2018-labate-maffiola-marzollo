@@ -44,9 +44,10 @@ public class ScoreBoard {
 
     /**
      * Sets and displays the specified score board.
+     *
      * @param scoreBoardMap The score board to display.
      */
-    public void setScoreBoardMap(Map<String, Integer> scoreBoardMap){
+    public void setScoreBoardMap(Map<String, Integer> scoreBoardMap) {
         this.scoreBoardMap = scoreBoardMap;
         start();
     }
@@ -54,13 +55,14 @@ public class ScoreBoard {
     /**
      * Places a marker in the given grid in te position identified by {@code cellNum}
      * for the player placed in the specified position.
-     * @param grid The grid where the marker has to be placed.
-     * @param cellNum The number of the cell to fill.
-     * @param playerIndex The positionn of the player.
+     *
+     * @param grid        The grid where the marker has to be placed.
+     * @param cellNum     The number of the cell to fill.
+     * @param playerIndex The position of the player.
      */
-    private void fillGrid(GridPane grid, int cellNum, int playerIndex){
-        int radius = 15;
-        if(cellNum > 0 && cellNum < 10){
+    private void fillGrid(GridPane grid, int cellNum, int playerIndex) {
+        int radius = 20;
+        if (cellNum > 0 && cellNum < 10) {
             Circle marker = new Circle();
             marker.setRadius(radius);
             marker.setFill(colors[playerIndex]);
@@ -75,18 +77,21 @@ public class ScoreBoard {
      */
     private void start() {
         int playerIndex = 0;
-        for(Map.Entry<String, Integer> entry : scoreBoardMap.entrySet()){
+        for (Map.Entry<String, Integer> entry : scoreBoardMap.entrySet()) {
 
             int score = entry.getValue();
             int tens = score / 10;
             int units = score % 10;
 
-            fillGrid(tensGrid, tens,playerIndex);
+            fillGrid(tensGrid, tens, playerIndex);
             fillGrid(unitsGrid, units, playerIndex);
 
             Label playerName = new Label();
-            playerName.setText(playerIndex + ". " + entry.getKey());
+            String text = String.format("%d. %s (%d)", playerIndex, entry.getKey(), entry.getValue());
+            playerName.setText(text);
             playerName.setTextFill(colors[playerIndex]);
+            playerName.setStyle("-fx-font-weight: bold;" +
+                    "-fx-font-size: 20px");
             playerNames.getChildren().add(playerName);
 
             ++playerIndex;

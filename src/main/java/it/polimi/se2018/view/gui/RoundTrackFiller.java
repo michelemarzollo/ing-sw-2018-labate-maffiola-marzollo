@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 import java.util.List;
@@ -72,7 +73,7 @@ public class RoundTrackFiller {
                 VBox dieContainer = (VBox) columnContainer.getChildren().get(col);
                 int row = dieContainer.getChildren().indexOf(source);
                 if (row != -1) {
-                    selectionHandler.accept(new Coordinates(row, col));
+                    selectionHandler.accept(new Coordinates(col, row));
                     return;
                 }
             }
@@ -96,22 +97,17 @@ public class RoundTrackFiller {
                 container.getChildren().add(dieImage);
                 dieImage.setOnMouseClicked(this::onClick);
             }
+            HBox.setHgrow(container, Priority.ALWAYS);
             columnContainer.getChildren().add(container);
         }
     }
 
     private void fitColumn(VBox column, int num) {
-        column.minWidthProperty().bind(
+        column.prefWidthProperty().bind(
                 columnContainer.widthProperty()
                         .subtract(columnContainer.getSpacing() * num)
                         .divide(num)
         );
-        column.maxWidthProperty().bind(
-                columnContainer.widthProperty()
-                        .subtract(columnContainer.getSpacing() * num)
-                        .divide(num)
-        );
-
     }
 
     private void fitDie(VBox container, AnchorPane dieImage) {
@@ -119,10 +115,10 @@ public class RoundTrackFiller {
         dieImage.maxHeightProperty().bind(dieImage.maxWidthProperty());
 
         dieImage.minWidthProperty().bind(
-                        container.widthProperty()
+                        container.prefWidthProperty()
         );
         dieImage.maxWidthProperty().bind(
-                        container.widthProperty()
+                        container.prefWidthProperty()
         );
     }
 

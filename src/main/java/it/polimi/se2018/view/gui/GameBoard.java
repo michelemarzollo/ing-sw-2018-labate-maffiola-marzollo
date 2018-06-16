@@ -375,12 +375,27 @@ public abstract class GameBoard {
             getTurnLabel().setText("");
     }
 
+    private void refreshDraftPool(){
+        ViewDataOrganizer organizer = displayer.getDataOrganizer();
+        if (organizer.getDraftPool() != null){
+            draftPoolFiller.setDice(displayer.getDataOrganizer().getDraftPool());
+            if(organizer.getNextTurn() != null){
+                int index = organizer.getNextTurn().getSacrificeIndex();
+                if(index != -1)
+                    draftPoolFiller.setSacrifice(index);
+                index = organizer.getNextTurn().getForcedSelectionIndex();
+                if(index != -1)
+                    draftPoolFiller.setForcedSelection(index);
+            }
+        }
+    }
+
     /**
      * Refreshes all displayed data that can be refreshed.
      */
     void refreshData() {
-        if (displayer.getDataOrganizer().getDraftPool() != null)
-            draftPoolFiller.setDice(displayer.getDataOrganizer().getDraftPool());
+        refreshDraftPool();
+
         if (displayer.getDataOrganizer().getRoundTrack() != null)
             roundTrackFiller.setLeftoverDice(displayer.getDataOrganizer().getRoundTrack());
 

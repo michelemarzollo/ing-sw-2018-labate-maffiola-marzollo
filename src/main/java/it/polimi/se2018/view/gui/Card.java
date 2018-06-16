@@ -8,7 +8,6 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -22,7 +21,7 @@ import java.util.function.Consumer;
  */
 public class Card {
 
-    private static final double MAX_X = 350;
+    private static final double MAX_X = 450;
 
     /**
      * The container holding the card.
@@ -79,10 +78,8 @@ public class Card {
     /**
      * Event handler for click events.
      * <p>It delegates the handler.</p>
-     *
-     * @param event The mouse event.
      */
-    private void onClick(MouseEvent event) {
+    private void onClick() {
         boolean use = getZoomDialog().showAndWait().orElse(false);
         if (use && handler != null)
             handler.accept(realName);
@@ -102,7 +99,7 @@ public class Card {
                         "-fx-background-repeat: stretch;" +
                         "-fx-background-size: cover;");
         fitImage();
-        cardImage.setOnMouseClicked(this::onClick);
+        cardImage.setOnMouseClicked(e -> onClick());
     }
 
     /**
@@ -112,12 +109,6 @@ public class Card {
         cardImage.minHeightProperty().bind(cardImage.minWidthProperty().multiply(ratio));
         cardImage.maxHeightProperty().bind(cardImage.maxWidthProperty().multiply(ratio));
 
-        cardImage.minWidthProperty().bind(
-                Bindings.min(
-                        container.widthProperty().multiply(0.3),
-                        container.heightProperty().multiply(0.7)
-                )
-        );
         cardImage.maxWidthProperty().bind(
                 Bindings.min(
                         container.widthProperty().multiply(0.3),
@@ -138,15 +129,15 @@ public class Card {
         cardDialog.setDialogPane(pane);
         BorderPane borderPane = new BorderPane();
         pane.setContent(borderPane);
-        ImageView imageView = new ImageView(new Image(url, MAX_X, MAX_X * ratio, true, false));
+        ImageView imageView = new ImageView(new Image(url, MAX_X, MAX_X * ratio, true, true));
         borderPane.setCenter(imageView);
         ButtonBar buttonBar = new ButtonBar();
         Button close = new Button("Close");
-        close.setOnMouseClicked(this::close);
+        close.setOnMouseClicked(e -> close());
         buttonBar.getButtons().add(close);
         if(handler != null) {
             Button use = new Button("Use");
-            use.setOnMouseClicked(this::use);
+            use.setOnMouseClicked(e -> use());
             buttonBar.getButtons().add(use);
         }
         buttonBar.setPadding(new Insets(15,0,0,0));
@@ -154,10 +145,10 @@ public class Card {
         return cardDialog;
     }
 
-    private void close(MouseEvent event){
+    private void close(){
         cardDialog.setResult(false);
     }
-    private void use(MouseEvent event){
+    private void use(){
         cardDialog.setResult(true);
     }
 }

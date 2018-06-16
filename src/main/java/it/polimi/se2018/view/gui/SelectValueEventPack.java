@@ -4,9 +4,14 @@ import it.polimi.se2018.model.Colour;
 import it.polimi.se2018.model.Die;
 import it.polimi.se2018.utils.Coordinates;
 import it.polimi.se2018.view.ClientView;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 /**
@@ -42,7 +47,23 @@ public class SelectValueEventPack extends BoardEventPack {
      */
     @Override
     public void draftPoolHandler(int index) {
-        this.value = index + 1;
+        //Can't be used
+    }
+
+    private Dialog<Integer> makeDialog(){
+        Dialog<Integer> diceDialog = new Dialog<>();
+        DialogPane pane = new DialogPane();
+        pane.setMinWidth(400);
+        pane.setMinHeight(300);
+        BorderPane borderPane = new BorderPane();
+        pane.setContent(borderPane);
+        diceDialog.setDialogPane(pane);
+        HBox diceContainer = new HBox();
+        borderPane.setCenter(diceContainer);
+        DraftPoolFiller filler = new DraftPoolFiller(diceContainer);
+        filler.setDice(getDice());
+        filler.setSelectionHandler(i -> diceDialog.setResult(i + 1));
+        return diceDialog;
     }
 
     /**
@@ -60,10 +81,8 @@ public class SelectValueEventPack extends BoardEventPack {
      */
     @Override
     public void patternHandler(Coordinates coordinates) {
-        if(value != -1){
+        if(value != -1)
             getClientView().handleToolCardUsage(coordinates, value);
-            value = -1;
-        }
     }
 
     /**
@@ -86,7 +105,9 @@ public class SelectValueEventPack extends BoardEventPack {
     @Override
     public void prepareControls(GameBoard board) {
         board.getToolCardContainer().setDisable(true);
-        board.getDraftPoolFiller().setDice(getDice());
+        board.getDraftPoolContainer().setDisable(true);
+        Optional<Integer> result = makeDialog().showAndWait();
+        value = result.orElse(-1);
     }
 
     /**

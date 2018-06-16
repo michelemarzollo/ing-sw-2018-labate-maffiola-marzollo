@@ -12,125 +12,123 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2018.view.gui.MultiPlayerBoard">
-   <children>
-      <GridPane layoutX="142.0" layoutY="163.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" percentWidth="33.0" />
-          <ColumnConstraints hgrow="SOMETIMES" percentWidth="30.0" />
-            <ColumnConstraints hgrow="SOMETIMES" percentWidth="37.0" />
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints percentHeight="25.0" vgrow="SOMETIMES" />
-          <RowConstraints percentHeight="45.0" vgrow="SOMETIMES" />
-          <RowConstraints percentHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <BorderPane style="-fx-border-color: black;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1">
-               <center>
-                  <HBox fx:id="opponentsContainer" alignment="CENTER" spacing="25.0" BorderPane.alignment="CENTER" />
-               </center>
-               <top>
-                  <Label text="Opponents" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                     <BorderPane.margin>
-                        <Insets bottom="5.0" top="10.0" />
-                     </BorderPane.margin>
-                  </Label>
-               </top>
-            </BorderPane>
-            <BorderPane style="-fx-border-color: black;" GridPane.columnIndex="1" GridPane.rowIndex="2">
-               <center>
-                  <HBox fx:id="publicCardContainer" alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER" />
-               </center>
-               <top>
-                  <Label text="Public Objective Cards" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-               </top>
-            </BorderPane>
-            <BorderPane style="-fx-border-color: black;" GridPane.columnIndex="2" GridPane.rowIndex="2">
-               <center>
-                  <HBox fx:id="toolCardContainer" alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER" />
-               </center>
-               <top>
-                  <Label text="Tool Cards" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-               </top>
-            </BorderPane>
-            <BorderPane style="-fx-border-color: black;" GridPane.columnIndex="1">
-               <center>
-                  <HBox fx:id="draftPoolContainer" alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER" />
-               </center>
-               <top>
-                  <Label text="Draft Pool" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                     <BorderPane.margin>
-                        <Insets top="25.0" />
-                     </BorderPane.margin>
-                  </Label>
-               </top>
-            </BorderPane>
-            <BorderPane style="-fx-border-color: black;" GridPane.columnIndex="2">
-               <center>
-                  <ScrollPane fx:id="scroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
-                     <content>
-                        <HBox fx:id="roundTrackContainer" alignment="CENTER" minHeight="${scroll.viewportBounds.width}" />
-                     </content>
-                  </ScrollPane>
-               </center>
-               <top>
-                  <Label text="Round Track" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                     <BorderPane.margin>
-                        <Insets top="25.0" />
-                     </BorderPane.margin>
-                  </Label>
-               </top>
-            </BorderPane>
-            <BorderPane style="-fx-border-color: black;" GridPane.rowIndex="2">
-               <center>
-                  <HBox fx:id="privateCardContainer" alignment="CENTER" />
-               </center>
-               <top>
-                  <Label text="Private Objective Card" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-               </top>
-            </BorderPane>
-            <BorderPane style="-fx-border-color: black;" GridPane.rowSpan="2">
-               <top>
-                  <HBox alignment="CENTER" spacing="50.0" BorderPane.alignment="CENTER">
-                     <BorderPane.margin>
-                        <Insets bottom="30.0" top="10.0" />
-                     </BorderPane.margin>
-                     <children>
-                        <Label fx:id="turnLabel" text="Label">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Label>
-                        <Button mnemonicParsing="false" onMouseClicked="#endTurn" text="End Turn" />
-                     </children>
-                  </HBox>
-               </top>
-               <center>
-                  <BorderPane fx:id="playerPatternContainer" BorderPane.alignment="CENTER" />
-               </center></BorderPane>
-         </children>
-      </GridPane>
-   </children>
+<AnchorPane minHeight="720.0" minWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.141"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2018.view.gui.MultiPlayerBoard">
+   <GridPane layoutX="142.0" layoutY="163.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+             AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <columnConstraints>
+         <ColumnConstraints hgrow="SOMETIMES" percentWidth="33.0"/>
+         <ColumnConstraints hgrow="SOMETIMES" percentWidth="30.0"/>
+         <ColumnConstraints hgrow="SOMETIMES" percentWidth="37.0"/>
+      </columnConstraints>
+      <rowConstraints>
+         <RowConstraints percentHeight="25.0" vgrow="SOMETIMES"/>
+         <RowConstraints percentHeight="45.0" vgrow="SOMETIMES"/>
+         <RowConstraints percentHeight="30.0" vgrow="SOMETIMES"/>
+      </rowConstraints>
+      <BorderPane style="-fx-border-color: black;" GridPane.columnIndex="1" GridPane.columnSpan="2"
+                  GridPane.rowIndex="1">
+         <center>
+            <HBox fx:id="opponentsContainer" alignment="CENTER" spacing="25.0" BorderPane.alignment="CENTER"/>
+         </center>
+         <top>
+            <Label text="Opponents" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="20.0"/>
+               </font>
+               <BorderPane.margin>
+                  <Insets bottom="5.0" top="10.0"/>
+               </BorderPane.margin>
+            </Label>
+         </top>
+      </BorderPane>
+      <BorderPane style="-fx-border-color: black;" GridPane.columnIndex="1" GridPane.rowIndex="2">
+         <center>
+            <HBox fx:id="publicCardContainer" alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER"/>
+         </center>
+         <top>
+            <Label text="Public Objective Cards" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="20.0"/>
+               </font>
+            </Label>
+         </top>
+      </BorderPane>
+      <BorderPane style="-fx-border-color: black;" GridPane.columnIndex="2" GridPane.rowIndex="2">
+         <center>
+            <HBox fx:id="toolCardContainer" alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER"/>
+         </center>
+         <top>
+            <Label text="Tool Cards" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="20.0"/>
+               </font>
+            </Label>
+         </top>
+      </BorderPane>
+      <BorderPane style="-fx-border-color: black;" GridPane.columnIndex="1">
+         <center>
+            <HBox fx:id="draftPoolContainer" alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER"/>
+         </center>
+         <top>
+            <Label text="Draft Pool" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="20.0"/>
+               </font>
+               <BorderPane.margin>
+                  <Insets top="25.0"/>
+               </BorderPane.margin>
+            </Label>
+         </top>
+      </BorderPane>
+      <BorderPane style="-fx-border-color: black;" GridPane.columnIndex="2">
+         <center>
+            <ScrollPane fx:id="scroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="ALWAYS"
+                        BorderPane.alignment="CENTER">
+               <HBox fx:id="roundTrackContainer" maxWidth="${scroll.viewportBounds.width}"
+                     minHeight="${scroll.viewportBounds.height}"/>
+            </ScrollPane>
+         </center>
+         <top>
+            <Label text="Round Track" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="20.0"/>
+               </font>
+               <BorderPane.margin>
+                  <Insets top="25.0"/>
+               </BorderPane.margin>
+            </Label>
+         </top>
+      </BorderPane>
+      <BorderPane style="-fx-border-color: black;" GridPane.rowIndex="2">
+         <center>
+            <HBox fx:id="privateCardContainer" alignment="CENTER"/>
+         </center>
+         <top>
+            <Label text="Private Objective Card" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="20.0"/>
+               </font>
+            </Label>
+         </top>
+      </BorderPane>
+      <BorderPane style="-fx-border-color: black;" GridPane.rowSpan="2">
+         <top>
+            <HBox alignment="CENTER" spacing="50.0" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets bottom="30.0" top="10.0"/>
+               </BorderPane.margin>
+               <Label fx:id="turnLabel" text="Label">
+                  <font>
+                     <Font size="20.0"/>
+                  </font>
+               </Label>
+               <Button mnemonicParsing="false" onMouseClicked="#endTurn" text="End Turn"/>
+            </HBox>
+         </top>
+         <center>
+            <BorderPane fx:id="playerPatternContainer" BorderPane.alignment="CENTER"/>
+         </center>
+      </BorderPane>
+   </GridPane>
 </AnchorPane>

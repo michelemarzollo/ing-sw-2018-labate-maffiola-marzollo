@@ -10,44 +10,41 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2018.view.gui.Pattern">
-    <children>
-        <BorderPane fx:id="container" layoutX="0.5" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
-            <top>
-                <VBox alignment="TOP_CENTER" BorderPane.alignment="CENTER">
-                    <children>
-                        <Label fx:id="playerNameLabel" text="Label">
-                            <font>
-                                <Font size="30.0" />
-                            </font>
-                        </Label>
-                        <Label fx:id="patternNameLabel" text="Label">
-                            <font>
-                                <Font size="20.0" />
-                            </font>
-                        </Label>
-                        <HBox fx:id="tokenContainer" alignment="CENTER" spacing="5.0" />
-                    </children>
-                </VBox>
-            </top>
-            <center>
-                <GridPane id="patternGrid" fx:id="patternGrid" gridLinesVisible="true" hgap="2.0" vgap="2.0" BorderPane.alignment="CENTER">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="NEVER" percentWidth="20.0" />
-                        <ColumnConstraints hgrow="NEVER" percentWidth="20.0" />
-                        <ColumnConstraints hgrow="NEVER" percentWidth="20.0" />
-                        <ColumnConstraints hgrow="NEVER" percentWidth="20.0" />
-                        <ColumnConstraints hgrow="NEVER" percentWidth="20.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints percentHeight="25.0" vgrow="NEVER" />
-                        <RowConstraints percentHeight="25.0" vgrow="NEVER" />
-                        <RowConstraints percentHeight="25.0" vgrow="NEVER" />
-                        <RowConstraints percentHeight="25.0" vgrow="NEVER" />
-                    </rowConstraints>
-                </GridPane>
-            </center>
-        </BorderPane>
-    </children>
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="it.polimi.se2018.view.gui.Pattern">
+    <BorderPane fx:id="container" layoutX="0.5" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0"
+                AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+        <top>
+            <VBox alignment="TOP_CENTER" BorderPane.alignment="CENTER">
+                <Label fx:id="playerNameLabel" text="Label">
+                    <font>
+                        <Font size="30.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="patternNameLabel" text="Label">
+                    <font>
+                        <Font size="20.0"/>
+                    </font>
+                </Label>
+                <HBox fx:id="tokenContainer" alignment="CENTER" spacing="5.0"/>
+            </VBox>
+        </top>
+        <center>
+            <GridPane id="patternGrid" fx:id="patternGrid" BorderPane.alignment="CENTER">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="NEVER" percentWidth="20.0"/>
+                    <ColumnConstraints hgrow="NEVER" percentWidth="20.0"/>
+                    <ColumnConstraints hgrow="NEVER" percentWidth="20.0"/>
+                    <ColumnConstraints hgrow="NEVER" percentWidth="20.0"/>
+                    <ColumnConstraints hgrow="NEVER" percentWidth="20.0"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints percentHeight="25.0" vgrow="NEVER"/>
+                    <RowConstraints percentHeight="25.0" vgrow="NEVER"/>
+                    <RowConstraints percentHeight="25.0" vgrow="NEVER"/>
+                    <RowConstraints percentHeight="25.0" vgrow="NEVER"/>
+                </rowConstraints>
+            </GridPane>
+        </center>
+    </BorderPane>
 </AnchorPane>

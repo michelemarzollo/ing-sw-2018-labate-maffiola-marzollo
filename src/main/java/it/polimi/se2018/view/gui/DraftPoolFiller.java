@@ -3,8 +3,7 @@ package it.polimi.se2018.view.gui;
 import it.polimi.se2018.model.Die;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -88,18 +87,28 @@ public class DraftPoolFiller {
         }
     }
 
+    private void disableDie(Node node){
+        ColorAdjust effect = new ColorAdjust();
+        effect.setSaturation(-1);
+        node.setDisable(true);
+        node.setEffect(effect);
+    }
+
+    public void setSacrifice(int index){
+        disableDie(diceContainer.getChildren().get(index));
+    }
+
+    public void setForcedSelection(int index){
+        for (int i = 0; i < diceContainer.getChildren().size(); i++) {
+            if(i != index)
+                disableDie(diceContainer.getChildren().get(i));
+        }
+    }
+
     private void fitDie(AnchorPane dieImage, int num) {
         dieImage.minHeightProperty().bind(dieImage.minWidthProperty());
         dieImage.maxHeightProperty().bind(dieImage.maxWidthProperty());
 
-        dieImage.minWidthProperty().bind(
-                Bindings.min(
-                        diceContainer.widthProperty()
-                                .subtract(diceContainer.getSpacing() * num)
-                                .divide(num),
-                        diceContainer.heightProperty().multiply(0.9)
-                )
-        );
         dieImage.maxWidthProperty().bind(
                 Bindings.min(
                         diceContainer.widthProperty()
