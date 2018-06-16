@@ -332,7 +332,7 @@ public class MultiPlayerControllerTest {
         assertTrue(game.getPlayers().get(0).getScore() != 0);
         assertTrue(game.getPlayers().get(1).getScore() != 0);
         //before endGame method invocation the scoreBoard is not even instantiated.
-        assertTrue(game.getScoreBoard() != null);
+        assertNotNull(game.getScoreBoard());
         // assertTrue(view.getCalledMethods().contains("showFinalView"));
         assertEquals(0, view.getCalledMethods().size());
     }
@@ -358,7 +358,6 @@ public class MultiPlayerControllerTest {
         controller.disconnectPlayer(msg2);
         assertFalse(game.getPlayers().get(0).isConnected());
         assertFalse(game.getPlayers().get(1).isConnected());
-        assertEquals(null, controller.getGame());
     }
 
     /**

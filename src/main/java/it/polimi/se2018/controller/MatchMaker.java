@@ -3,6 +3,8 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.Game;
 import it.polimi.se2018.view.View;
 
+import java.lang.ref.WeakReference;
+
 
 /**
  * Singleton used to link a view to a controller.
@@ -17,7 +19,7 @@ public class MatchMaker {
     /**
      * A multi player controller that can accept new players.
      */
-    private MultiPlayerController multiPlayer;
+    private WeakReference<MultiPlayerController> multiPlayer;
 
     /**
      * Private constructor to force singleton behaviour.
@@ -42,9 +44,16 @@ public class MatchMaker {
      * @param view The view to be linked.
      */
     public void makeMultiPlayerMatchFor(View view) {
-        if (multiPlayer == null || !multiPlayer.acceptsNewPlayers())
-            multiPlayer = new MultiPlayerController(new Game(), 60, 5);
-        view.registerObserver(multiPlayer);
+        MultiPlayerController controller = null;
+        if (multiPlayer != null)
+            controller = multiPlayer.get();
+
+        if (controller == null || !controller.acceptsNewPlayers()) {
+            controller = new MultiPlayerController(new Game(), 20, 5);
+            multiPlayer = new WeakReference<>(controller);
+        }
+
+        view.registerObserver(controller);
     }
 
     /**

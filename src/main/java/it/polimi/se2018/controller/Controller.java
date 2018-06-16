@@ -157,7 +157,7 @@ public abstract class Controller implements Observer<ViewMessage> {
         this.game = game;
         toolCardBehaviors = new HashMap<>();
         registerToolCardBehaviors(toolCardBehaviors);
-        turnTimer = new Timer();
+        turnTimer = new Timer("Turn timer");
         this.turnDuration = turnDuration;
 
         actionMap = new EnumMap<>(Action.class);
@@ -170,15 +170,15 @@ public abstract class Controller implements Observer<ViewMessage> {
      * Creates a map in which for each {@link PublicObjectiveCard} name
      * there is an object to calculate the score for it in the proper way.
      */
-    private void registerPublicObjectiveScores(){
+    private void registerPublicObjectiveScores() {
         scoreStrategy.put("Row Color Variety", new RowVarietyScore(6, true));
         scoreStrategy.put("Column Color Variety", new ColumnVarietyScore(5, true));
         scoreStrategy.put("Row Shade Variety", new RowVarietyScore(5, true));
         scoreStrategy.put("Column Shade Variety", new ColumnVarietyScore(2, true));
-        scoreStrategy.put("Light Shades", new GridVarietyScore(2, false, new Integer[]{1,2}));
-        scoreStrategy.put("Medium Shades", new GridVarietyScore(2, false, new Integer[]{3,4}));
-        scoreStrategy.put("Deep Shades", new GridVarietyScore(2, false, new Integer[]{5,6}));
-        scoreStrategy.put("Shade Variety", new GridVarietyScore(5, false, new Integer[]{1,2,3,4,5,6}));
+        scoreStrategy.put("Light Shades", new GridVarietyScore(2, false, new Integer[]{1, 2}));
+        scoreStrategy.put("Medium Shades", new GridVarietyScore(2, false, new Integer[]{3, 4}));
+        scoreStrategy.put("Deep Shades", new GridVarietyScore(2, false, new Integer[]{5, 6}));
+        scoreStrategy.put("Shade Variety", new GridVarietyScore(5, false, new Integer[]{1, 2, 3, 4, 5, 6}));
         scoreStrategy.put("Color Diagonals", new DiagonalScore(1, true));
         scoreStrategy.put("Color Variety", new GridVarietyScore(4, true, Colour.values()));
     }
@@ -236,6 +236,7 @@ public abstract class Controller implements Observer<ViewMessage> {
 
     /**
      * Finds a player among the ones in the game, according to it's name.
+     *
      * @param playerName the player's name.
      * @return the {@link Player}.
      */
@@ -255,10 +256,11 @@ public abstract class Controller implements Observer<ViewMessage> {
     protected void endTurn(ViewMessage message) {
         turnTimer.cancel();
         boolean updateSuccessful = getGame().getTurnManager().updateTurn();
-        if (!updateSuccessful)
+        if (updateSuccessful) {
+            turnTimer = new Timer("TurnTimer");
+            turnTimer.schedule(new EndTurnTask(message), (long) turnDuration * 1000);
+        } else
             endRound(message);
-        turnTimer = new Timer();
-        turnTimer.schedule(new EndTurnTask(message), (long) turnDuration * 1000);
     }
 
     /**
@@ -282,12 +284,15 @@ public abstract class Controller implements Observer<ViewMessage> {
      */
     protected void endRound(ViewMessage message) {
         try {
-            getGame().getTurnManager().setupNewRound();
             cleanDraftPool();
+            getGame().getTurnManager().setupNewRound();
             refillDraftPool();
             getGame().getTurnManager().updateTurn();
+            turnTimer = new Timer("TurnTimer");
+            turnTimer.schedule(new EndTurnTask(message), (long) turnDuration * 1000);
         } catch (TurnManager.GameFinishedException e) {
             endGame(message);
+            finalizeMatch();
         }
     }
 
@@ -460,7 +465,7 @@ public abstract class Controller implements Observer<ViewMessage> {
                 getGame().getTurnManager().getCurrentTurn().useToolCard();
                 consumeResources(message);
             } else {
-                getGame().getTurnManager().getCurrentTurn().setSelectedToolCard(null);
+                //getGame().getTurnManager().getCurrentTurn().setSelectedToolCard(null);
             }
         }
 
@@ -502,8 +507,8 @@ public abstract class Controller implements Observer<ViewMessage> {
             return;
         }
 
-        player.setPattern(pattern);
         player.setTokens(pattern.getDifficulty());
+        player.setPattern(pattern);
         displayGame(message); //selectGameView
 
         boolean gameReady = getGame().getPlayers().stream()
@@ -531,18 +536,21 @@ public abstract class Controller implements Observer<ViewMessage> {
      * Let's the reference to the game fall, to allow the Garbage Collector
      * to get rid of it.
      */
-    protected void finalizeMatch(){
-        game = null;
+    protected void finalizeMatch() {
+        game.deregisterAll();
+        turnTimer.cancel();
     }
 
     /**
      * The method that returns the object to calculate the score for a certain {@link PublicObjectiveCard}.
+     *
      * @param name the name of the {@link PublicObjectiveCard}
      * @return the class to calculate the score.
      */
-    protected PublicObjectiveScore getPublicStrategy(String name){
+    protected PublicObjectiveScore getPublicStrategy(String name) {
         return scoreStrategy.get(name);
     }
+
     /**
      * The task to end the turn when the turnTimer ends because the player
      * spent to much time to make the move.
@@ -574,7 +582,7 @@ public abstract class Controller implements Observer<ViewMessage> {
     }
 
 
-    boolean acceptsNewPlayers(){
+    boolean acceptsNewPlayers() {
         return !getGame().isSetupComplete();
     }
 
