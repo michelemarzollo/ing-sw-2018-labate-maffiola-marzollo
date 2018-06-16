@@ -86,6 +86,11 @@ public abstract class View extends Observable<ViewMessage>
     public abstract void showValueDestinationSelection();
 
     /**
+     * Shows the view related to the use of the Grozing Pliers Tool Card.
+     */
+    public abstract void showDieAndIncrementSelection();
+
+    /**
      * Getter for the player name associated with the view.
      * @return The name of the player associated with the view
      */

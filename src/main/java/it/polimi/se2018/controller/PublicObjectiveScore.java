@@ -46,7 +46,7 @@ public abstract class PublicObjectiveScore {
 
     /**
      * Gets the attribute of the die related to the property of the card:
-     * if the card work on colours it'a the colour, otherwise it's the value.
+     * if the card work on colours it's the colour, otherwise it's the value.
      *
      * @param die the die we are interested in.
      * @return the colour or value of the die.

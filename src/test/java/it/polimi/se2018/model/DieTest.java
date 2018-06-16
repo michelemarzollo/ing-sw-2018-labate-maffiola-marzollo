@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
  *
  * @author michelemarzollo
  */
-public class TestDie {
+public class DieTest {
 
     /**
      * Tests that it's not allowed to create a die with invalid value
@@ -21,7 +21,7 @@ public class TestDie {
     @Test
     public void testFailedConstructor() {
         try {
-            Die d = new Die(0, new Random(), Colour.RED);
+            new Die(0, new Random(), Colour.RED);
             fail();
         } catch (DieValueException e) {
             assertTrue(true);
@@ -35,7 +35,7 @@ public class TestDie {
     @Test
     public void testFailedConstructor2() {
         try {
-            Die d = new Die(7, new Random(), Colour.RED);
+            new Die(7, new Random(), Colour.RED);
             fail();
         } catch (DieValueException e) {
             assertTrue(true);
@@ -83,7 +83,7 @@ public class TestDie {
     public void testInvalidDecrease() {
         Die d1 = new Die(1, new Random(), Colour.GREEN);
         try {
-            Die d2 = d1.decrease();
+            d1.decrease();
             fail();
         } catch (DieValueException e) {
             assertTrue(true);
@@ -108,7 +108,7 @@ public class TestDie {
     public void testInvalidIncrease() {
         Die d1 = new Die(6, new Random(), Colour.GREEN);
         try {
-            Die d2 = d1.increase();
+            d1.increase();
             fail();
         } catch (DieValueException e) {
             assertTrue(true);

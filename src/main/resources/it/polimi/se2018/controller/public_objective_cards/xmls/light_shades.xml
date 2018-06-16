@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<public_objective xmlns="http://se2018.polimi.it/public_objective"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://se2018.polimi.it/public_objective  ../public_objective.xsd">
+
+    <name>Deep Shades</name>
+    <description>Sets of 1 &amp; 2 values anywhere</description>
+    <victoryPoints>2</victoryPoints>
+    <otherInformation>
+        <withParam>
+            <valueGrid>
+                <worksOn>value</worksOn>
+                <strategy>Grid</strategy>
+                <valueArray>1 2</valueArray>
+            </valueGrid>
+        </withParam>
+    </otherInformation>
+
+</public_objective>

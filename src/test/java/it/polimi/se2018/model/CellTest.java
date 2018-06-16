@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
  *
  * @author michelemarzollo
  */
-public class TestCell {
+public class CellTest {
 
     /**
      * Tests the constructor when gets an invalid argument.

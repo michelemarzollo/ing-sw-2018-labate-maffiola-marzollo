@@ -57,8 +57,15 @@ public abstract class Controller implements Observer<ViewMessage> {
      */
     private Timer turnTimer;
 
-    private final Map<String, PublicObjectiveScore> scoreStrategy = new HashMap<>();
+    /**
+     * The list of objects that contain the method to calculate the score of
+     * {@link PublicObjectiveCard}s.
+     */
+    private List<PublicObjectiveScore> publicScoreCalculators = new ArrayList<>();
 
+    /**
+     * The class to calculate the score of the {@link PrivateObjectiveCard}.
+     */
     protected PrivateObjectiveScore privateScoreCalculator;
 
     //ABSTRACT METHODS
@@ -163,24 +170,25 @@ public abstract class Controller implements Observer<ViewMessage> {
         actionMap = new EnumMap<>(Action.class);
         registerActions(actionMap);
         privateScoreCalculator = new PrivateObjectiveScore();
-        registerPublicObjectiveScores();
     }
 
     /**
-     * Creates a map in which for each {@link PublicObjectiveCard} name
-     * there is an object to calculate the score for it in the proper way.
+     * Adds a new class to calculate the score of a {@link PublicObjectiveCard}
+     * at the end of the game.
+     * In the model there is the corresponding {@link PublicObjectiveCard}.
+     *
+     * @param scoreStrategy the class to calculate the score related to a certain card.
      */
-    private void registerPublicObjectiveScores() {
-        scoreStrategy.put("Row Color Variety", new RowVarietyScore(6, true));
-        scoreStrategy.put("Column Color Variety", new ColumnVarietyScore(5, true));
-        scoreStrategy.put("Row Shade Variety", new RowVarietyScore(5, true));
-        scoreStrategy.put("Column Shade Variety", new ColumnVarietyScore(2, true));
-        scoreStrategy.put("Light Shades", new GridVarietyScore(2, false, new Integer[]{1, 2}));
-        scoreStrategy.put("Medium Shades", new GridVarietyScore(2, false, new Integer[]{3, 4}));
-        scoreStrategy.put("Deep Shades", new GridVarietyScore(2, false, new Integer[]{5, 6}));
-        scoreStrategy.put("Shade Variety", new GridVarietyScore(5, false, new Integer[]{1, 2, 3, 4, 5, 6}));
-        scoreStrategy.put("Color Diagonals", new DiagonalScore(1, true));
-        scoreStrategy.put("Color Variety", new GridVarietyScore(4, true, Colour.values()));
+    public void addPublicScoreStrategy(PublicObjectiveScore scoreStrategy) {
+        publicScoreCalculators.add(scoreStrategy);
+    }
+
+    /**
+     * The getter for {@code publicScoreCalculators}.
+     * @return {@code publicScoreCalculators}.
+     */
+    public List<PublicObjectiveScore> getPublicScoreCalculators(){
+        return publicScoreCalculators;
     }
 
     /**
@@ -539,16 +547,6 @@ public abstract class Controller implements Observer<ViewMessage> {
     protected void finalizeMatch() {
         game.deregisterAll();
         turnTimer.cancel();
-    }
-
-    /**
-     * The method that returns the object to calculate the score for a certain {@link PublicObjectiveCard}.
-     *
-     * @param name the name of the {@link PublicObjectiveCard}
-     * @return the class to calculate the score.
-     */
-    protected PublicObjectiveScore getPublicStrategy(String name) {
-        return scoreStrategy.get(name);
     }
 
     /**

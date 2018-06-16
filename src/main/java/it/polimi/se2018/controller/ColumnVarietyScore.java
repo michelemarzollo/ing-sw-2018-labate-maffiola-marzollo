@@ -23,7 +23,7 @@ public class ColumnVarietyScore extends ArrayVarietyScore {
      * @param victoryPoints the victory points related to the card.
      * @param propertyIsColour the property of the die on which the card works.
      */
-    ColumnVarietyScore(int victoryPoints, boolean propertyIsColour) {
+    public ColumnVarietyScore(int victoryPoints, boolean propertyIsColour) {
         super(victoryPoints, propertyIsColour);
     }
 

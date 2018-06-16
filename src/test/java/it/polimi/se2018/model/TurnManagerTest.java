@@ -22,7 +22,7 @@ public class TurnManagerTest {
     @Test
     public void testTurnManagerConstructorNull(){
         try{
-            TurnManager turnManager = new TurnManager(null);
+            new TurnManager(null);
             fail();
         }
         catch(NullPointerException ex){
@@ -34,7 +34,7 @@ public class TurnManagerTest {
     public void testTurnManagerConstructorEmpty(){
         try{
             ArrayList<Player> players = new ArrayList<>();
-            TurnManager turnManager = new TurnManager(players);
+            new TurnManager(players);
             fail();
         }
         catch(IllegalArgumentException ex){

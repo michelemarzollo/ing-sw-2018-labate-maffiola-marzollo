@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<public_objective xmlns="http://se2018.polimi.it/public_objective"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://se2018.polimi.it/public_objective  ../public_objective.xsd">
+
+    <name>Color Variety</name>
+    <description>Sets of one of each color anywhere</description>
+    <victoryPoints>4</victoryPoints>
+    <otherInformation>
+        <withParam>
+            <colourGrid>
+                <worksOn>colour</worksOn>
+                <strategy>Grid</strategy>
+                <colourArray>BLUE GREEN PURPLE RED YELLOW</colourArray>
+            </colourGrid>
+        </withParam>
+    </otherInformation>
+
+</public_objective>

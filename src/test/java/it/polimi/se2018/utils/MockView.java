@@ -138,6 +138,14 @@ public class MockView extends View {
         calledMethods.add("showConfirm");
     }
 
+    /**
+     * The method to simulate the corresponding method in the view.
+     */
+    @Override
+    public void showDieAndIncrementSelection() { calledMethods.add("showDieAndIncrementSelection");
+    }
+
+
     @Override
     public void update(ModelUpdate message) {
         calledMethods.add("update: " + message.getEventType());

@@ -4,6 +4,8 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.Logger;
 import org.xml.sax.SAXException;
 
+import java.io.File;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -61,8 +63,8 @@ public class CardDealer {
      *                   to be dealt.
      * @param toolCards  The number of {@link ToolCard} to be dealt.
      */
-    public void deal(int publicObj, int privateObj, int toolCards) {
-        dealPublicObjectives(publicObj);
+    public void deal(int publicObj, int privateObj, int toolCards, Controller controller) {
+        dealPublicObjectives(publicObj, controller);
         dealToolCards(toolCards);
         dealPrivateObjectives(privateObj);
         dealCandidates();
@@ -118,9 +120,19 @@ public class CardDealer {
      *
      * @param publicObj The number of public objectives to deal.
      */
-    private void dealPublicObjectives(int publicObj) {
-        PublicObjectiveFactory publicObjectiveFactory = new PublicObjectiveFactory();
-        this.getGame().setPublicObjectiveCards(publicObjectiveFactory.newInstances(publicObj));
+    private void dealPublicObjectives(int publicObj, Controller controller) {
+        try {
+            File directory = new File(getClass()
+                    .getResource("public_objective_cards/xmls")
+                    .toURI()
+            );
+            XmlPublicObjectiveLoader publicObjectiveFactory = new XmlPublicObjectiveLoader(directory, controller);
+            this.getGame().setPublicObjectiveCards(publicObjectiveFactory.load(publicObj));
+        } catch (URISyntaxException e) {
+            Logger.getDefaultLogger().log("URISyntaxException " + e);
+        } catch (SAXException e) {
+            Logger.getDefaultLogger().log("USAXException " + e);
+        }
     }
 
 
