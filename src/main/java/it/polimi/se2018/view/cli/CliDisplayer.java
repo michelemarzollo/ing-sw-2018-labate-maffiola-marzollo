@@ -52,11 +52,6 @@ public class CliDisplayer implements Displayer {
     }
 
     @Override
-    public void askIncrement() {
-        //TODO
-    }
-
-    @Override
     public void askPlacement() {
         //TODO
     }
@@ -651,7 +646,7 @@ public class CliDisplayer implements Displayer {
      * it is the dedicated view for it.
      */
     @Override
-    public void selectDieAndIncrement() {
+    public void askIncrement() {
         int index;
         int choice;
         output.printDraftPool(getDraftPool());
@@ -668,7 +663,7 @@ public class CliDisplayer implements Displayer {
             return;
         }
         output.printTextNewLine("Invalid input!");
-        selectDieAndIncrement();
+        askIncrement();
     }
 
     /**
