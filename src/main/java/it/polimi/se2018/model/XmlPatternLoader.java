@@ -10,55 +10,69 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Scanner;
 
 /**
  * This class allows to load pattern cards from xml files contained in
  * a directory.
  *
+ * <p>All pattern xml descriptions must respect the schema located in the pattern
+ * directory in the model package.</p>
+ *
  * @author dvdmff
  */
 public class XmlPatternLoader implements PatternLoader {
 
+    private static final String PATTERNS_DIR = "it/polimi/se2018/model/patterns/";
+
     /**
-     * The directory where pattern xmls are stored.
+     * The list of pattern xml descriptions suitable for loading.
      */
-    private final File directory;
+    private final List<String> loadablePatterns = new ArrayList<>();
 
     /**
      * The factory used to create sax parsers.
      */
     private final SAXParser saxParser;
 
+    /**
+     * The sax validator used to validate xml files.
+     */
     private final Validator validator;
 
     /**
+     * The directory where patterns are stored.
+     */
+    private final String basePath;
+
+    /**
      * Creates a new {@code XmlPatternLoader} that can load patterns from
-     * xmls contained in the specified directory.
-     * <p>It also loads the xsd file which pattern definitions are checked against.</p>
+     * xml files.
+     * <p>The loaded pattern are the default ones.</p>
      *
-     * @param directory The directory that contains the xmls.
      * @throws IllegalArgumentException if the specified directory isn't actually
      *                                  a directory or it isn't readable.
      * @throws SAXException             if sax validator or sax parser cannot be used.
      */
-    public XmlPatternLoader(File directory) throws SAXException {
-        if (!directory.isDirectory())
-            throw new IllegalArgumentException("Directory required");
-        if (directory.listFiles() == null)
-            throw new IllegalArgumentException("Cannot list files");
-        this.directory = directory;
+    public XmlPatternLoader() throws SAXException {
+        this(PATTERNS_DIR, "patterns.list");
+    }
 
-        SchemaFactory schemaFactory =
-                SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        Schema schema = schemaFactory.newSchema(getClass().getResource("patterns/pattern.xsd"));
-        validator = schema.newValidator();
+    /**
+     * Creates a new {@code XmlPatternLoader} that loads patterns from the specified base directory.
+     * <p>The files available are listed in the file named {@code listName}.</p>
+     *
+     * @param basePath The directory where the list and files are stored.
+     * @param listName The name of the list file containing the names of the available files to load.
+     * @throws SAXException if sax validator or sax parser cannot be used.
+     */
+    public XmlPatternLoader(String basePath, String listName) throws SAXException {
+        validator = getValidator();
 
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
         try {
@@ -66,6 +80,54 @@ public class XmlPatternLoader implements PatternLoader {
         } catch (ParserConfigurationException e) {
             //fatal
             throw new RuntimeException("ParserConfigurationException: " + e.getMessage());
+        }
+
+        this.basePath = basePath;
+        filterFiles(listName);
+    }
+
+    /**
+     * Creates a validator object for pattern xml descriptions.
+     *
+     * @return A validator object for pattern xml descriptions.
+     * @throws SAXException if the validator can't be instantiated.
+     */
+    private Validator getValidator() throws SAXException {
+        SchemaFactory schemaFactory =
+                SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+
+        InputStream schemaStream = getClass().getClassLoader().getResourceAsStream(PATTERNS_DIR + "pattern.xsd");
+        Schema schema = schemaFactory.newSchema(new StreamSource(schemaStream));
+        return schema.newValidator();
+    }
+
+    /**
+     * Creates an input stream for the specified file.
+     *
+     * @param fileName The name of the file.
+     * @return The input stream for the specified file.
+     */
+    private InputStream getStreamFor(String fileName) {
+        String path = basePath + fileName;
+        return this.getClass().getClassLoader().getResourceAsStream(path);
+    }
+
+    /**
+     * Populates the list of loadable patterns.
+     *
+     * @param listName The list containing loadable files.
+     * @throws IllegalArgumentException if the list file is unavailable.
+     */
+    private void filterFiles(String listName) {
+        InputStream stream = getStreamFor(listName);
+        if (stream == null)
+            throw new IllegalArgumentException("The given list file is unavailable.");
+        try (Scanner fileNameScanner = new Scanner(stream)) {
+            while (fileNameScanner.hasNext()) {
+                String fileName = fileNameScanner.nextLine() + ".xml";
+                if (isValid(getStreamFor(fileName)))
+                    loadablePatterns.add(fileName);
+            }
         }
     }
 
@@ -80,39 +142,26 @@ public class XmlPatternLoader implements PatternLoader {
      */
     @Override
     public Pattern[] load(int n) {
+        Collections.shuffle(loadablePatterns);
 
-        File[] listedFiles = directory.listFiles();
-        if(listedFiles == null)
-            throw new NullPointerException("The list of files is null");
-
-        List<File> files = Arrays.stream(listedFiles)
-                .filter(File::isFile)
-                .collect(Collectors.toList());
-        Collections.shuffle(files);
-
-
-        List<Pattern> patterns = new ArrayList<>();
-
-        for (int i = 0;
-             i < files.size() && patterns.size() != n;
-             ++i) {
-            File file = files.get(i);
-            if (isValid(file))
-                patterns.add(loadPattern(file));
-        }
-        return patterns.toArray(new Pattern[0]);
+        return loadablePatterns.stream()
+                .limit(n)
+                .map(this::loadPattern)
+                .toArray(Pattern[]::new);
     }
 
     /**
      * Validates {@code file} against the xsd for pattern definitions.
      *
-     * @param file The file to be validated.
+     * @param stream The file to be validated.
      * @return {@code true} if the file is a valid pattern description;
      * {@code false} otherwise.
      */
-    private boolean isValid(File file) {
+    private boolean isValid(InputStream stream) {
+        if (stream == null)
+            return false;
         try {
-            validator.validate(new StreamSource(file));
+            validator.validate(new StreamSource(stream));
             return true;
         } catch (SAXException | IOException e) {
             return false;
@@ -122,15 +171,16 @@ public class XmlPatternLoader implements PatternLoader {
     /**
      * Loads a pattern from an xml file.
      *
-     * @param file The file where the card is stored.
+     * @param fileName The name of the file where the pattern is described.
      * @return A pattern matching its description in xml. If {@code null}
      * is returned then some error while loading happened.
      */
-    private Pattern loadPattern(File file) {
+    private Pattern loadPattern(String fileName) {
         try {
+            InputStream inputStream = getStreamFor(fileName);
             SaxPatternBuilder saxPatternBuilder = new SaxPatternBuilder();
 
-            saxParser.parse(file, saxPatternBuilder);
+            saxParser.parse(inputStream, saxPatternBuilder);
             return saxPatternBuilder.build();
 
         } catch (SAXException | IOException ignored) {

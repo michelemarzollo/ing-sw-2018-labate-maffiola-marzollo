@@ -19,9 +19,9 @@ public class XmlPatternLoaderTest {
      */
     @Test
     public void testBadDirectoryConstructorFailure() {
-        File directory = new File("/fake/fake/fake/");
+        String path = "/fake/fake/fake/";
         try {
-            new XmlPatternLoader(directory);
+            new XmlPatternLoader(path, "fake.list");
             Assert.fail("Should not create object");
         } catch (SAXException e) {
             Assert.fail();
@@ -36,15 +36,16 @@ public class XmlPatternLoaderTest {
      */
     @Test
     public void testPatternLoading() {
-        File directory = null;
-        try {
-            directory = new File(getClass()
-                    .getResource("patternSources/duomo")
-                    .toURI()
-            );
-        } catch (URISyntaxException e) {
-            Assert.fail(e.getMessage());
-        }
+        String listPath = "it/polimi/se2018/model/patternSources/duomo/";
+//        File directory = null;
+//        try {
+//            directory = new File(getClass()
+//                    .getResource("patternSources/duomo")
+//                    .toURI()
+//            );
+//        } catch (URISyntaxException e) {
+//            Assert.fail(e.getMessage());
+//        }
 
         Cell[][] expectedGrid =
                 GridUtils.getEmptyUnrestrictedGrid(Pattern.ROWS, Pattern.COLS);
@@ -53,7 +54,7 @@ public class XmlPatternLoaderTest {
         expectedGrid[0][0] = new Cell(Colour.BLUE);
 
         try {
-            XmlPatternLoader loader = new XmlPatternLoader(directory);
+            XmlPatternLoader loader = new XmlPatternLoader(listPath, "duomo.list");
             Pattern pattern = loader.load(1)[0];
 
             Assert.assertEquals("Duomo", pattern.getName());
@@ -73,19 +74,21 @@ public class XmlPatternLoaderTest {
      */
     @Test
     public void testBadPatternLoading() {
-        File directory = null;
-        try {
-            directory = new File(
-                    getClass()
-                            .getResource("patternSources/bad")
-                            .toURI()
-            );
-        } catch (URISyntaxException e) {
-            Assert.fail(e.getMessage());
-        }
+        String listPath = "it/polimi/se2018/model/patternSources/bad/";
+
+//        File directory = null;
+//        try {
+//            directory = new File(
+//                    getClass()
+//                            .getResource("patternSources/bad")
+//                            .toURI()
+//            );
+//        } catch (URISyntaxException e) {
+//            Assert.fail(e.getMessage());
+//        }
 
         try {
-            XmlPatternLoader loader = new XmlPatternLoader(directory);
+            XmlPatternLoader loader = new XmlPatternLoader(listPath, "bad.list");
             loader.load(1);
         } catch (SAXException e) {
             Assert.assertEquals("", e.getMessage());
@@ -98,18 +101,20 @@ public class XmlPatternLoaderTest {
      */
     @Test
     public void testRequestTooManyPattern(){
-        File directory = null;
-        try {
-            directory = new File(getClass()
-                    .getResource("patternSources/duomo")
-                    .toURI()
-            );
-        } catch (URISyntaxException e) {
-            Assert.fail(e.getMessage());
-        }
+        String listPath = "it/polimi/se2018/model/patternSources/duomo/";
+
+//        File directory = null;
+//        try {
+//            directory = new File(getClass()
+//                    .getResource("patternSources/duomo")
+//                    .toURI()
+//            );
+//        } catch (URISyntaxException e) {
+//            Assert.fail(e.getMessage());
+//        }
 
         try {
-            XmlPatternLoader loader = new XmlPatternLoader(directory);
+            XmlPatternLoader loader = new XmlPatternLoader(listPath, "duomo.list");
             Pattern[] patterns = loader.load(5);
 
             Assert.assertEquals(1, patterns.length);
