@@ -6,8 +6,10 @@ import it.polimi.se2018.utils.Coordinates;
 import it.polimi.se2018.view.*;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * This class displays the game through the command line interface. It is used
@@ -32,15 +34,29 @@ public class CliDisplayer implements Displayer {
      */
     private ClientView view;
 
+    private static Consumer<Displayer> callback;
+
     /**
      * Constructor of the class.
      * @param inputStream The {@link InputStream} from which the user's input will
      *                    be gathered.
      * @param output The {@link PrintStream} on which the game will be displayed.
      */
-    protected CliDisplayer(InputStream inputStream, PrintStream output) {
+    private CliDisplayer(InputStream inputStream, PrintStream output) {
         this.input = new CliInput(inputStream);
         this.output = new CliImagePrinter(output);
+        callback.accept(this);
+    }
+
+    /**
+     * Launches the cli.
+     * @param in The stream used for input.
+     * @param out The stream used for output.
+     * @param callback The callback function to register the displayer.
+     */
+    public static void launchCli(InputStream in, PrintStream out, Consumer<Displayer> callback){
+        CliDisplayer.callback = callback;
+        new CliDisplayer(in, out);
     }
 
     /**

@@ -1,6 +1,5 @@
 package it.polimi.se2018.view.gui;
 
-import it.polimi.se2018.App;
 import it.polimi.se2018.model.Die;
 import it.polimi.se2018.utils.Logger;
 import it.polimi.se2018.view.ClientView;
@@ -20,6 +19,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * This class displays the game using a JavaFX gui.
@@ -48,13 +48,27 @@ public class JavaFxDisplayer extends Application implements Displayer {
      */
     private PatternSelection patternSelection;
 
+    /**
+     * Callback function to register the displayer.
+     */
+    private static Consumer<Displayer> callback;
+
+    /**
+     * Calls the callback function and resets it.
+     */
     @Override
-    public void init() {
-        App.setInstance(this);
+    public synchronized void init() {
+        callback.accept(this);
+        callback = null;
     }
 
-    public static void startGui(String[] args) {
-        launch(args);
+    /**
+     * Launches the gui.
+     * @param callback The callback function to register the displayer.
+     */
+    public static void launchGui(Consumer<Displayer> callback) {
+        JavaFxDisplayer.callback = callback;
+        launch();
     }
 
     /**
