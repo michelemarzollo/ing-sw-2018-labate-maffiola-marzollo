@@ -4,7 +4,6 @@ import it.polimi.se2018.controller.MatchMaker;
 import it.polimi.se2018.model.events.Action;
 import it.polimi.se2018.model.events.ViewMessage;
 import it.polimi.se2018.networking.client.ClientNetInterface;
-import it.polimi.se2018.networking.messages.Command;
 import it.polimi.se2018.networking.messages.Message;
 import it.polimi.se2018.view.VirtualView;
 
@@ -110,8 +109,11 @@ public class DefaultNetInterface implements ServerNetInterface {
     @Override
     public void removeClient(ClientNetInterface client) {
         VirtualView view = views.remove(client.getUsername());
-        if (view != null)
+
+        if (view != null) {
+            view.setClient(null);
             DisconnectedViewsRepository.getInstance().addView(view);
+        }
 
         server.removeClient(client);
     }

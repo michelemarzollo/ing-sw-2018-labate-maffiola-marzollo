@@ -55,8 +55,8 @@ public class VirtualTcpClient implements ClientNetInterface, Runnable {
     public VirtualTcpClient(ServerNetInterface server, Socket connection) throws IOException {
         this.server = server;
         this.connection = connection;
-        inputStream = new ObjectInputStream(connection.getInputStream());
         outputStream = new ObjectOutputStream(connection.getOutputStream());
+        inputStream = new ObjectInputStream(connection.getInputStream());
     }
 
     /**
@@ -115,7 +115,7 @@ public class VirtualTcpClient implements ClientNetInterface, Runnable {
                 else
                     server.send(message);
             } catch (IOException e) {
-                Logger.getDefaultLogger().log("An error occurred: " + e.getMessage());
+                Logger.getDefaultLogger().log("An error occurred, closing connection.");
                 terminate();
             } catch (ClassNotFoundException e) {
                 Logger.getDefaultLogger().log("Serialized class cannot be found" + e.getMessage());
@@ -137,6 +137,7 @@ public class VirtualTcpClient implements ClientNetInterface, Runnable {
             outputStream.flush();
         } catch (IOException e) {
             Logger.getDefaultLogger().log("An error occurred: " + e.getMessage());
+            terminate();
         }
     }
 
@@ -159,6 +160,7 @@ public class VirtualTcpClient implements ClientNetInterface, Runnable {
 
     /**
      * Terminates the client connection.
+     * <p>The server is informed that the connection is dropped.</p>
      */
     private void terminate() {
         try {
@@ -166,5 +168,6 @@ public class VirtualTcpClient implements ClientNetInterface, Runnable {
         } catch (IOException e) {
             //Do nothing
         }
+        server.removeClient(this);
     }
 }

@@ -7,6 +7,7 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.server.UnicastRemoteObject;
 
 public class RmiServer extends Server {
 
@@ -25,6 +26,11 @@ public class RmiServer extends Server {
      * it's set to {@code true} if it is running, to {@code false} otherwise.
      */
     private boolean isRunning = false;
+
+    /**
+     * The exposed server interface
+     */
+    private RmiServerInterface serverImplementation;
 
     /**
      * The constructor of the class.
@@ -63,8 +69,7 @@ public class RmiServer extends Server {
         }
 
         try {
-            RmiServerImplementation serverImplementation =
-                    new RmiServerImplementation(getServerNetInterface());
+            serverImplementation = new RmiServerImplementation(getServerNetInterface());
             Naming.rebind(url, serverImplementation);
             isRunning = true;
         } catch (MalformedURLException e) {
@@ -83,6 +88,7 @@ public class RmiServer extends Server {
     public void stop() {
         try {
             Naming.unbind(url);
+            UnicastRemoteObject.unexportObject(serverImplementation, true);
         } catch (RemoteException e) {
             Logger.getDefaultLogger().log("Connection error: " + e.getMessage() + "!");
         } catch (NotBoundException e) {

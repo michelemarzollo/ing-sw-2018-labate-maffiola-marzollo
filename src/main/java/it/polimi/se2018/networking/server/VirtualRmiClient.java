@@ -26,12 +26,24 @@ public class VirtualRmiClient implements ClientNetInterface {
     private final RmiClientInterface client;
 
     /**
+     * The username of the player.
+     */
+    private final String username;
+
+    /**
      * The constructor of the class.
      *
      * @param server the interface of the server.
      * @param client the interface of the real client.
      */
     public VirtualRmiClient(ServerNetInterface server, RmiClientInterface client) {
+        String retrievedUsername;
+        try {
+            retrievedUsername = client.getUsername();
+        } catch (RemoteException e) {
+            retrievedUsername = "";
+        }
+        this.username = retrievedUsername;
         this.server = server;
         this.client = client;
     }
@@ -43,11 +55,7 @@ public class VirtualRmiClient implements ClientNetInterface {
      */
     @Override
     public String getUsername() {
-        try {
-            return client.getUsername();
-        } catch (RemoteException e) {
-            return "";
-        }
+        return username;
     }
 
     /**

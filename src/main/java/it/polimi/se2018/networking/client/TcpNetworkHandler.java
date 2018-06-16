@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.concurrent.Semaphore;
 
 /**
  * This class represents the server on client side. It is the access point to
@@ -30,7 +31,7 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
      * the server on client's side, so this is the link with the server since we
      * are on client side.
      */
-    private Socket clientConnection;
+    private final Socket clientConnection;
 
     /**
      * The input stream used to read from socket.
@@ -42,6 +43,11 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
     private final ObjectOutputStream outputStream;
 
     /**
+     * Semaphore used to synchronize socket access.
+     */
+    private final Semaphore sentUsername = new Semaphore(0);
+
+    /**
      * The constructor of the class. It bounds this handler to the {@code client} specified
      * and creates the client socket connecting to the server socket at the {@code address} and
      * {@code port} specified.
@@ -51,8 +57,8 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
      */
     public TcpNetworkHandler(String address, int port) throws IOException {
         this.clientConnection = new Socket(address, port);
-        inputStream = new ObjectInputStream(clientConnection.getInputStream());
         outputStream = new ObjectOutputStream(clientConnection.getOutputStream());
+        inputStream = new ObjectInputStream(clientConnection.getInputStream());
         Thread networkThread = new Thread(this);
         networkThread.start();
     }
@@ -68,6 +74,11 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
      */
     @Override
     public void run() {
+        try {
+            sentUsername.acquire();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
         try {
             while (!this.clientConnection.isClosed()) {
                 Message message = (Message) inputStream.readObject();
@@ -116,6 +127,7 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
         send(new Message(Command.LOGIN, client.getUsername()));
         try {
             Message ack = (Message) inputStream.readObject();
+            sentUsername.release();
             return ack.getCommand() == Command.ACK;
         } catch (IOException | ClassNotFoundException e) {
             return false;

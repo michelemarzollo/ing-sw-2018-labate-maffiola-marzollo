@@ -100,6 +100,7 @@ public class RmiNetworkHandler implements ServerNetInterface {
     public void removeClient(ClientNetInterface client) {
         try {
             server.removeClient(remoteRef);
+            UnicastRemoteObject.unexportObject(remoteRef, true);
         } catch (RemoteException e) {
             Logger.getDefaultLogger().log(ERROR_STRING + e.getMessage() + "!");
         }
