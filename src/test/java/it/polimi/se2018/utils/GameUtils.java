@@ -1,11 +1,8 @@
 package it.polimi.se2018.utils;
 
 import it.polimi.se2018.model.*;
-import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import java.io.File;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,16 +28,17 @@ public class GameUtils {
      *
      * @param first  The first player.
      * @param second The second player.
-     * @throws URISyntaxException if invalid uri is encountered.
      * @throws SAXException       if sax can't be used.
      */
     private static void assignCandidates(Player first, Player second)
-            throws URISyntaxException, SAXException {
+            throws SAXException {
 
-        File directory = new File(GameUtils.class
-                .getResource("../model/patternSources/duomo").toURI()
-        );
-        XmlPatternLoader loader = new XmlPatternLoader(directory);
+//        File directory = new File(GameUtils.class
+//                .getResource("../model/patternSources/duomo").toURI()
+//        );
+        String listPath = "it/polimi/se2018/model/patternSources/duomo/";
+
+        XmlPatternLoader loader = new XmlPatternLoader(listPath, "duomo.list");
         Pattern pattern = loader.load(1)[0];
         first.setCandidates(new Pattern[]{
                 pattern, pattern
@@ -127,7 +125,7 @@ public class GameUtils {
 
         try {
             assignCandidates(playerOne, playerTwo);
-        } catch (URISyntaxException | SAXException e) {
+        } catch (SAXException e) {
             return null;
         }
 

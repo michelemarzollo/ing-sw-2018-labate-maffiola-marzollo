@@ -55,10 +55,20 @@ public abstract class View extends Observable<ViewMessage>
     public abstract void showDieSelection();
 
     /**
+     * Shows the view to select and increment a die.
+     */
+    public abstract void showDieIncrementSelection();
+
+    /**
      * Shows the move die selection view.
      * @param amount The amount of dice to move.
      */
     public abstract void showMoveSelection(int amount);
+
+    /**
+     * Shows the move die selection view and allows to move up to 2 dice.
+     */
+    public abstract void showMoveUpToTwo();
 
     /**
      * Shows the difficulty selection view.
@@ -91,4 +101,13 @@ public abstract class View extends Observable<ViewMessage>
         this.playerName = playerName;
     }
 
+    /**
+     * Show the die placement view.
+     */
+    public abstract void showPlaceDie();
+
+    /**
+     * Shows a confirmation view.
+     */
+    public abstract void showConfirm();
 }

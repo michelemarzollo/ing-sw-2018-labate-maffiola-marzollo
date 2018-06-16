@@ -46,7 +46,8 @@ public class GlazingHammerBehaviourTest {
         GlazingHammerBehaviour behaviour = new GlazingHammerBehaviour();
         behaviour.askParameters(message);
 
-        Assert.assertEquals(0, mockView.getCalledMethods().size());
+        Assert.assertEquals(1, mockView.getCalledMethods().size());
+        Assert.assertEquals("showConfirm", mockView.getCalledMethods().get(0));
     }
 
     /**

@@ -61,7 +61,6 @@ public class GridVarietyScore extends PublicObjectiveScore {
         //Sorts the occurrences array, so that the minimum (the value on which the result depends)
         //is in position 0
         Arrays.sort(occurrences);
-        System.out.println(occurrences[0]);
         return victoryPoints * occurrences[0];
     }
 

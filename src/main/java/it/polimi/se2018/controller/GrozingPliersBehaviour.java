@@ -5,6 +5,7 @@ import it.polimi.se2018.model.DieValueException;
 import it.polimi.se2018.model.Game;
 import it.polimi.se2018.model.events.IncrementDieValue;
 import it.polimi.se2018.model.events.ViewMessage;
+import it.polimi.se2018.utils.Logger;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class GrozingPliersBehaviour implements ToolCardBehaviour {
      */
     @Override
     public void askParameters(ViewMessage message) {
-        message.getView().showDieSelection();
+        message.getView().showDieIncrementSelection();
     }
 
     /**
@@ -67,10 +68,12 @@ public class GrozingPliersBehaviour implements ToolCardBehaviour {
             game.getTurnManager().getCurrentTurn().setForcedSelectionIndex(index);
         }
         catch(DieValueException ex){
+            Logger.getDefaultLogger().log(ex.getMessage());
             msg.getView().showError(ex.getMessage());
             return false;
         }
         catch(IndexOutOfBoundsException ex){
+            Logger.getDefaultLogger().log(ex.getMessage());
             msg.getView().showError("The index of the selected die is not valid");
             return false;
         }

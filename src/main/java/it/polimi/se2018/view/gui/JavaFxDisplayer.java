@@ -1,20 +1,25 @@
 package it.polimi.se2018.view.gui;
 
+import it.polimi.se2018.App;
 import it.polimi.se2018.model.Die;
 import it.polimi.se2018.utils.Logger;
 import it.polimi.se2018.view.ClientView;
 import it.polimi.se2018.view.Displayer;
 import it.polimi.se2018.view.ViewDataOrganizer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * This class displays the game using a JavaFX gui.
@@ -34,9 +39,23 @@ public class JavaFxDisplayer extends Application implements Displayer {
      */
     private ClientView clientView;
     /**
-     * The displayed game board.
+     * The displayed game board JavaFX controller.
      */
     private GameBoard board;
+
+    /**
+     * The pattern selection JavaFX controller.
+     */
+    private PatternSelection patternSelection;
+
+    @Override
+    public void init() {
+        App.setInstance(this);
+    }
+
+    public static void startGui(String[] args) {
+        launch(args);
+    }
 
     /**
      * The first method that is called and sets the {@code primaryStage}.
@@ -68,9 +87,14 @@ public class JavaFxDisplayer extends Application implements Displayer {
             Logger.getDefaultLogger().log(e.getMessage());
             return;
         }
-        root.setCenter(node);
-        board = loader.getController();
-        board.setDisplayer(this);
+        Platform.runLater(() -> {
+            root.setCenter(node);
+            board = loader.getController();
+            board.setDisplayer(this);
+            primaryStage.sizeToScene();
+            primaryStage.setTitle("Sagrada");
+        });
+        refreshDisplayedData();
     }
 
     /**
@@ -85,12 +109,14 @@ public class JavaFxDisplayer extends Application implements Displayer {
             loader.setLocation(this.getClass().getResource("login.fxml"));
             AnchorPane view = loader.load();
 
-            setStageSize(623, 440);
-            root.setCenter(view);
-            primaryStage.setTitle("Sagrada - Login");
+            Platform.runLater(() -> {
+                root.setCenter(view);
+                primaryStage.setTitle("Sagrada - Login");
 
-            LoginView controller = loader.getController();
-            controller.setParentController(this);
+                LoginView controller = loader.getController();
+                controller.setParentController(this);
+                primaryStage.sizeToScene();
+            });
 
         } catch (IOException e) {
             Logger.getDefaultLogger().log(e.getMessage());
@@ -120,10 +146,17 @@ public class JavaFxDisplayer extends Application implements Displayer {
      */
     @Override
     public void displayError(String error) {
-        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-        errorAlert.setHeaderText("Error");
-        errorAlert.setContentText(error);
-        errorAlert.showAndWait();
+        Platform.runLater(() -> {
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText("Error");
+            errorAlert.setContentText(error);
+            errorAlert.showAndWait();
+        });
+    }
+
+    @Override
+    public void displayWaitMessage() {
+        askPattern();
     }
 
     /**
@@ -137,23 +170,14 @@ public class JavaFxDisplayer extends Application implements Displayer {
 
             loader.setLocation(this.getClass().getResource("pattern_card_selection.fxml"));
             AnchorPane view = loader.load();
+            Platform.runLater(() -> {
+                root.setCenter(view);
+                primaryStage.setTitle("Window Pattern Card selection");
+                primaryStage.sizeToScene();
+            });
+            patternSelection = loader.getController();
+            refreshDisplayedData();
 
-            root.setCenter(view);
-            primaryStage.setTitle("Window Pattern Card selection");
-
-            primaryStage.setMinWidth(1000);
-            primaryStage.setMinHeight(700);
-            primaryStage.setMaxWidth(1300);
-            primaryStage.setMaxHeight(755);
-
-            PatternSelection controller = loader.getController();
-            for (int i = 0; i < getDataOrganizer().getGameSetup().getPlayers().length; i++) {
-                if (getDataOrganizer().getGameSetup().getPlayers()[i].equals(clientView.getPlayerName())) {
-                    controller.setParentController(this);
-                    controller.setPatterns(getDataOrganizer().getGameSetup().getCandidates()[i]);
-                    controller.setGrid();
-                }
-            }
 
         } catch (IOException e) {
             Logger.getDefaultLogger().log(e.getMessage());
@@ -171,16 +195,15 @@ public class JavaFxDisplayer extends Application implements Displayer {
 
             loader.setLocation(this.getClass().getResource("private_selection.fxml"));
             AnchorPane view = loader.load();
+            Platform.runLater(() -> {
+                root.setCenter(view);
+                primaryStage.setTitle("Private Objective Card selection");
 
-            root.setCenter(view);
-            primaryStage.setTitle("Private Objective Card selection");
-            primaryStage.setMinWidth(770);
-            primaryStage.setMinHeight(550);
-
-            PrivateSelection controller = loader.getController();
-            controller.setCards();
-            controller.setParentController(this);
-
+                PrivateSelection controller = loader.getController();
+                controller.setCards();
+                controller.setParentController(this);
+                primaryStage.sizeToScene();
+            });
         } catch (IOException e) {
             Logger.getDefaultLogger().log(e.getMessage());
         }
@@ -200,9 +223,12 @@ public class JavaFxDisplayer extends Application implements Displayer {
             Logger.getDefaultLogger().log(e.getMessage());
             return;
         }
-        root.setCenter(node);
-        ScoreBoard controller = loader.getController();
-        controller.setScoreBoardMap(getDataOrganizer().getScoreBoard());
+        Platform.runLater(() -> {
+            root.setCenter(node);
+            ScoreBoard controller = loader.getController();
+            controller.setScoreBoardMap(getDataOrganizer().getScoreBoard());
+            primaryStage.sizeToScene();
+        });
     }
 
     /**
@@ -211,20 +237,17 @@ public class JavaFxDisplayer extends Application implements Displayer {
     @Override
     public void selectDie() {
         BoardEventPack eventPack = new SelectDieEventPack(clientView);
-        board.setEventPack(eventPack);
+        Platform.runLater(() -> board.setEventPack(eventPack));
     }
 
     /**
      * Changes the event pack of the game board to allow the user to move one or two dice.
      */
     @Override
-    public void moveDie(int amount) {
+    public void moveDice(int amount, boolean moveAll) {
         BoardEventPack eventPack;
-        if (amount == 1)
-            eventPack = new MoveDieEventPack(clientView);
-        else
-            eventPack = new MoveDiceEventPack(clientView);
-        board.setEventPack(eventPack);
+        eventPack = new MoveDiceEventPack(clientView, amount, moveAll);
+        Platform.runLater(() -> board.setEventPack(eventPack));
     }
 
     /**
@@ -240,14 +263,14 @@ public class JavaFxDisplayer extends Application implements Displayer {
             loader.setLocation(this.getClass().getResource("ask_difficulty.fxml"));
             AnchorPane view = loader.load();
 
-            setStageSize(623, 440);
+            Platform.runLater(() -> {
+                root.setCenter(view);
+                primaryStage.setTitle("Sagrada - Difficulty selection");
 
-            root.setCenter(view);
-            primaryStage.setTitle("Sagrada - Difficulty selection");
-
-            AskDifficulty controller = loader.getController();
-            controller.setController(this);
-
+                AskDifficulty controller = loader.getController();
+                controller.setController(this);
+                primaryStage.sizeToScene();
+            });
         } catch (IOException e) {
             Logger.getDefaultLogger().log(e.getMessage());
         }
@@ -260,7 +283,7 @@ public class JavaFxDisplayer extends Application implements Displayer {
     @Override
     public void askDiceToSwap() {
         BoardEventPack eventPack = new SwapDiceEventPack(clientView);
-        board.setEventPack(eventPack);
+        Platform.runLater(() -> board.setEventPack(eventPack));
     }
 
     /**
@@ -269,28 +292,30 @@ public class JavaFxDisplayer extends Application implements Displayer {
      */
     @Override
     public void askValueDestination() {
-        int dieIndex = clientView.getDataOrganizer().getNextTurn().getForcedSelectionIndex();
-        Die die = clientView.getDataOrganizer().getDraftPool().get(dieIndex);
+        int dieIndex = getDataOrganizer().getNextTurn().getForcedSelectionIndex();
+        Die die = getDataOrganizer().getDraftPool().get(dieIndex);
         BoardEventPack eventPack = new SelectValueEventPack(clientView, die.getColour());
-        board.setEventPack(eventPack);
+        Platform.runLater(() -> board.setEventPack(eventPack));
     }
 
     @Override
-    public void refreshDisplayedData() {
-        if (board != null)
-            board.refreshData();
-    }
-
-    /**
-     * Resizes the stage.
-     * @param width The new width.
-     * @param height The new height.
-     */
-    private void setStageSize(int width, int height) {
-        primaryStage.setMaxWidth(width);
-        primaryStage.setMaxHeight(height);
-        primaryStage.setMinWidth(width);
-        primaryStage.setMinHeight(height);
+    public synchronized void refreshDisplayedData() {
+        if (board != null) {
+            if (getDataOrganizer().getScoreBoard() != null)
+                displayScoreBoard();
+            else
+                Platform.runLater(() -> board.refreshData());
+        }
+        if (patternSelection != null && getDataOrganizer().getGameSetup() != null) {
+            String player = getDataOrganizer().getLocalPlayer();
+            int index = Arrays.asList(getDataOrganizer().getGameSetup().getPlayers()).indexOf(player);
+            it.polimi.se2018.model.Pattern[] patterns = getDataOrganizer().getGameSetup().getCandidates()[index];
+            Platform.runLater(() -> {
+                patternSelection.setParentController(this);
+                patternSelection.setPatterns(patterns);
+                patternSelection.setGrid();
+            });
+        }
     }
 
     /**
@@ -300,7 +325,7 @@ public class JavaFxDisplayer extends Application implements Displayer {
      * @param reason the description of the reason for which the player must
      *               wait.
      */
-    public void displayWaitingView(String reason) {
+    void displayWaitingView(String reason) {
 
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -308,11 +333,10 @@ public class JavaFxDisplayer extends Application implements Displayer {
             loader.setLocation(this.getClass().getResource("waiting_view.fxml"));
             AnchorPane view = loader.load();
 
-            setStageSize(623, 440);
+            primaryStage.sizeToScene();
 
             WaitingView controller = loader.getController();
             controller.setText(reason);
-
             root.setCenter(view);
             primaryStage.setTitle("Wait");
 
@@ -328,28 +352,12 @@ public class JavaFxDisplayer extends Application implements Displayer {
      * @param text a description of the choice that was just made.
      * @return {@code true} if he confirmed the choice, {@code} false otherwise.
      */
-    public boolean displayConfirmationView(String text) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("confirmation_view.fxml"));
-            AnchorPane page = loader.load();
+    public boolean displayConfirm(String text) {
 
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Confirmation");
-            Scene scene = new Scene(page);
-            dialogStage.setScene(scene);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, text, ButtonType.NO, ButtonType.OK);
+        Optional<ButtonType> response = alert.showAndWait();
 
-            ConfirmationView controller = loader.getController();
-            controller.setText(text + "\nDo you confirm your choice?");
-            controller.setDialogStage(dialogStage);
-            dialogStage.showAndWait();
-
-            return controller.isConfirmed();
-
-        } catch (IOException e) {
-            Logger.getDefaultLogger().log(e.getMessage());
-            return false;
-        }
+        return response.orElse(ButtonType.NO) == ButtonType.OK;
     }
 
     /**
@@ -383,13 +391,24 @@ public class JavaFxDisplayer extends Application implements Displayer {
     }
 
     @Override
-    public void setDataOrganizer(ViewDataOrganizer organizer) {
-
+    public void askIncrement() {
+        BoardEventPack eventPack = new IncrementDieValueEventPack(clientView);
+        Platform.runLater(() -> board.setEventPack(eventPack));
     }
 
     @Override
-    public void displayWaitMessage() {
-
+    public void askPlacement() {
+        BoardEventPack eventPack = new PlaceDieEventPack(clientView);
+        Platform.runLater(() -> board.setEventPack(eventPack));
     }
 
+    @Override
+    public void askConfirm() {
+        Platform.runLater(() -> {
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            Optional<ButtonType> response = confirm.showAndWait();
+            if (response.orElse(ButtonType.CLOSE) == ButtonType.OK)
+                clientView.handleToolCardUsage();
+        });
+    }
 }

@@ -7,15 +7,13 @@ import it.polimi.se2018.model.events.ViewMessage;
 import it.polimi.se2018.networking.client.ClientNetInterface;
 import it.polimi.se2018.networking.messages.Command;
 import it.polimi.se2018.networking.messages.Message;
-import it.polimi.se2018.utils.Logger;
-
-import java.lang.ref.WeakReference;
 
 /**
  * This class represent a view on the server-side of the application.
  * <p>The aim of this class is to decouple the MVC architecture from
  * the underlying networking services.</p>
  * <p>This class is mutable and has no thread safety yet.</p>
+ *
  * @author dvdmff
  */
 public class VirtualView extends View {
@@ -26,16 +24,16 @@ public class VirtualView extends View {
     private boolean expired = false;
 
     /**
-     * Weak reference to the client associated with this view.
+     * Reference to the client associated with this view.
      */
-    private WeakReference<ClientNetInterface> client;
+    private ClientNetInterface client;
 
     /**
      * Creates a new virtual view with the specified player name that is
      * associated with the given client.
      *
-     * @param client     The client connection the player is using to communicate
-     *                   with the server.
+     * @param client The client connection the player is using to communicate
+     *               with the server.
      * @throws IllegalArgumentException if {@code client} is null.
      */
     public VirtualView(ClientNetInterface client) {
@@ -44,7 +42,7 @@ public class VirtualView extends View {
         }
 
         setPlayerName(client.getUsername());
-        this.client = new WeakReference<>(client);
+        this.client = client;
     }
 
     /**
@@ -57,9 +55,7 @@ public class VirtualView extends View {
      * @throws IllegalArgumentException if {@code client} is null.
      */
     public synchronized void setClient(ClientNetInterface client) {
-        if (client == null)
-            throw new IllegalArgumentException("client can't be null");
-        this.client = new WeakReference<>(client);
+        this.client = client;
     }
 
     /**
@@ -71,13 +67,13 @@ public class VirtualView extends View {
      * has died.
      */
     private synchronized ClientNetInterface getClient() {
-        ClientNetInterface clientNetInterface = this.client.get();
-        if (clientNetInterface == null) {
+        if (client == null) {
             // disconnected, notify controller
-            handle(
-                    new ViewMessage(this, Action.DISCONNECT_PLAYER, this.getPlayerName()));
+            new Thread(() ->
+                    handle(new ViewMessage(this, Action.DISCONNECT_PLAYER, this.getPlayerName())))
+                    .start();
         }
-        return clientNetInterface;
+        return client;
     }
 
     /**
@@ -151,6 +147,11 @@ public class VirtualView extends View {
         show("showDieSelection");
     }
 
+    @Override
+    public void showDieIncrementSelection() {
+        show("showDieIncrementSelection");
+    }
+
     /**
      * Informs the associated client to show the move die selection view.
      * <p><strong>Note: there are troubles with the sending of the argument.</strong></p>
@@ -159,7 +160,12 @@ public class VirtualView extends View {
      */
     @Override
     public void showMoveSelection(int amount) {
-        show("showMoveSelection");
+        show("showMoveSelection" + amount);
+    }
+
+    @Override
+    public void showMoveUpToTwo() {
+        show("showMoveUpToTwo");
     }
 
     /**
@@ -186,8 +192,19 @@ public class VirtualView extends View {
         show("showValueDestinationSelection");
     }
 
+    @Override
+    public void showPlaceDie() {
+        show("showPlaceDie");
+    }
+
+    @Override
+    public void showConfirm() {
+        show("showConfirm");
+    }
+
     /**
      * Propagates messages received from the network to the rest of the MVC architecture.
+     *
      * @param message The message received from the network.
      */
     public void handle(ViewMessage message) {
@@ -197,6 +214,7 @@ public class VirtualView extends View {
 
     /**
      * Propagates the messages notified by the observables to the network.
+     *
      * @param message The update message sent by the model.
      */
     @Override
@@ -209,6 +227,7 @@ public class VirtualView extends View {
 
     /**
      * Getter for the expired flag.
+     *
      * @return {@code true} if the view has expired; {@code false} otherwise.
      */
     public boolean isNotExpired() {

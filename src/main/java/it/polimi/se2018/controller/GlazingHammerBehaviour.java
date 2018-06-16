@@ -39,7 +39,7 @@ public class GlazingHammerBehaviour implements ToolCardBehaviour {
      */
     @Override
     public void askParameters(ViewMessage message) {
-        //do nothing
+        message.getView().showConfirm();
     }
 
     /**

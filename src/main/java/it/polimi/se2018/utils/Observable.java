@@ -22,7 +22,7 @@ public abstract class Observable<T> {
      * @param observer The observer to be associated with the
      *                 observable
      */
-    public void registerObserver(Observer<T> observer){
+    public synchronized void registerObserver(Observer<T> observer){
         observers.add(observer);
     }
 
@@ -34,8 +34,12 @@ public abstract class Observable<T> {
      *         removed; {@code false} if there was no prior association
      *         between the two objects.
      */
-    public boolean deregisterObserver(Observer<T> observer){
+    public synchronized boolean deregisterObserver(Observer<T> observer){
         return observers.remove(observer);
+    }
+
+    public synchronized void deregisterAll(){
+        observers.clear();
     }
 
     /**
@@ -43,7 +47,7 @@ public abstract class Observable<T> {
      * @param message The message to send to the observers in order to
      *               notify  them.
      */
-    public void notifyObservers(T message){
+    public synchronized void notifyObservers(T message){
         observers.forEach(o -> o.update(message));
     }
 }

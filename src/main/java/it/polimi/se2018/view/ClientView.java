@@ -5,6 +5,7 @@ import it.polimi.se2018.networking.client.Client;
 import it.polimi.se2018.networking.client.RmiNetworkHandler;
 import it.polimi.se2018.networking.client.TcpNetworkHandler;
 import it.polimi.se2018.utils.Coordinates;
+import it.polimi.se2018.utils.Logger;
 
 import java.io.IOException;
 
@@ -50,22 +51,23 @@ public class ClientView extends View {
     public ClientView(Displayer displayer) {
         organizer = new ViewDataOrganizer();
         this.displayer = displayer;
-        this.displayer.setDataOrganizer(organizer); //teoricamente basta aggiungere un getter per l'organizer qua
         //e il displayer non avrà bisogno del riferimento all'organizer, ma potrà accedervi tramite questa classe
         this.displayer.setView(this);
     }
 
     /**
      * Getter for {@code gameRunning}
+     *
      * @return {@code true} if {@code gameRunning} has been set with the show method,
      * {@code false} otherwise.
      */
-    public boolean isGameRunning(){
+    public boolean isGameRunning() {
         return gameRunning;
     }
 
     /**
      * Getter for {@code gameEndSinglePlayer}
+     *
      * @return {@code true} if {@code gameEndSinglePlayer} has been set
      * with the {@code showPrivateObjective} method, {@code false} otherwise.
      */
@@ -75,75 +77,150 @@ public class ClientView extends View {
 
     /**
      * The getter for {@code organizer}.
+     *
      * @return the organizer.
      */
     public ViewDataOrganizer getDataOrganizer() {
         return organizer;
     }
 
+    /**
+     * Shows the main multi player board.
+     */
     @Override
     public void showMultiPlayerGame() {
         gameRunning = true;
         displayer.displayMultiPlayerGame();
     }
 
+    /**
+     * Shows the main single player board.
+     */
     @Override
     public void showSinglePlayerGame() {
         gameRunning = true;
         displayer.displaySinglePlayerGame();
     }
 
+    /**
+     * Shows an error message.
+     *
+     * @param error the message that has to be displayed
+     */
     @Override
     public void showError(String error) {
         displayer.displayError(error);
     }
 
+    /**
+     * Shows the pattern selection menu.
+     */
     @Override
     public void showPatternSelection() {
-        displayer.displayWaitMessage();
+        displayer.askPattern();
     }
 
+    /**
+     * Shows the private objective selection menu.
+     */
     @Override
     public void showPrivateObjectiveSelection() {
         gameEndSinglePlayer = true;
         displayer.askPrivateObjective();
     }
 
+    /**
+     * Shows the score board.
+     */
     @Override
     public void showScoreBoard() {
         displayer.displayScoreBoard();
     }
 
+    /**
+     * Shows the die selection view.
+     */
     @Override
     public void showDieSelection() {
         displayer.selectDie();
     }
 
+    /**
+     * Shows the die increment view.
+     */
     @Override
-    public void showMoveSelection(int amount) {
-        displayer.moveDie(amount);
+    public void showDieIncrementSelection() {
+        displayer.askIncrement();
     }
 
+    /**
+     * Shows the move selection view.
+     *
+     * @param amount The amount of dice to move.
+     */
+    @Override
+    public void showMoveSelection(int amount) {
+        displayer.moveDice(amount, true);
+    }
+
+    /**
+     * Shows the view to move up to two dice.
+     */
+    @Override
+    public void showMoveUpToTwo() {
+        displayer.moveDice(2, false);
+    }
+
+    /**
+     * Shows the difficulty selection menu.
+     */
     @Override
     public void showDifficultySelection() {
         displayer.askDifficulty();
     }
 
+    /**
+     * Shows the dice swap view.
+     */
     @Override
     public void showLensCutterSelection() {
         displayer.askDiceToSwap();
     }
 
+    /**
+     * Shows the view to select the die value and place it.
+     */
     @Override
     public void showValueDestinationSelection() {
         displayer.askValueDestination();
     }
 
+    /**
+     * Shows the view to place a die.
+     */
+    @Override
+    public void showPlaceDie() {
+        displayer.askPlacement();
+    }
 
+    /**
+     * Shows a confirmation view.
+     */
+    @Override
+    public void showConfirm() {
+        displayer.askConfirm();
+    }
+
+    /**
+     * Updates the displayed data.
+     *
+     * @param message An object containing the data to define
+     */
     @Override
     public void update(ModelUpdate message) {
-        message.pushInto(organizer);//Why not organizer.push(message)?
         organizer.push(message);
+        if (organizer.getScoreBoard() != null)
+            showScoreBoard();
         displayer.refreshDisplayedData();
     }
 
@@ -218,6 +295,17 @@ public class ClientView extends View {
 
     /**
      * Handles the event in which the player wants to use a tool card.
+     */
+    public void handleToolCardUsage() {
+        notifyObservers(new ViewMessage(
+                this,
+                Action.APPLY_TOOL_CARD,
+                getPlayerName()
+        ));
+    }
+
+    /**
+     * Handles the event in which the player wants to use a tool card.
      *
      * @param index     The index of the die from the draft pool.
      * @param increment {@code true} if the die value has to be incremented;
@@ -228,13 +316,14 @@ public class ClientView extends View {
                 index,
                 increment,
                 this,
-                Action.INCREMENT_DIE,
+                Action.APPLY_TOOL_CARD,
                 getPlayerName()
         ));
     }
 
     /**
      * Handles the event in which the player wants to use a tool card.
+     *
      * @param index The index of the die on the draft pool.
      */
     public void handleToolCardUsage(int index) {
@@ -248,22 +337,47 @@ public class ClientView extends View {
 
     /**
      * Handles the event in which the player wants to use a tool card.
-     * @param index The index of the die on the draft pool.
+     *
+     * @param index       The index of the die on the draft pool.
      * @param destination The destination of the die on the pattern.
      */
     public void handleToolCardUsage(int index, Coordinates destination) {
-        notifyObservers(new PlaceDie(
-                index,
-                destination,
-                this,
-                Action.APPLY_TOOL_CARD,
-                getPlayerName()
-        ));
+        handleToolCardUsage(index, destination, false);
     }
 
     /**
      * Handles the event in which the player wants to use a tool card.
-     * @param source The source coordinates of the die on the pattern.
+     *
+     * @param index       The index of the die on the draft pool.
+     * @param destination The destination of the die on the pattern.
+     * @param isSwap      {@code true} if a swap is required; {@code false} otherwise.
+     */
+    public void handleToolCardUsage(int index, Coordinates destination, boolean isSwap) {
+        ViewMessage message;
+        if (isSwap)
+            message = new DiceSwap(
+                    index,
+                    destination,
+                    this,
+                    Action.APPLY_TOOL_CARD,
+                    getPlayerName()
+            );
+        else
+            message = new PlaceDie(
+                    index,
+                    destination,
+                    this,
+                    Action.APPLY_TOOL_CARD,
+                    getPlayerName()
+            );
+
+        notifyObservers(message);
+    }
+
+    /**
+     * Handles the event in which the player wants to use a tool card.
+     *
+     * @param source      The source coordinates of the die on the pattern.
      * @param destination The destination coordinates of the die on the pattern.
      */
     public void handleToolCardUsage(Coordinates source, Coordinates destination) {
@@ -278,7 +392,8 @@ public class ClientView extends View {
 
     /**
      * Handles the event in which the player wants to use a tool card.
-     * @param sources The source coordinates of the dice on the pattern.
+     *
+     * @param sources      The source coordinates of the dice on the pattern.
      * @param destinations The destination coordinates of the dice on the pattern.
      */
     public void handleToolCardUsage(Coordinates[] sources, Coordinates[] destinations) {
@@ -293,10 +408,11 @@ public class ClientView extends View {
 
     /**
      * Handles the event in which the player wants to use a tool card.
+     *
      * @param destination The destination of the die on the pattern.
-     * @param value The selected value of the die.
+     * @param value       The selected value of the die.
      */
-    public void handleToolCardUsage(Coordinates destination, int value){
+    public void handleToolCardUsage(Coordinates destination, int value) {
         notifyObservers(new ChooseValue(
                 this,
                 Action.APPLY_TOOL_CARD,
@@ -320,12 +436,13 @@ public class ClientView extends View {
     /**
      * Handles the case in which the player logs in.
      * <p>This method sets the communication protocol with the server to Java RMI.</p>
-     * @param playerName The name of the player.
+     *
+     * @param playerName    The name of the player.
      * @param serverAddress The address of the server.
-     * @param serviceName The name of the RMI service on the server.
+     * @param serviceName   The name of the RMI service on the server.
      */
     public void handleLogin(String playerName, String serverAddress, String serviceName) {
-        //@TODO add a parameter for the game mode
+        //TODO add a parameter for the game mode
         setPlayerName(playerName);
         organizer.setLocalPlayer(playerName);
         client = new Client(this, new RmiNetworkHandler(serverAddress, serviceName));
@@ -340,17 +457,19 @@ public class ClientView extends View {
     /**
      * Handles the case in which the player logs in.
      * <p>This method sets the communication protocol with the server to TCP.</p>
-     * @param playerName The name of the player.
+     *
+     * @param playerName    The name of the player.
      * @param serverAddress The address of the server.
-     * @param port The port on the server where the service is listening on.
+     * @param port          The port on the server where the service is listening on.
      */
     public void handleLogin(String playerName, String serverAddress, int port) {
-        //@TODO add a parameter for the game mode
+        //TODO add a parameter for the game mode
         setPlayerName(playerName);
         organizer.setLocalPlayer(playerName);
         try {
             client = new Client(this, new TcpNetworkHandler(serverAddress, port));
         } catch (IOException e) {
+            Logger.getDefaultLogger().log(e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
 
@@ -364,9 +483,10 @@ public class ClientView extends View {
     /**
      * The method to notify the controller after the selection of the
      * {@link it.polimi.se2018.model.PrivateObjectiveCard}.
+     *
      * @param name the name of the card.
      */
-    public void handlePrivateSelection(String name){
+    public void handlePrivateSelection(String name) {
         notifyObservers(new SelectCard(
                 name,
                 this,
@@ -378,9 +498,10 @@ public class ClientView extends View {
     /**
      * Handles the selection of the difficulty at the beginning of a single-player
      * game.
+     *
      * @param difficulty the chosen difficulty.
      */
-    public void handleDifficultySelection(int difficulty){
+    public void handleDifficultySelection(int difficulty) {
         notifyObservers(new SelectDifficulty(
                 difficulty,
                 this,

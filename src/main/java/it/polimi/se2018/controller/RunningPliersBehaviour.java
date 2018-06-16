@@ -36,7 +36,7 @@ public class RunningPliersBehaviour implements ToolCardBehaviour {
      */
     @Override
     public void askParameters(ViewMessage message) {
-        message.getView().showDieSelection();
+        message.getView().showPlaceDie();
     }
 
     /**

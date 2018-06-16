@@ -51,7 +51,7 @@ public class RunningPliersBehaviourTest {
         behaviour.askParameters(message);
 
         Assert.assertEquals(1, mockView.getCalledMethods().size());
-        Assert.assertEquals("showDieSelection", mockView.getCalledMethods().get(0));
+        Assert.assertEquals("showPlaceDie", mockView.getCalledMethods().get(0));
     }
 
     /**

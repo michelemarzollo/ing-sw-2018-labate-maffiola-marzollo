@@ -86,12 +86,22 @@ public class MockView extends View {
         calledMethods.add("showDieSelection");
     }
 
+    @Override
+    public void showDieIncrementSelection() {
+        calledMethods.add("showDieIncrementSelection");
+    }
+
     /**
      * The method to simulate the corresponding method in the view.
      */
     @Override
     public void showMoveSelection(int amount) {
         calledMethods.add("showMoveSelection" + amount);
+    }
+
+    @Override
+    public void showMoveUpToTwo() {
+        calledMethods.add("showMoveUpToTwo");
     }
 
     /**
@@ -118,6 +128,15 @@ public class MockView extends View {
         calledMethods.add("showValueDestinationSelection");
     }
 
+    @Override
+    public void showPlaceDie() {
+        calledMethods.add("showPlaceDie");
+    }
+
+    @Override
+    public void showConfirm() {
+        calledMethods.add("showConfirm");
+    }
 
     @Override
     public void update(ModelUpdate message) {

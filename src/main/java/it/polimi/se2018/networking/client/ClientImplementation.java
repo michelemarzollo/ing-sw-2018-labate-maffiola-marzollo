@@ -4,6 +4,7 @@ import it.polimi.se2018.model.events.ModelUpdate;
 import it.polimi.se2018.model.events.ViewMessage;
 import it.polimi.se2018.networking.messages.Command;
 import it.polimi.se2018.networking.messages.Message;
+import it.polimi.se2018.utils.Logger;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.view.View;
@@ -67,11 +68,15 @@ public class ClientImplementation  extends Observable<ModelUpdate>
         showMethods.put("showPrivateObjectiveSelection", view::showPrivateObjectiveSelection);
         showMethods.put("showScoreBoard", view::showScoreBoard);
         showMethods.put("showDieSelection", view::showDieSelection);
-        // how to handle this?
-        //showMethods.put("showMoveSelection", view::showMoveSelection);
+        showMethods.put("showMoveSelection1", () -> view.showMoveSelection(1));
+        showMethods.put("showMoveSelection2", () -> view.showMoveSelection(2));
         showMethods.put("showDifficultySelection", view::showDifficultySelection);
         showMethods.put("showLensCutterSelection", view::showLensCutterSelection);
         showMethods.put("showValueDestinationSelection", view::showValueDestinationSelection);
+        showMethods.put("showDieIncrementSelection", view::showDieIncrementSelection);
+        showMethods.put("showPlaceDie", view::showPlaceDie);
+        showMethods.put("showConfirm", view::showConfirm);
+        showMethods.put("showMoveUpToTwo", view::showMoveUpToTwo);
     }
 
     /**
@@ -97,6 +102,7 @@ public class ClientImplementation  extends Observable<ModelUpdate>
             view.showError((String) message.getBody());
         else if (message.getCommand() == Command.SHOW) {
             String showWhat = (String) message.getBody();
+            Logger.getDefaultLogger().log("show: " + showWhat);
             ShowMethod showMethod = showMethods.get(showWhat);
             if (showMethod != null)
                 showMethod.show();

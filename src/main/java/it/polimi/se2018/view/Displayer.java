@@ -55,7 +55,7 @@ public interface Displayer {
      * Lets the player select up to {@code amount} dice to move on its pattern.
      * @param amount The maximum amount of dice to be moved.
      */
-    void moveDie(int amount);
+    void moveDice(int amount, boolean moveAll);
 
     /**
      * Asks the wished difficulty to the player when in single player mode.
@@ -78,14 +78,6 @@ public interface Displayer {
     void refreshDisplayedData();
 
     /**
-     * Sets the {@link ViewDataOrganizer} from which the Model's informations
-     * will be retrieved.
-     * @param organizer the {@link ViewDataOrganizer} that will be bound to the
-     *                  Displayer.
-     */
-    void setDataOrganizer(ViewDataOrganizer organizer);
-
-    /**
      * The getter for the {@link ViewDataOrganizer}, that keeps the track
      * of model messages.
      * @return the organizer.
@@ -103,4 +95,20 @@ public interface Displayer {
      * @return the client view.
      */
     ClientView getView();
+
+    /**
+     * Asks the user to select a die and decide whether to increment or to
+     * decrement it.
+     */
+    void askIncrement();
+
+    /**
+     * Asks the user to place a die.
+     */
+    void askPlacement();
+
+    /**
+     * Lets the user confirm its choice.
+     */
+    void askConfirm();
 }

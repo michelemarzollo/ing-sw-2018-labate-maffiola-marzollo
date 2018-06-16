@@ -47,6 +47,7 @@ public class FluxRemoverBehaviour implements ToolCardBehaviour {
     @Override
     public void askParameters(ViewMessage message) {
         message.getView().showDieSelection();
+        firstStepDone = false;
     }
 
     /**
@@ -139,6 +140,7 @@ public class FluxRemoverBehaviour implements ToolCardBehaviour {
 
             game.getDraftPool().draft(forcedSelection);
             currentTurn.placeDie();
+            firstStepDone = false;
             return true;
 
         } catch (PlacementErrorException e) {

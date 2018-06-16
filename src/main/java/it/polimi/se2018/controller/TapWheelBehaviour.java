@@ -36,7 +36,7 @@ public class TapWheelBehaviour implements ToolCardBehaviour {
      */
     @Override
     public void askParameters(ViewMessage message) {
-        message.getView().showMoveSelection(2);
+        message.getView().showMoveUpToTwo();
     }
 
     /**
