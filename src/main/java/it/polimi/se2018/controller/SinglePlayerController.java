@@ -139,7 +139,7 @@ public class SinglePlayerController extends Controller {
             SelectDifficulty difficulty = (SelectDifficulty) message;
             if (difficulty.getDifficulty() < MIN_DIFFICULTY || difficulty.getDifficulty() > MAX_DIFFICULTY) {
                 message.getView().showError("The level of difficulty must be in " + MIN_DIFFICULTY
-                        + " - " + MAX_DIFFICULTY + " 5 range: choose another one");
+                        + " - " + MAX_DIFFICULTY + " range: choose another one");
                 message.getView().showDifficultySelection();
             } else {
                 CardDealer cardDealer = new CardDealer(getGame());

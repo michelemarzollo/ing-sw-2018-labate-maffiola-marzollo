@@ -178,7 +178,7 @@ public class SinglePlayerControllerTest {
         SelectDifficulty msg2 = new SelectDifficulty(0, view, playerName);
         controller.performAction(msg2);
         assertTrue(view.getCalledMethods().contains(
-                "showError: The level of difficulty must be in 1-5 range: choose another one"));
+                "showError: The level of difficulty must be in 1 - 5 range: choose another one"));
         assertFalse(game.isSetupComplete());
         //cards shouldn't have been distributed
         assertNull(game.getPublicObjectiveCards());
@@ -208,7 +208,7 @@ public class SinglePlayerControllerTest {
         SelectDifficulty msg2 = new SelectDifficulty(7, view, playerName);
         controller.performAction(msg2);
         assertTrue(view.getCalledMethods().contains(
-                "showError: The level of difficulty must be in 1-5 range: choose another one"));
+                "showError: The level of difficulty must be in 1 - 5 range: choose another one"));
         assertFalse(game.isSetupComplete());
         //cards shouldn't have been distributed
         assertNull(game.getPublicObjectiveCards());
