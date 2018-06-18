@@ -55,7 +55,7 @@ public class SinglePlayerControllerTest {
 
         msg = new ViewMessage(view, null, playerName);
         controller.update(msg);
-        assertTrue(view.getCalledMethods().size() == 1);
+        assertEquals(1, view.getCalledMethods().size());
         assertTrue(view.getCalledMethods().contains("showDifficultySelection"));
     }
 
@@ -290,7 +290,7 @@ public class SinglePlayerControllerTest {
                 name, view, Action.SELECT_PRIVATE_OBJECTIVE, playerName);
         controller.performAction(msg2);
         assertTrue(game.getDraftPool().getDice().isEmpty());
-        assertTrue(game.getPlayers().get(1).getName().equals("RoundTrack"));
+        assertEquals("RoundTrack", game.getPlayers().get(1).getName());
         assertEquals(-33 + 6 + playerPublicScore, game.getPlayers().get(0).getScore());
         assertEquals(37, game.getPlayers().get(1).getScore());
 
@@ -498,7 +498,7 @@ public class SinglePlayerControllerTest {
         assertEquals(3, game.getDraftPool().getDice().size());
         assertFalse(game.getDraftPool().getDice().contains(removedDie));
         for (int i = 0; i < 3; i++) {
-            assertTrue(dice2.get(i).equals(game.getDraftPool().getDice().get(i)));
+            assertEquals(dice2.get(i), game.getDraftPool().getDice().get(i));
         }
     }
 
@@ -636,14 +636,8 @@ public class SinglePlayerControllerTest {
 
         //sets the public Objective Cards in the game
         try {
-            File directory = new File(getClass()
-                    .getResource("public_objective_cards/xmls")
-                    .toURI()
-            );
-            XmlPublicObjectiveLoader publicObjectiveFactory = new XmlPublicObjectiveLoader(directory, controller);
+            XmlPublicObjectiveLoader publicObjectiveFactory = new XmlPublicObjectiveLoader(controller);
             game.setPublicObjectiveCards(publicObjectiveFactory.load(3));
-        } catch (URISyntaxException e) {
-            Logger.getDefaultLogger().log("URISyntaxException " + e);
         } catch (SAXException e) {
             Logger.getDefaultLogger().log("USAXException " + e);
         }

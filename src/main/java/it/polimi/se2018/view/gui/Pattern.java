@@ -4,6 +4,7 @@ import it.polimi.se2018.model.Cell;
 import it.polimi.se2018.model.Die;
 import it.polimi.se2018.model.events.PlayerStatus;
 import it.polimi.se2018.utils.Coordinates;
+import it.polimi.se2018.utils.ResourceManager;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -66,6 +67,9 @@ public class Pattern {
      */
     private Consumer<Coordinates> handler;
 
+    /**
+     * Enforces layout constrains.
+     */
     @FXML
     private void initialize() {
 
@@ -138,6 +142,12 @@ public class Pattern {
         }
     }
 
+    /**
+     * Set the style for the specified cell.
+     * <p>If url is empty, no background will be loaded.</p>
+     * @param cell The node representing a cell.
+     * @param url The url of the background to use.
+     */
     private void setCellStyle(AnchorPane cell, String url) {
         if (!url.isEmpty())
             cell.setStyle(
@@ -161,7 +171,7 @@ public class Pattern {
     private AnchorPane makeDieAt(Die die) {
 
         AnchorPane dieRepresentation = new AnchorPane();
-        String url = getClass().getResource("images/dice/" + die.getColour() + die.getValue() + ".jpg").toString();
+        String url = ResourceManager.getInstance().getDieImageUrl(die);
         setCellStyle(dieRepresentation, url);
 
         return dieRepresentation;
@@ -175,12 +185,8 @@ public class Pattern {
      */
     private AnchorPane makeRestrictionAt(Cell cell) {
         AnchorPane restrictionRepresentation = new AnchorPane();
-        String url = "";
-        if (cell.getColour() == null && cell.getValue() != 0)
-            url = this.getClass().getResource("images/dice/Gray" + cell.getValue() + ".jpg").toString();
-        else if (cell.getValue() == 0 && cell.getColour() != null)
-            url = this.getClass().getResource("images/dice/" + cell.getColour() + "Restriction.jpg").toString();
-
+        String url;
+        url = ResourceManager.getInstance().getCellImageUrl(cell);
         setCellStyle(restrictionRepresentation, url);
 
         return restrictionRepresentation;

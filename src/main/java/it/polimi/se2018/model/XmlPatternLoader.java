@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.utils.ResourceManager;
 import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
@@ -96,20 +97,9 @@ public class XmlPatternLoader implements PatternLoader {
         SchemaFactory schemaFactory =
                 SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
-        InputStream schemaStream = getClass().getClassLoader().getResourceAsStream(PATTERNS_DIR + "pattern.xsd");
+        InputStream schemaStream = ResourceManager.getInstance().getPatternSchema();
         Schema schema = schemaFactory.newSchema(new StreamSource(schemaStream));
         return schema.newValidator();
-    }
-
-    /**
-     * Creates an input stream for the specified file.
-     *
-     * @param fileName The name of the file.
-     * @return The input stream for the specified file.
-     */
-    private InputStream getStreamFor(String fileName) {
-        String path = basePath + fileName;
-        return this.getClass().getClassLoader().getResourceAsStream(path);
     }
 
     /**
@@ -119,14 +109,16 @@ public class XmlPatternLoader implements PatternLoader {
      * @throws IllegalArgumentException if the list file is unavailable.
      */
     private void filterFiles(String listName) {
-        InputStream stream = getStreamFor(listName);
+        InputStream stream = ResourceManager.getInstance().getStream(basePath, listName);
         if (stream == null)
             throw new IllegalArgumentException("The given list file is unavailable.");
         try (Scanner fileNameScanner = new Scanner(stream)) {
             while (fileNameScanner.hasNext()) {
-                String fileName = fileNameScanner.nextLine() + ".xml";
-                if (isValid(getStreamFor(fileName)))
-                    loadablePatterns.add(fileName);
+                String resource = fileNameScanner.nextLine();
+                InputStream resourceStream =
+                        ResourceManager.getInstance().getXmlStream(basePath, resource);
+                if (isValid(resourceStream))
+                    loadablePatterns.add(resource);
             }
         }
     }
@@ -171,13 +163,15 @@ public class XmlPatternLoader implements PatternLoader {
     /**
      * Loads a pattern from an xml file.
      *
-     * @param fileName The name of the file where the pattern is described.
+     * @param resource The name of the resource where the pattern is described.
      * @return A pattern matching its description in xml. If {@code null}
      * is returned then some error while loading happened.
      */
-    private Pattern loadPattern(String fileName) {
+    private Pattern loadPattern(String resource) {
         try {
-            InputStream inputStream = getStreamFor(fileName);
+
+            InputStream inputStream =
+                    ResourceManager.getInstance().getXmlStream(basePath, resource);
             SaxPatternBuilder saxPatternBuilder = new SaxPatternBuilder();
 
             saxParser.parse(inputStream, saxPatternBuilder);

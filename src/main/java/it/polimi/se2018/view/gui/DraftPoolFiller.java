@@ -1,6 +1,7 @@
 package it.polimi.se2018.view.gui;
 
 import it.polimi.se2018.model.Die;
+import it.polimi.se2018.utils.ResourceManager;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
 import javafx.scene.effect.ColorAdjust;
@@ -40,15 +41,13 @@ public class DraftPoolFiller {
     }
 
     /**
-     * Loads the correct image for the given die.
+     * Creates a node with the correct image for the given die.
      *
      * @param die The die to be represented.
-     * @return An Image holding the representation of the given die.
-     * @deprecated Use a url manager instead.
+     * @return A node holding the representation of the given die.
      */
-    @Deprecated
-    private AnchorPane loadDieImage(Die die) {
-        String url = this.getClass().getResource("images/dice/" + die.getColour() + die.getValue() + ".jpg").toString();
+    private AnchorPane getImageFor(Die die) {
+        String url = ResourceManager.getInstance().getDieImageUrl(die);
         AnchorPane dieImage = new AnchorPane();
         dieImage.setStyle(
                 "-fx-background-image:url('" + url + "');" +
@@ -80,7 +79,7 @@ public class DraftPoolFiller {
     public void setDice(List<Die> dice) {
         diceContainer.getChildren().clear();
         for (Die die : dice) {
-            AnchorPane dieImage = loadDieImage(die);
+            AnchorPane dieImage = getImageFor(die);
             fitDie(dieImage, dice.size());
             dieImage.setOnMouseClicked(this::onClick);
             diceContainer.getChildren().add(dieImage);

@@ -2,6 +2,7 @@ package it.polimi.se2018.view.gui;
 
 import it.polimi.se2018.model.Die;
 import it.polimi.se2018.utils.Coordinates;
+import it.polimi.se2018.utils.ResourceManager;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
@@ -41,15 +42,13 @@ public class RoundTrackFiller {
     }
 
     /**
-     * Loads the correct image for a die.
+     * Creates a node with the correct image for a die.
      *
      * @param die The die to be represented.
-     * @return An image holding the representation of the die.
-     * @deprecated Use a url manager instead.
+     * @return A node holding the representation of the die.
      */
-    @Deprecated
     private AnchorPane loadDieImage(Die die) {
-        String url = getClass().getResource("images/dice/" + die.getColour() + die.getValue() + ".jpg").toString();
+        String url = ResourceManager.getInstance().getDieImageUrl(die);
         AnchorPane dieImage = new AnchorPane();
         dieImage.setStyle(
                 "-fx-background-image:url('" + url + "');" +
@@ -102,6 +101,11 @@ public class RoundTrackFiller {
         }
     }
 
+    /**
+     * Fits the given column in the container.
+     * @param column The column to fit.
+     * @param num The total number of columns to fit.
+     */
     private void fitColumn(VBox column, int num) {
         column.prefWidthProperty().bind(
                 columnContainer.widthProperty()
@@ -110,6 +114,11 @@ public class RoundTrackFiller {
         );
     }
 
+    /**
+     * Fits a die in its column.
+     * @param container The column containing the die.
+     * @param dieImage The die to fit.
+     */
     private void fitDie(VBox container, AnchorPane dieImage) {
         dieImage.minHeightProperty().bind(dieImage.minWidthProperty());
         dieImage.maxHeightProperty().bind(dieImage.maxWidthProperty());

@@ -236,14 +236,8 @@ public class MultiPlayerControllerTest {
 
         //sets the public Objective Cards in the game
         try {
-            File directory = new File(getClass()
-                    .getResource("public_objective_cards/xmls")
-                    .toURI()
-            );
-            XmlPublicObjectiveLoader publicObjectiveFactory = new XmlPublicObjectiveLoader(directory, controller);
+            XmlPublicObjectiveLoader publicObjectiveFactory = new XmlPublicObjectiveLoader(controller);
             game.setPublicObjectiveCards(publicObjectiveFactory.load(3));
-        } catch (URISyntaxException e) {
-            Logger.getDefaultLogger().log("URISyntaxException " + e);
         } catch (SAXException e) {
             Logger.getDefaultLogger().log("USAXException " + e);
         }

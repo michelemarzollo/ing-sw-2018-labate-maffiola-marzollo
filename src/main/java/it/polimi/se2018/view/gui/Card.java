@@ -1,5 +1,6 @@
 package it.polimi.se2018.view.gui;
 
+import it.polimi.se2018.utils.ResourceManager;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -42,8 +43,6 @@ public class Card {
      */
     private String cardName;
 
-    private String realName;
-
     private final double ratio;
 
     /**
@@ -60,8 +59,7 @@ public class Card {
     public Card(HBox container, String cardName, double ratio) {
         this.ratio = ratio;
         this.container = container;
-        realName = cardName;
-        this.cardName = cardName.replaceAll("\\s+", "");
+        this.cardName = cardName;
         initialize();
     }
 
@@ -82,7 +80,7 @@ public class Card {
     private void onClick() {
         boolean use = getZoomDialog().showAndWait().orElse(false);
         if (use && handler != null)
-            handler.accept(realName);
+            handler.accept(cardName);
     }
 
     /**
@@ -91,8 +89,7 @@ public class Card {
      * @implNote Use a url manager instead of crafting the url.
      */
     private void initialize() {
-        url =
-                this.getClass().getResource("images/cards/" + cardName + ".jpg").toString();
+        url = ResourceManager.getInstance().getCardImageUrl(cardName);
         cardImage.setStyle(
                 "-fx-background-image:url('" + url + "');" +
                         "-fx-background-position: center center;" +
@@ -119,10 +116,17 @@ public class Card {
         HBox.setHgrow(cardImage, Priority.ALWAYS);
     }
 
+    /**
+     * Inserts the card in the container.
+     */
     public void insert() {
         container.getChildren().add(cardImage);
     }
 
+    /**
+     * Creates a dialog to allow to zoom the card.
+     * @return A dialog to allow to zoom the card.
+     */
     private Dialog<Boolean> getZoomDialog(){
         cardDialog = new Dialog<>();
         DialogPane pane = new DialogPane();
@@ -145,9 +149,16 @@ public class Card {
         return cardDialog;
     }
 
+    /**
+     * Handler to close a dialog.
+     */
     private void close(){
         cardDialog.setResult(false);
     }
+
+    /**
+     * Handler to use a card.
+     */
     private void use(){
         cardDialog.setResult(true);
     }
