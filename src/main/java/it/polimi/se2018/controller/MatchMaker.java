@@ -12,6 +12,26 @@ import java.lang.ref.WeakReference;
 public class MatchMaker {
 
     /**
+     * The duration of a turn in multi-player configuration.
+     */
+    private static final int MULTI_PLAYER_TURN_DURATION = 200;
+
+    /**
+     * The duration of the timeout in multi-player configuration.
+     */
+    private static final int MULTI_PLAYER_TIMEOUT = 50;
+
+    /**
+     * The duration of a turn in single-player configuration.
+     */
+    private static final int SINGLE_PLAYER_TURN_DURATION = 200;
+
+    /**
+     * The duration of the timeout in single-player configuration.
+     */
+    private static final int SINGLE_PLAYER_TIMEOUT = 50;
+
+    /**
      * The only instance of the class.
      */
     private static MatchMaker instance;
@@ -49,7 +69,7 @@ public class MatchMaker {
             controller = multiPlayer.get();
 
         if (controller == null || !controller.acceptsNewPlayers()) {
-            controller = new MultiPlayerController(new Game(), 20, 5);
+            controller = new MultiPlayerController(new Game(), MULTI_PLAYER_TURN_DURATION, MULTI_PLAYER_TIMEOUT);
             multiPlayer = new WeakReference<>(controller);
         }
 
@@ -62,7 +82,7 @@ public class MatchMaker {
      * @param view The view to be linked.
      */
     public void makeSinglePlayerMatchFor(View view) {
-        Controller singlePlayer = new SinglePlayerController(new Game(), 150, 60);
+        Controller singlePlayer = new SinglePlayerController(new Game(), SINGLE_PLAYER_TURN_DURATION, SINGLE_PLAYER_TIMEOUT);
         view.registerObserver(singlePlayer);
     }
 }

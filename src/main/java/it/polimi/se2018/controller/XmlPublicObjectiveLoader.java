@@ -61,7 +61,7 @@ public class XmlPublicObjectiveLoader {
      *                                  a directory or it isn't readable.
      * @throws SAXException             if sax validator or sax parser cannot be used.
      */
-    XmlPublicObjectiveLoader(File directory, Controller controller) throws SAXException {
+    public XmlPublicObjectiveLoader(File directory, Controller controller) throws SAXException {
 
         this.controller = controller;
 

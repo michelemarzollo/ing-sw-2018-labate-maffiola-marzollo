@@ -1,5 +1,7 @@
-package it.polimi.se2018.model;
+package it.polimi.se2018.utils;
 
+
+import it.polimi.se2018.model.PublicObjectiveCard;
 
 import java.util.Collections;
 import java.util.List;

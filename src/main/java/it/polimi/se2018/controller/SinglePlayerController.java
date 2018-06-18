@@ -23,6 +23,32 @@ import java.util.function.Consumer;
 public class SinglePlayerController extends Controller {
 
     /**
+     * The number of public objective cards to be used in a match.
+     */
+    private static final int NUM_OF_PUBLIC_OBJECTIVE = 3;
+
+    /**
+     * The number of private objective cards to be used in a match.
+     */
+    private static final int NUM_OF_PRIVATE_OBJECTIVE = 2;
+
+    /**
+     * The minimum difficulty the player can choose at the beginning of the game.
+     */
+    private static final int MIN_DIFFICULTY = 1;
+
+    /**
+     * The maximum difficulty the player can choose at the beginning of the game.
+     */
+    private static final int MAX_DIFFICULTY = 5;
+
+    /**
+     * The points to be subtracted at the end of the game for each empty
+     * cell in the {@link Pattern}.
+     */
+    private static final int EMPTY_CELL_PENALTY = 3;
+
+    /**
      * Timer that is used to keep the Game 'alive' for
      * a predefined {@code timeout} when the Player disconnects.
      */
@@ -40,12 +66,12 @@ public class SinglePlayerController extends Controller {
      * Creates a new controller for the Single Player mode
      * associated to the specified game instance.
      *
-     * @param game    The game that has to be bound
-     *                to the controller.
+     * @param game         The game that has to be bound
+     *                     to the controller.
      * @param turnDuration The time that the player have to consume his turn.
-     * @param timeOut Period that has to be waited keeping the current {@link Game}
-     *                still valid and after which the {@link Game} has to be
-     *                deleted.
+     * @param timeOut      Period that has to be waited keeping the current {@link Game}
+     *                     still valid and after which the {@link Game} has to be
+     *                     deleted.
      */
     public SinglePlayerController(Game game, int turnDuration, int timeOut) {
         super(game, turnDuration);
@@ -88,12 +114,11 @@ public class SinglePlayerController extends Controller {
      */
     @Override
     protected void registerPlayer(ViewMessage message) {
-        if (getGame().getPlayers().isEmpty()){
+        if (getGame().getPlayers().isEmpty()) {
             getGame().registerObserver(message.getView());
             getGame().addPlayer(new Player(message.getPlayerName()));
             message.getView().showDifficultySelection();
-        }
-        else message.getView().showError("There is already one registered player!");
+        } else message.getView().showError("There is already one registered player!");
     }
 
     /**
@@ -110,22 +135,22 @@ public class SinglePlayerController extends Controller {
      */
 
     private void setUpGame(ViewMessage message) {
-        if (getGame().getPlayers().size() == 1){
+        if (getGame().getPlayers().size() == 1) {
             SelectDifficulty difficulty = (SelectDifficulty) message;
-            if (difficulty.getDifficulty() < 1 || difficulty.getDifficulty() > 5) {
-                message.getView().showError("The level of difficulty must be in 1-5 range: choose another one");
+            if (difficulty.getDifficulty() < MIN_DIFFICULTY || difficulty.getDifficulty() > MAX_DIFFICULTY) {
+                message.getView().showError("The level of difficulty must be in " + MIN_DIFFICULTY
+                        + " - " + MAX_DIFFICULTY + " 5 range: choose another one");
                 message.getView().showDifficultySelection();
             } else {
                 CardDealer cardDealer = new CardDealer(getGame());
                 //In singlePlayer mode the Player has two privateObjectiveCards and
                 //the number of ToolCards depend on the level of difficulty chosen.
-                cardDealer.deal(3, 2, difficulty.getDifficulty(), this);
+                cardDealer.deal(NUM_OF_PUBLIC_OBJECTIVE, NUM_OF_PRIVATE_OBJECTIVE, difficulty.getDifficulty(), this);
                 getGame().terminateSetup(); //this invocation in Game generates the GAME_SET_UP message
                 //now to begin the Game the only missing thing is the choice of a Pattern.
                 message.getView().showPatternSelection();
             }
-        }
-        else message.getView().showError("There is no registered player!");
+        } else message.getView().showError("There is no registered player!");
     }
 
 
@@ -206,7 +231,7 @@ public class SinglePlayerController extends Controller {
         privateScoreCalculator.setColour(privateObjectiveColour);
         privateScore = privateScoreCalculator.getScore(pattern);
 
-        emptySpacePenalty = 3 * getGame().getPlayers().get(0).getPattern().emptyCells();
+        emptySpacePenalty = EMPTY_CELL_PENALTY * getGame().getPlayers().get(0).getPattern().emptyCells();
         //Player in position 0 is the user.
         getGame().getPlayers().get(0).
                 setScore(publicScore + privateScore - emptySpacePenalty);
@@ -315,7 +340,7 @@ public class SinglePlayerController extends Controller {
     protected void disconnectPlayer(ViewMessage message) {
         disconnectedTimer.schedule(new EndGameTask(), (long) timeOut * 1000);
 
-        if (getGame().getPlayers().get(0).getName().equals(message.getPlayerName())){
+        if (getGame().getPlayers().get(0).getName().equals(message.getPlayerName())) {
             getGame().getPlayers().get(0).setConnected(false);
         }
     }

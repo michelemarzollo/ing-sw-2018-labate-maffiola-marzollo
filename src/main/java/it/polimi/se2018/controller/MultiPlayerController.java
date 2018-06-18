@@ -21,6 +21,27 @@ import java.util.function.Consumer;
 public class MultiPlayerController extends Controller {
 
     /**
+     * The number of public objective cards to be used in a match.
+     */
+    private static final int NUM_OF_PUBLIC_OBJECTIVE = 3;
+
+    /**
+     * The number of private objective cards to be used in a match.
+     */
+    private static final int NUM_OF_PRIVATE_OBJECTIVE = 1;
+
+    /**
+     * The number of  ToolCards to be used in a match.
+     */
+    private static final int NUM_OF_TOOL_CARDS = 3;
+
+    /**
+     * The points to be subtracted at the end of the game for each empty
+     * cell in the {@link Pattern}.
+     */
+    private static final int EMPTY_CELL_PENALTY = 1;
+
+    /**
      * The amount of time, counted from the moment the second player was added, to
      * wait before making the game start if there aren't still 4 players (in seconds).
      */
@@ -199,7 +220,7 @@ public class MultiPlayerController extends Controller {
             //The score given by the unused tokens
             score += player.getTokens();
             //The score subtracted by the empty cells
-            score -= player.getPattern().emptyCells();
+            score -= EMPTY_CELL_PENALTY * player.getPattern().emptyCells();
 
             player.setScore(score);
 
@@ -223,7 +244,7 @@ public class MultiPlayerController extends Controller {
      */
     @Override
     protected void registerPlayer(ViewMessage message) {
-        if(getGame().getPlayers().size()<4){
+        if (getGame().getPlayers().size() < 4) {
             //When the method is called there is one player to add
             getGame().addPlayer(new Player(message.getPlayerName()));
             Logger.getDefaultLogger().log("connecting " + message.getPlayerName());
@@ -238,8 +259,7 @@ public class MultiPlayerController extends Controller {
                 lobbyTimer.cancel();
                 setUpGame();
             }
-        }
-        else message.getView().showError("There are already four registered players!");
+        } else message.getView().showError("There are already four registered players!");
 
     }
 
@@ -261,7 +281,7 @@ public class MultiPlayerController extends Controller {
      */
     private void setUpGame() {
         CardDealer cardDealer = new CardDealer(getGame());
-        cardDealer.deal(3, 1, 3, this);
+        cardDealer.deal(NUM_OF_PUBLIC_OBJECTIVE, NUM_OF_PRIVATE_OBJECTIVE, NUM_OF_TOOL_CARDS, this);
         getGame().terminateSetup();
     }
 
@@ -289,8 +309,8 @@ public class MultiPlayerController extends Controller {
         //checks if there is any connceted player
         boolean connectedPlayers = false;
 
-        for (Player p: getGame().getPlayers()){
-            if (p.isConnected()){
+        for (Player p : getGame().getPlayers()) {
+            if (p.isConnected()) {
                 connectedPlayers = true;
                 break;
             }
