@@ -74,7 +74,7 @@ public class XmlPublicObjectiveLoader {
      *                                  a directory or it isn't readable.
      * @throws SAXException             if sax validator or sax parser cannot be used.
      */
-    XmlPublicObjectiveLoader(Controller controller) throws SAXException {
+    public XmlPublicObjectiveLoader(Controller controller) throws SAXException {
         this(DEFAULT_PATH, controller);
     }
 
@@ -89,7 +89,7 @@ public class XmlPublicObjectiveLoader {
      *                                  a directory or it isn't readable.
      * @throws SAXException             if sax validator or sax parser cannot be used.
      */
-    XmlPublicObjectiveLoader(String basePath, Controller controller) throws SAXException {
+    public XmlPublicObjectiveLoader(String basePath, Controller controller) throws SAXException {
 
         this.controller = controller;
         this.basePath = basePath;
