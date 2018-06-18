@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://se2018.polimi.it/server_specification"
+           elementFormDefault="qualified">
+
+    <xs:element name="server_specification">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="port" type="xs:int"/>
+                <xs:element name="address" type="xs:string"/>
+                <xs:element name="service_name" type="xs:string"/>
+                <xs:element name="turn_duration" type="xs:int"/>
+                <xs:element name="multi_player_timeout" type="xs:int"/>
+                <xs:element name="single_player_timeout" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

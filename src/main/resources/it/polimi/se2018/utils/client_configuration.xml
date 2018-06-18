@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<client_specification xmlns="http://se2018.polimi.it/client_specification">
+    <server_address>localhost</server_address>
+    <service_name>MyServer</service_name>
+    <sever_port>7777</sever_port>
+</client_specification>

@@ -2,9 +2,13 @@ package it.polimi.se2018;
 
 import it.polimi.se2018.networking.server.HybridServer;
 import it.polimi.se2018.utils.ClaParser;
+import it.polimi.se2018.utils.Logger;
+import it.polimi.se2018.utils.ServerConfiguration;
+import it.polimi.se2018.utils.XmlServerConfigLoader;
 import it.polimi.se2018.view.ClientView;
 import it.polimi.se2018.view.Displayer;
 import it.polimi.se2018.view.DisplayerFactory;
+import org.xml.sax.SAXException;
 
 import java.util.Scanner;
 
@@ -60,14 +64,22 @@ public class App {
      * @param parser The parser used for command line arguments.
      */
     private static void launchServer(ClaParser parser) {
-        HybridServer server = new HybridServer("localhost", "MyServer", 7777);
-        server.start();
-        Scanner in = new Scanner(System.in);
-        String cmd = in.nextLine();
-        while (!cmd.equalsIgnoreCase("quit")) {
-            cmd = in.nextLine();
+        try {
+            XmlServerConfigLoader serverConfigLoader = new XmlServerConfigLoader(parser.getConfigLocation());
+            ServerConfiguration configuration = serverConfigLoader.loadConfiguration();
+
+            HybridServer server = new HybridServer(configuration.getAddress(),
+                    configuration.getServiceName(), configuration.getPortNumber());
+            server.start();
+            Scanner in = new Scanner(System.in);
+            String cmd = in.nextLine();
+            while (!cmd.equalsIgnoreCase("quit")) {
+                cmd = in.nextLine();
+            }
+            server.stop();
+        } catch (SAXException e) {
+            Logger.getDefaultLogger().log("SAXException: " + e.getMessage());
         }
-        server.stop();
     }
 
     /**

@@ -28,16 +28,19 @@ import java.util.Scanner;
  *
  * @author michelemarzollo
  */
+
 public class XmlPublicObjectiveLoader {
 
     /**
      * Default search path.
      */
     private static final String DEFAULT_PATH = "it/polimi/se2018/controller/public_objective_cards/";
+
     /**
      * Expected file name for card list.
      */
     private static final String LIST_NAME = "cards.list";
+
     /**
      * Path where files are stored.
      */
