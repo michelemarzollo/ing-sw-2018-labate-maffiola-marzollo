@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.utils.PublicObjectiveFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
