@@ -1,12 +1,12 @@
-package it.polimi.se2018.model;
+package it.polimi.se2018.controller;
 
+import it.polimi.se2018.model.Cell;
+import it.polimi.se2018.model.Colour;
+import it.polimi.se2018.model.Pattern;
 import it.polimi.se2018.utils.GridUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.SAXException;
-
-import java.io.File;
-import java.net.URISyntaxException;
 
 /**
  * Unit tests for XmlPatternLoader.

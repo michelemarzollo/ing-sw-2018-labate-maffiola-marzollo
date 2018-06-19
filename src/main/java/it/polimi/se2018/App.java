@@ -1,10 +1,7 @@
 package it.polimi.se2018;
 
 import it.polimi.se2018.networking.server.HybridServer;
-import it.polimi.se2018.utils.ClaParser;
-import it.polimi.se2018.utils.Logger;
-import it.polimi.se2018.utils.ServerConfiguration;
-import it.polimi.se2018.utils.XmlServerConfigLoader;
+import it.polimi.se2018.utils.*;
 import it.polimi.se2018.view.ClientView;
 import it.polimi.se2018.view.Displayer;
 import it.polimi.se2018.view.DisplayerFactory;
@@ -88,16 +85,22 @@ public class App {
      * @param parser The parser used for command line arguments.
      */
     private static void launchClient(ClaParser parser) {
-        Displayer displayer;
-        if (parser.isCli())
-            //TODO add full support for CLI
-            displayer = DisplayerFactory.getInstance().newCliDisplayer();
-        else if (parser.isGui())
-            displayer = DisplayerFactory.getInstance().newGuiDisplayer();
-        else {
-            printUsage();
-            return;
+        try {
+            XmlClientConfigLoader clientConfigLoader = new XmlClientConfigLoader(parser.getConfigLocation());
+            ClientConfiguration configuration = clientConfigLoader.loadConfiguration();
+            Displayer displayer;
+            if (parser.isCli())
+                //TODO add full support for CLI
+                displayer = DisplayerFactory.getInstance().newCliDisplayer();
+            else if (parser.isGui())
+                displayer = DisplayerFactory.getInstance().newGuiDisplayer();
+            else {
+                printUsage();
+                return;
+            }
+            new ClientView(displayer);
+        } catch (SAXException e) {
+            Logger.getDefaultLogger().log("SAXException: " + e.getMessage());
         }
-        new ClientView(displayer);
     }
 }

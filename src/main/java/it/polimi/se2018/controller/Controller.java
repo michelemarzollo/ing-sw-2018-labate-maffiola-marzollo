@@ -63,11 +63,6 @@ public abstract class Controller implements Observer<ViewMessage> {
      */
     private List<PublicObjectiveScore> publicScoreCalculators = new ArrayList<>();
 
-    /**
-     * The class to calculate the score of the {@link PrivateObjectiveCard}.
-     */
-    protected PrivateObjectiveScore privateScoreCalculator;
-
     //ABSTRACT METHODS
 
     /**
@@ -169,7 +164,6 @@ public abstract class Controller implements Observer<ViewMessage> {
 
         actionMap = new EnumMap<>(Action.class);
         registerActions(actionMap);
-        privateScoreCalculator = new PrivateObjectiveScore();
     }
 
     /**

@@ -1,24 +1,43 @@
 package it.polimi.se2018.model;
 
-import java.io.Serializable;
-
-/**
- * ObjectiveCard represents the common features of both public and private
- * objective cards
- *
- * @author michelemarzollo
- */
-public interface ObjectiveCard extends Serializable {
+public abstract class ObjectiveCard {
 
     /**
-     * Getter for the name of the Objective Card.
-     * @return the card's name.
+     * The name of the Objective Card.
      */
-    String getName();
+    private String name;
 
     /**
-     * Getter for the description of the Objective Card.
-     * @return the card's description.
+     * The description of the card: it resumes synthetically the
+     * goal the player should aim for, to get a good score.
      */
-    String getDescription();
+    private String description;
+
+    /**
+     * The constructor of the class.
+     * @param name The name of the Objective Card.
+     * @param description The description of the card.
+     */
+    protected ObjectiveCard(String name, String description){
+        this.name = name;
+        this.description = description;
+    }
+
+    /**
+     * The getter for the name.
+     *
+     * @return the name of the card.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * The getter for the description.
+     *
+     * @return the description of the card.
+     */
+    public String getDescription() {
+        return description;
+    }
 }

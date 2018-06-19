@@ -29,9 +29,9 @@ public class PrivateObjectiveScoreTest {
             Assert.fail();
         }
 
-        PrivateObjectiveScore cardScore = new PrivateObjectiveScore();
-        cardScore.setColour(Colour.RED);
-        int actualScore = cardScore.getScore(grid);
+
+        int actualScore = PrivateObjectiveScore.getInstance().
+                getScore(grid, Colour.RED);
         int expectedScore = 4 * 5;
 
         Assert.assertEquals(expectedScore, actualScore);
@@ -44,9 +44,8 @@ public class PrivateObjectiveScoreTest {
     public void testEmptyGridScore() {
         Cell[][] grid = GridUtils.getEmptyUnrestrictedGrid(4, 5);
 
-        PrivateObjectiveScore cardScore = new PrivateObjectiveScore();
-        cardScore.setColour(Colour.GREEN);
-        int actualScore = cardScore.getScore(grid);
+        int actualScore = PrivateObjectiveScore.getInstance().
+                getScore(grid, Colour.GREEN);
 
         Assert.assertEquals(0, actualScore);
     }

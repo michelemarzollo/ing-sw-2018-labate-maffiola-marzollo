@@ -1,5 +1,8 @@
-package it.polimi.se2018.model;
+package it.polimi.se2018.controller;
 
+import it.polimi.se2018.controller.PatternLoader;
+import it.polimi.se2018.controller.SaxPatternBuilder;
+import it.polimi.se2018.model.Pattern;
 import it.polimi.se2018.utils.ResourceManager;
 import org.xml.sax.SAXException;
 

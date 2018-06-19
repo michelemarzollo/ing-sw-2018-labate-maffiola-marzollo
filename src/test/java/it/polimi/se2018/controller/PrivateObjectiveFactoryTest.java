@@ -1,5 +1,7 @@
-package it.polimi.se2018.model;
+package it.polimi.se2018.controller;
 
+import it.polimi.se2018.controller.PrivateObjectiveFactory;
+import it.polimi.se2018.model.PrivateObjectiveCard;
 import org.junit.Assert;
 import org.junit.Test;
 

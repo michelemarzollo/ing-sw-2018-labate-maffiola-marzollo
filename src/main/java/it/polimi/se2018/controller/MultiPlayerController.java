@@ -215,8 +215,8 @@ public class MultiPlayerController extends Controller {
                 score += publicScore.getScore(player.getPattern().getGrid());
             }
             //The score given by the PrivateObjectiveCard
-            privateScoreCalculator.setColour(player.getCards()[0].getColour());
-            score += privateScoreCalculator.getScore(player.getPattern().getGrid());
+            score += PrivateObjectiveScore.getInstance().
+                    getScore(player.getPattern().getGrid(), player.getCards()[0].getColour());
             //The score given by the unused tokens
             score += player.getTokens();
             //The score subtracted by the empty cells

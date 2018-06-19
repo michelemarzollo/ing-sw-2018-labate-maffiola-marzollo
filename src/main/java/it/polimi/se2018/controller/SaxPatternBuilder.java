@@ -1,5 +1,8 @@
-package it.polimi.se2018.model;
+package it.polimi.se2018.controller;
 
+import it.polimi.se2018.model.Cell;
+import it.polimi.se2018.model.Colour;
+import it.polimi.se2018.model.Pattern;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
