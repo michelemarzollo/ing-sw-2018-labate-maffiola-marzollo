@@ -4,8 +4,10 @@ import it.polimi.se2018.model.events.*;
 import it.polimi.se2018.networking.client.Client;
 import it.polimi.se2018.networking.client.RmiNetworkHandler;
 import it.polimi.se2018.networking.client.TcpNetworkHandler;
+import it.polimi.se2018.utils.ClientConfiguration;
 import it.polimi.se2018.utils.Coordinates;
 import it.polimi.se2018.utils.Logger;
+import it.polimi.se2018.utils.MissingConfigurationException;
 
 import java.io.IOException;
 
@@ -431,6 +433,22 @@ public class ClientView extends View {
                 Action.DISCONNECT_PLAYER,
                 getPlayerName()
         ));
+    }
+
+    public void handleLogin(String playerName, boolean multiPlayer, boolean rmi){
+        //TODO: handle the multiplayer parameter
+        try {
+            if (rmi){
+                handleLogin(playerName, ClientConfiguration.getInstance().getServerAddress(),
+                        ClientConfiguration.getInstance().getServiceName());
+            }
+            else {
+                handleLogin(playerName, ClientConfiguration.getInstance().getServerAddress(),
+                        ClientConfiguration.getInstance().getPortNumber());
+            }
+        } catch (MissingConfigurationException e) {
+            Logger.getDefaultLogger().log("MissingConfigurationException: " + e.getMessage());
+        }
     }
 
     /**

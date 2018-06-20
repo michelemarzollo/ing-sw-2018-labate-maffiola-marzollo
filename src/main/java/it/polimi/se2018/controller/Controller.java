@@ -173,16 +173,16 @@ public abstract class Controller implements Observer<ViewMessage> {
      *
      * @param scoreStrategy the class to calculate the score related to a certain card.
      */
-    public void addPublicScoreStrategy(PublicObjectiveScore scoreStrategy) {
+    protected void addPublicScoreStrategy(PublicObjectiveScore scoreStrategy) {
         publicScoreCalculators.add(scoreStrategy);
     }
 
     /**
      * The getter for {@code publicScoreCalculators}.
-     * @return {@code publicScoreCalculators}.
+     * @return a copy of {@code publicScoreCalculators}.
      */
-    public List<PublicObjectiveScore> getPublicScoreCalculators(){
-        return publicScoreCalculators;
+    protected List<PublicObjectiveScore> getPublicScoreCalculators(){
+        return new ArrayList<>(publicScoreCalculators);
     }
 
     /**

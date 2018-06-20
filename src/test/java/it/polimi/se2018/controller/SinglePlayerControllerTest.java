@@ -4,12 +4,10 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.events.*;
 import it.polimi.se2018.utils.Coordinates;
 import it.polimi.se2018.utils.GameUtils;
-import it.polimi.se2018.utils.Logger;
 import it.polimi.se2018.utils.MockView;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xml.sax.SAXException;
 
 import java.util.*;
 

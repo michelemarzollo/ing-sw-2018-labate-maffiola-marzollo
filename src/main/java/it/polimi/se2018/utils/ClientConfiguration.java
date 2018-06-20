@@ -71,6 +71,13 @@ public class ClientConfiguration {
     }
 
     /**
+     * Resets the instance to null;
+     */
+    public static void reset(){
+        instance = null;
+    }
+
+    /**
      * The getter for {@code serverAddress}.
      *
      * @return The server of the server the client has to connect to.

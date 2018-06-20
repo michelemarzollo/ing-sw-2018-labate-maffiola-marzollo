@@ -238,7 +238,7 @@ public class MultiPlayerControllerTest {
 
         //sets the public Objective Cards in the game
         try {
-            XmlPublicObjectiveLoader publicObjectiveFactory = new XmlPublicObjectiveLoader(controller);
+            XmlPublicObjectiveLoader publicObjectiveFactory = new XmlPublicObjectiveLoader("it/polimi/se2018/utils/public_objective_cards/", controller);
             game.setPublicObjectiveCards(publicObjectiveFactory.load(2));
         } catch (SAXException e) {
             Logger.getDefaultLogger().log("USAXException " + e);
@@ -269,6 +269,7 @@ public class MultiPlayerControllerTest {
         }
 
         controller.calculateScores();
+        assertEquals(2, pippoPublicScore);
         assertEquals(12 - 18 + 4 + pippoPublicScore, pippo.getScore());
         assertEquals(5 - 19 + 4 + plutoPublicScore, pluto.getScore());
     }

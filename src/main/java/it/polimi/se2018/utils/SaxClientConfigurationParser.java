@@ -43,11 +43,6 @@ public class SaxClientConfigurationParser extends DefaultHandler {
     private int portNumber;
 
     /**
-     * The {@link ClientConfiguration} created from the file.
-     */
-    private ClientConfiguration clientConfiguration;
-
-    /**
      * The method that sets all flags to false when the document is starting to be read.
      */
     @Override
@@ -77,7 +72,7 @@ public class SaxClientConfigurationParser extends DefaultHandler {
             inServerAddress = true;
         if (qualifiedName.equals("service_name"))
             inServiceName = true;
-        if (qualifiedName.equals("port"))
+        if (qualifiedName.equals("server_port"))
             inPort = true;
     }
 
@@ -99,7 +94,7 @@ public class SaxClientConfigurationParser extends DefaultHandler {
             inServerAddress = false;
         if (qualifiedName.equals("service_name"))
             inServiceName = false;
-        if (qualifiedName.equals("port"))
+        if (qualifiedName.equals("server_port"))
             inPort = false;
     }
 
@@ -130,16 +125,6 @@ public class SaxClientConfigurationParser extends DefaultHandler {
      */
     @Override
     public void endDocument() {
-        clientConfiguration = ClientConfiguration.makeInstance(
-                serverAddress, serviceName, portNumber);
-    }
-
-    /**
-     * The getter for the {@link ClientConfiguration}
-     *
-     * @return The {@link ClientConfiguration} created from the file.
-     */
-    public ClientConfiguration getClientConfiguration() {
-        return clientConfiguration;
+        ClientConfiguration.makeInstance(serverAddress, serviceName, portNumber);
     }
 }

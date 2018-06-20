@@ -72,8 +72,6 @@ public class SaxServerConfigurationParser extends DefaultHandler {
      */
     private int singlePlayerTimeOut;
 
-    private ServerConfiguration serverConfiguration;
-
     /**
      * The method that sets all flags to false when the document is starting to be read.
      */
@@ -134,7 +132,7 @@ public class SaxServerConfigurationParser extends DefaultHandler {
         if (qualifiedName.equals("port"))
             inPort = false;
         if (qualifiedName.equals("address"))
-            inAddress = true;
+            inAddress = false;
         if (qualifiedName.equals("service_name"))
             inServiceName = false;
         if (qualifiedName.equals("turn_duration"))
@@ -178,16 +176,8 @@ public class SaxServerConfigurationParser extends DefaultHandler {
      */
     @Override
     public void endDocument() {
-        serverConfiguration = ServerConfiguration.makeInstance(portNumber, address,
+        ServerConfiguration.makeInstance(portNumber, address,
                 serviceName, turnDuration, multiPlayerTimeOut, singlePlayerTimeOut);
     }
 
-    /**
-     * The getter for the {@link ServerConfiguration}
-     *
-     * @return The {@link ServerConfiguration} created from the file.
-     */
-    public ServerConfiguration getServerConfiguration() {
-        return serverConfiguration;
-    }
 }

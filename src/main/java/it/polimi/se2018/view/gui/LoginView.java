@@ -80,11 +80,7 @@ public class LoginView {
         if (username.equals(""))
             parentController.displayError("You must insert a username!");
         else {
-            if (rmi) {
-                parentController.getView().handleLogin(username, "localhost", "MyServer");
-            } else {
-                parentController.getView().handleLogin(username, "localhost", 7777);
-            }
+            parentController.getView().handleLogin(username, multiPlayer, rmi);
             parentController.displayWaitingView("Waiting for connection...");
         }
 

@@ -9,7 +9,7 @@
             <xs:sequence>
                 <xs:element name="server_address" type="xs:string"/>
                 <xs:element name="service_name" type="xs:string"/>
-                <xs:element name="sever_port" type="xs:int"/>
+                <xs:element name="server_port" type="xs:int"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

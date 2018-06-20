@@ -104,6 +104,13 @@ public class ServerConfiguration {
     }
 
     /**
+     * Resets the instance to null;
+     */
+    public static void reset(){
+        instance = null;
+    }
+
+    /**
      * The getter for {@code portNumber}.
      *
      * @return The number of the port of the server.
