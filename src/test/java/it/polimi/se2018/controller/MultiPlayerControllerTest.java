@@ -16,6 +16,9 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
+/**
+ * The unit tests for {@link MultiPlayerController}.
+ */
 public class MultiPlayerControllerTest {
 
     /**
@@ -228,7 +231,9 @@ public class MultiPlayerControllerTest {
         Game game = GameUtils.getStartedGame(true);
         if (game == null)
             Assert.fail("Error on game initialization");
-        Controller controller = new MultiPlayerController(game, 100, 100);
+        MultiPlayerController controller = new MultiPlayerController(game, 100, 100);
+
+
         Die blue6 = new Die(6, new Random(), Colour.BLUE);
         Die red5 = new Die(5, new Random(), Colour.RED);
         Player pippo = game.getPlayers().get(0);
@@ -236,8 +241,8 @@ public class MultiPlayerControllerTest {
 
         //sets the public Objective Cards in the game
         try {
-            XmlPublicObjectiveLoader publicObjectiveFactory = new XmlPublicObjectiveLoader(controller);
-            game.setPublicObjectiveCards(publicObjectiveFactory.load(3));
+            XmlPublicObjectiveLoader publicObjectiveFactory = new XmlPublicObjectiveLoader("it/polimi/se2018/utils/public_objective_cards/", controller);
+            game.setPublicObjectiveCards(publicObjectiveFactory.load(2));
         } catch (SAXException e) {
             Logger.getDefaultLogger().log("USAXException " + e);
         }
@@ -248,7 +253,7 @@ public class MultiPlayerControllerTest {
                     .placeDie(blue6, new Coordinates(1, 0));
             pippo.setPattern(newPattern1);
             newPattern1 = pippo.getPattern()
-                    .placeDie(red5, new Coordinates(1, 1));
+                    .placeDie(blue6, new Coordinates(2, 1));
             pippo.setPattern(newPattern1);
             Pattern newPattern2 = pluto.getPattern()
                     .placeDie(red5, new Coordinates(1, 0));
@@ -266,9 +271,9 @@ public class MultiPlayerControllerTest {
             plutoPublicScore += publicObjectiveScore.getScore(pluto.getPattern().getGrid());
         }
 
-
         controller.calculateScores();
-        assertEquals(6 - 18 + 4 + pippoPublicScore, pippo.getScore());
+        assertEquals(2, pippoPublicScore);
+        assertEquals(12 - 18 + 4 + pippoPublicScore, pippo.getScore());
         assertEquals(5 - 19 + 4 + plutoPublicScore, pluto.getScore());
     }
 

@@ -222,14 +222,14 @@ public class SinglePlayerController extends Controller {
         int publicScore = 0;
         int privateScore;
         int emptySpacePenalty;
-        Cell[][] pattern = getGame().getPlayers().get(0).getPattern().getGrid();
+        Cell[][] patternGrid = getGame().getPlayers().get(0).getPattern().getGrid();
         for (PublicObjectiveScore publicScoreCalculator : getPublicScoreCalculators()) {
-            publicScore += publicScoreCalculator.getScore(pattern);
+            publicScore += publicScoreCalculator.getScore(patternGrid);
         }
         //The chosen PrivateObjectiveCard is placed in the first position of the array (0).
         Colour privateObjectiveColour = getGame().getPlayers().get(0).getCards()[0].getColour();
-        privateScoreCalculator.setColour(privateObjectiveColour);
-        privateScore = privateScoreCalculator.getScore(pattern);
+        privateScore = PrivateObjectiveScore.getInstance().
+                getScore(patternGrid, privateObjectiveColour);
 
         emptySpacePenalty = EMPTY_CELL_PENALTY * getGame().getPlayers().get(0).getPattern().emptyCells();
         //Player in position 0 is the user.

@@ -4,15 +4,11 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.events.*;
 import it.polimi.se2018.utils.Coordinates;
 import it.polimi.se2018.utils.GameUtils;
-import it.polimi.se2018.utils.Logger;
 import it.polimi.se2018.utils.MockView;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.xml.sax.SAXException;
 
-import java.io.File;
-import java.net.URISyntaxException;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -222,7 +218,8 @@ public class SinglePlayerControllerTest {
     public void testEndGame() {
         game = new Game();
         controller = new SinglePlayerController(game, 100, 100);
-        game = getCompleteSinglePlayerGame(game, controller);
+        GameUtils gameUtils = new GameUtils();
+        game = gameUtils.getCompleteSinglePlayerGame(game, controller);
         ViewMessage msg = new ViewMessage(view, Action.END_TURN, playerName);
 
         controller.endGame(msg);
@@ -241,7 +238,8 @@ public class SinglePlayerControllerTest {
     public void testNegativeSelectPrivateObjective() {
         game = new Game();
         controller = new SinglePlayerController(game, 100, 100);
-        game = getCompleteSinglePlayerGame(game, controller);
+        GameUtils gameUtils = new GameUtils();
+        game = gameUtils.getCompleteSinglePlayerGame(game, controller);
         ViewMessage msg = new ViewMessage(view, Action.END_TURN, playerName);
 
         controller.endGame(msg);
@@ -273,7 +271,8 @@ public class SinglePlayerControllerTest {
     public void testCalculateScores() {
         game = new Game();
         controller = new SinglePlayerController(game, 100, 100);
-        game = getCompleteSinglePlayerGame(game, controller);
+        GameUtils gameUtils = new GameUtils();
+        game = gameUtils.getCompleteSinglePlayerGame(game, controller);
 
         ViewMessage msg = new ViewMessage(view, Action.END_TURN, playerName);
 
@@ -308,7 +307,8 @@ public class SinglePlayerControllerTest {
     public void testFillScoreBoard() {
         game = new Game();
         controller = new SinglePlayerController(game, 100, 100);
-        game = getCompleteSinglePlayerGame(game, controller);
+        GameUtils gameUtils = new GameUtils();
+        game = gameUtils.getCompleteSinglePlayerGame(game, controller);
 
         game.getDraftPool().setDice(new ArrayList<>());
 
@@ -440,7 +440,8 @@ public class SinglePlayerControllerTest {
     public void testDisplayGame() {
         game = new Game();
         controller = new SinglePlayerController(game, 100, 100);
-        game = getCompleteSinglePlayerGame(game, controller);
+        GameUtils gameUtils = new GameUtils();
+        game = gameUtils.getCompleteSinglePlayerGame(game, controller);
         ViewMessage msg = new ViewMessage(view, Action.END_TURN, "Pippo"); //generic action, just to have a ViewMessage
         controller.displayGame(msg);
         assertEquals("showSinglePlayerGame", view.getCalledMethods().get(view.getCalledMethods().size() - 1));
@@ -456,7 +457,8 @@ public class SinglePlayerControllerTest {
     public void testGetDraftAmount() {
         game = new Game();
         controller = new SinglePlayerController(game, 100, 100);
-        game = getCompleteSinglePlayerGame(game, controller);
+        GameUtils gameUtils = new GameUtils();
+        game = gameUtils.getCompleteSinglePlayerGame(game, controller);
         assertEquals(4, controller.getDraftAmount());
     }
 
@@ -573,104 +575,5 @@ public class SinglePlayerControllerTest {
         controller.reconnectPlayer(msg);
         assertFalse(game.getPlayers().get(0).isConnected());
         assertEquals(1, game.getPlayers().size());
-    }
-
-    /**
-     * Creates a more complete game than the ones in {@link GameUtils}, with a real
-     * window pattern and 5 placed dice, but where the setUp is not done casually
-     * and it is easy to see how it should behave.
-     * (For single player configuration).
-     * <p>
-     * The dice are chosen so that the sum of the values for each colour is always six, so that
-     * independently from the Private Objective chosen, the score related to it
-     * will always be 6.
-     * The {@link PublicObjectiveCard}S are chosen randomly, among a few cards that
-     * are in the directory resources. The reason why this method is not in {@link GameUtils}
-     * is that to load those cards the loader had to be in the package controller.</p>
-     *
-     * @return the game
-     * @author michelemarzollo
-     */
-    private Game getCompleteSinglePlayerGame(Game game, Controller controller) {
-
-        Cell[][] grid = new Cell[4][5];
-        Pattern sunCatcher;
-
-        //The cycle instantiates a grid of cell with no restrictions
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[i].length; j++) {
-                grid[i][j] = new Cell();
-            }
-        }
-        //Some cell have a restriction
-        grid[0][1] = new Cell(Colour.BLUE);
-        grid[0][2] = new Cell(2);
-        grid[0][4] = new Cell(Colour.YELLOW);
-        grid[1][1] = new Cell(4);
-        grid[1][3] = new Cell(Colour.RED);
-        grid[2][2] = new Cell(5);
-        grid[2][3] = new Cell(Colour.YELLOW);
-        grid[3][0] = new Cell(Colour.GREEN);
-        grid[3][1] = new Cell(3);
-        grid[3][4] = new Cell(Colour.PURPLE);
-
-        sunCatcher = new Pattern("SunCatcher", 3, grid);
-
-        Random random = new Random();
-
-        try {
-            sunCatcher = sunCatcher.placeDie(new Die(6, random, Colour.PURPLE), new Coordinates(3, 4));
-            sunCatcher = sunCatcher.placeDie(new Die(4, random, Colour.YELLOW), new Coordinates(2, 3));
-            sunCatcher = sunCatcher.placeDie(new Die(5, random, Colour.RED), new Coordinates(2, 2));
-            sunCatcher = sunCatcher.placeDie(new Die(3, random, Colour.BLUE), new Coordinates(3, 1));
-            sunCatcher = sunCatcher.placeDie(new Die(1, random, Colour.GREEN), new Coordinates(3, 0));
-            sunCatcher = sunCatcher.placeDie(new Die(1, random, Colour.RED), new Coordinates(1, 3));
-            sunCatcher = sunCatcher.placeDie(new Die(2, random, Colour.YELLOW), new Coordinates(0, 3));
-            sunCatcher = sunCatcher.placeDie(new Die(5, random, Colour.GREEN), new Coordinates(1, 4));
-            sunCatcher = sunCatcher.placeDie(new Die(3, random, Colour.BLUE), new Coordinates(2, 0));
-        } catch (PlacementErrorException e) {
-            System.out.println("Placement error");
-        }
-
-        Player player = new Player("Pippo");
-
-        //sets the public Objective Cards in the game
-        try {
-            XmlPublicObjectiveLoader publicObjectiveFactory = new XmlPublicObjectiveLoader(controller);
-            game.setPublicObjectiveCards(publicObjectiveFactory.load(3));
-        } catch (SAXException e) {
-            Logger.getDefaultLogger().log("USAXException " + e);
-        }
-
-        PrivateObjectiveFactory privateObjectiveFactory = new PrivateObjectiveFactory();
-        PrivateObjectiveCard[] privateObjectiveCards = privateObjectiveFactory.newInstances(2);
-        game.addPlayer(player);
-        game.getPlayers().get(0).setCards(privateObjectiveCards);
-
-        ToolCard[] toolCards = {new ToolCard("Grozing Pliers", "Description", Colour.PURPLE),
-                new ToolCard("Eglomise Brush", "Description", Colour.BLUE)};
-        game.setToolCards(toolCards);
-        game.terminateSetup();
-        game.start();
-        game.getPlayers().get(0).setPattern(sunCatcher);
-
-        List<Die> dice = new ArrayList<>(Arrays.asList(
-                new Die(4, random, Colour.YELLOW),
-                new Die(5, random, Colour.RED),
-                new Die(3, random, Colour.BLUE),
-                new Die(6, random, Colour.PURPLE)));
-
-        game.getDraftPool().setDice(dice);
-
-        //setting of the roundtrack
-        game.getRoundTrack().addAllForRound(1, new ArrayList<>(Arrays.asList(
-                new Die(6, random, Colour.PURPLE),
-                new Die(4, random, Colour.YELLOW))));
-        game.getRoundTrack().addAllForRound(2, new ArrayList<>(Arrays.asList(
-                new Die(5, random, Colour.RED),
-                new Die(3, random, Colour.BLUE),
-                new Die(1, random, Colour.GREEN))));
-
-        return game;
     }
 }

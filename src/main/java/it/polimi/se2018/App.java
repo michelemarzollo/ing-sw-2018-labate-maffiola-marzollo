@@ -1,10 +1,11 @@
 package it.polimi.se2018;
 
 import it.polimi.se2018.networking.server.HybridServer;
-import it.polimi.se2018.utils.ClaParser;
+import it.polimi.se2018.utils.*;
 import it.polimi.se2018.view.ClientView;
 import it.polimi.se2018.view.Displayer;
 import it.polimi.se2018.view.DisplayerFactory;
+import org.xml.sax.SAXException;
 
 import java.util.Scanner;
 
@@ -60,14 +61,22 @@ public class App {
      * @param parser The parser used for command line arguments.
      */
     private static void launchServer(ClaParser parser) {
-        HybridServer server = new HybridServer("localhost", "MyServer", 7777);
-        server.start();
-        Scanner in = new Scanner(System.in);
-        String cmd = in.nextLine();
-        while (!cmd.equalsIgnoreCase("quit")) {
-            cmd = in.nextLine();
+        try {
+            XmlServerConfigLoader serverConfigLoader = new XmlServerConfigLoader(parser.getConfigLocation());
+            ServerConfiguration configuration = serverConfigLoader.loadConfiguration();
+
+            HybridServer server = new HybridServer(configuration.getAddress(),
+                    configuration.getServiceName(), configuration.getPortNumber());
+            server.start();
+            Scanner in = new Scanner(System.in);
+            String cmd = in.nextLine();
+            while (!cmd.equalsIgnoreCase("quit")) {
+                cmd = in.nextLine();
+            }
+            server.stop();
+        } catch (SAXException e) {
+            Logger.getDefaultLogger().log("SAXException: " + e.getMessage());
         }
-        server.stop();
     }
 
     /**
@@ -76,16 +85,22 @@ public class App {
      * @param parser The parser used for command line arguments.
      */
     private static void launchClient(ClaParser parser) {
-        Displayer displayer;
-        if (parser.isCli())
-            //TODO add full support for CLI
-            displayer = DisplayerFactory.getInstance().newCliDisplayer();
-        else if (parser.isGui())
-            displayer = DisplayerFactory.getInstance().newGuiDisplayer();
-        else {
-            printUsage();
-            return;
+        try {
+            XmlClientConfigLoader clientConfigLoader = new XmlClientConfigLoader(parser.getConfigLocation());
+            ClientConfiguration configuration = clientConfigLoader.loadConfiguration();
+            Displayer displayer;
+            if (parser.isCli())
+                //TODO add full support for CLI
+                displayer = DisplayerFactory.getInstance().newCliDisplayer();
+            else if (parser.isGui())
+                displayer = DisplayerFactory.getInstance().newGuiDisplayer();
+            else {
+                printUsage();
+                return;
+            }
+            new ClientView(displayer);
+        } catch (SAXException e) {
+            Logger.getDefaultLogger().log("SAXException: " + e.getMessage());
         }
-        new ClientView(displayer);
     }
 }

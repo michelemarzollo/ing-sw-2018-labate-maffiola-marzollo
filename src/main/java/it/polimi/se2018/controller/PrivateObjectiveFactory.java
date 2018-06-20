@@ -1,5 +1,8 @@
-package it.polimi.se2018.model;
+package it.polimi.se2018.controller;
 
+
+import it.polimi.se2018.model.Colour;
+import it.polimi.se2018.model.PrivateObjectiveCard;
 
 import java.util.ArrayList;
 import java.util.Arrays;

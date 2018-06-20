@@ -5,18 +5,7 @@ package it.polimi.se2018.model;
  *
  * @author michelemarzollo
  */
-public class PublicObjectiveCard implements ObjectiveCard {
-
-    /**
-     * The name of the Public Objective Card
-     */
-    private String name;
-
-    /**
-     * The description of the card: it resumes synthetically the
-     * goal the player should aim for, to get a good score.
-     */
-    private String description;
+public class PublicObjectiveCard extends ObjectiveCard {
 
     /**
      * The number of points that a player gains every
@@ -32,29 +21,8 @@ public class PublicObjectiveCard implements ObjectiveCard {
      * @param victoryPoints the victory points.
      */
     public PublicObjectiveCard(String name, String description, int victoryPoints) {
-        this.name = name;
-        this.description = description;
+        super(name, description);
         this.victoryPoints = victoryPoints;
-    }
-
-    /**
-     * The getter for the name.
-     *
-     * @return the name of the card.
-     */
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * The getter for the description.
-     *
-     * @return the description of the card.
-     */
-    @Override
-    public String getDescription() {
-        return description;
     }
 
     /**

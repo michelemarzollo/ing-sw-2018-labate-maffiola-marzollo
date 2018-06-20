@@ -8,11 +8,14 @@ import org.junit.Test;
 import java.util.Random;
 
 /**
- * Unit tests for the class RowVarietyScore
+ * Unit tests for the class {@link RowVarietyScore}.
+ *
+ * @author michelemarzollo
  */
 public class RowVarietyScoreTest {
 
     //Tests in the case in which the property of the card is the colour
+
     /**
      * Tests if the score is calculated correctly in a simple case.
      * <p>In this simple case, the grid contains two rows of dice of
@@ -39,7 +42,7 @@ public class RowVarietyScoreTest {
                             + e.getMessage());
                 }
 
-        RowVarietyScore rowVarietyScore =  new RowVarietyScore(6, true);
+        RowVarietyScore rowVarietyScore = new RowVarietyScore(6, true);
         int actualScore = rowVarietyScore.getScore(grid);
         int expectedScore = 6 * 2;
         Assert.assertEquals(expectedScore, actualScore);
@@ -71,7 +74,7 @@ public class RowVarietyScoreTest {
                             + e.getMessage());
                 }
 
-        RowVarietyScore rowVarietyScore =  new RowVarietyScore(6, true);
+        RowVarietyScore rowVarietyScore = new RowVarietyScore(6, true);
         int actualScore = rowVarietyScore.getScore(grid);
         int expectedScore = 0;
         Assert.assertEquals(expectedScore, actualScore);
@@ -101,7 +104,7 @@ public class RowVarietyScoreTest {
                             + e.getMessage());
                 }
 
-        RowVarietyScore rowVarietyScore =  new RowVarietyScore(6, true);
+        RowVarietyScore rowVarietyScore = new RowVarietyScore(6, true);
         int actualScore = rowVarietyScore.getScore(grid);
         int expectedScore = 0;
         Assert.assertEquals(expectedScore, actualScore);
@@ -131,7 +134,7 @@ public class RowVarietyScoreTest {
                             + e.getMessage());
                 }
 
-        RowVarietyScore rowVarietyScore =  new RowVarietyScore(5, false);
+        RowVarietyScore rowVarietyScore = new RowVarietyScore(5, false);
         int actualScore = rowVarietyScore.getScore(grid);
         int expectedScore = 5 * 2;
         Assert.assertEquals(expectedScore, actualScore);
@@ -161,7 +164,7 @@ public class RowVarietyScoreTest {
                             + e.getMessage());
                 }
 
-        RowVarietyScore rowVarietyScore =  new RowVarietyScore(5, false);
+        RowVarietyScore rowVarietyScore = new RowVarietyScore(5, false);
         int actualScore = rowVarietyScore.getScore(grid);
         int expectedScore = 0;
         Assert.assertEquals(expectedScore, actualScore);
@@ -188,7 +191,7 @@ public class RowVarietyScoreTest {
                             + e.getMessage());
                 }
 
-        RowVarietyScore rowVarietyScore =  new RowVarietyScore(5, false);
+        RowVarietyScore rowVarietyScore = new RowVarietyScore(5, false);
         int actualScore = rowVarietyScore.getScore(grid);
         int expectedScore = 0;
         Assert.assertEquals(expectedScore, actualScore);

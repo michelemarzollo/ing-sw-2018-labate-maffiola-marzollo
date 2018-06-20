@@ -1,6 +1,8 @@
 package it.polimi.se2018.utils;
 
 import it.polimi.se2018.controller.Controller;
+import it.polimi.se2018.controller.PrivateObjectiveFactory;
+import it.polimi.se2018.controller.XmlPatternLoader;
 import it.polimi.se2018.controller.XmlPublicObjectiveLoader;
 import it.polimi.se2018.model.*;
 import org.xml.sax.SAXException;

@@ -95,7 +95,6 @@ public class PatternSelection {
 
                 controller.setStatus(playerStatus);
                 controller.hidePlayerName(true);
-                //controller.minimize();
 
                 BorderPane borderPane = new BorderPane(patternView);
                 borderPane.setOnMouseClicked(this::handleClick);

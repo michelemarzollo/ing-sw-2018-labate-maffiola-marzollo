@@ -8,22 +8,12 @@ package it.polimi.se2018.model;
  *
  * @author michelemarzollo
  */
-public class PrivateObjectiveCard implements ObjectiveCard {
-
-    /**
-     * The name of the card.
-     */
-    private final String name;
+public class PrivateObjectiveCard extends ObjectiveCard {
 
     /**
      * The colour of the dice that will count int the score of the card.
      */
     private final Colour colour;
-
-    /**
-     * The description of the card.
-     */
-    private final String description;
 
     /**
      * The constructor of the class.
@@ -33,29 +23,8 @@ public class PrivateObjectiveCard implements ObjectiveCard {
      * @param description the description of the card.
      */
     public PrivateObjectiveCard(String name, Colour colour, String description) {
-        this.name = name;
+        super (name, description);
         this.colour = colour;
-        this.description = description;
-    }
-
-    /**
-     * The getter for the name.
-     *
-     * @return the card's name.
-     */
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Getter for the description of the Objective Card.
-     *
-     * @return the card's description.
-     */
-    @Override
-    public String getDescription() {
-        return description;
     }
 
     /**

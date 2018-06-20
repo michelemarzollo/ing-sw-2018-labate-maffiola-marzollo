@@ -1,16 +1,10 @@
-package it.polimi.se2018.model;
+package it.polimi.se2018.controller;
 
+import it.polimi.se2018.model.Pattern;
 import it.polimi.se2018.utils.ResourceManager;
+import it.polimi.se2018.utils.XmlLoader;
 import org.xml.sax.SAXException;
 
-import javax.xml.XMLConstants;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -27,7 +21,7 @@ import java.util.Scanner;
  *
  * @author dvdmff
  */
-public class XmlPatternLoader implements PatternLoader {
+public class XmlPatternLoader extends XmlLoader implements PatternLoader{
 
     private static final String PATTERNS_DIR = "it/polimi/se2018/model/patterns/";
 
@@ -35,16 +29,6 @@ public class XmlPatternLoader implements PatternLoader {
      * The list of pattern xml descriptions suitable for loading.
      */
     private final List<String> loadablePatterns = new ArrayList<>();
-
-    /**
-     * The factory used to create sax parsers.
-     */
-    private final SAXParser saxParser;
-
-    /**
-     * The sax validator used to validate xml files.
-     */
-    private final Validator validator;
 
     /**
      * The directory where patterns are stored.
@@ -73,33 +57,11 @@ public class XmlPatternLoader implements PatternLoader {
      * @throws SAXException if sax validator or sax parser cannot be used.
      */
     public XmlPatternLoader(String basePath, String listName) throws SAXException {
-        validator = getValidator();
-
-        SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-        try {
-            saxParser = saxParserFactory.newSAXParser();
-        } catch (ParserConfigurationException e) {
-            //fatal
-            throw new RuntimeException("ParserConfigurationException: " + e.getMessage());
-        }
+        super();
+        validator = getValidator(ResourceManager.getInstance().getPatternSchema());
 
         this.basePath = basePath;
         filterFiles(listName);
-    }
-
-    /**
-     * Creates a validator object for pattern xml descriptions.
-     *
-     * @return A validator object for pattern xml descriptions.
-     * @throws SAXException if the validator can't be instantiated.
-     */
-    private Validator getValidator() throws SAXException {
-        SchemaFactory schemaFactory =
-                SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-
-        InputStream schemaStream = ResourceManager.getInstance().getPatternSchema();
-        Schema schema = schemaFactory.newSchema(new StreamSource(schemaStream));
-        return schema.newValidator();
     }
 
     /**
@@ -140,24 +102,6 @@ public class XmlPatternLoader implements PatternLoader {
                 .limit(n)
                 .map(this::loadPattern)
                 .toArray(Pattern[]::new);
-    }
-
-    /**
-     * Validates {@code file} against the xsd for pattern definitions.
-     *
-     * @param stream The file to be validated.
-     * @return {@code true} if the file is a valid pattern description;
-     * {@code false} otherwise.
-     */
-    private boolean isValid(InputStream stream) {
-        if (stream == null)
-            return false;
-        try {
-            validator.validate(new StreamSource(stream));
-            return true;
-        } catch (SAXException | IOException e) {
-            return false;
-        }
     }
 
     /**

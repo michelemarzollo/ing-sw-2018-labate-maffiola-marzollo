@@ -3,12 +3,10 @@ package it.polimi.se2018.view.cli;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.events.*;
 import it.polimi.se2018.utils.Coordinates;
-import it.polimi.se2018.utils.Logger;
-import it.polimi.se2018.view.ClientView;
-import it.polimi.se2018.view.Displayer;
-import it.polimi.se2018.view.ViewDataOrganizer;
+import it.polimi.se2018.view.*;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.function.Consumer;
@@ -126,7 +124,7 @@ public class CliDisplayer implements Displayer {
             }
             return;
         }
-        if (!view.isGameRunning()) {
+        if (!view.isGameRunning() && getDataOrganizer().getLastUpdate().getEventType().equals(ModelEvent.GAME_SETUP)) {
             askPattern();
             return;
         }
@@ -137,7 +135,6 @@ public class CliDisplayer implements Displayer {
         if (view.isGameRunning() && getDataOrganizer().getLastUpdate().getEventType().equals(ModelEvent.GAME_END)) {
             displayScoreBoard();
         }
-        Logger.getDefaultLogger().log("refresh done");
     }
 
     /**
@@ -155,34 +152,35 @@ public class CliDisplayer implements Displayer {
                         "╚════██║██╔══██║██║   ██║██╔══██╗██╔══██║██║  ██║██╔══██║\n" +
                         "███████║██║  ██║╚██████╔╝██║  ██║██║  ██║██████╔╝██║  ██║\n" +
                         "╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝\n");
-        int connection;
-        int gameMode;
-        String userName;
-        output.printTextNewLine("Choose the type of connection, enter: \n" +
-                "1 for SOCKET\n" +
-                "2 for RMI");
-        connection = input.readInputInt();
-        output.printTextNewLine("Choose the game mode, enter: \n" +
-                "1 for Single player\n" +
-                "2 for Multiplayer");
-        gameMode = input.readInputInt();
-        output.printTextNewLine("Enter your username:");
-        userName = input.readInputString();
-        if (connection == 1) {
-            //@TODO retrieve server address and port from config
-            String serverAddress = "localhost";
-            int port = 7777;
-            view.handleLogin(userName, serverAddress, port); //@TODO add a parameter for the gameMode
-        } else {
-            if (connection == 2) {
-                String serverAddress = "localhost";
-                String serviceName = "MyServer";
-                view.handleLogin(userName, serverAddress, serviceName); //a paramater for the gameMode have to be added
-            } else {
-                output.printTextNewLine("Invalid choice");
-                displayLoginView();
-            }
+
+        int connection = 0;
+        int gameMode = 0;
+        String userName = null;
+
+        while (connection != 1 && connection != 2) {
+            output.printTextNewLine("Choose the type of connection, enter: \n" +
+                    "1 for SOCKET\n" +
+                    "2 for RMI");
+            connection = input.readInputInt();
         }
+
+        while (gameMode != 1 && gameMode != 2) {
+            output.printTextNewLine("Choose the game mode, enter: \n" +
+                    "1 for Single player\n" +
+                    "2 for Multiplayer");
+            gameMode = input.readInputInt();
+        }
+
+        boolean multiPlayer = (gameMode == 2);
+        boolean rmi = (connection == 2);
+
+        while (userName == null || userName.equals("")) {
+            output.printTextNewLine("Enter your username:");
+            userName = input.readInputString();
+        }
+
+        view.handleLogin(userName, multiPlayer, rmi);
+
     }
 
     /**
@@ -200,15 +198,12 @@ public class CliDisplayer implements Displayer {
      */
     @Override
     public void askPattern() {
-        if (getDataOrganizer().getGameSetup() != null) {
-            String pattern;
-            int playerIndex = findPlayerIndex(view.getPlayerName(), getDataOrganizer().getGameSetup().getPlayers());
-            output.printPatternSelection(getDataOrganizer().getGameSetup().getCandidates()[playerIndex]);
-            output.printTextNewLine("Enter the name of the pattern you want to choose:");
-            pattern = input.readInputString();
-            view.handlePatternSelection(pattern);
-        } else
-            output.printTextNewLine("Waiting...");
+        String pattern;
+        int playerIndex = findPlayerIndex(view.getPlayerName(), getDataOrganizer().getGameSetup().getPlayers());
+        output.printPatternSelection(getDataOrganizer().getGameSetup().getCandidates()[playerIndex]);
+        output.printTextNewLine("Enter the name of the pattern you want to choose:");
+        pattern = input.readInputString();
+        view.handlePatternSelection(pattern);
     }
 
     /**
@@ -237,12 +232,9 @@ public class CliDisplayer implements Displayer {
      */
     @Override
     public void displayMultiPlayerGame() {
-        if (getDataOrganizer().getNextTurn() == null) {
-            output.printTextNewLine("Your pattern is:");
-            output.printPattern(getPattern());
-            output.printTextNewLine("Wait for the game to start");
-        } else
-            displayTurnView();
+        output.printTextNewLine("Your pattern is:");
+        output.printPattern(getPattern());
+        output.printTextNewLine("Wait for the game to start");
     }
 
     /**

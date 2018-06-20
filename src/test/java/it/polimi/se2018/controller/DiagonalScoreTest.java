@@ -8,7 +8,9 @@ import org.junit.Test;
 import java.util.Random;
 
 /**
- * Unit tests for DiagonalScore class.
+ * Unit tests for {@link DiagonalScore} class.
+ *
+ * @author michelemarzollo
  */
 public class DiagonalScoreTest {
 
@@ -28,7 +30,7 @@ public class DiagonalScoreTest {
                 Assert.fail("PlacementErrorException has occurred: "
                         + e.getMessage());
             }
-        DiagonalScore diagonalScore =  new DiagonalScore(1, true);
+        DiagonalScore diagonalScore = new DiagonalScore(1, true);
         int actualScore = diagonalScore.getScore(grid);
         int expectedScore = 3;
         Assert.assertEquals(expectedScore, actualScore);
@@ -60,7 +62,7 @@ public class DiagonalScoreTest {
                         + e.getMessage());
             }
 
-        DiagonalScore diagonalScore =  new DiagonalScore(1, true);
+        DiagonalScore diagonalScore = new DiagonalScore(1, true);
         int actualScore = diagonalScore.getScore(grid);
         int expectedScore = 3 * 4;
         Assert.assertEquals(expectedScore, actualScore);
@@ -87,7 +89,7 @@ public class DiagonalScoreTest {
                     + e.getMessage());
         }
 
-        DiagonalScore diagonalScore =  new DiagonalScore(1, true);
+        DiagonalScore diagonalScore = new DiagonalScore(1, true);
         int actualScore = diagonalScore.getScore(grid);
         int expectedScore = 4;
         Assert.assertEquals(expectedScore, actualScore);
@@ -116,7 +118,7 @@ public class DiagonalScoreTest {
                     + e.getMessage());
         }
 
-        DiagonalScore diagonalScore =  new DiagonalScore(1, true);
+        DiagonalScore diagonalScore = new DiagonalScore(1, true);
         int actualScore = diagonalScore.getScore(grid);
         int expectedScore = 0;
         Assert.assertEquals(expectedScore, actualScore);
@@ -147,7 +149,7 @@ public class DiagonalScoreTest {
                     + e.getMessage());
         }
 
-        DiagonalScore diagonalScore =  new DiagonalScore(1, false);
+        DiagonalScore diagonalScore = new DiagonalScore(1, false);
         int actualScore = diagonalScore.getScore(grid);
         int expectedScore = 4;
         Assert.assertEquals(expectedScore, actualScore);

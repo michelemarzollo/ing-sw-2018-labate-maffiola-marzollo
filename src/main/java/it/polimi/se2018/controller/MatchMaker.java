@@ -1,6 +1,9 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.Game;
+import it.polimi.se2018.utils.Logger;
+import it.polimi.se2018.utils.MissingConfigurationException;
+import it.polimi.se2018.utils.ServerConfiguration;
 import it.polimi.se2018.view.View;
 
 import java.lang.ref.WeakReference;
@@ -10,26 +13,6 @@ import java.lang.ref.WeakReference;
  * Singleton used to link a view to a controller.
  */
 public class MatchMaker {
-
-    /**
-     * The duration of a turn in multi-player configuration.
-     */
-    private static final int MULTI_PLAYER_TURN_DURATION = 200;
-
-    /**
-     * The duration of the timeout in multi-player configuration.
-     */
-    private static final int MULTI_PLAYER_TIMEOUT = 50;
-
-    /**
-     * The duration of a turn in single-player configuration.
-     */
-    private static final int SINGLE_PLAYER_TURN_DURATION = 200;
-
-    /**
-     * The duration of the timeout in single-player configuration.
-     */
-    private static final int SINGLE_PLAYER_TIMEOUT = 50;
 
     /**
      * The only instance of the class.
@@ -69,11 +52,20 @@ public class MatchMaker {
             controller = multiPlayer.get();
 
         if (controller == null || !controller.acceptsNewPlayers()) {
-            controller = new MultiPlayerController(new Game(), MULTI_PLAYER_TURN_DURATION, MULTI_PLAYER_TIMEOUT);
-            multiPlayer = new WeakReference<>(controller);
-        }
+            try {
+                ServerConfiguration configuration = ServerConfiguration.getInstance();
 
-        view.registerObserver(controller);
+                controller = new MultiPlayerController(new Game(),
+                        configuration.getTurnDuration(), configuration.getMultiPlayerTimeOut());
+
+                multiPlayer = new WeakReference<>(controller);
+
+                view.registerObserver(controller);
+
+            } catch (MissingConfigurationException e) {
+                Logger.getDefaultLogger().log(e.getMessage());
+            }
+        }
     }
 
     /**
@@ -82,7 +74,15 @@ public class MatchMaker {
      * @param view The view to be linked.
      */
     public void makeSinglePlayerMatchFor(View view) {
-        Controller singlePlayer = new SinglePlayerController(new Game(), SINGLE_PLAYER_TURN_DURATION, SINGLE_PLAYER_TIMEOUT);
-        view.registerObserver(singlePlayer);
+        try {
+            ServerConfiguration configuration = ServerConfiguration.getInstance();
+
+            Controller singlePlayer = new SinglePlayerController(new Game(),
+                    configuration.getTurnDuration(), configuration.getSinglePlayerTimeOut());
+
+            view.registerObserver(singlePlayer);
+        } catch (MissingConfigurationException e) {
+            Logger.getDefaultLogger().log(e.getMessage());
+        }
     }
 }

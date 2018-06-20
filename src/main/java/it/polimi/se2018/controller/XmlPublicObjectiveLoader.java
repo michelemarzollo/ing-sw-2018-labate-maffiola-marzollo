@@ -3,16 +3,9 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.PublicObjectiveCard;
 import it.polimi.se2018.utils.ResourceManager;
+import it.polimi.se2018.utils.XmlLoader;
 import org.xml.sax.SAXException;
 
-import javax.xml.XMLConstants;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -28,16 +21,19 @@ import java.util.Scanner;
  *
  * @author michelemarzollo
  */
-public class XmlPublicObjectiveLoader {
+
+public class XmlPublicObjectiveLoader extends XmlLoader {
 
     /**
      * Default search path.
      */
     private static final String DEFAULT_PATH = "it/polimi/se2018/controller/public_objective_cards/";
+
     /**
      * Expected file name for card list.
      */
     private static final String LIST_NAME = "cards.list";
+
     /**
      * Path where files are stored.
      */
@@ -47,16 +43,6 @@ public class XmlPublicObjectiveLoader {
      * List of loadable card files.
      */
     private List<String> loadableCards = new ArrayList<>();
-
-    /**
-     * The factory used to create sax parsers.
-     */
-    private final SAXParser saxParser;
-
-    /**
-     * The validator of the files.
-     */
-    private final Validator validator;
 
     /**
      * The controller the loader refers to.
@@ -90,19 +76,12 @@ public class XmlPublicObjectiveLoader {
      * @throws SAXException             if sax validator or sax parser cannot be used.
      */
     public XmlPublicObjectiveLoader(String basePath, Controller controller) throws SAXException {
-
+        super();
         this.controller = controller;
         this.basePath = basePath;
 
-        validator = getValidator();
+        validator = getValidator(ResourceManager.getInstance().getPublicObjectiveSchema());
 
-        SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-        try {
-            saxParser = saxParserFactory.newSAXParser();
-        } catch (ParserConfigurationException e) {
-            //fatal
-            throw new RuntimeException("ParserConfigurationException: " + e.getMessage());
-        }
         filterFiles();
     }
 
@@ -124,39 +103,6 @@ public class XmlPublicObjectiveLoader {
                     loadableCards.add(resource);
             }
         }
-    }
-
-    /**
-     * Validates {@code file} against the xsd for public objective card definitions.
-     *
-     * @param stream The resource to be validated.
-     * @return {@code true} if the file is a valid card description;
-     * {@code false} otherwise.
-     */
-    private boolean isValid(InputStream stream){
-        if (stream == null)
-            return false;
-        try {
-            validator.validate(new StreamSource(stream));
-            return true;
-        } catch (SAXException | IOException e) {
-            return false;
-        }
-    }
-
-    /**
-     * Creates a validator object for public objective xml descriptions.
-     *
-     * @return A validator object for public objective xml descriptions.
-     * @throws SAXException if the validator can't be instantiated.
-     */
-    private Validator getValidator() throws SAXException {
-        SchemaFactory schemaFactory =
-                SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-
-        InputStream schemaStream = ResourceManager.getInstance().getPublicObjectiveSchema();
-        Schema schema = schemaFactory.newSchema(new StreamSource(schemaStream));
-        return schema.newValidator();
     }
 
     /**

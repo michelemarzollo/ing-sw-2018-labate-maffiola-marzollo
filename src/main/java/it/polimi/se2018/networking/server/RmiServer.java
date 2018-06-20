@@ -46,6 +46,7 @@ public class RmiServer extends Server {
     /**
      * The constructor of the class.
      *
+     * @param superSystem the super-system to which the rmi server refers to.
      * @param address     the address.
      * @param serviceName the name of the service.
      */

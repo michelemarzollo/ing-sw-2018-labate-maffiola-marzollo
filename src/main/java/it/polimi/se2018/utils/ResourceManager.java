@@ -96,6 +96,22 @@ public class ResourceManager {
     }
 
     /**
+     * Retrieves the {@link InputStream} of the client configuration xsd.
+     * @return The {@link InputStream} of the client configuration xsd.
+     */
+    public InputStream getClientConfigurationSchema() {
+        return getClass().getClassLoader().getResourceAsStream(BASE + "utils/client_specification.xsd");
+    }
+
+    /**
+     * Retrieves the {@link InputStream} of the client configuration xsd.
+     * @return The {@link InputStream} of the client configuration xsd.
+     */
+    public InputStream getServerConfigurationSchema() {
+        return getClass().getClassLoader().getResourceAsStream(BASE + "utils/server_specification.xsd");
+    }
+
+    /**
      * Returns a stream for the given file.
      * @param base The directory where the file is located.
      * @param fileName The name of the file.

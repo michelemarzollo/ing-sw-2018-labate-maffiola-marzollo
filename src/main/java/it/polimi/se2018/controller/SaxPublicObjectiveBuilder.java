@@ -71,7 +71,7 @@ public class SaxPublicObjectiveBuilder extends DefaultHandler {
     private int victoryPoints;
 
     /**
-     * The property (works on colours or on vaulues) of the card to create.
+     * The property (works on colours or on values) of the card to create.
      */
     private boolean propertyIsColour;
 

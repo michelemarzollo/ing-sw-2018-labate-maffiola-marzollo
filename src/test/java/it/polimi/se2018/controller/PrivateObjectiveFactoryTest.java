@@ -1,24 +1,25 @@
-package it.polimi.se2018.model;
+package it.polimi.se2018.controller;
 
-import it.polimi.se2018.utils.PublicObjectiveFactory;
+import it.polimi.se2018.controller.PrivateObjectiveFactory;
+import it.polimi.se2018.model.PrivateObjectiveCard;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
 
 /**
- * Unit tests for PublicObjectiveFactory class.
+ * Unit tests for PrivateObjectiveFactory class.
  */
-public class PublicObjectiveFactoryTest {
+public class PrivateObjectiveFactoryTest {
 
     /**
      * Tests if the factory returns the correct number of instances.
      */
     @Test
     public void testCorrectNumberOfInstances() {
-        int instances = 5;
-        PublicObjectiveFactory factory = new PublicObjectiveFactory();
-        PublicObjectiveCard[] cards = factory.newInstances(instances);
+        int instances = 4;
+        PrivateObjectiveFactory factory = new PrivateObjectiveFactory();
+        PrivateObjectiveCard[] cards = factory.newInstances(instances);
 
         long actualInstances = cards.length;
 
@@ -31,11 +32,12 @@ public class PublicObjectiveFactoryTest {
      */
     @Test
     public void testNoCardRepetition() {
-        int instances = 10;
-        PublicObjectiveFactory factory = new PublicObjectiveFactory();
-        PublicObjectiveCard[] cards = factory.newInstances(instances);
+        int instances = 5;
+        PrivateObjectiveFactory factory = new PrivateObjectiveFactory();
+        PrivateObjectiveCard[] cards = factory.newInstances(instances);
 
         long distinctCards = Arrays.stream(cards)
+                .map(PrivateObjectiveCard::getName)
                 .distinct()
                 .count();
 
@@ -49,13 +51,12 @@ public class PublicObjectiveFactoryTest {
     @Test
     public void testRequestTooManyCards() {
         int instances = 20;
-        PublicObjectiveFactory factory = new PublicObjectiveFactory();
+        PrivateObjectiveFactory factory = new PrivateObjectiveFactory();
         try {
-            PublicObjectiveCard[] cards = factory.newInstances(instances);
+            PrivateObjectiveCard[] cards = factory.newInstances(instances);
             Assert.fail();
         } catch (IllegalArgumentException ignored) {
 
         }
-
     }
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<server_specification xmlns="http://se2018.polimi.it/server_specification">
+    <port>7777</port>
+    <address>localhost</address>
+    <service_name>MyServer</service_name>
+    <turn_duration>300</turn_duration>
+    <multi_player_timeout>60</multi_player_timeout>
+    <single_player_timeout>100</single_player_timeout>
+</server_specification>

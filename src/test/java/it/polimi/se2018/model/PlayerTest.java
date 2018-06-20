@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.controller.PrivateObjectiveFactory;
 import org.junit.Before;
 import org.junit.Test;
 
