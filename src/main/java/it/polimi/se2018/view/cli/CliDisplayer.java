@@ -3,10 +3,12 @@ package it.polimi.se2018.view.cli;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.events.*;
 import it.polimi.se2018.utils.Coordinates;
-import it.polimi.se2018.view.*;
+import it.polimi.se2018.utils.Logger;
+import it.polimi.se2018.view.ClientView;
+import it.polimi.se2018.view.Displayer;
+import it.polimi.se2018.view.ViewDataOrganizer;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.function.Consumer;
@@ -38,9 +40,10 @@ public class CliDisplayer implements Displayer {
 
     /**
      * Constructor of the class.
+     *
      * @param inputStream The {@link InputStream} from which the user's input will
      *                    be gathered.
-     * @param output The {@link PrintStream} on which the game will be displayed.
+     * @param output      The {@link PrintStream} on which the game will be displayed.
      */
     private CliDisplayer(InputStream inputStream, PrintStream output) {
         this.input = new CliInput(inputStream);
@@ -50,17 +53,19 @@ public class CliDisplayer implements Displayer {
 
     /**
      * Launches the cli.
-     * @param in The stream used for input.
-     * @param out The stream used for output.
+     *
+     * @param in       The stream used for input.
+     * @param out      The stream used for output.
      * @param callback The callback function to register the displayer.
      */
-    public static void launchCli(InputStream in, PrintStream out, Consumer<Displayer> callback){
+    public static void launchCli(InputStream in, PrintStream out, Consumer<Displayer> callback) {
         CliDisplayer.callback = callback;
         new CliDisplayer(in, out);
     }
 
     /**
      * Getter for the {@link ClientView} to which the CliDisplayer is bound.
+     *
      * @return the {@link ClientView} to which the CliDisplayer is associated.
      */
     public ClientView getView() {
@@ -79,6 +84,7 @@ public class CliDisplayer implements Displayer {
 
     /**
      * Getter for the {@link ViewDataOrganizer} associated to the CliDisplayer.
+     *
      * @return the {@link ViewDataOrganizer} to which the CliDisplayer refers.
      */
     @Override
@@ -88,6 +94,7 @@ public class CliDisplayer implements Displayer {
 
     /**
      * Setter for the {@link ClientView}
+     *
      * @param view The view that will handle requests.
      */
     @Override
@@ -110,17 +117,16 @@ public class CliDisplayer implements Displayer {
      */
     @Override
     public void refreshDisplayedData() {
-        if(getDataOrganizer().getLastUpdate().getEventType().equals(ModelEvent.PLAYER_CONNECTION_STATUS)){
+        if (getDataOrganizer().getLastUpdate().getEventType().equals(ModelEvent.PLAYER_CONNECTION_STATUS)) {
             PlayerConnectionStatus connectionStatus = (PlayerConnectionStatus) getDataOrganizer().getLastUpdate();
-            if(connectionStatus.isConnected()){
+            if (connectionStatus.isConnected()) {
                 output.printTextNewLine(connectionStatus.getPlayerName() + "reconnected!");
-            }
-            else{
+            } else {
                 output.printTextNewLine(connectionStatus.getPlayerName() + "disconnected!");
             }
             return;
         }
-        if (!view.isGameRunning() && getDataOrganizer().getLastUpdate().getEventType().equals(ModelEvent.GAME_SETUP)) {
+        if (!view.isGameRunning()) {
             askPattern();
             return;
         }
@@ -131,6 +137,7 @@ public class CliDisplayer implements Displayer {
         if (view.isGameRunning() && getDataOrganizer().getLastUpdate().getEventType().equals(ModelEvent.GAME_END)) {
             displayScoreBoard();
         }
+        Logger.getDefaultLogger().log("refresh done");
     }
 
     /**
@@ -143,11 +150,11 @@ public class CliDisplayer implements Displayer {
     public void displayLoginView() { //verrà chiamata da qualche parte nel main, non si è ancora connesso il client
         output.printTextNewLine(
                 "███████╗ █████╗  ██████╗ ██████╗  █████╗ ██████╗  █████╗ \n" +
-                "██╔════╝██╔══██╗██╔════╝ ██╔══██╗██╔══██╗██╔══██╗██╔══██╗\n" +
-                "███████╗███████║██║  ███╗██████╔╝███████║██║  ██║███████║\n" +
-                "╚════██║██╔══██║██║   ██║██╔══██╗██╔══██║██║  ██║██╔══██║\n" +
-                "███████║██║  ██║╚██████╔╝██║  ██║██║  ██║██████╔╝██║  ██║\n" +
-                "╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝\n");
+                        "██╔════╝██╔══██╗██╔════╝ ██╔══██╗██╔══██╗██╔══██╗██╔══██╗\n" +
+                        "███████╗███████║██║  ███╗██████╔╝███████║██║  ██║███████║\n" +
+                        "╚════██║██╔══██║██║   ██║██╔══██╗██╔══██║██║  ██║██╔══██║\n" +
+                        "███████║██║  ██║╚██████╔╝██║  ██║██║  ██║██████╔╝██║  ██║\n" +
+                        "╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝\n");
         int connection;
         int gameMode;
         String userName;
@@ -163,13 +170,13 @@ public class CliDisplayer implements Displayer {
         userName = input.readInputString();
         if (connection == 1) {
             //@TODO retrieve server address and port from config
-            String serverAddress = null;
-            int port = 0;
+            String serverAddress = "localhost";
+            int port = 7777;
             view.handleLogin(userName, serverAddress, port); //@TODO add a parameter for the gameMode
         } else {
             if (connection == 2) {
-                String serverAddress = null;
-                String serviceName = null;
+                String serverAddress = "localhost";
+                String serviceName = "MyServer";
                 view.handleLogin(userName, serverAddress, serviceName); //a paramater for the gameMode have to be added
             } else {
                 output.printTextNewLine("Invalid choice");
@@ -183,7 +190,7 @@ public class CliDisplayer implements Displayer {
      * to the server and before the starting of the game.
      */
     @Override
-    public void displayWaitMessage(){
+    public void displayWaitMessage() {
         output.printTextNewLine("You're connected, wait for the game to start");
     }
 
@@ -193,12 +200,15 @@ public class CliDisplayer implements Displayer {
      */
     @Override
     public void askPattern() {
-        String pattern;
-        int playerIndex = findPlayerIndex(view.getPlayerName(), getDataOrganizer().getGameSetup().getPlayers());
-        output.printPatternSelection(getDataOrganizer().getGameSetup().getCandidates()[playerIndex]);
-        output.printTextNewLine("Enter the name of the pattern you want to choose:");
-        pattern = input.readInputString();
-        view.handlePatternSelection(pattern);
+        if (getDataOrganizer().getGameSetup() != null) {
+            String pattern;
+            int playerIndex = findPlayerIndex(view.getPlayerName(), getDataOrganizer().getGameSetup().getPlayers());
+            output.printPatternSelection(getDataOrganizer().getGameSetup().getCandidates()[playerIndex]);
+            output.printTextNewLine("Enter the name of the pattern you want to choose:");
+            pattern = input.readInputString();
+            view.handlePatternSelection(pattern);
+        } else
+            output.printTextNewLine("Waiting...");
     }
 
     /**
@@ -208,7 +218,8 @@ public class CliDisplayer implements Displayer {
      * The index that the player occupies among the {@link GameSetup} players
      * corresponds to the index where his candidates are in the same message and
      * where his Private Objective Cards are: this method find that index.
-     * @param name The player's name.
+     *
+     * @param name  The player's name.
      * @param names The array of player's names.
      * @return The index where to find {@code name} among {@code names}.
      */
@@ -226,9 +237,12 @@ public class CliDisplayer implements Displayer {
      */
     @Override
     public void displayMultiPlayerGame() {
-        output.printTextNewLine("Your pattern is:");
-        output.printPattern(getPattern());
-        output.printTextNewLine("Wait for the game to start");
+        if (getDataOrganizer().getNextTurn() == null) {
+            output.printTextNewLine("Your pattern is:");
+            output.printPattern(getPattern());
+            output.printTextNewLine("Wait for the game to start");
+        } else
+            displayTurnView();
     }
 
     /**
@@ -272,6 +286,7 @@ public class CliDisplayer implements Displayer {
 
     /**
      * Helper method to verify if it is the user's turn.
+     *
      * @return {@code true} if now it is the user's turn, {@code false}
      * otherwise.
      */
@@ -282,6 +297,7 @@ public class CliDisplayer implements Displayer {
     /**
      * Helper method to verify if the player whose turn is now, has not
      * done any move yet.
+     *
      * @return {@code true} if the player has done nothing in his turn yet,
      * {@code false} otherwise.
      */
@@ -292,6 +308,7 @@ public class CliDisplayer implements Displayer {
 
     /**
      * Handle the first move of the user.
+     *
      * @param command The action selected by the user between all the possible
      *                first actions.
      */
@@ -369,8 +386,7 @@ public class CliDisplayer implements Displayer {
                 dieIndex = input.readInputInt();
                 view.handleToolCardSelection(name, dieIndex);
             }
-        } 
-        else goBackToTurnView();
+        } else goBackToTurnView();
     }
 
     /**
@@ -389,6 +405,7 @@ public class CliDisplayer implements Displayer {
     /**
      * Displays the possibility to insert the coordinates for an action requested
      * by the user (ex: placing a Die, using some Tool Card's effect...)
+     *
      * @return The inserted coordinates
      */
     private Coordinates readCoordinates() {
@@ -419,6 +436,7 @@ public class CliDisplayer implements Displayer {
 
     /**
      * Handles the user's specific request on the game status.
+     *
      * @param choice The action selected by the user between all the possible
      *               actions that indicates what he wants to see about the game
      *               status.
@@ -427,8 +445,8 @@ public class CliDisplayer implements Displayer {
         switch (choice) {
             case 1:
                 //MP
-                if(getDataOrganizer().getAllPlayerStatus().size() != 1)  output.printPatterns(getPlayers());
-                //SP
+                if (getDataOrganizer().getAllPlayerStatus().size() != 1) output.printPatterns(getPlayers());
+                    //SP
                 else output.printPattern(getPattern());
                 displayTurnView();
                 break;
@@ -457,6 +475,7 @@ public class CliDisplayer implements Displayer {
 
     /**
      * Handle the second move of the user when he has already placed a die.
+     *
      * @param command The action selected by the user between all the possible
      *                actions left.
      */
@@ -479,6 +498,7 @@ public class CliDisplayer implements Displayer {
 
     /**
      * Handle the second move of the user when he has already used a Tool Card.
+     *
      * @param command The action selected by the user between all the possible
      *                actions left.
      */
@@ -502,6 +522,7 @@ public class CliDisplayer implements Displayer {
     /**
      * Displays an error message sent from the Model and redisplay the correct
      * view.
+     *
      * @param error The error message.
      */
     @Override
@@ -517,7 +538,7 @@ public class CliDisplayer implements Displayer {
     /**
      * Redisplay the correct View after showing an error in MultiPlayer mode.
      */
-    private void restoreDisplayMultiPlayer(){
+    private void restoreDisplayMultiPlayer() {
         //The first error that a player can commit is about the pattern's selection
         if (!view.isGameRunning()) {
             //If the pattern's choice is not correct, here it is redisplayed.
@@ -533,7 +554,7 @@ public class CliDisplayer implements Displayer {
     /**
      * Redisplay the correct View after showing an error in SinglePlayer mode.
      */
-    private void restoreDisplaySinglePlayer(){
+    private void restoreDisplaySinglePlayer() {
         if (!view.isGameRunning() && getDataOrganizer().getGameSetup() == null) {
             //The committed error is necessarily on the difficulty selection in this case.
             //The correct view is redisplayed.
@@ -548,7 +569,7 @@ public class CliDisplayer implements Displayer {
             return;
         }
         if (view.isGameRunning()) {
-            if(!view.isGameEndSinglePlayer()) {
+            if (!view.isGameEndSinglePlayer()) {
                 //If an error is made during the user's turn the Turn View is redisplayed.
                 displayTurnView();
             }
@@ -583,6 +604,7 @@ public class CliDisplayer implements Displayer {
      * Displays the possibility of moving a die on the user's Pattern inserting
      * an appropriate input. It is invoked by certain Tool Cards that allow to
      * move dice on the Pattern.
+     *
      * @param amount The maximum amount of dice to be moved.
      */
     @Override
@@ -670,11 +692,11 @@ public class CliDisplayer implements Displayer {
         index = input.readInputInt();
         output.printTextNewLine("Enter 1 to increment the value of the selected die, 2 to decrement it:");
         choice = input.readInputInt();
-        if(choice == 1){
+        if (choice == 1) {
             view.handleToolCardUsage(index, true);
             return;
         }
-        if(choice == 2){
+        if (choice == 2) {
             view.handleToolCardUsage(index, false);
             return;
         }
@@ -721,15 +743,17 @@ public class CliDisplayer implements Displayer {
 
     /**
      * Getter for the players' status in the game.
+     *
      * @return a List of {@link PlayerStatus} that represent all the players
      * in the game.
      */
-    private List<PlayerStatus> getPlayers(){
+    private List<PlayerStatus> getPlayers() {
         return getDataOrganizer().getAllPlayerStatus();
     }
 
     /**
      * Getter for the Public Objective Cards in the game.
+     *
      * @return an array of the Public Objective Cards in the game.
      */
     private PublicObjectiveCard[] getPublicCards() {
@@ -738,6 +762,7 @@ public class CliDisplayer implements Displayer {
 
     /**
      * Getter for the Private Objective Cards of the user.
+     *
      * @return an array of the user's Private Objective Cards.
      */
     private PrivateObjectiveCard[] getPrivateCards() {
@@ -747,6 +772,7 @@ public class CliDisplayer implements Displayer {
 
     /**
      * Getter for the Tool Cards in the game.
+     *
      * @return an array of the Tool Cards in the game.
      */
     private ToolCard[] getToolCards() {
@@ -755,6 +781,7 @@ public class CliDisplayer implements Displayer {
 
     /**
      * Getter for the user's chosen Pattern.
+     *
      * @return The Pattern chosen from the user at the beginning of the game.
      */
     private Pattern getPattern() {
@@ -763,17 +790,19 @@ public class CliDisplayer implements Displayer {
 
     /**
      * Getter for the Round Track of the game.
+     *
      * @return a List of Lists of Dice that represents the Round Track.
      */
-    private List<List<Die>> getRoundTrack(){
+    private List<List<Die>> getRoundTrack() {
         return getDataOrganizer().getRoundTrack();
     }
 
     /**
      * getter for the Draft Pool of the game.
+     *
      * @return a List of dice that represents the Draft Pool.
      */
-    private List<Die> getDraftPool(){
+    private List<Die> getDraftPool() {
         return getDataOrganizer().getDraftPool();
     }
 

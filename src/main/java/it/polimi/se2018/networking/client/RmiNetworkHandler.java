@@ -32,6 +32,11 @@ public class RmiNetworkHandler implements ServerNetInterface {
     private RmiClientInterface remoteRef;
 
     /**
+     * The exported interface.
+     */
+    private RmiClientInterface rmiClientInterface;
+
+    /**
      * The string to print in case of {@link RemoteException}.
      */
     private static final String ERROR_STRING = "Connection error: ";
@@ -81,9 +86,9 @@ public class RmiNetworkHandler implements ServerNetInterface {
     @Override
     public boolean addClient(ClientNetInterface client) {
         try {
-            RmiClientImplementation clientImplementation = new RmiClientImplementation(client);
+            rmiClientInterface = new RmiClientImplementation(client);
             remoteRef = (RmiClientInterface) UnicastRemoteObject.exportObject(
-                    clientImplementation, 0);
+                    rmiClientInterface, 0);
             return server.addClient(remoteRef);
         } catch (RemoteException e) {
             Logger.getDefaultLogger().log(ERROR_STRING + e.getMessage() + "!");
@@ -100,7 +105,7 @@ public class RmiNetworkHandler implements ServerNetInterface {
     public void removeClient(ClientNetInterface client) {
         try {
             server.removeClient(remoteRef);
-            UnicastRemoteObject.unexportObject(remoteRef, true);
+            UnicastRemoteObject.unexportObject(rmiClientInterface, true);
         } catch (RemoteException e) {
             Logger.getDefaultLogger().log(ERROR_STRING + e.getMessage() + "!");
         }

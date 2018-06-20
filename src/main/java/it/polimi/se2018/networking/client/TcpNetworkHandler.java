@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.concurrent.Semaphore;
 
 /**
@@ -79,19 +80,22 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        try {
-            while (!this.clientConnection.isClosed()) {
+        while (!this.clientConnection.isClosed()) {
+            try {
                 Message message = (Message) inputStream.readObject();
                 if (message == null)
                     //the connection has been closed
                     clientConnection.close();
                 else
                     client.notify(message);
+
+            } catch (SocketException e) {
+                Logger.getDefaultLogger().log("Closed socket: terminating");
+            } catch (IOException e) {
+                Logger.getDefaultLogger().log("An error occurred: " + e.getMessage());
+            } catch (ClassNotFoundException e) {
+                Logger.getDefaultLogger().log("Serialized class cannot be found" + e.getMessage());
             }
-        } catch (IOException e) {
-            Logger.getDefaultLogger().log("An error occurred: " + e.getMessage());
-        } catch (ClassNotFoundException e) {
-            Logger.getDefaultLogger().log("Serialized class cannot be found" + e.getMessage());
         }
     }
 
@@ -141,6 +145,10 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
      */
     @Override
     public void removeClient(ClientNetInterface client) {
+        close();
+    }
+
+    private void close() {
         try {
             clientConnection.close();
         } catch (IOException ignored) {

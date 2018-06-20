@@ -46,4 +46,11 @@ public class Client {
     public ClientNetInterface getNetInterface(){
         return netInterface;
     }
+
+    /**
+     * Terminates the connection to the server.
+     */
+    public void disconnect(){
+        getServer().removeClient(getNetInterface());
+    }
 }

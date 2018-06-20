@@ -53,6 +53,7 @@ public class ClientView extends View {
         this.displayer = displayer;
         //e il displayer non avrà bisogno del riferimento all'organizer, ma potrà accedervi tramite questa classe
         this.displayer.setView(this);
+        displayer.displayLoginView();
     }
 
     /**
@@ -431,6 +432,7 @@ public class ClientView extends View {
                 Action.DISCONNECT_PLAYER,
                 getPlayerName()
         ));
+        client.disconnect();
     }
 
     /**

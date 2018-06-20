@@ -56,7 +56,7 @@ public class DisplayerFactory {
      * @return A new CLI displayer.
      */
     public synchronized Displayer newCliDisplayer(){
-        new Thread(() -> CliDisplayer.launchCli(System.in, System.out, this::setDisplayer));
+        CliDisplayer.launchCli(System.in, System.out, this::setDisplayer);
         try{
             displayerSemaphore.acquire();
         } catch (InterruptedException e) {
@@ -70,7 +70,7 @@ public class DisplayerFactory {
      * @return A new GUI displayer.
      */
     public synchronized Displayer newGuiDisplayer(){
-        new Thread(() -> JavaFxDisplayer.launchGui(this::setDisplayer)).start();
+        new Thread(() -> JavaFxDisplayer.launchGui(this::setDisplayer), "Factory-Thread").start();
         try {
             displayerSemaphore.acquire();
         } catch (InterruptedException e) {
