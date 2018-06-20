@@ -20,6 +20,7 @@ public class XmlClientConfigLoader extends XmlLoader {
 
     /**
      * The constructor of the class.
+     *
      * @param path the path where to find the xml file.
      * @throws SAXException it there was any sax error in parsing.
      */
@@ -38,14 +39,14 @@ public class XmlClientConfigLoader extends XmlLoader {
     public ClientConfiguration loadConfiguration() {
         try {
 
-            try(FileInputStream inputStream = new FileInputStream(path)){
+            try (FileInputStream inputStream = new FileInputStream(path)) {
                 SaxClientConfigurationParser clientConfigurationParser = new SaxClientConfigurationParser();
 
                 if (isValid(inputStream)) {
                     //I create again the strem because it was destroyed
-                    try(FileInputStream stream = new FileInputStream(path)) {
+                    try (FileInputStream stream = new FileInputStream(path)) {
                         saxParser.parse(stream, clientConfigurationParser);
-                       return tryGetConfigurationInstance();
+                        return tryGetConfigurationInstance();
                     }
                 }
                 //should never enter here
@@ -57,7 +58,14 @@ public class XmlClientConfigLoader extends XmlLoader {
         }
     }
 
-    private ClientConfiguration tryGetConfigurationInstance(){
+    /**
+     * Helper method for {@code loadConfiguration()}: it tries to get the instance of
+     * {@link ClientConfiguration}. It should never enter in the catch branch, beacause
+     * at this point the ClientConfiguration should have been instantiated.
+     *
+     * @return the instance of {@link ClientConfiguration}.
+     */
+    private ClientConfiguration tryGetConfigurationInstance() {
         try {
             return ClientConfiguration.getInstance();
         } catch (MissingConfigurationException e) {

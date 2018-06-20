@@ -44,17 +44,15 @@ public class ClientConfiguration {
 
     /**
      * The method that instantiates the class. If it is called when {@code instance}
-     * is not null it returns the instance that is already there.
+     * is not null it does nothing and ignores the new parameters.
      *
      * @param serverAddress The server of the server the client has to connect to.
      * @param serviceName   The name of the RMI service.
      * @param port          The number of the port to connect to in TCP connection.
-     * @return The instance of the singleton.
      */
-    public static ClientConfiguration makeInstance(String serverAddress, String serviceName, int port) {
+    public static void makeInstance(String serverAddress, String serviceName, int port) {
         if (instance == null)
             instance = new ClientConfiguration(serverAddress, serviceName, port);
-        return instance;
     }
 
     /**

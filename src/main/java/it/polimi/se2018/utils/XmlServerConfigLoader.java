@@ -39,12 +39,12 @@ public class XmlServerConfigLoader extends XmlLoader {
     public ServerConfiguration loadConfiguration() {
         try {
 
-            try(FileInputStream inputStream = new FileInputStream(path)){
+            try (FileInputStream inputStream = new FileInputStream(path)) {
                 SaxServerConfigurationParser clientConfigurationParser = new SaxServerConfigurationParser();
 
                 if (isValid(inputStream)) {
                     //I create again the strem because it was destroyed
-                    try(FileInputStream stream = new FileInputStream(path)) {
+                    try (FileInputStream stream = new FileInputStream(path)) {
                         saxParser.parse(stream, clientConfigurationParser);
                         return tryGetConfigurationInstance();
                     }
@@ -57,8 +57,15 @@ public class XmlServerConfigLoader extends XmlLoader {
             return null;
         }
     }
-    
-    private ServerConfiguration tryGetConfigurationInstance(){
+
+    /**
+     * Helper method for {@code loadConfiguration()}: it tries to get the instance of
+     * {@link ServerConfiguration}. It should never enter in the catch branch, beacause
+     * at this point the ServerConfiguration should have been instantiated.
+     *
+     * @return the instance of {@link ServerConfiguration}.
+     */
+    private ServerConfiguration tryGetConfigurationInstance() {
         try {
             return ServerConfiguration.getInstance();
         } catch (MissingConfigurationException e) {

@@ -70,7 +70,7 @@ public class ServerConfiguration {
 
     /**
      * The method that instantiates the class. If it is called when {@code instance}
-     * is not null it returns the instance that is already there.
+     * is not null it does nothing and ignores the new parameters.
      *
      * @param portNumber          The number of the port of the server.
      * @param address             The address of the server.
@@ -78,16 +78,14 @@ public class ServerConfiguration {
      * @param turnDuration        The duration of a turn of the match.
      * @param multiPlayerTimeOut  The timeout for multi-player mode.
      * @param singlePlayerTimeOut The timeout for single-player mode.
-     * @return The instance of the singleton.
      */
-    public static ServerConfiguration makeInstance(
+    public static void makeInstance(
             int portNumber, String address, String serviceName,
             int turnDuration, int multiPlayerTimeOut, int singlePlayerTimeOut) {
 
         if (instance == null)
             instance = new ServerConfiguration(portNumber, address, serviceName,
                     turnDuration, multiPlayerTimeOut, singlePlayerTimeOut);
-        return instance;
     }
 
     /**
@@ -106,7 +104,7 @@ public class ServerConfiguration {
     /**
      * Resets the instance to null;
      */
-    public static void reset(){
+    public static void reset() {
         instance = null;
     }
 
