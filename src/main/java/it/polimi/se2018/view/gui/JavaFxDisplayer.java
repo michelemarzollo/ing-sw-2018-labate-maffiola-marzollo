@@ -86,6 +86,11 @@ public class JavaFxDisplayer extends Application implements Displayer {
         displayLoginView();
     }
 
+    @Override
+    public void stop(){
+        getView().handleDisconnect();
+    }
+
     /**
      * Loads and updates the game board found at the given resource.
      *
