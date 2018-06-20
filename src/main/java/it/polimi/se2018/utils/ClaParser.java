@@ -63,7 +63,7 @@ public class ClaParser {
                 setHelp();
             }
             else if ("--config".equals(splitOnWhiteSpaces(arg.trim())[0])) {
-                if(!handleConfigCommand(arg.trim())){
+                if (!handleConfigCommand(arg.trim())){
                     return;
                 }
             }
@@ -94,7 +94,7 @@ public class ClaParser {
      * was correct, {@code false} otherwise.
      */
     private boolean handleConfigCommand(String arg){
-        if(splitOnWhiteSpaces(arg).length == 1){
+        if(splitOnWhiteSpaces(arg).length != 2){
             setError();
             return false;
         }
