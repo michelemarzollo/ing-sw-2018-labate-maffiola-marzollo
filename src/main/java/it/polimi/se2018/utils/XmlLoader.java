@@ -48,9 +48,10 @@ public abstract class XmlLoader {
     }
 
     /**
-     * Creates a validator object for server configuration xml descriptions.
+     * Creates a validator object for xml descriptions.
      *
-     * @return A validator object for server configuration xml descriptions.
+     * @param schemaStream the stream of the xsd file used to validate the xml files.
+     * @return A validator object for xml descriptions.
      * @throws SAXException if the validator can't be instantiated.
      */
     protected Validator getValidator(InputStream schemaStream) throws SAXException {
@@ -62,10 +63,10 @@ public abstract class XmlLoader {
     }
 
     /**
-     * Validates {@code file} against the xsd for server configuration definitions.
+     * Validates {@code file} against the xsd given in {@code getValidator()}.
      *
      * @param stream The file to be validated.
-     * @return {@code true} if the file is a valid {@link ServerConfiguration} description;
+     * @return {@code true} if the file a valid against the xsd description;
      * {@code false} otherwise.
      */
     protected boolean isValid(InputStream stream) {

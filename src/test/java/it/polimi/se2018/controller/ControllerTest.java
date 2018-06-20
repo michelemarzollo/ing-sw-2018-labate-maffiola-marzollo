@@ -13,6 +13,9 @@ import java.util.Timer;
 
 import static org.junit.Assert.*;
 
+/**
+ * The unit tests for {@link Controller}.
+ */
 public class ControllerTest {
 
     /**

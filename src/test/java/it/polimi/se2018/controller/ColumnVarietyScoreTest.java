@@ -8,7 +8,9 @@ import org.junit.Test;
 import java.util.Random;
 
 /**
- * Unit tests for ColumnVariety class.
+ * Unit tests for {@link ColumnVarietyScore} class.
+ *
+ * @author michelemarzollo
  */
 public class ColumnVarietyScoreTest {
 
@@ -39,7 +41,7 @@ public class ColumnVarietyScoreTest {
                             + e.getMessage());
                 }
 
-        ColumnVarietyScore columnVarietyScore =  new ColumnVarietyScore(5, true);
+        ColumnVarietyScore columnVarietyScore = new ColumnVarietyScore(5, true);
         int actualScore = columnVarietyScore.getScore(grid);
         int expectedScore = 5 * 2;
         Assert.assertEquals(expectedScore, actualScore);
@@ -70,7 +72,7 @@ public class ColumnVarietyScoreTest {
                             + e.getMessage());
                 }
 
-        ColumnVarietyScore columnVarietyScore =  new ColumnVarietyScore(5, true);
+        ColumnVarietyScore columnVarietyScore = new ColumnVarietyScore(5, true);
         int actualScore = columnVarietyScore.getScore(grid);
         int expectedScore = 0;
         Assert.assertEquals(expectedScore, actualScore);
@@ -99,7 +101,7 @@ public class ColumnVarietyScoreTest {
                             + e.getMessage());
                 }
 
-        ColumnVarietyScore columnVarietyScore =  new ColumnVarietyScore(5, true);
+        ColumnVarietyScore columnVarietyScore = new ColumnVarietyScore(5, true);
         int actualScore = columnVarietyScore.getScore(grid);
         int expectedScore = 0;
         Assert.assertEquals(expectedScore, actualScore);
@@ -129,7 +131,7 @@ public class ColumnVarietyScoreTest {
                             + e.getMessage());
                 }
 
-        ColumnVarietyScore columnVarietyScore =  new ColumnVarietyScore(4, false);
+        ColumnVarietyScore columnVarietyScore = new ColumnVarietyScore(4, false);
         int actualScore = columnVarietyScore.getScore(grid);
         int expectedScore = 4 * 2;
         Assert.assertEquals(expectedScore, actualScore);
@@ -159,7 +161,7 @@ public class ColumnVarietyScoreTest {
                             + e.getMessage());
                 }
 
-        ColumnVarietyScore columnVarietyScore =  new ColumnVarietyScore(4, false);
+        ColumnVarietyScore columnVarietyScore = new ColumnVarietyScore(4, false);
         int actualScore = columnVarietyScore.getScore(grid);
         int expectedScore = 0;
         Assert.assertEquals(expectedScore, actualScore);
@@ -186,7 +188,7 @@ public class ColumnVarietyScoreTest {
                             + e.getMessage());
                 }
 
-        ColumnVarietyScore columnVarietyScore =  new ColumnVarietyScore(4, false);
+        ColumnVarietyScore columnVarietyScore = new ColumnVarietyScore(4, false);
         int actualScore = columnVarietyScore.getScore(grid);
         int expectedScore = 0;
         Assert.assertEquals(expectedScore, actualScore);

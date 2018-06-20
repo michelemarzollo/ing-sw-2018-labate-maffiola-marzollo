@@ -7,6 +7,11 @@ import org.junit.Test;
 
 import java.util.Random;
 
+/**
+ * Unit tests for {@link GridVarietyScore}.
+ *
+ * @author michelemarzollo
+ */
 public class GridVarietyScoreTest {
 
     //Tests in the case in which the shades are of two values (refers to the card Light Shades)

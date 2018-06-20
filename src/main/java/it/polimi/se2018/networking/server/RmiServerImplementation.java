@@ -5,7 +5,6 @@ import it.polimi.se2018.networking.messages.Message;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Objects;
 
 /**
  * The RMI server implementation, which extends {@link UnicastRemoteObject}, for
