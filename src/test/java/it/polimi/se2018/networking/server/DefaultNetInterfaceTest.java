@@ -30,7 +30,7 @@ public class DefaultNetInterfaceTest {
     public void testAddClientSuccessful(){
         String name = "Pippo";
         DummyClient client = new DummyClient(name);
-        server.getServerNetInterface().addClient(client);
+        server.getServerNetInterface().addClient(client, false);
 
         Assert.assertSame(client, server.getClientFor(name));
         Assert.assertEquals(name, server.getClientFor(name).getUsername());
@@ -44,8 +44,8 @@ public class DefaultNetInterfaceTest {
         String name = "Pippo";
         DummyClient firstClient = new DummyClient(name);
         DummyClient secondClient = new DummyClient(name);
-        server.getServerNetInterface().addClient(firstClient);
-        server.getServerNetInterface().addClient(secondClient);
+        server.getServerNetInterface().addClient(firstClient, false);
+        server.getServerNetInterface().addClient(secondClient, false);
 
         Assert.assertEquals(1, server.getClients().size());
         Assert.assertSame(firstClient,server.getClientFor(name));
@@ -59,7 +59,7 @@ public class DefaultNetInterfaceTest {
     public void testRemoveClient(){
         String name = "Pippo";
         DummyClient client = new DummyClient(name);
-        server.getServerNetInterface().addClient(client);
+        server.getServerNetInterface().addClient(client, false);
         server.getServerNetInterface().removeClient(client);
 
         Assert.assertEquals(0, server.getClients().size());

@@ -38,7 +38,7 @@ public class DelegateNetInterfaceTest {
         String name = "Pippo";
         DummyClient client = new DummyClient(name);
 
-        slave.getServerNetInterface().addClient(client);
+        slave.getServerNetInterface().addClient(client, false);
 
         Assert.assertEquals(0, slave.getClients().size());
 
@@ -56,8 +56,8 @@ public class DelegateNetInterfaceTest {
         String name = "Pippo";
         DummyClient firstClient = new DummyClient(name);
         DummyClient secondClient = new DummyClient(name);
-        slave.getServerNetInterface().addClient(firstClient);
-        slave.getServerNetInterface().addClient(secondClient);
+        slave.getServerNetInterface().addClient(firstClient, false);
+        slave.getServerNetInterface().addClient(secondClient, false);
 
         Assert.assertEquals(0, slave.getClients().size());
 
@@ -75,7 +75,7 @@ public class DelegateNetInterfaceTest {
     public void testRemoveClient(){
         String name = "Pippo";
         DummyClient client = new DummyClient(name);
-        slave.getServerNetInterface().addClient(client);
+        slave.getServerNetInterface().addClient(client, false);
         slave.getServerNetInterface().removeClient(client);
 
         Assert.assertEquals(0, slave.getClients().size());

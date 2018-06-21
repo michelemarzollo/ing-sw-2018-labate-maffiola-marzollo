@@ -37,26 +37,24 @@ public class RmiServerImplementation extends UnicastRemoteObject implements RmiS
     /**
      * The method to ad a client to the server.
      *
-     * @param client the client to add.
+     * @param client        the client to add.
+     * @param isMultiPlayer {@code true} if the client wants to play in multi player mode;
+     *                      {@code false} if it wants ti play in single player mode.
      * @return {@code true} if the client has been added; {@code false} otherwise.
-     * @throws RemoteException if there were problems of communication during
-     *                         the remote method call.
      */
     @Override
-    public boolean addClient(RmiClientInterface client) throws RemoteException {
+    public boolean addClient(RmiClientInterface client, boolean isMultiPlayer) {
         VirtualRmiClient virtualClient = new VirtualRmiClient(server, client);
-        return server.addClient(virtualClient);
+        return server.addClient(virtualClient, isMultiPlayer);
     }
 
     /**
      * The method to remove a client form the server.
      *
      * @param client the client to remove.
-     * @throws RemoteException if there were problems of communication during
-     *                         the remote method call.
      */
     @Override
-    public void removeClient(RmiClientInterface client) throws RemoteException {
+    public void removeClient(RmiClientInterface client) {
         VirtualRmiClient virtualClient = new VirtualRmiClient(server, client);
         server.removeClient(virtualClient);
     }
@@ -65,11 +63,9 @@ public class RmiServerImplementation extends UnicastRemoteObject implements RmiS
      * The method to send a message to the server.
      *
      * @param message the message to be received by the server.
-     * @throws RemoteException if there were problems of communication during
-     *                         the remote method call.
      */
     @Override
-    public void send(Message message) throws RemoteException {
+    public void send(Message message) {
         server.send(message);
     }
 

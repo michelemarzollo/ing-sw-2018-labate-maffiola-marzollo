@@ -46,6 +46,11 @@ public class VirtualTcpClient implements ClientNetInterface, Runnable {
     private final ObjectInputStream inputStream;
 
     /**
+     * Flag to indicate the game mode the player has chosen.
+     */
+    private boolean isMultiPlayer;
+
+    /**
      * Constructor of the class.
      *
      * @param server     The {@link ServerNetInterface} of the VirtualTcpClient that
@@ -70,7 +75,9 @@ public class VirtualTcpClient implements ClientNetInterface, Runnable {
             //Read the message
             Message message = (Message) inputStream.readObject();
             //First message is the username
-            if (message.getCommand() == Command.LOGIN) {
+            if (message.getCommand() == Command.LOGIN_MP
+                    || message.getCommand() == Command.LOGIN_SP) {
+                this.isMultiPlayer = message.getCommand() == Command.LOGIN_MP;
                 this.username = (String) message.getBody();
             }
             return true;
@@ -151,7 +158,7 @@ public class VirtualTcpClient implements ClientNetInterface, Runnable {
         if (!gotUsername)
             terminate();
 
-        boolean added = server.addClient(this);
+        boolean added = server.addClient(this, isMultiPlayer);
         if (!added)
             terminate();
 

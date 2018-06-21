@@ -81,15 +81,18 @@ public class RmiNetworkHandler implements ServerNetInterface {
      * of the client, to interact with the Stub of the server, and passes the
      * remote reference of the client to the server.
      *
-     * @param client the client to connect.
+     * @param client        the client to connect.
+     * @param isMultiPlayer {@code true} if the client is playing in multi player mode;
+     *                      {@code false} if it's playing in single player mode.
+     * @return {@code true} if the client had been added; {@code false} otherwise.
      */
     @Override
-    public boolean addClient(ClientNetInterface client) {
+    public boolean addClient(ClientNetInterface client, boolean isMultiPlayer) {
         try {
             rmiClientInterface = new RmiClientImplementation(client);
             remoteRef = (RmiClientInterface) UnicastRemoteObject.exportObject(
                     rmiClientInterface, 0);
-            return server.addClient(remoteRef);
+            return server.addClient(remoteRef, isMultiPlayer);
         } catch (RemoteException e) {
             Logger.getDefaultLogger().log(ERROR_STRING + e.getMessage() + "!");
         }

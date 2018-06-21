@@ -92,7 +92,6 @@ public class App {
             clientConfigLoader.loadConfiguration();
             Displayer displayer;
             if (parser.isCli())
-                //TODO add full support for CLI
                 displayer = DisplayerFactory.getInstance().newCliDisplayer();
             else if (parser.isGui())
                 displayer = DisplayerFactory.getInstance().newGuiDisplayer();

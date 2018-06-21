@@ -18,7 +18,7 @@ public class RmiServerImplementationTest {
     @Test
     public void testAddClient(){
         DummyServer server = new DummyServer();
-        RmiServerImplementation serverImplementation = null;
+        RmiServerInterface serverImplementation = null;
         try {
             serverImplementation = new RmiServerImplementation(server);
         } catch (RemoteException e) {
@@ -26,7 +26,7 @@ public class RmiServerImplementationTest {
         }
         String name = "Pippo";
         try {
-            serverImplementation.addClient(new RmiClientImplementation(new DummyClient(name)));
+            serverImplementation.addClient(new RmiClientImplementation(new DummyClient(name)), false);
         } catch (RemoteException e) {
             Assert.fail(e.getMessage());
         }
@@ -40,7 +40,7 @@ public class RmiServerImplementationTest {
     @Test
     public void testRemoveClient(){
         DummyServer server = new DummyServer();
-        RmiServerImplementation serverImplementation = null;
+        RmiServerInterface serverImplementation = null;
         try {
             serverImplementation = new RmiServerImplementation(server);
         } catch (RemoteException e) {
@@ -48,7 +48,7 @@ public class RmiServerImplementationTest {
         }
         String name = "Pippo";
         try {
-            serverImplementation.addClient(new RmiClientImplementation(new DummyClient(name)));
+            serverImplementation.addClient(new RmiClientImplementation(new DummyClient(name)), false);
             serverImplementation.removeClient(new RmiClientImplementation(new DummyClient(name)));
         } catch (RemoteException e) {
             Assert.fail(e.getMessage());

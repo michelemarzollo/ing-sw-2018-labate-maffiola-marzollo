@@ -64,16 +64,20 @@ public class DefaultNetInterface implements ServerNetInterface {
      * the view relative to the match is retrieved from the disconnected views
      * repository. Otherwise a new view is created and is linked to a controller.</p>
      *
-     * @param client The client to be associated with a view.
+     * @param client        The client to be associated with a view.
+     * @param isMultiPlayer {@code true} if the client wants to play in multi player mode;
+     *                      {@code false} if it wants ti play in single player mode.
      */
-    private void associateView(ClientNetInterface client) {
+    private void associateView(ClientNetInterface client, boolean isMultiPlayer) {
         VirtualView view = DisconnectedViewsRepository.getInstance()
                 .tryRetrieveViewFor(client.getUsername());
 
         if (view == null) {
             view = new VirtualView(client);
-            //TODO add single player
-            MatchMaker.getInstance().makeMultiPlayerMatchFor(view);
+            if (isMultiPlayer)
+                MatchMaker.getInstance().makeMultiPlayerMatchFor(view);
+            else
+                MatchMaker.getInstance().makeSinglePlayerMatchFor(view);
         } else {
             view.setClient(client);
             // inform controller of reconnection
@@ -85,17 +89,19 @@ public class DefaultNetInterface implements ServerNetInterface {
     /**
      * Adds a new client and associates it with a view.
      *
-     * @param client The newly connected client.
+     * @param client        The newly connected client.
+     * @param isMultiPlayer {@code true} if the client wants to play in multi player mode;
+     *                      {@code false} if it wants ti play in single player mode.
      * @return {@code true} if the client has been added; {@code false} otherwise.
      */
     @Override
-    public boolean addClient(ClientNetInterface client) {
+    public boolean addClient(ClientNetInterface client, boolean isMultiPlayer) {
         boolean clientAdded = server.addClient(client);
 
         if (!clientAdded)
             return false;
 
-        associateView(client);
+        associateView(client, isMultiPlayer);
         return true;
     }
 

@@ -2,14 +2,9 @@ package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.events.*;
 import it.polimi.se2018.networking.client.Client;
-import it.polimi.se2018.networking.client.RmiNetworkHandler;
-import it.polimi.se2018.networking.client.TcpNetworkHandler;
-import it.polimi.se2018.utils.ClientConfiguration;
+import it.polimi.se2018.networking.client.NetworkHandlerFactory;
+import it.polimi.se2018.networking.server.ServerNetInterface;
 import it.polimi.se2018.utils.Coordinates;
-import it.polimi.se2018.utils.Logger;
-import it.polimi.se2018.utils.MissingConfigurationException;
-
-import java.io.IOException;
 
 /**
  * This class represents the client-side view.
@@ -438,60 +433,16 @@ public class ClientView extends View {
     }
 
     public void handleLogin(String playerName, boolean multiPlayer, boolean rmi){
-        //TODO: handle the multiplayer parameter
-        try {
-            if (rmi){
-                handleLogin(playerName, ClientConfiguration.getInstance().getServerAddress(),
-                        ClientConfiguration.getInstance().getServiceName());
-            }
-            else {
-                handleLogin(playerName, ClientConfiguration.getInstance().getServerAddress(),
-                        ClientConfiguration.getInstance().getPortNumber());
-            }
-        } catch (MissingConfigurationException e) {
-            Logger.getDefaultLogger().log("MissingConfigurationException: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Handles the case in which the player logs in.
-     * <p>This method sets the communication protocol with the server to Java RMI.</p>
-     *
-     * @param playerName    The name of the player.
-     * @param serverAddress The address of the server.
-     * @param serviceName   The name of the RMI service on the server.
-     */
-    public void handleLogin(String playerName, String serverAddress, String serviceName) {
-        //TODO add a parameter for the game mode
         setPlayerName(playerName);
         organizer.setLocalPlayer(playerName);
-        client = new Client(this, new RmiNetworkHandler(serverAddress, serviceName));
+        ServerNetInterface netHandler;
+        if (rmi)
+            netHandler = NetworkHandlerFactory.newRmiNetHandler();
+        else
+            netHandler = NetworkHandlerFactory.newTcpNetHandler();
 
-        notifyObservers(new ViewMessage(
-                this,
-                Action.REGISTER_PLAYER,
-                getPlayerName()
-        ));
-    }
-
-    /**
-     * Handles the case in which the player logs in.
-     * <p>This method sets the communication protocol with the server to TCP.</p>
-     *
-     * @param playerName    The name of the player.
-     * @param serverAddress The address of the server.
-     * @param port          The port on the server where the service is listening on.
-     */
-    public void handleLogin(String playerName, String serverAddress, int port) {
-        //TODO add a parameter for the game mode
-        setPlayerName(playerName);
-        organizer.setLocalPlayer(playerName);
-        try {
-            client = new Client(this, new TcpNetworkHandler(serverAddress, port));
-        } catch (IOException e) {
-            Logger.getDefaultLogger().log(e.getMessage());
-            throw new RuntimeException(e.getMessage());
-        }
+        client = new Client(this, netHandler);
+        client.connect(multiPlayer);
 
         notifyObservers(new ViewMessage(
                 this,

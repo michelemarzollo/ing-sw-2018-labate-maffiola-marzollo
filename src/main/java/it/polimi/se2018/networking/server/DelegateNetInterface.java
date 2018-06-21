@@ -37,12 +37,14 @@ public class DelegateNetInterface implements ServerNetInterface {
     /**
      * Delegates the master server to send a message.
      *
-     * @param client the client to be added.
+     * @param client        the client to be added.
+     * @param isMultiPlayer {@code true} if the client wants to play in multi player mode;
+     *                      {@code false} if it wants ti play in single player mode.
      * @return {@code true} if the client has been added; {@code false} otherwise.
      */
     @Override
-    public boolean addClient(ClientNetInterface client) {
-        return server.getMasterServer().getServerNetInterface().addClient(client);
+    public boolean addClient(ClientNetInterface client, boolean isMultiPlayer) {
+        return server.getMasterServer().getServerNetInterface().addClient(client, isMultiPlayer);
     }
 
     /**

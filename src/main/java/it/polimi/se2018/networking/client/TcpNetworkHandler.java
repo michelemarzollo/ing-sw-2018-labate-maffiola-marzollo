@@ -123,12 +123,16 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
      * The method to add a client to the server.
      *
      * @param client the client to add.
+     * @param isMultiPlayer {@code true} if the client is playing in multi player mode;
+     *                      {@code false} if it's playing in single player mode.
+     *
      * @return {@code true} if the client had been added; {@code false} otherwise.
      */
     @Override
-    public boolean addClient(ClientNetInterface client) {
+    public boolean addClient(ClientNetInterface client, boolean isMultiPlayer) {
         this.client = client;
-        send(new Message(Command.LOGIN, client.getUsername()));
+        Command command = isMultiPlayer ? Command.LOGIN_MP : Command.LOGIN_SP;
+        send(new Message(command, client.getUsername()));
         try {
             Message ack = (Message) inputStream.readObject();
             sentUsername.release();

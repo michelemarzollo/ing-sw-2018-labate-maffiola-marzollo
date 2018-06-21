@@ -31,7 +31,7 @@ public class DummyServer implements ServerNetInterface {
      * @return {@code true} if the client has been added; {@code false} otherwise.
      */
     @Override
-    public boolean addClient(ClientNetInterface client) {
+    public boolean addClient(ClientNetInterface client, boolean isMultiPlayer) {
         return clients.add(client);
     }
 

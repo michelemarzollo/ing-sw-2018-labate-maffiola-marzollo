@@ -13,6 +13,7 @@ public enum Command {
     MODEL_UPDATE,
     VIEW_MESSAGE,
     ACK,
-    LOGIN
+    LOGIN_MP,
+    LOGIN_SP
 
 }
