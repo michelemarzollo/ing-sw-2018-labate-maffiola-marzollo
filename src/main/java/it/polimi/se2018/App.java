@@ -42,7 +42,9 @@ public class App {
         ClaParser parser = new ClaParser();
         parser.parse(args);
 
-        if (parser.isServer())
+        if (parser.isError() || parser.isHelp())
+            printUsage();
+        else if (parser.isServer())
             launchServer(parser);
         else
             launchClient(parser);
@@ -87,7 +89,7 @@ public class App {
     private static void launchClient(ClaParser parser) {
         try {
             XmlClientConfigLoader clientConfigLoader = new XmlClientConfigLoader(parser.getConfigLocation());
-            ClientConfiguration configuration = clientConfigLoader.loadConfiguration();
+            clientConfigLoader.loadConfiguration();
             Displayer displayer;
             if (parser.isCli())
                 //TODO add full support for CLI

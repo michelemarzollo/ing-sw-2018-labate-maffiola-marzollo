@@ -1,10 +1,13 @@
 package it.polimi.se2018.utils;
 
 /**
- * This class is a command line arguments parser. It is used to parse the
+ * This class is a command line arguments parser.
+ * <p>It is used to parse the
  * command line input and find what commands have been inserted: it saves the
  * commands that have been selected and is able to say if some mistake have
- * been made when inserting the input.
+ * been made when inserting the input.</p>
+ * <p>Only one among {@code isServer()}, {@code isCli()} and {@code isGui()} can be
+ * true at any given time.</p>
  */
 public class ClaParser {
 
@@ -49,63 +52,36 @@ public class ClaParser {
      */
     public void parse(String[] args) {
 
-        for (String arg : args) {
-            if ("--server".equals(arg.trim())) {
-                setServer();
-            }
-            else if ("--gui".equals(arg.trim())) {
-                setGui();
-            }
-            else if ("--cli".equals(arg.trim())) {
-                setCli();
-            }
-            else if ("--help".equals(arg.trim())) {
-                setHelp();
-            }
-            else if ("--config".equals(splitOnWhiteSpaces(arg.trim())[0])) {
-                if(!handleConfigCommand(arg.trim())){
-                    return;
+        boolean expectPath = false;
+        try {
+            for (String arg : args) {
+                if ("--server".equals(arg.trim()))
+                    setServer();
+                else if ("--gui".equals(arg.trim()))
+                    setGui();
+                else if ("--cli".equals(arg.trim()))
+                    setCli();
+                else if ("--help".equals(arg.trim()))
+                    setHelp();
+                else if ("--config".equals(arg.trim()))
+                    expectPath = true;
+                else if (expectPath) {
+                    setConfigLocation(arg);
+                    expectPath = false;
                 }
+                //A not valid argument has been passed.
+                else
+                    throw new ConfigurationError();
             }
-            //A not valid argument has been passed.
-            else {
-                setError();
-                return;
-            }
-        }
-    }
-
-    /**
-     * Helper for the parse method.
-     * @param arg The command that has to be analyzed
-     * @return an array of strings that represent the strings contained in
-     * {@code command} split on multiple white spaces.
-     */
-    private String[] splitOnWhiteSpaces(String arg){
-        return arg.split("\\s+");
-    }
-
-    /**
-     * Helper for the parse method. Set the ConfigLocation if the second string
-     * of the command ({@code arg}) that represents the file path is present or
-     * register the error otherwise.
-     * @param arg The command line argument for the configuration file.
-     * @return {@code true} if the configuration file command syntax
-     * was correct, {@code false} otherwise.
-     */
-    private boolean handleConfigCommand(String arg){
-        if(splitOnWhiteSpaces(arg).length == 1){
+        } catch (ConfigurationError e) {
+            Logger.getDefaultLogger().log("exc");
             setError();
-            return false;
-        }
-        else {
-            setConfigLocation(splitOnWhiteSpaces(arg)[1]);
-            return true;
         }
     }
 
     /**
      * Getter for the isServer attribute.
+     *
      * @return {@code true} if the '--server' command has been inserted,
      * {@code false otherwise}.
      */
@@ -116,13 +92,19 @@ public class ClaParser {
     /**
      * Setter for the isServer attribute: sets isServer to {@code true} if the
      * '--server' command has been inserted.
+     *
+     * @throws ConfigurationError if at least one among {@code isServer()}, {@code isCli()}
+     *                            and {@code isGui()} is already true.
      */
-    private void setServer() {
+    private void setServer() throws ConfigurationError {
+        if (isServer() || isCli() || isGui())
+            throw new ConfigurationError();
         isServer = true;
     }
 
     /**
      * Getter for the isCli attribute.
+     *
      * @return {@code true} if the '--cli' command has been inserted,
      * {@code false otherwise}.
      */
@@ -133,13 +115,19 @@ public class ClaParser {
     /**
      * Setter for the isCli attribute: sets isCli to {@code true} if the
      * '--cli' command has been inserted.
+     *
+     * @throws ConfigurationError if at least one among {@code isServer()}, {@code isCli()}
+     *                            and {@code isGui()} is already true.
      */
-    private void setCli() {
+    private void setCli() throws ConfigurationError {
+        if (isServer() || isCli() || isGui())
+            throw new ConfigurationError();
         isCli = true;
     }
 
     /**
      * Getter for the isGui attribute.
+     *
      * @return {@code true} if the '--gui' command has been inserted,
      * {@code false otherwise}.
      */
@@ -150,13 +138,19 @@ public class ClaParser {
     /**
      * Setter for the isGui attribute: sets isGui to {@code true} if the
      * '--gui' command has been inserted.
+     *
+     * @throws ConfigurationError if at least one among {@code isServer()}, {@code isCli()}
+     *                            and {@code isGui()} is already true.
      */
-    private void setGui() {
+    private void setGui() throws ConfigurationError {
+        if (isServer() || isCli() || isGui())
+            throw new ConfigurationError();
         isGui = true;
     }
 
     /**
      * Getter for the isHelp attribute.
+     *
      * @return {@code true} if the '--help' command has been inserted,
      * {@code false otherwise}.
      */
@@ -174,15 +168,16 @@ public class ClaParser {
 
     /**
      * Getter for the isError attribute.
+     *
      * @return {@code true} if at least one of the inserted commands {@code args}
      * have a non correct syntax, {@code false otherwise}.
      */
     public boolean isError() {
-        return isError;
+        return isError || getConfigLocation() == null || !(isServer() || isCli() || isGui());
     }
 
     /**
-     * Setter for the isError attribute: sets isError to {@code true} if {@code parse}
+     * Setter for the isError attribute: forces isError to {@code true} if {@code parse}
      * find an argument with a incorrect syntax.
      */
     private void setError() {
@@ -191,6 +186,7 @@ public class ClaParser {
 
     /**
      * Getter for the configLocation
+     *
      * @return The path where to find the configuration file.
      */
     public String getConfigLocation() {
@@ -199,10 +195,17 @@ public class ClaParser {
 
     /**
      * Setter for the configLocation
+     *
      * @param configLocation The string that represents the path where to find the
      *                       configuration file.
      */
     private void setConfigLocation(String configLocation) {
         this.configLocation = configLocation;
+    }
+
+    /**
+     * Internal exception to signal error during parsing.
+     */
+    private static class ConfigurationError extends Exception {
     }
 }

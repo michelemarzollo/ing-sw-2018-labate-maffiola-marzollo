@@ -246,4 +246,15 @@ public class Pattern {
     public void setSelectionHandler(Consumer<Coordinates> handler) {
         this.handler = handler;
     }
+
+    /**
+     * Sets a player as disconnected.
+     * <p>Its name and pattern name labels will be set disabled to graphically
+     * notify the player.</p>
+     * @param disconnected Flag to indicate if the player has to be set connected or disconnected.
+     */
+    public void setDisconnected(boolean disconnected) {
+        playerNameLabel.setDisable(disconnected);
+        patternNameLabel.setDisable(disconnected);
+    }
 }

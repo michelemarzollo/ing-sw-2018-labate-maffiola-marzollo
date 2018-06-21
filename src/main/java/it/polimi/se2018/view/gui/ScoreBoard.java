@@ -87,7 +87,7 @@ public class ScoreBoard {
             fillGrid(unitsGrid, units, playerIndex);
 
             Label playerName = new Label();
-            String text = String.format("%d. %s (%d)", playerIndex, entry.getKey(), entry.getValue());
+            String text = String.format("%d. %s (%d)", playerIndex + 1, entry.getKey(), entry.getValue());
             playerName.setText(text);
             playerName.setTextFill(colors[playerIndex]);
             playerName.setStyle("-fx-font-weight: bold;" +

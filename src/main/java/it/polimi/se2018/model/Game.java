@@ -1,10 +1,14 @@
 package it.polimi.se2018.model;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import it.polimi.se2018.model.events.*;
+import it.polimi.se2018.model.events.GameEnd;
+import it.polimi.se2018.model.events.GameSetup;
+import it.polimi.se2018.model.events.ModelUpdate;
 import it.polimi.se2018.utils.Observable;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The class that represents the status of the game
@@ -180,8 +184,8 @@ public class Game extends Observable<ModelUpdate> {
      * @param scoreBoard The final ranking as an ordered array of players.
      */
     public void setScoreBoard(List<Player> scoreBoard) {
-        Map<String, Integer> scoreMap = scoreBoard.stream()
-                .collect(Collectors.toMap(Player::getName, Player::getScore));
+        Map<String, Integer> scoreMap = new LinkedHashMap<>();
+        scoreBoard.forEach(p -> scoreMap.put(p.getName(), p.getScore()));
         GameEnd message = new GameEnd(scoreMap);
         notifyObservers(message);
         this.scoreBoard = scoreBoard;
@@ -202,7 +206,6 @@ public class Game extends Observable<ModelUpdate> {
      * are instantiated and game status updated to started.</p>
      * After {@code start} execution is no one's turn yet:
      * {@link it.polimi.se2018.controller.Controller} will set it.
-     *
      */
     public void start() {
         if (setupComplete && !started) {

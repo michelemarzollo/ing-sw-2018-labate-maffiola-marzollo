@@ -3,6 +3,7 @@ package it.polimi.se2018.view.gui;
 import it.polimi.se2018.model.ObjectiveCard;
 import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.model.events.GameSetup;
+import it.polimi.se2018.model.events.PlayerConnectionStatus;
 import it.polimi.se2018.model.events.PlayerStatus;
 import it.polimi.se2018.utils.Coordinates;
 import it.polimi.se2018.utils.Logger;
@@ -342,7 +343,25 @@ public abstract class GameBoard {
             PlayerStatus playerStatus = getDisplayer().getDataOrganizer().getPlayerStatus(entry.getKey());
             if(playerStatus != null)
                 entry.getValue().setStatus(playerStatus);
+            checkConnected(entry.getValue(), entry.getKey());
         }
+    }
+
+    /**
+     * Checks if an opponent is connected or disconnected.
+     * <p>If the player results disconnected, its pattern is altered in order to
+     * display such information.</p>
+     * @param pattern The pattern layout of the player.
+     * @param playerName The name of the player to be checked.
+     */
+    private void checkConnected(Pattern pattern, String playerName) {
+        PlayerConnectionStatus connectionStatus =
+                getDisplayer().getDataOrganizer().getConnectionStatus(playerName);
+
+        if (connectionStatus == null || connectionStatus.isConnected())
+            pattern.setDisconnected(false);
+        else
+            pattern.setDisconnected(true);
     }
 
     /**

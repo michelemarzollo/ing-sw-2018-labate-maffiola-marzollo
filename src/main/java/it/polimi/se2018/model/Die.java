@@ -37,7 +37,7 @@ public class Die implements Serializable {
      * @param colour The colour of the Die.
      */
     public Die(Random random, Colour colour) {
-        this.value = random.nextInt(5)+1;
+        this.value = random.nextInt(6)+1;
         this.random = random;
         this.colour = colour;
     }

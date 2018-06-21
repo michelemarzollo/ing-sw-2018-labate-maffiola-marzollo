@@ -1,6 +1,8 @@
 package it.polimi.se2018.model;
 
-public abstract class ObjectiveCard {
+import java.io.Serializable;
+
+public abstract class ObjectiveCard implements Serializable {
 
     /**
      * The name of the Objective Card.

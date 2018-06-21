@@ -227,10 +227,10 @@ public class TurnManager {
 
         Player nextPlayer = turnIterator.next();
         //skip all player whose second turn has been consumed
-        while (playersToSkip.contains(nextPlayer) && turnIterator.hasNext())
+        while (skipPlayer(nextPlayer) && turnIterator.hasNext())
             nextPlayer = turnIterator.next();
 
-        if (playersToSkip.contains(nextPlayer))
+        if (skipPlayer(nextPlayer))
             //no players have a second turn this round, so move the game forward.
             return false;
 
@@ -239,6 +239,15 @@ public class TurnManager {
 
         return true;
 
+    }
+
+    /**
+     * Tells if a player has to be skipped.
+     * @param player The player to check.
+     * @return {@code true} if the player has to be skipped; {@code false} otherwise.
+     */
+    private boolean skipPlayer(Player player){
+        return playersToSkip.contains(player) || !player.isConnected();
     }
 
     /**

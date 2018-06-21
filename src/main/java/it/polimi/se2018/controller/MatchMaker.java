@@ -60,12 +60,13 @@ public class MatchMaker {
 
                 multiPlayer = new WeakReference<>(controller);
 
-                view.registerObserver(controller);
 
             } catch (MissingConfigurationException e) {
                 Logger.getDefaultLogger().log(e.getMessage());
+                return;
             }
         }
+        view.registerObserver(controller);
     }
 
     /**

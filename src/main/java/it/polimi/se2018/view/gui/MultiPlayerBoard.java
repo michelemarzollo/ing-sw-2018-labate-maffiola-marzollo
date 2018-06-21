@@ -1,6 +1,5 @@
 package it.polimi.se2018.view.gui;
 
-import it.polimi.se2018.model.events.PlayerConnectionStatus;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.layout.AnchorPane;
@@ -41,28 +40,10 @@ public class MultiPlayerBoard extends GameBoard {
         for (String playerName : getDisplayer().getDataOrganizer().getGameSetup().getPlayers()) {
             if (!playerName.equals(localPlayer)) {
                 AnchorPane pattern = loadOpponentPattern(playerName);
-                checkConnected(pattern, playerName);
                 opponentsContainer.getChildren().addAll(pattern);
             }
         }
         opponentsContainer.setAlignment(Pos.CENTER);
-    }
-
-    /**
-     * Checks if an opponent is connected or disconnected.
-     * <p>If the player results disconnected, its pattern is altered in order to
-     * display such information.</p>
-     * @param pattern The pattern layout of the player.
-     * @param playerName The name of the player to be checked.
-     */
-    private void checkConnected(AnchorPane pattern, String playerName) {
-        PlayerConnectionStatus connectionStatus =
-                getDisplayer().getDataOrganizer().getConnectionStatus(playerName);
-
-        if (connectionStatus == null || connectionStatus.isConnected())
-            pattern.setDisable(false);
-        else
-            pattern.setDisable(true);
     }
 
     /**
