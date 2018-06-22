@@ -2,7 +2,7 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.events.Action;
-import it.polimi.se2018.model.events.MoveTwoDice;
+import it.polimi.se2018.model.events.MoveDice;
 import it.polimi.se2018.model.events.ViewMessage;
 import it.polimi.se2018.utils.Coordinates;
 import it.polimi.se2018.utils.DieUtils;
@@ -16,9 +16,9 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Unit tests for TapWheelBehaviour class.
+ * Unit tests for MoveSomeDiceBehaviour class.
  */
-public class TapWheelBehaviourTest {
+public class MoveSomeDiceBehaviourTest {
 
     /**
      * Tests if requirements are met.
@@ -28,7 +28,7 @@ public class TapWheelBehaviourTest {
         Game game = GameUtils.getHalfwayGame();
         if (game == null)
             Assert.fail("Error on game initialization");
-        TapWheelBehaviour behaviour = new TapWheelBehaviour();
+        MoveSomeDiceBehaviour behaviour = new MoveSomeDiceBehaviour();
         Assert.assertTrue(behaviour.areRequirementsSatisfied(game));
     }
 
@@ -45,7 +45,7 @@ public class TapWheelBehaviourTest {
                 "Pippo"
         );
 
-        TapWheelBehaviour behaviour = new TapWheelBehaviour();
+        MoveSomeDiceBehaviour behaviour = new MoveSomeDiceBehaviour();
         behaviour.askParameters(message);
 
         Assert.assertEquals(1, mockView.getCalledMethods().size());
@@ -75,7 +75,7 @@ public class TapWheelBehaviourTest {
     }
 
     private Game setupSuccessScenario(MockView mockView) {
-        MoveTwoDice message = new MoveTwoDice(
+        MoveDice message = new MoveDice(
                 new Coordinates[]{
                         new Coordinates(1, 0),
                         new Coordinates(2, 2)
@@ -146,7 +146,7 @@ public class TapWheelBehaviourTest {
      *
      * @param game         The game to be manipulated.
      * @param insertYellow Flag to indicate if a yellow die has to be inserted.
-     * @see TapWheelBehaviourTest#getLeftovers(boolean)
+     * @see MoveSomeDiceBehaviourTest#getLeftovers(boolean)
      */
     private void fillRoundTrack(Game game, boolean insertYellow) {
         game.getRoundTrack().addAllForRound(1, getLeftovers(insertYellow));
@@ -162,7 +162,7 @@ public class TapWheelBehaviourTest {
      *                     be successful.
      * @return An instance of Game just after the behaviour has been applied.
      */
-    private Game setupScenario(MoveTwoDice message, boolean insertYellow, boolean isSuccess) {
+    private Game setupScenario(MoveDice message, boolean insertYellow, boolean isSuccess) {
         Game game = GameUtils.getHalfwayGame();
         if (game == null)
             Assert.fail("Error on game initialization");
@@ -172,7 +172,7 @@ public class TapWheelBehaviourTest {
         boolean control = placeSomeDice(player);
         Assert.assertTrue("Error on placement", control);
 
-        TapWheelBehaviour behaviour = new TapWheelBehaviour();
+        MoveSomeDiceBehaviour behaviour = new MoveSomeDiceBehaviour();
         boolean success = behaviour.useToolCard(game, message);
 
         Assert.assertEquals(isSuccess, success);
@@ -188,7 +188,7 @@ public class TapWheelBehaviourTest {
      * @return An instance of Game just after the behaviour has been applied.
      */
     private Game setupBadColourScenario(MockView mockView) {
-        MoveTwoDice message = new MoveTwoDice(
+        MoveDice message = new MoveDice(
                 new Coordinates[]{
                         new Coordinates(1, 0),
                         new Coordinates(2, 2)
@@ -254,7 +254,7 @@ public class TapWheelBehaviourTest {
     }
 
     private Game setupBadAmountScenario(MockView mockView) {
-        MoveTwoDice message = new MoveTwoDice(
+        MoveDice message = new MoveDice(
                 new Coordinates[]{
                         new Coordinates(1, 0),
                         new Coordinates(2, 2)

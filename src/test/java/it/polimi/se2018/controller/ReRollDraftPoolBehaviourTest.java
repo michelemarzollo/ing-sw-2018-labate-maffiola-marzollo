@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Unit tests for GlazinHammerBehaviour class.
+ * Unit tests for ReRollDraftPoolBehaviour class.
  */
-public class GlazingHammerBehaviourTest {
+public class ReRollDraftPoolBehaviourTest {
 
     /**
      * Tests if requirements are not met when a player has already placed a die.
@@ -26,7 +26,7 @@ public class GlazingHammerBehaviourTest {
         if (game == null)
             Assert.fail("Error on game initialization");
         game.getTurnManager().getCurrentTurn().placeDie();
-        GlazingHammerBehaviour behaviour = new GlazingHammerBehaviour();
+        ReRollDraftPoolBehaviour behaviour = new ReRollDraftPoolBehaviour();
         Assert.assertFalse(behaviour.areRequirementsSatisfied(game));
     }
 
@@ -43,7 +43,7 @@ public class GlazingHammerBehaviourTest {
                 "Pippo"
         );
 
-        GlazingHammerBehaviour behaviour = new GlazingHammerBehaviour();
+        ReRollDraftPoolBehaviour behaviour = new ReRollDraftPoolBehaviour();
         behaviour.askParameters(message);
 
         Assert.assertEquals(1, mockView.getCalledMethods().size());
@@ -68,7 +68,7 @@ public class GlazingHammerBehaviourTest {
                 "Pippo"
         );
 
-        GlazingHammerBehaviour behaviour = new GlazingHammerBehaviour();
+        ReRollDraftPoolBehaviour behaviour = new ReRollDraftPoolBehaviour();
         boolean success = behaviour.useToolCard(game, message);
 
         Assert.assertTrue(success);

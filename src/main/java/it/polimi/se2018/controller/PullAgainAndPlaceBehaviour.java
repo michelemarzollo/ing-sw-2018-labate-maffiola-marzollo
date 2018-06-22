@@ -9,14 +9,12 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * The class to describe the behaviour of the Flux Remover ToolCard
- * {@link it.polimi.se2018.model.ToolCard}. (Tool Card 11)
- * <p>
- * The ToolCard allows to change a die form the {@link DraftPool}
- * with a Die drafted randomly from the {@link DiceBag}. The value of
- * the new die is chosen by the player.</p>
+ * This class manages the usage of tool cards that puts a die back in the dice bag
+ * and pulls a new one, allowing the player to select the value before placing it.
+ *
+ * @author michelemarzollo
  */
-public class FluxRemoverBehaviour implements ToolCardBehaviour {
+public class PullAgainAndPlaceBehaviour implements ToolCardBehaviour {
 
     /**
      * The attribute to indicate if the first part of the procedure linked
@@ -51,7 +49,7 @@ public class FluxRemoverBehaviour implements ToolCardBehaviour {
     }
 
     /**
-     * The method to use the Flux Remover ToolCard.
+     * Applies the effect of the tool card.
      * <p>
      * The action is divided in two steps: in the first one the chosen die of the
      * DraftPool is changed with one die from the DiceBag. In the second one the

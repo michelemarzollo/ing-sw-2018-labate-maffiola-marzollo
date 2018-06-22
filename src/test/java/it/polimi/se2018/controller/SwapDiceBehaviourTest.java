@@ -18,9 +18,9 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Unit tests for LensCutterBehaviour class.
+ * Unit tests for SwapDiceBehaviour class.
  */
-public class LensCutterBehaviourTest {
+public class SwapDiceBehaviourTest {
 
     /**
      * Tests if requirements are not met when the player has already placed a die.
@@ -31,7 +31,7 @@ public class LensCutterBehaviourTest {
         if (game == null)
             Assert.fail("Error on game initialization");
         game.getTurnManager().getCurrentTurn().placeDie();
-        LensCutterBehaviour behaviour = new LensCutterBehaviour();
+        SwapDiceBehaviour behaviour = new SwapDiceBehaviour();
         Assert.assertFalse(behaviour.areRequirementsSatisfied(game));
     }
 
@@ -48,7 +48,7 @@ public class LensCutterBehaviourTest {
                 "Pippo"
         );
 
-        LensCutterBehaviour behaviour = new LensCutterBehaviour();
+        SwapDiceBehaviour behaviour = new SwapDiceBehaviour();
         behaviour.askParameters(message);
 
         Assert.assertEquals(1, mockView.getCalledMethods().size());
@@ -78,7 +78,7 @@ public class LensCutterBehaviourTest {
                 "Pippo"
         );
 
-        LensCutterBehaviour behaviour = new LensCutterBehaviour();
+        SwapDiceBehaviour behaviour = new SwapDiceBehaviour();
         boolean success = behaviour.useToolCard(game, message);
 
         Assert.assertTrue(success);
@@ -107,7 +107,7 @@ public class LensCutterBehaviourTest {
                 "Pippo"
         );
 
-        LensCutterBehaviour behaviour = new LensCutterBehaviour();
+        SwapDiceBehaviour behaviour = new SwapDiceBehaviour();
         boolean success = behaviour.useToolCard(game, message);
 
         Assert.assertFalse(success);

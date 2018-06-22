@@ -6,7 +6,6 @@ import it.polimi.se2018.utils.Coordinates;
 import it.polimi.se2018.view.*;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.function.Consumer;
@@ -609,7 +608,7 @@ public class CliDisplayer implements Displayer {
             source = readCoordinates();
             output.printTextNewLine("Enter the destination coordinates:");
             destination = readCoordinates();
-            view.handleToolCardUsage(source, destination);
+            view.handleToolCardUsage(new Coordinates[]{source}, new Coordinates[]{destination});
             return;
         }
         if (amount == 2) {
@@ -631,7 +630,7 @@ public class CliDisplayer implements Displayer {
     /**
      * Displays the possibility of swapping two dice between the Draft Pool
      * and the RoundTrack inserting an appropriate input. It is invoked
-     * by the {@link it.polimi.se2018.controller.LensCutterBehaviour}, it
+     * by the {@link it.polimi.se2018.controller.SwapDiceBehaviour}, it
      * is the dedicated view for it.
      */
     @Override
@@ -651,7 +650,7 @@ public class CliDisplayer implements Displayer {
     /**
      * Displays the possibility of choosing a value for a die drafted from the
      * {@link DiceBag} and to put it on the user's Pattern inserting an appropriate input.
-     * It is invoked from the {@link it.polimi.se2018.controller.FluxRemoverBehaviour}, it
+     * It is invoked from the {@link it.polimi.se2018.controller.PullAgainAndPlaceBehaviour}, it
      * is the dedicated view for the second step of its usage.
      */
     @Override
@@ -672,7 +671,7 @@ public class CliDisplayer implements Displayer {
     /**
      * Displays the selection of a die and the choice about incrementin or
      * decrementing its value inserting an appropriate input.
-     * It is invoked by the {@link it.polimi.se2018.controller.GrozingPliersBehaviour},
+     * It is invoked by the {@link it.polimi.se2018.controller.AlterDieValueBehaviour},
      * it is the dedicated view for it.
      */
     @Override

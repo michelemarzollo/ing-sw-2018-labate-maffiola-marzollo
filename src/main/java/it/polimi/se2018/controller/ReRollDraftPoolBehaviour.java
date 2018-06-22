@@ -9,12 +9,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Represents the "Glazing Hammer" tool card.
- * <p>The effect of this tool card is to re-roll all dice that are
- * currently in the draft pool.</p>
- * <p>This tool card doesn't require any parameters to be applied.</p>
+ * This class manages the usage of tool cards that re-rolls all dice in the draft pool.
+ *
+ * @author dvdmff
  */
-public class GlazingHammerBehaviour implements ToolCardBehaviour {
+public class ReRollDraftPoolBehaviour implements ToolCardBehaviour {
 
     /**
      * Tells if the tool card can be applied.
@@ -35,6 +34,7 @@ public class GlazingHammerBehaviour implements ToolCardBehaviour {
     /**
      * Does nothing.
      * <p>The card doesn't require parameters.</p>
+     *
      * @param message The message sent by the view.
      */
     @Override
@@ -44,7 +44,8 @@ public class GlazingHammerBehaviour implements ToolCardBehaviour {
 
     /**
      * Re-rolls all dice in the draft pool.
-     * @param game The game the effect has to be applied to.
+     *
+     * @param game    The game the effect has to be applied to.
      * @param message The message sent by th view.
      * @return Always {@code true}.
      */

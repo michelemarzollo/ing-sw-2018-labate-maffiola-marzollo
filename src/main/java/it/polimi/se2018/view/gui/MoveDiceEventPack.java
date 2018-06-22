@@ -32,6 +32,7 @@ public class MoveDiceEventPack extends BoardEventPack {
     /**
      * Creates a new instance that uses the specified client view to handle
      * requests.
+     *
      * @param clientView The client view responsible for requests.
      */
     public MoveDiceEventPack(ClientView clientView, int amount, boolean moveAll) {
@@ -43,6 +44,7 @@ public class MoveDiceEventPack extends BoardEventPack {
 
     /**
      * Does noting.
+     *
      * @param index The index of the selected die.
      */
     @Override
@@ -52,6 +54,7 @@ public class MoveDiceEventPack extends BoardEventPack {
 
     /**
      * Does noting.
+     *
      * @param coordinates The coordinates of the selected die.
      */
     @Override
@@ -65,26 +68,24 @@ public class MoveDiceEventPack extends BoardEventPack {
      * 2nd source, 2nd destination.</p>
      * <p>After all selections are collected, the client view is notified and
      * the data reset.</p>
+     *
      * @param coordinates The coordinates of the selected cell.
      */
     @Override
     public void patternHandler(Coordinates coordinates) {
         boolean goOn = true;
-        if(sources.size() == currentIndex)
+        if (sources.size() == currentIndex)
             sources.add(coordinates);
-        else if(destinations.size() == currentIndex) {
+        else if (destinations.size() == currentIndex) {
             destinations.add(coordinates);
             ++currentIndex;
-            if(currentIndex != amount && !moveAll)
+            if (currentIndex != amount && !moveAll)
                 goOn = askContinue();
         }
-        if(!goOn || currentIndex == amount){
-            if(amount == 1)
-                getClientView().handleToolCardUsage(sources.get(0), destinations.get(0));
-            else
-                getClientView().handleToolCardUsage(
-                        sources.toArray(new Coordinates[0]),
-                        destinations.toArray(new Coordinates[0]));
+        if (!goOn || currentIndex == amount) {
+            getClientView().handleToolCardUsage(
+                    sources.toArray(new Coordinates[0]),
+                    destinations.toArray(new Coordinates[0]));
             reset();
         }
     }
@@ -99,6 +100,7 @@ public class MoveDiceEventPack extends BoardEventPack {
 
     /**
      * Disables every control but the player pattern.
+     *
      * @param board The GameBoard instance displaying the game.
      */
     @Override
@@ -110,6 +112,7 @@ public class MoveDiceEventPack extends BoardEventPack {
 
     /**
      * Does noting.
+     *
      * @param cardName The name of the tool card.
      */
     @Override

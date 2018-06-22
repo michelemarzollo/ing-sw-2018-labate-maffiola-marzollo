@@ -192,18 +192,19 @@ public abstract class Controller implements Observer<ViewMessage> {
      */
     private void registerToolCardBehaviors(Map<String, ToolCardBehaviour> behaviors) {
 
-        behaviors.put("Grozing Pliers", new GrozingPliersBehaviour());
-        behaviors.put("Eglomise Brush", new EglomiseBrushBehaviour());
-        behaviors.put("Copper Foil Burnisher", new CopperFoilBurnisherBehaviour());
-        behaviors.put("Lathekin", new LathekinBehaviour());
-        behaviors.put("Lens Cutter", new LensCutterBehaviour());
-        behaviors.put("Flux Brush", new FluxBrushBehaviour());
-        behaviors.put("Glazing Hammer", new GlazingHammerBehaviour());
-        behaviors.put("Running Pliers", new RunningPliersBehaviour());
-        behaviors.put("Cork-backed Straightedge", new CorkBackedStraightedgeBehaviour());
-        behaviors.put("Grinding Stone", new GrindingStoneBehaviour());
-        behaviors.put("Flux Remover", new FluxRemoverBehaviour());
-        behaviors.put("Tap Wheel", new TapWheelBehaviour());
+        behaviors.put("Grozing Pliers", new AlterDieValueBehaviour(true));
+        behaviors.put("Eglomise Brush", new MoveDiceBehaviour(1, Restriction.ONLY_VALUE));
+        behaviors.put("Copper Foil Burnisher", new MoveDiceBehaviour(1, Restriction.ONLY_COLOUR));
+        behaviors.put("Lathekin", new MoveDiceBehaviour(2, Restriction.DEFAULT));
+        behaviors.put("Lens Cutter", new SwapDiceBehaviour());
+        behaviors.put("Flux Brush", new ReRollDieBehaviour());
+        behaviors.put("Glazing Hammer", new ReRollDraftPoolBehaviour());
+        behaviors.put("Running Pliers", new PlaceDieBehaviour(true, Restriction.DEFAULT));
+        behaviors.put("Cork-backed Straightedge",
+                new PlaceDieBehaviour(false, Restriction.NOT_ADJACENT));
+        behaviors.put("Grinding Stone", new AlterDieValueBehaviour(false));
+        behaviors.put("Flux Remover", new PullAgainAndPlaceBehaviour());
+        behaviors.put("Tap Wheel", new MoveSomeDiceBehaviour());
     }
 
     /**
@@ -459,15 +460,14 @@ public abstract class Controller implements Observer<ViewMessage> {
             return;
         }
 
-        ToolCardBehaviour behavior = toolCardBehaviors.get(game.getTurnManager().getCurrentTurn().getSelectedToolCard().getName());
+        ToolCardBehaviour behavior =
+                toolCardBehaviors.get(game.getTurnManager().getCurrentTurn().getSelectedToolCard().getName());
 
         if (behavior != null) {
             boolean success = behavior.useToolCard(getGame(), message);
             if (success) {
                 getGame().getTurnManager().getCurrentTurn().useToolCard();
                 consumeResources(message);
-            } else {
-                //getGame().getTurnManager().getCurrentTurn().setSelectedToolCard(null);
             }
         }
 
@@ -572,7 +572,6 @@ public abstract class Controller implements Observer<ViewMessage> {
             endTurn(message);
         }
     }
-
 
     boolean acceptsNewPlayers() {
         return !getGame().isSetupComplete();

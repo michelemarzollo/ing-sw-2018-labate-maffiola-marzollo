@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Unit tests for FluxRemoverBehaviour class.
+ * Unit tests for PullAgainAndPlaceBehaviour class.
  */
-public class FluxRemoverBehaviourTest {
+public class PullAgainAndPlaceBehaviourTest {
 
     /**
      * Tests if the requirements are not met when a player has already placed a die.
@@ -32,7 +32,7 @@ public class FluxRemoverBehaviourTest {
         if (game == null)
             Assert.fail("Error on game initialization");
         game.getTurnManager().getCurrentTurn().placeDie();
-        FluxRemoverBehaviour behaviour = new FluxRemoverBehaviour();
+        PullAgainAndPlaceBehaviour behaviour = new PullAgainAndPlaceBehaviour();
         Assert.assertFalse(behaviour.areRequirementsSatisfied(game));
     }
 
@@ -49,7 +49,7 @@ public class FluxRemoverBehaviourTest {
                 "Pippo"
         );
 
-        FluxRemoverBehaviour behaviour = new FluxRemoverBehaviour();
+        PullAgainAndPlaceBehaviour behaviour = new PullAgainAndPlaceBehaviour();
         behaviour.askParameters(message);
 
         Assert.assertEquals(1, mockView.getCalledMethods().size());
@@ -61,9 +61,9 @@ public class FluxRemoverBehaviourTest {
      *
      * @param game     The game the tool card is applied to.
      * @param mockView The mock view used to register method calls.
-     * @return A FluxRemoverBehaviour that is ready for the second stage.
+     * @return A PullAgainAndPlaceBehaviour that is ready for the second stage.
      */
-    private FluxRemoverBehaviour applyFirstStep(Game game, MockView mockView) {
+    private PullAgainAndPlaceBehaviour applyFirstStep(Game game, MockView mockView) {
         SelectDie message = new SelectDie(
                 1,
                 mockView,
@@ -74,7 +74,7 @@ public class FluxRemoverBehaviourTest {
         // draft some dice to avoid strange behaviour from dice bag
         game.getDiceBag().draft(73);
 
-        FluxRemoverBehaviour behaviour = new FluxRemoverBehaviour();
+        PullAgainAndPlaceBehaviour behaviour = new PullAgainAndPlaceBehaviour();
         boolean success = behaviour.useToolCard(game, message);
         Assert.assertFalse(success);
 
@@ -130,7 +130,7 @@ public class FluxRemoverBehaviourTest {
         // draft some dice to avoid strange behaviour from dice bag
         game.getDiceBag().draft(73);
 
-        FluxRemoverBehaviour behaviour = new FluxRemoverBehaviour();
+        PullAgainAndPlaceBehaviour behaviour = new PullAgainAndPlaceBehaviour();
         boolean success = behaviour.useToolCard(game, message);
 
         Assert.assertFalse(success);
@@ -163,7 +163,7 @@ public class FluxRemoverBehaviourTest {
         }
         Player player = game.getPlayers().get(0);
 
-        FluxRemoverBehaviour behaviour = applyFirstStep(game, mockView);
+        PullAgainAndPlaceBehaviour behaviour = applyFirstStep(game, mockView);
 
         ChooseValue message = new ChooseValue(
                 mockView,
@@ -212,7 +212,7 @@ public class FluxRemoverBehaviourTest {
         if (game == null)
             Assert.fail("Error on game initialization");
         Player player = game.getPlayers().get(0);
-        FluxRemoverBehaviour behaviour = applyFirstStep(game, mockView);
+        PullAgainAndPlaceBehaviour behaviour = applyFirstStep(game, mockView);
 
 
         ChooseValue message = new ChooseValue(

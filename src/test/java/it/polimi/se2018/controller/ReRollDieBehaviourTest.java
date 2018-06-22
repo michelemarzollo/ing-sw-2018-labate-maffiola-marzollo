@@ -14,9 +14,9 @@ import org.junit.Test;
 import java.util.List;
 
 /**
- * Unit tests for FluxBrushBehaviour class.
+ * Unit tests for ReRollDieBehaviour class.
  */
-public class FluxBrushBehaviourTest {
+public class ReRollDieBehaviourTest {
 
     /**
      * Tests if the requirements are met in a case where it's the case.
@@ -26,7 +26,7 @@ public class FluxBrushBehaviourTest {
         Game game = GameUtils.getHalfwayGame();
         if (game == null)
             Assert.fail("Error on game initialization");
-        FluxRemoverBehaviour behaviour = new FluxRemoverBehaviour();
+        PullAgainAndPlaceBehaviour behaviour = new PullAgainAndPlaceBehaviour();
         Assert.assertTrue(behaviour.areRequirementsSatisfied(game));
     }
 
@@ -43,7 +43,7 @@ public class FluxBrushBehaviourTest {
                 "Pippo"
         );
 
-        FluxBrushBehaviour behaviour = new FluxBrushBehaviour();
+        ReRollDieBehaviour behaviour = new ReRollDieBehaviour();
         behaviour.askParameters(message);
 
         Assert.assertEquals(1, mockView.getCalledMethods().size());
@@ -70,7 +70,7 @@ public class FluxBrushBehaviourTest {
                 "Pippo"
         );
 
-        FluxBrushBehaviour behaviour = new FluxBrushBehaviour();
+        ReRollDieBehaviour behaviour = new ReRollDieBehaviour();
         boolean success = behaviour.useToolCard(game, message);
 
         Assert.assertTrue(success);
@@ -136,7 +136,7 @@ public class FluxBrushBehaviourTest {
                 "Pippo"
         );
 
-        FluxBrushBehaviour behaviour = new FluxBrushBehaviour();
+        ReRollDieBehaviour behaviour = new ReRollDieBehaviour();
         boolean success = behaviour.useToolCard(game, message);
 
         Assert.assertFalse(success);

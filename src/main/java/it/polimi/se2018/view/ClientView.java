@@ -375,27 +375,11 @@ public class ClientView extends View {
     /**
      * Handles the event in which the player wants to use a tool card.
      *
-     * @param source      The source coordinates of the die on the pattern.
-     * @param destination The destination coordinates of the die on the pattern.
-     */
-    public void handleToolCardUsage(Coordinates source, Coordinates destination) {
-        notifyObservers(new MoveDie(
-                source,
-                destination,
-                this,
-                Action.APPLY_TOOL_CARD,
-                getPlayerName()
-        ));
-    }
-
-    /**
-     * Handles the event in which the player wants to use a tool card.
-     *
      * @param sources      The source coordinates of the dice on the pattern.
      * @param destinations The destination coordinates of the dice on the pattern.
      */
     public void handleToolCardUsage(Coordinates[] sources, Coordinates[] destinations) {
-        notifyObservers(new MoveTwoDice(
+        notifyObservers(new MoveDice(
                 sources,
                 destinations,
                 this,

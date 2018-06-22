@@ -22,8 +22,8 @@ public class ControllerTest {
      * Tests the setter of PublicScoreStrategies.
      */
     @Test
-    public void testAddPublicScoreStrategy(){
-        Game game =  new Game();
+    public void testAddPublicScoreStrategy() {
+        Game game = new Game();
         Controller controller = new SinglePlayerController(game, 10, 10);
         DiagonalScore diagonalScore = new DiagonalScore(2, true);
         controller.addPublicScoreStrategy(diagonalScore);
@@ -34,8 +34,8 @@ public class ControllerTest {
      * Tests the getter of PublicScoreStrategies.
      */
     @Test
-    public void testGetPublicScoreCalculators(){
-        Game game =  new Game();
+    public void testGetPublicScoreCalculators() {
+        Game game = new Game();
         Controller controller = new SinglePlayerController(game, 10, 10);
         DiagonalScore diagonalScore = new DiagonalScore(2, true);
         RowVarietyScore rowVarietyScore = new RowVarietyScore(2, true);
@@ -51,7 +51,7 @@ public class ControllerTest {
     @Test
     public void testFillScoreBoardMustInvert() {
         Game game = GameUtils.getSetUpGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         game.getPlayers().get(0).setScore(49);
@@ -66,7 +66,7 @@ public class ControllerTest {
     @Test
     public void testFillScoreBoardMustNotInvert() {
         Game game = GameUtils.getSetUpGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         game.getPlayers().get(0).setScore(50);
@@ -103,7 +103,7 @@ public class ControllerTest {
     @Test
     public void testEndTurnSameRound() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view1 = new MockView("Pippo");
@@ -116,7 +116,7 @@ public class ControllerTest {
     @Test
     public void testEndTurnChangeRound() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view1 = new MockView("Pippo");
@@ -138,7 +138,7 @@ public class ControllerTest {
     @Test
     public void testCheckTurnEndFalse() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         game.getTurnManager().getCurrentTurn().placeDie();
@@ -148,7 +148,7 @@ public class ControllerTest {
     @Test
     public void testCheckTurnEndTrue() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         game.getTurnManager().getCurrentTurn().placeDie();
@@ -159,7 +159,7 @@ public class ControllerTest {
     @Test
     public void testEndRoundGameNotFinished() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view1 = new MockView("Pippo");
@@ -178,13 +178,13 @@ public class ControllerTest {
     @Test
     public void testEndRoundGameFinished() {
         Game game = GameUtils.getFinishedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view1 = new MockView("Pippo");
         ViewMessage msg = new ViewMessage(view1, Action.END_TURN, "Pippo");
         controller.endRound(msg); //game is over, it will invoke the 'endGame' method.
-       // assertTrue(view1.getCalledMethods().contains("showFinalView")); //ensures that the endGame method has been called
+        // assertTrue(view1.getCalledMethods().contains("showFinalView")); //ensures that the endGame method has been called
         // within endRound method
     }
 
@@ -196,7 +196,7 @@ public class ControllerTest {
     @Test
     public void testCleanDraftPool() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         int round = game.getTurnManager().getRound();
@@ -209,17 +209,17 @@ public class ControllerTest {
     @Test
     public void testRefillDraftPool() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         controller.refillDraftPool();
-        assertEquals(5, game.getDraftPool().getDice().size() );
+        assertEquals(5, game.getDraftPool().getDice().size());
     }
 
     @Test
     public void testCanMovePositive() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         //The game is prepared so that at the beginning of the first Round is Pippo's turn
@@ -229,7 +229,7 @@ public class ControllerTest {
     @Test
     public void testCanMoveNegative() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         //The game is prepared so that at the beginning of the first Round is Pippo's turn
@@ -239,11 +239,11 @@ public class ControllerTest {
     @Test
     public void testPlaceDieNotYourTurn() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view = new MockView("Pippo");
-        PlaceDie msg = new PlaceDie(0, new Coordinates(2,3), view, Action.PLACE_DIE, "Pluto" );
+        PlaceDie msg = new PlaceDie(0, new Coordinates(2, 3), view, Action.PLACE_DIE, "Pluto");
         controller.placeDie(msg);
         assertTrue(view.getCalledMethods().contains("showError: Not your turn!"));
     }
@@ -251,11 +251,11 @@ public class ControllerTest {
     @Test
     public void testPlaceDieAlreadyPlacedDie() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view = new MockView("Pippo");
-        PlaceDie msg = new PlaceDie(0, new Coordinates(2,3), view, Action.PLACE_DIE, "Pippo" );
+        PlaceDie msg = new PlaceDie(0, new Coordinates(2, 3), view, Action.PLACE_DIE, "Pippo");
         game.getTurnManager().getCurrentTurn().placeDie();
         controller.placeDie(msg);
         assertTrue(view.getCalledMethods().contains("showError: You already placed a die!"));
@@ -264,43 +264,44 @@ public class ControllerTest {
     @Test
     public void testPlaceDieCorrectPlacement() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         int initialLength = game.getDraftPool().getDice().size();
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view = new MockView("Pippo");
-        PlaceDie msg = new PlaceDie(0, new Coordinates(0,1), view, Action.PLACE_DIE, "Pippo" );
+        PlaceDie msg = new PlaceDie(0, new Coordinates(0, 1), view, Action.PLACE_DIE, "Pippo");
         controller.placeDie(msg);
         assertEquals(Colour.RED, game.getTurnManager().getCurrentTurn().getPlayer().getPattern().
                 getGrid()[0][1].getDie().getColour());
         assertEquals(1, game.getTurnManager().getCurrentTurn().getPlayer().getPattern().
                 getGrid()[0][1].getDie().getValue());
-        assertEquals(initialLength, game.getDraftPool().getDice().size()+1);
+        assertEquals(initialLength, game.getDraftPool().getDice().size() + 1);
     }
 
 
     @Test
     public void testPlaceDieWrongPlacement() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view = new MockView("Pippo");
-        PlaceDie msg = new PlaceDie(0, new Coordinates(0,0), view, Action.PLACE_DIE, "Pippo" );
+        PlaceDie msg = new PlaceDie(0, new Coordinates(0, 0), view, Action.PLACE_DIE, "Pippo");
         //Wrong placement: at grid[0][0] there is a restriction on the die's colour: it must be blue while
         //the selected die is red.
         controller.placeDie(msg);
         assertTrue(view.getCalledMethods().contains("showError: Placement doesn't respect restrictions!\n" +
                 "The placedDie's colour is different from the colour restriction of the cell"));
     }
+
     @Test
     public void testPlaceDieWrongDieSelection() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view = new MockView("Pippo");
-        PlaceDie msg = new PlaceDie(5, new Coordinates(0,1), view, Action.PLACE_DIE, "Pippo" );
+        PlaceDie msg = new PlaceDie(5, new Coordinates(0, 1), view, Action.PLACE_DIE, "Pippo");
         //wrong selection: the DraftPool has 5 dice, not 6!
         controller.placeDie(msg);
         assertTrue(view.getCalledMethods().contains("showError: Invalid selection!"));
@@ -309,13 +310,13 @@ public class ControllerTest {
     @Test
     public void testPlaceDieWithTurnEnd() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view = new MockView("Pippo");
         game.getTurnManager().getCurrentTurn().useToolCard();
         //correct placement, after this the turn has to be updated because Pippo has done any action he could
-        PlaceDie msg = new PlaceDie(0, new Coordinates(0,1), view, Action.PLACE_DIE, "Pippo" );
+        PlaceDie msg = new PlaceDie(0, new Coordinates(0, 1), view, Action.PLACE_DIE, "Pippo");
         controller.placeDie(msg);
         assertEquals("Pluto", game.getTurnManager().getCurrentTurn().getPlayer().getName());
     }
@@ -328,12 +329,12 @@ public class ControllerTest {
     @Test
     public void testPlaceDieValidForcedSelection() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         game.getTurnManager().getCurrentTurn().setForcedSelectionIndex(0);
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view = new MockView("Pippo");
-        PlaceDie msg = new PlaceDie(0, new Coordinates(0,1), view, Action.PLACE_DIE, "Pippo" );
+        PlaceDie msg = new PlaceDie(0, new Coordinates(0, 1), view, Action.PLACE_DIE, "Pippo");
         controller.placeDie(msg);
         assertEquals(Colour.RED, game.getTurnManager().getCurrentTurn().getPlayer().getPattern().
                 getGrid()[0][1].getDie().getColour());
@@ -349,12 +350,12 @@ public class ControllerTest {
     @Test
     public void testPlaceDieInvalidForcedSelection() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         game.getTurnManager().getCurrentTurn().setForcedSelectionIndex(0);
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view = new MockView("Pippo");
-        PlaceDie msg = new PlaceDie(1, new Coordinates(0,1), view, Action.PLACE_DIE, "Pippo" );
+        PlaceDie msg = new PlaceDie(1, new Coordinates(0, 1), view, Action.PLACE_DIE, "Pippo");
         controller.placeDie(msg);
         assertTrue(view.getCalledMethods().contains("showError: Invalid selection!"));
     }
@@ -362,7 +363,7 @@ public class ControllerTest {
     @Test
     public void testActivateToolCardNotYourTurn() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         ToolCard[] toolCards = {new ToolCard("Grozing Pliers", "Description", Colour.PURPLE),
                 new ToolCard("Eglomise Brush", "Description", Colour.BLUE),
@@ -378,7 +379,7 @@ public class ControllerTest {
     @Test
     public void testActivateToolCardInvalidCard() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         ToolCard[] toolCards = {new ToolCard("Grozing Pliers", "Description", Colour.PURPLE),
                 new ToolCard("Eglomise Brush", "Description", Colour.BLUE),
@@ -397,7 +398,7 @@ public class ControllerTest {
     @Test
     public void testActivateToolCardRequirementsNotSatisfied() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         ToolCard[] toolCards = {new ToolCard("Grozing Pliers", "Description", Colour.PURPLE),
                 new ToolCard("Eglomise Brush", "Description", Colour.BLUE),
@@ -414,7 +415,7 @@ public class ControllerTest {
     @Test
     public void testActivateToolCardValid() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         ToolCard[] toolCards = {new ToolCard("Grozing Pliers", "Description", Colour.PURPLE),
                 new ToolCard("Eglomise Brush", "Description", Colour.BLUE),
@@ -431,7 +432,7 @@ public class ControllerTest {
     @Test
     public void testApplyToolCardNotYourTurn() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         ToolCard[] toolCards = {new ToolCard("Grozing Pliers", "Description", Colour.PURPLE),
                 new ToolCard("Eglomise Brush", "Description", Colour.BLUE),
@@ -440,7 +441,7 @@ public class ControllerTest {
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view = new MockView("Pippo");
         //It's not Pluto's turn at the first turn of the first round
-        IncrementDieValue msg = new IncrementDieValue(2,true, view, Action.APPLY_TOOL_CARD, "Pluto");
+        IncrementDieValue msg = new IncrementDieValue(2, true, view, Action.APPLY_TOOL_CARD, "Pluto");
         game.getTurnManager().getCurrentTurn().setSelectedToolCard(toolCards[0]);
         controller.applyToolCard(msg);
         assertTrue(view.getCalledMethods().contains("showError: Not your turn"));
@@ -449,7 +450,7 @@ public class ControllerTest {
     @Test
     public void testApplyToolCardNoActivation() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         ToolCard[] toolCards = {new ToolCard("Grozing Pliers", "Description", Colour.PURPLE),
                 new ToolCard("Eglomise Brush", "Description", Colour.BLUE),
@@ -457,7 +458,7 @@ public class ControllerTest {
         game.setToolCards(toolCards);
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view = new MockView("Pippo");
-        IncrementDieValue msg = new IncrementDieValue(2,true, view, Action.APPLY_TOOL_CARD, "Pippo");
+        IncrementDieValue msg = new IncrementDieValue(2, true, view, Action.APPLY_TOOL_CARD, "Pippo");
         controller.applyToolCard(msg);
         assertTrue(view.getCalledMethods().contains("showError: No toolCard has been activated yet"));
     }
@@ -468,7 +469,7 @@ public class ControllerTest {
     @Test
     public void testApplyToolCardInvalidData() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         ToolCard[] toolCards = {new ToolCard("Grozing Pliers", "Description", Colour.PURPLE),
                 new ToolCard("Eglomise Brush", "Description", Colour.BLUE),
@@ -477,7 +478,7 @@ public class ControllerTest {
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view = new MockView("Pippo");
         //The dice in draftPool are 5: 7 is out of bound.
-        IncrementDieValue msg = new IncrementDieValue(7,true, view, Action.APPLY_TOOL_CARD, "Pippo");
+        IncrementDieValue msg = new IncrementDieValue(7, true, view, Action.APPLY_TOOL_CARD, "Pippo");
         game.getTurnManager().getCurrentTurn().setSelectedToolCard(toolCards[0]);
         controller.applyToolCard(msg);
         //assertEquals(null, game.getTurnManager().getCurrentTurn().getSelectedToolCard());
@@ -488,7 +489,7 @@ public class ControllerTest {
     @Test
     public void testApplyToolCardValid() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         ToolCard[] toolCards = {new ToolCard("Grozing Pliers", "Description", Colour.PURPLE),
                 new ToolCard("Eglomise Brush", "Description", Colour.BLUE),
@@ -496,7 +497,7 @@ public class ControllerTest {
         game.setToolCards(toolCards);
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view = new MockView("Pippo");
-        IncrementDieValue msg = new IncrementDieValue(0,true, view, Action.APPLY_TOOL_CARD, "Pippo");
+        IncrementDieValue msg = new IncrementDieValue(0, true, view, Action.APPLY_TOOL_CARD, "Pippo");
         game.getTurnManager().getCurrentTurn().setSelectedToolCard(toolCards[0]);
         controller.applyToolCard(msg);
         assertEquals(3, game.getTurnManager().getCurrentTurn().getPlayer().getTokens());
@@ -507,7 +508,7 @@ public class ControllerTest {
     @Test
     public void testApplyToolCardValidAndChangeTurn() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         ToolCard[] toolCards = {new ToolCard("Grozing Pliers", "Description", Colour.PURPLE),
                 new ToolCard("Eglomise Brush", "Description", Colour.BLUE),
@@ -515,9 +516,18 @@ public class ControllerTest {
         game.setToolCards(toolCards);
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view = new MockView("Pippo");
-        PlaceDie msg1 = new PlaceDie(0, new Coordinates(0,1), view, Action.PLACE_DIE, "Pippo");
+        PlaceDie msg1 = new PlaceDie(0, new Coordinates(0, 1), view, Action.PLACE_DIE, "Pippo");
         controller.placeDie(msg1);
-        MoveDie msg2 = new MoveDie(new Coordinates(0,1), new Coordinates(0,1), view, Action.APPLY_TOOL_CARD, "Pippo");
+        MoveDice msg2 = new MoveDice(
+                new Coordinates[]{
+                        new Coordinates(0, 1)
+                },
+                new Coordinates[]{
+                        new Coordinates(0, 1)
+                },
+                view,
+                Action.APPLY_TOOL_CARD,
+                "Pippo");
         game.getTurnManager().getCurrentTurn().setSelectedToolCard(toolCards[1]);
         controller.applyToolCard(msg2);
         assertEquals(3, game.getPlayers().get(0).getTokens());
@@ -529,7 +539,7 @@ public class ControllerTest {
     @Test
     public void testSelectPatternInvalidPlayer() {
         Game game = GameUtils.getSetUpGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view = new MockView("Pippo");
@@ -541,7 +551,7 @@ public class ControllerTest {
     @Test
     public void testSelectPatternInvalidPattern() {
         Game game = GameUtils.getSetUpGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view = new MockView("Pippo");
@@ -553,7 +563,7 @@ public class ControllerTest {
     @Test
     public void testSelectPatternValidButGameNotReady() {
         Game game = GameUtils.getSetUpGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view = new MockView("Pippo");
@@ -571,7 +581,7 @@ public class ControllerTest {
     @Test
     public void testSelectPatternValidAndGameReady() {
         Game game = GameUtils.getSetUpGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view1 = new MockView("Pippo");
@@ -590,9 +600,9 @@ public class ControllerTest {
     }
 
     @Test
-    public void finalizeMatch(){
+    public void finalizeMatch() {
         Game game = GameUtils.getStartedGame(true);
-        if(game == null)
+        if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         assertNotNull(controller.getGame());

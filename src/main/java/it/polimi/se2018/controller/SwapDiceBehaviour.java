@@ -8,13 +8,12 @@ import it.polimi.se2018.model.events.ViewMessage;
 import java.util.List;
 
 /**
- * The class to describe the behaviour of the Lens Cutter ToolCard
- * {@link it.polimi.se2018.model.ToolCard}. (Tool Card 5)
- * <p>
- * The ToolCard allows to change a die from the {@link it.polimi.se2018.model.DraftPool}
- * with a die from the {@link it.polimi.se2018.model.RoundTrack}</p>
+ * This class manages the usage of tool cards that swap a die from the draft pool with
+ * one from the round track.
+ *
+ * @author michelemarzollo
  */
-public class LensCutterBehaviour implements ToolCardBehaviour {
+public class SwapDiceBehaviour implements ToolCardBehaviour {
 
     /**
      * Tells if the tool card can be applied.
@@ -41,7 +40,7 @@ public class LensCutterBehaviour implements ToolCardBehaviour {
     }
 
     /**
-     * The action associated to the Lens Cutter ToolCard.
+     * Swaps the selected dice.
      * <p>
      * The chosen die of the {@link it.polimi.se2018.model.DraftPool} is
      * swapped with the chosen die of the {@link it.polimi.se2018.model.RoundTrack}

@@ -1,9 +1,6 @@
 package it.polimi.se2018.controller;
 
-import it.polimi.se2018.model.Cell;
-import it.polimi.se2018.model.Die;
-import it.polimi.se2018.model.Game;
-import it.polimi.se2018.model.Player;
+import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.events.Action;
 import it.polimi.se2018.model.events.PlaceDie;
 import it.polimi.se2018.model.events.ViewMessage;
@@ -17,20 +14,33 @@ import org.junit.Test;
 import java.util.List;
 
 /**
- * Unit tests for RunningPliersBehaviour class.
+ * Unit tests for PlaceDieBehaviour.
  */
-public class RunningPliersBehaviourTest {
+public class PlaceDieBehaviourTest {
 
     /**
      * Tests if requirements are not met when a player has no second turn
      * in a round.
      */
     @Test
-    public void testRequirements() {
+    public void testRequirementsUseSecondTurn() {
         Game game = GameUtils.getRoundFinishedGame(false);
         if (game == null)
             Assert.fail("Error on game initialization");
-        RunningPliersBehaviour behaviour = new RunningPliersBehaviour();
+        ToolCardBehaviour behaviour = new PlaceDieBehaviour(true, Restriction.DEFAULT);
+        Assert.assertFalse(behaviour.areRequirementsSatisfied(game));
+    }
+
+    /**
+     * Tests that the requirements are not met after a player has placed a die.
+     */
+    @Test
+    public void testRequirementsNoSecondTurn() {
+        Game game = GameUtils.getHalfwayGame();
+        if (game == null)
+            Assert.fail("Error on game initialization");
+        game.getTurnManager().getCurrentTurn().placeDie();
+        ToolCardBehaviour behaviour = new PlaceDieBehaviour(false, Restriction.NOT_ADJACENT);
         Assert.assertFalse(behaviour.areRequirementsSatisfied(game));
     }
 
@@ -47,7 +57,7 @@ public class RunningPliersBehaviourTest {
                 "Pippo"
         );
 
-        RunningPliersBehaviour behaviour = new RunningPliersBehaviour();
+        ToolCardBehaviour behaviour = new PlaceDieBehaviour(true, Restriction.DEFAULT);
         behaviour.askParameters(message);
 
         Assert.assertEquals(1, mockView.getCalledMethods().size());
@@ -55,13 +65,61 @@ public class RunningPliersBehaviourTest {
     }
 
     /**
-     * Tests a case in which the usage of the tool card is successful.
+     * Tests a case in which the usage of the tool card is successful when the second turn is not used.
+     * <p>This means that no views are selected during the process and that the
+     * selected die is actually placed in the pattern and removed from the draft pool.</p>
+     */
+    @Test
+    public void testUsageSuccessfulNoSecondTurnNotAdjacent() {
+        MockView mockView = new MockView("Pippo");
+
+        Game game = GameUtils.getHalfwayGame();
+        if (game == null)
+            Assert.fail("Error on game initialization");
+
+        Player player = game.getPlayers().get(0);
+
+        PlaceDie message = new PlaceDie(
+                1,
+                new Coordinates(3, 3),
+                mockView,
+                Action.ACTIVATE_TOOL_CARD,
+                "Pippo"
+        );
+
+        ToolCardBehaviour behaviour = new PlaceDieBehaviour(false, Restriction.NOT_ADJACENT);
+        boolean success = behaviour.useToolCard(game, message);
+
+        Assert.assertTrue(success);
+        Die expectedDie = GameUtils.getDice(false).get(1);
+        Die actualDie = player.getPattern().getGrid()[3][3].getDie();
+
+        Assert.assertEquals(0, mockView.getCalledMethods().size());
+
+        Assert.assertTrue(DieUtils.areEqual(expectedDie, actualDie));
+
+        List<Die> expectedDraftPool = GameUtils.getDice(false);
+        expectedDraftPool.remove(1);
+        List<Die> actualDraftPool = game.getDraftPool().getDice();
+
+        Assert.assertEquals(expectedDraftPool.size(), actualDraftPool.size());
+        for (int i = 0; i < expectedDraftPool.size(); i++) {
+            Assert.assertTrue(
+                    DieUtils.areEqual(expectedDraftPool.get(i), actualDraftPool.get(i))
+            );
+        }
+
+        Assert.assertTrue(game.getTurnManager().getCurrentTurn().hasAlreadyPlacedDie());
+    }
+
+    /**
+     * Tests a case in which the usage of the tool card is successful when the second turn is used.
      * <p>This means that no views are selected during the process and that
      * the selected die is correctly placed following all placement restrictions
      * and that the second turn for the player is consumed.</p>
      */
     @Test
-    public void testUsageSuccess() {
+    public void testUsageSuccessUseSecondTurn() {
         MockView mockView = new MockView("Pippo");
         Game game = GameUtils.getHalfwayGame();
         if (game == null)
@@ -76,13 +134,12 @@ public class RunningPliersBehaviourTest {
                 "Pippo"
         );
 
-        RunningPliersBehaviour behaviour = new RunningPliersBehaviour();
+        ToolCardBehaviour behaviour = new PlaceDieBehaviour(true, Restriction.DEFAULT);
         boolean success = behaviour.useToolCard(game, message);
 
         Assert.assertTrue(success);
         Assert.assertEquals(0, mockView.getCalledMethods().size());
 
-        Assert.assertTrue(game.getTurnManager().getCurrentTurn().hasAlreadyPlacedDie());
         Assert.assertTrue(game.getTurnManager().getPlayersToSkip().contains(player));
 
         List<Die> oldDraftPool = GameUtils.getDice(false);
@@ -100,11 +157,10 @@ public class RunningPliersBehaviourTest {
             }
             Assert.assertTrue(match);
         }
-
     }
 
     /**
-     * Helper method that sets up a failure scenario.
+     * Helper method that sets up a failure scenario where the second turn is set to be consumed.
      * <p>The kind of failure that happens can be set through the {@code badIndex}
      * parameter.</p>
      *
@@ -131,7 +187,7 @@ public class RunningPliersBehaviourTest {
                 "Pippo"
         );
 
-        RunningPliersBehaviour behaviour = new RunningPliersBehaviour();
+        ToolCardBehaviour behaviour = new PlaceDieBehaviour(true, Restriction.DEFAULT);
         boolean success = behaviour.useToolCard(game, message);
 
         Assert.assertFalse(success);

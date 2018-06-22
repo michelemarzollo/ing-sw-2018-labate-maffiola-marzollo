@@ -8,14 +8,11 @@ import it.polimi.se2018.model.events.ViewMessage;
 import java.util.List;
 
 /**
- * Represents the "Flux Brush" tool card.
- * <p>The effect of this tool card is to re-roll a die in the draft pool.
- * After the roll the user is forced to only use that die for the rest of
- * his turn.</p>
- * <p>This tool card requires the index of the die in the draft pool
- * to be applied.</p>
+ * This class manages the usage of tool cards that re-rolls a die.
+ *
+ * @author dvdmff
  */
-public class FluxBrushBehaviour implements ToolCardBehaviour {
+public class ReRollDieBehaviour implements ToolCardBehaviour {
 
     /**
      * Always returns true because this tool card has no specific requirements.

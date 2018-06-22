@@ -1,7 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
-import it.polimi.se2018.model.events.MoveTwoDice;
+import it.polimi.se2018.model.events.MoveDice;
 import it.polimi.se2018.model.events.ViewMessage;
 import it.polimi.se2018.utils.Coordinates;
 
@@ -10,13 +10,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Represents the "Tap Wheel" tool card.
- * <p>The effect of this tool card is to move up to two dice of the same
- * colour of a die in the round track following all placement restrictions.</p>
- * <p>This tool card requires two pairs of source-destination coordinates
- * as user-given parameters to be applied.</p>
+ * This class manages the usage of tool cards that move up to 2 dices of
+ * the same colour of a die in the round track.
+ * <p>Full placement restriction are used to make the move.</p>
  */
-public class TapWheelBehaviour implements ToolCardBehaviour {
+public class MoveSomeDiceBehaviour implements ToolCardBehaviour {
 
     /**
      * Always returns true because this tool card has no specific requirements.
@@ -91,12 +89,11 @@ public class TapWheelBehaviour implements ToolCardBehaviour {
      * @param message The message to be checked.
      * @return {@code true} if the message is correct; {@code false} otherwise.
      */
-    private boolean checkAmounts(MoveTwoDice message) {
+    private boolean checkAmounts(MoveDice message) {
         int sourcesNum = message.getSources().length;
         int destinationNum = message.getDestinations().length;
 
         return sourcesNum == destinationNum && sourcesNum >= 1 && sourcesNum <= 2;
-
     }
 
     /**
@@ -132,30 +129,29 @@ public class TapWheelBehaviour implements ToolCardBehaviour {
      */
     @Override
     public boolean useToolCard(Game game, ViewMessage message) {
-        MoveTwoDice moveTwoDice = (MoveTwoDice) message;
+        MoveDice moveDice = (MoveDice) message;
 
-        if (!checkAmounts(moveTwoDice)) {
-            moveTwoDice.getView().showError("Bad amount of selected positions");
+        if (!checkAmounts(moveDice)) {
+            moveDice.getView().showError("Bad amount of selected positions");
             return false;
         }
 
         Player player = game.getTurnManager().getCurrentTurn().getPlayer();
         Pattern pattern = player.getPattern();
-        List<Die> selected = getDiceAt(pattern, moveTwoDice.getSources());
+        List<Die> selected = getDiceAt(pattern, moveDice.getSources());
 
         if (!isSelectionValid(selected, game.getRoundTrack().getLeftovers())) {
-            moveTwoDice.getView().showError("Invalid selection: bad colours!");
+            moveDice.getView().showError("Invalid selection: bad colours!");
             return false;
         }
 
         try {
-            Pattern newPattern = pattern.moveDice(
-                    moveTwoDice.getSources(),
-                    moveTwoDice.getDestinations());
+            Pattern newPattern =
+                    pattern.moveDice(moveDice.getSources(), moveDice.getDestinations());
             player.setPattern(newPattern);
             return true;
         } catch (PlacementErrorException e) {
-            moveTwoDice.getView().showError("Bad selection: cannot move");
+            moveDice.getView().showError("Bad selection: cannot move");
         }
         return false;
     }

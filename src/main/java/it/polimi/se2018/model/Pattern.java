@@ -14,8 +14,13 @@ import java.util.List;
  */
 public class Pattern implements Serializable {
 
+    /**
+     * The number of rows in a pattern.
+     */
     public static final int ROWS = 4;
-
+    /**
+     * The number of columns in a pattern.
+     */
     public static final int COLS = 5;
 
 
@@ -211,7 +216,8 @@ public class Pattern implements Serializable {
 
     /**
      * Checks if the specified die can be moved in the cell identified by the coordinates.
-     * @param die The die to be placed.
+     *
+     * @param die         The die to be placed.
      * @param coordinates The coordinates where the die will be placed.
      * @param restriction The restriction under which the constraints has to be checked.
      * @throws PlacementErrorException if a colour or value constraint is not respected.
@@ -284,7 +290,9 @@ public class Pattern implements Serializable {
      *                                 It also propagates the exception if it is thrown from
      *                                 {@link Cell}'s {@code place} method.
      */
-    public Pattern moveDice(Coordinates[] sources, Coordinates[] destinations) throws PlacementErrorException {
+    public Pattern moveDice(Coordinates[] sources, Coordinates[] destinations, Restriction restriction)
+            throws PlacementErrorException {
+
         Pattern pattern = new Pattern(this);
         List<Die> removed = new ArrayList<>();
         for (Coordinates source : sources)
@@ -292,9 +300,13 @@ public class Pattern implements Serializable {
 
         for (int i = 0; i < removed.size(); ++i)
             //throws an exception if there is some placement problem.
-            pattern = pattern.placeDie(removed.get(i), destinations[i]);
+            pattern = pattern.placeDie(removed.get(i), destinations[i], restriction);
 
         return pattern; //returns the new Pattern if the placement has been successful
+    }
+
+    public Pattern moveDice(Coordinates[] sources, Coordinates[] destinations) throws PlacementErrorException {
+        return moveDice(sources, destinations, Restriction.DEFAULT);
     }
 
     /**
