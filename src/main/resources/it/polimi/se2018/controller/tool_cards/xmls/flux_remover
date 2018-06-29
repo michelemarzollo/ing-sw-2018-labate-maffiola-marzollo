@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<tool_card xmlns="http://se2018.polimi.it/tool_card"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://se2018.polimi.it/tool_card  ../tool_card.xsd">
+
+    <name>Flux Remover</name>
+    <description>After drafting, return the die to the Dice Bag and pull 1 die from the bags\n
+        Choose a value and place the new die, obeying all placement restrictions, or\n
+        return it to the Draft Pool</description>
+    <colour>PURPLE</colour>
+
+</tool_card>
