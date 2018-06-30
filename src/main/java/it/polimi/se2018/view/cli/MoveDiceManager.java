@@ -3,10 +3,29 @@ package it.polimi.se2018.view.cli;
 import it.polimi.se2018.utils.Coordinates;
 import it.polimi.se2018.view.ClientView;
 
+/**
+ * This manager handles the use of the Tool Cards that needs as a
+ * parameter the coordinates for moving dice on the Draft Pool
+ * (for example the 'Tap Wheel').
+ * It is set as manager for the input by the {@link CliDisplayer} when
+ * the moveDice method is invoked.
+ */
 public class MoveDiceManager extends InputEventManager{
 
+    /**
+     * Indicates the number of dice that have to be moved.
+     */
     private int amount;
+
+    /**
+     * Indicates whether it is mandatory to move both dice (in the
+     * case in which the {@code amount} is equals to two) or not.
+     */
     private boolean moveAll;
+
+    /**
+     * These eight int will contain the coordinates for the moves.
+     */
     private int firstSourceRow;
     private int firstSourceCol;
     private int firstDestRow;
@@ -15,10 +34,26 @@ public class MoveDiceManager extends InputEventManager{
     private int secondSourceCol;
     private int secondDestRow;
     private int secondDestCol;
+
+    /**
+     * Indicates whether the user has chosen to move both dice
+     * (if he has this possibility) or not.
+     */
     private boolean hasConfirmed;
 
+    /**
+     * Reference to the input gatherer class: it is necessary to restore the
+     * correct manager after the accomplishment of this task.
+     */
     private CliInput gatherer;
 
+    /**
+     * Constructor of the class
+     * @param view The view to which this manager is bounded.
+     * @param output The output destination where the prompts of this manager
+     *               are shown.
+     *@param gatherer The input gatherer to which this manager is bounded.
+     */
     public MoveDiceManager(ClientView view, CliImagePrinter output, CliInput gatherer, int amount, boolean moveAll) {
         super(view, output);
         this.amount = amount;
@@ -26,6 +61,14 @@ public class MoveDiceManager extends InputEventManager{
         this.gatherer = gatherer;
     }
 
+    /**
+     * This method is the one delegated for handling the input entered by the user
+     * in a correct way. When all the data have been gathered the handling is delegated
+     * to the {@link ClientView} that will create the correct message for sending it
+     * on the network.
+     * @param input The String inserted by the user that represents here the coordinates
+     *              or the confirm.
+     */
     @Override
     public void handle(String input) {
         try {
@@ -55,6 +98,11 @@ public class MoveDiceManager extends InputEventManager{
         }
     }
 
+    /**
+     * Handles the second interaction for the second movement on the Pattern.
+     * @param choice The input inserted by the user that represents here the coordinates
+     *               or the confirm.
+     */
     private void handleSecondMove(int choice) {
         if(!moveAll && !hasConfirmed){
             handleConfirm(choice);
@@ -83,6 +131,10 @@ public class MoveDiceManager extends InputEventManager{
         }
     }
 
+    /**
+     * Handles the confirm in the case in which is it possible to move two dice.
+     * @param choice The choice inserted by the user.
+     */
     private void handleConfirm(int choice) {
         if(choice == 1){
             setHasConfirmed();
@@ -96,6 +148,10 @@ public class MoveDiceManager extends InputEventManager{
     }
 
 
+    /**
+     * Shows the correct textual messages to the player in this phase
+     * according to what he can and what he has to insert.
+     */
     @Override
     public void showPrompt() {
         if(amount == 1){
@@ -107,6 +163,10 @@ public class MoveDiceManager extends InputEventManager{
         }
     }
 
+    /**
+     * Shows the prompt for the Tool Cards that allows only to move one die or
+     * for the first step for those that allows to move two dice.
+     */
     private void showOneMovePrompt() {
         if(firstSourceRow == -1){
             output.printPattern(getPattern());
@@ -125,6 +185,9 @@ public class MoveDiceManager extends InputEventManager{
         }
     }
 
+    /**
+     * Shows the prompt for the second movement.
+     */
     private void showTwoMovePrompt() {
         if(!moveAll && !hasConfirmed){
             output.printTextNewLine("Do you want to move another die? Enter 1 if so, 0 otherwise");
@@ -148,6 +211,9 @@ public class MoveDiceManager extends InputEventManager{
         }
     }
 
+    /**
+     * Setter for the confirm.
+     */
     private void setHasConfirmed() {
         this.hasConfirmed = true;
     }
