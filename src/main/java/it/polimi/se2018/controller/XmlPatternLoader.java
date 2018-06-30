@@ -2,15 +2,11 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.Pattern;
 import it.polimi.se2018.utils.ResourceManager;
-import it.polimi.se2018.utils.XmlLoader;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
 
 /**
  * This class allows to load pattern cards from xml files contained in
@@ -21,14 +17,9 @@ import java.util.Scanner;
  *
  * @author dvdmff
  */
-public class XmlPatternLoader extends XmlLoader implements PatternLoader{
+public class XmlPatternLoader extends XmlCardLoader implements PatternLoader{
 
     private static final String PATTERNS_DIR = "it/polimi/se2018/model/patterns/";
-
-    /**
-     * The list of pattern xml descriptions suitable for loading.
-     */
-    private final List<String> loadablePatterns = new ArrayList<>();
 
     /**
      * The directory where patterns are stored.
@@ -61,28 +52,7 @@ public class XmlPatternLoader extends XmlLoader implements PatternLoader{
         validator = getValidator(ResourceManager.getInstance().getPatternSchema());
 
         this.basePath = basePath;
-        filterFiles(listName);
-    }
-
-    /**
-     * Populates the list of loadable patterns.
-     *
-     * @param listName The list containing loadable files.
-     * @throws IllegalArgumentException if the list file is unavailable.
-     */
-    private void filterFiles(String listName) {
-        InputStream stream = ResourceManager.getInstance().getStream(basePath, listName);
-        if (stream == null)
-            throw new IllegalArgumentException("The given list file is unavailable.");
-        try (Scanner fileNameScanner = new Scanner(stream)) {
-            while (fileNameScanner.hasNext()) {
-                String resource = fileNameScanner.nextLine();
-                InputStream resourceStream =
-                        ResourceManager.getInstance().getXmlStream(basePath, resource);
-                if (isValid(resourceStream))
-                    loadablePatterns.add(resource);
-            }
-        }
+        filterFiles(basePath, listName);
     }
 
     /**
@@ -96,9 +66,9 @@ public class XmlPatternLoader extends XmlLoader implements PatternLoader{
      */
     @Override
     public Pattern[] load(int n) {
-        Collections.shuffle(loadablePatterns);
+        Collections.shuffle(loadableCards);
 
-        return loadablePatterns.stream()
+        return loadableCards.stream()
                 .limit(n)
                 .map(this::loadPattern)
                 .toArray(Pattern[]::new);

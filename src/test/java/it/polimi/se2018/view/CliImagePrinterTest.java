@@ -1,12 +1,15 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.controller.ToolCardFactory;
+import it.polimi.se2018.controller.XmlToolCardLoader;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.utils.Coordinates;
 import it.polimi.se2018.utils.GameUtils;
+import it.polimi.se2018.utils.Logger;
 import it.polimi.se2018.view.cli.CliImagePrinter;
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -80,8 +83,15 @@ public class CliImagePrinterTest {
 
     @Test
     public void testPrintToolCard(){
-        ToolCardFactory factory = new ToolCardFactory();
-        ToolCard[] cards = factory.newInstances(3);
+        if (ToolCardFactory.getInstance() == null){
+            try {
+                XmlToolCardLoader xmlToolCardLoader = new XmlToolCardLoader();
+                xmlToolCardLoader.createToolCardFactory();
+            } catch (SAXException e) {
+                Logger.getDefaultLogger().log("USAXException " + e);
+            }
+        }
+        ToolCard[] cards = ToolCardFactory.getInstance().newInstances(3);
         CliImagePrinter printer = new CliImagePrinter(System.out);
         for(int i = 0; i < 3; i++){
             printer.printToolCard(cards[i]);

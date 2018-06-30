@@ -109,8 +109,15 @@ public class CardDealer {
      * @param toolCards The number of tool cards to deal.
      */
     private void dealToolCards(int toolCards) {
-        ToolCardFactory toolCardFactory = new ToolCardFactory();
-        this.getGame().setToolCards(toolCardFactory.newInstances(toolCards));
+        if (ToolCardFactory.getInstance() == null){
+            try {
+                XmlToolCardLoader xmlToolCardLoader = new XmlToolCardLoader();
+                xmlToolCardLoader.createToolCardFactory();
+            } catch (SAXException e) {
+                Logger.getDefaultLogger().log("USAXException " + e);
+            }
+        }
+        this.getGame().setToolCards(ToolCardFactory.getInstance().newInstances(toolCards));
     }
 
     /**

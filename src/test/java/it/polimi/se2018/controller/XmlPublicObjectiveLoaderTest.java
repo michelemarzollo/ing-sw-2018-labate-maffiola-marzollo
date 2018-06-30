@@ -15,6 +15,11 @@ import org.xml.sax.SAXException;
 public class XmlPublicObjectiveLoaderTest {
 
     /**
+     * Expected file name for card list.
+     */
+    private static final String LIST_NAME = "cards.list";
+
+    /**
      * Tests if an invalid directory causes the constructor to throw an
      * IllegalArgumentException.
      */
@@ -24,7 +29,7 @@ public class XmlPublicObjectiveLoaderTest {
         Controller controller = new MultiPlayerController(game, 100, 100);
         String path = "/fake/fake/fake/";
         try {
-            new XmlPublicObjectiveLoader(path, controller);
+            new XmlPublicObjectiveLoader(path, LIST_NAME, controller);
             Assert.fail("Should not create object");
         } catch (SAXException e) {
             Assert.fail();
@@ -46,7 +51,7 @@ public class XmlPublicObjectiveLoaderTest {
             Controller controller = new SinglePlayerController(game, 100, 100);
             GameUtils gameUtils = new GameUtils();
             game = gameUtils.getCompleteSinglePlayerGame(game, controller);
-            XmlPublicObjectiveLoader loader = new XmlPublicObjectiveLoader(listPath, controller);
+            XmlPublicObjectiveLoader loader = new XmlPublicObjectiveLoader(listPath, LIST_NAME, controller);
             PublicObjectiveCard[] cards = loader.load(1);
 
             Assert.assertEquals("Color Diagonals", cards[0].getName());
@@ -71,7 +76,7 @@ public class XmlPublicObjectiveLoaderTest {
         String listPath = "it/polimi/se2018/utils/public_objective_cards/bad/";
 
         try {
-            XmlPatternLoader loader = new XmlPatternLoader(listPath, "bad.list");
+            XmlPatternLoader loader = new XmlPatternLoader(listPath, "cards.list");
             loader.load(1);
         } catch (SAXException e) {
             Assert.assertEquals("", e.getMessage());
@@ -91,7 +96,7 @@ public class XmlPublicObjectiveLoaderTest {
             Controller controller = new SinglePlayerController(game, 100, 100);
             GameUtils gameUtils = new GameUtils();
             game = gameUtils.getCompleteSinglePlayerGame(game, controller);
-            XmlPublicObjectiveLoader loader = new XmlPublicObjectiveLoader(listPath, controller);
+            XmlPublicObjectiveLoader loader = new XmlPublicObjectiveLoader(listPath, LIST_NAME, controller);
             PublicObjectiveCard[] cards = loader.load(12);
 
             Assert.assertEquals(10, cards.length);

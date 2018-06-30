@@ -26,7 +26,7 @@ public class SaxPublicObjectiveBuilder extends DefaultHandler {
     private boolean inName;
 
     /**
-     * Says if the content of the tag 'name' is being read.
+     * Says if the content of the tag 'description' is being read.
      */
     private boolean inDescription;
 
@@ -61,7 +61,7 @@ public class SaxPublicObjectiveBuilder extends DefaultHandler {
     private String name;
 
     /**
-     * The name of the card to create.
+     * The description of the card to create.
      */
     private String description;
 

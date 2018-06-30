@@ -3,15 +3,11 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.PublicObjectiveCard;
 import it.polimi.se2018.utils.ResourceManager;
-import it.polimi.se2018.utils.XmlLoader;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
 
 /**
  * The class to load files from the directory 'resources/public_objective_cards'.
@@ -22,7 +18,7 @@ import java.util.Scanner;
  * @author michelemarzollo
  */
 
-public class XmlPublicObjectiveLoader extends XmlLoader {
+public class XmlPublicObjectiveLoader extends XmlCardLoader {
 
     /**
      * Default search path.
@@ -38,11 +34,6 @@ public class XmlPublicObjectiveLoader extends XmlLoader {
      * Path where files are stored.
      */
     private final String basePath;
-
-    /**
-     * List of loadable card files.
-     */
-    private List<String> loadableCards = new ArrayList<>();
 
     /**
      * The controller the loader refers to.
@@ -61,7 +52,7 @@ public class XmlPublicObjectiveLoader extends XmlLoader {
      * @throws SAXException             if sax validator or sax parser cannot be used.
      */
     public XmlPublicObjectiveLoader(Controller controller) throws SAXException {
-        this(DEFAULT_PATH, controller);
+        this(DEFAULT_PATH, LIST_NAME, controller);
     }
 
     /**
@@ -69,40 +60,21 @@ public class XmlPublicObjectiveLoader extends XmlLoader {
      * xmls contained in the specified directory.
      * <p>It also loads the xsd file which card definitions are checked against.</p>
      *
-     * @param basePath  The directory that contains the xmls.
-     * @param controller the controller the loader refers to.
+     * @param basePath   The directory that contains the xmls.
+     * @param listName   The name of the list file containing the names of the available files to load.
+     * @param controller The controller the loader refers to.
      * @throws IllegalArgumentException if the specified directory isn't actually
      *                                  a directory or it isn't readable.
      * @throws SAXException             if sax validator or sax parser cannot be used.
      */
-    public XmlPublicObjectiveLoader(String basePath, Controller controller) throws SAXException {
+    public XmlPublicObjectiveLoader(String basePath, String listName, Controller controller) throws SAXException {
         super();
         this.controller = controller;
         this.basePath = basePath;
 
         validator = getValidator(ResourceManager.getInstance().getPublicObjectiveSchema());
 
-        filterFiles();
-    }
-
-    /**
-     * Populates the list of loadable cards.
-     *
-     * @throws IllegalArgumentException if the list file is unavailable.
-     */
-    private void filterFiles() {
-        InputStream stream = ResourceManager.getInstance().getStream(basePath, LIST_NAME);
-        if (stream == null)
-            throw new IllegalArgumentException("The given list file is unavailable.");
-        try (Scanner fileNameScanner = new Scanner(stream)) {
-            while (fileNameScanner.hasNext()) {
-                String resource = "xmls/" + fileNameScanner.nextLine();
-                InputStream resourceStream =
-                        ResourceManager.getInstance().getXmlStream(basePath, resource);
-                if (isValid(resourceStream))
-                    loadableCards.add(resource);
-            }
-        }
+        filterFiles(basePath, listName);
     }
 
     /**

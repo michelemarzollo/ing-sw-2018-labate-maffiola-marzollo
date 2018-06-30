@@ -1,9 +1,6 @@
 package it.polimi.se2018.utils;
 
-import it.polimi.se2018.controller.Controller;
-import it.polimi.se2018.controller.PrivateObjectiveFactory;
-import it.polimi.se2018.controller.XmlPatternLoader;
-import it.polimi.se2018.controller.XmlPublicObjectiveLoader;
+import it.polimi.se2018.controller.*;
 import it.polimi.se2018.model.*;
 import org.xml.sax.SAXException;
 
@@ -98,7 +95,16 @@ public class GameUtils {
      * @param game The game where to deal tool cards.
      */
     private static void dealToolCards(Game game) {
-        ToolCard[] toolCards = new ToolCardFactory().newInstances(12);
+        ToolCardFactory.reset();
+        if (ToolCardFactory.getInstance() == null){
+            try {
+                XmlToolCardLoader xmlToolCardLoader = new XmlToolCardLoader();
+                xmlToolCardLoader.createToolCardFactory();
+            } catch (SAXException e) {
+                Logger.getDefaultLogger().log("USAXException " + e);
+            }
+        }
+        ToolCard[] toolCards = ToolCardFactory.getInstance().newInstances(12);
         game.setToolCards(toolCards);
     }
 
