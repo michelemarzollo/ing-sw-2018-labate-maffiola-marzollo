@@ -12,7 +12,7 @@ import java.util.List;
  * This class represents an handler for the user input: it handles the
  * user's input in the right way and shows the correct prompts to him
  * relying on the current game state.
- * There is a correct manager (handler) for every game phase and every
+ * There is a correct manager for every game phase and every
  * manager has to extends this abstract class.
  */
 public abstract class InputEventManager {

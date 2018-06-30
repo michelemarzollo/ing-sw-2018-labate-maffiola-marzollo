@@ -203,7 +203,7 @@ public class CliDisplayer implements Displayer {
     }
 
     /**
-     * Redisplay the correct View after showing an error in MultiPlayer mode.
+     * Restores the correct View after showing an error in MultiPlayer mode.
      */
     private void restoreDisplayMultiPlayer() {
         //The first error that a player can commit is about the pattern's selection
@@ -219,7 +219,7 @@ public class CliDisplayer implements Displayer {
     }
 
     /**
-     * Redisplay the correct View after showing an error in SinglePlayer mode.
+     * Restores the correct View after showing an error in SinglePlayer mode.
      */
     private void restoreDisplaySinglePlayer() {
         if (!view.isGameRunning() && getDataOrganizer().getGameSetup() == null) {
