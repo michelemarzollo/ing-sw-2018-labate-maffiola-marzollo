@@ -2,7 +2,7 @@ package it.polimi.se2018.model.events;
 
 import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.model.Turn;
-import it.polimi.se2018.view.ViewDataOrganizer;
+import it.polimi.se2018.model.viewmodel.ViewDataOrganizer;
 
 /**
  * The event to update the view when the turn of a player is finished, and
@@ -128,5 +128,12 @@ public class NextTurn extends ModelUpdate {
     @Override
     public void pushInto(ViewDataOrganizer organizer) {
         organizer.push(this);
+    }
+
+    public boolean equals(NextTurn other){
+        return other.getPlayerName().equals(getPlayerName()) &&
+                other.isAlreadyPlacedDie() == isAlreadyPlacedDie() &&
+                other.isAlreadyUsedToolCard() == isAlreadyUsedToolCard() &&
+                other.isSecondTurnAvailable() == isSecondTurnAvailable();
     }
 }

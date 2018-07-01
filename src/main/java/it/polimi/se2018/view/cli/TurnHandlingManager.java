@@ -2,14 +2,21 @@ package it.polimi.se2018.view.cli;
 
 import it.polimi.se2018.view.ClientView;
 
-/**
- * This manager handles the central phase of the game: it handles the
- * evolution of a turn.
- * It is set as manager for the input by the {@link CliDisplayer} when
- * the displayTurnView is invoked.
- */
+import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * Input manager used to let the user select the available options during his turn.
+ */
 public class TurnHandlingManager extends InputEventManager {
+
+    /**
+     * Prompt messages for all the possible options.
+     */
+    private static final String PLACE_DIE_PROMPT = "place a die";
+    private static final String TOOL_CARD_PROMPT = "use a tool card";
+    private static final String END_TURN_PROMPT = "end current turn";
+    private static final String GAME_STATUS_PROMPT = "show game status";
 
     /**
      * This manager has a subHandler for each of the four actions the user
@@ -19,209 +26,113 @@ public class TurnHandlingManager extends InputEventManager {
     private InputEventManager subHandler;
 
     /**
-     * Constructor of the class
-     * @param view The view to which this manager is bounded.
+     * The list of available options.
+     */
+    private List<Option> availableOptions = new ArrayList<>();
+
+    /**
+     * Constructor of the class.
+     *
+     * @param view   The view to which this manager is bounded.
      * @param output The output destination where the prompts of this manager
      *               are shown.
      */
-    public TurnHandlingManager(ClientView view, CliImagePrinter output) {
+    public TurnHandlingManager(ClientView view, CliPrinter output) {
         super(view, output);
     }
 
     /**
-     * This method is the one delegated for handling the input entered by the user
-     * in a correct way. When all the data have been gathered the handling is delegated
-     * to the {@link ClientView} that will create the correct message for sending it
-     * on the network. In this case the real handling will be delegated to the
-     * current subHandler: this methods only set the correct subHandler with the
-     * {@code handleFirstMove} and {@code handleSecondMove} invocations if the user
-     * has still to choose the action otherwise it delegates.
+     * Refills the list of available options according to the current game status.
+     */
+    private void refillOptionMap() {
+        availableOptions.clear();
+        if (!hasPlacedDie())
+            addOption(
+                    PLACE_DIE_PROMPT,
+                    () -> setSubHandler(new DiePlacementHandler(getView(), getOutput(), this)));
+
+        if (!hasUsedToolCard())
+            addOption(
+                    TOOL_CARD_PROMPT,
+                    () -> setSubHandler(new ToolCardHandler(getView(), getOutput(), this))
+            );
+
+        addOption(
+                END_TURN_PROMPT,
+                () -> setSubHandler(new SkipTurnHandler(getView(), getOutput(), this))
+        );
+        addOption(
+                GAME_STATUS_PROMPT,
+                () -> setSubHandler(new GameStatusHandler(getView(), getOutput(), this))
+        );
+    }
+
+    /**
+     * Inserts an entry to the available options list.
+     *
+     * @param prompt  The prompt message.
+     * @param handler The handler to be used to process input.
+     */
+    private void addOption(String prompt, Runnable handler) {
+        int index = availableOptions.size() + 1;
+        availableOptions.add(new Option(
+                index + ". " + prompt,
+                handler
+        ));
+    }
+
+    /**
+     * Handles the input entered by the user.
+     * <p>After collecting the user choice, sets the sub-handler to the requested one and
+     * delegates it for the following input handling.</p>
+     *
      * @param input The String inserted by the user.
      */
     @Override
     public void handle(String input) {
-        if(isNotMyTurn()){
+        if (isNotMyTurn())
             return;
-        }
-        if (!hasPlacedDie() && !hasUsedToolCard()) {
-            handleFirstMove(input);
-        } else {
-            handleSecondMove(input);
-        }
-    }
 
-    /**
-     * Handles the first Move in the Turn.
-     * @param input The String inserted by the user.
-     */
-    private void handleFirstMove(String input){
-        if (subHandler == null) {
-            handleFirstChoice(input);
-        }
-        else subHandler.handle(input);
-    }
-
-    /**
-     * Handles the second Move in the Turn.
-     * @param input The String inserted by the user.
-     */
-    private void handleSecondMove(String input){
-        if (subHandler == null) {
-            if (!hasPlacedDie() && hasUsedToolCard()) {
-                handleSecondChoiceDie(input);
+        if (subHandler != null)
+            subHandler.handle(input);
+        else {
+            try {
+                int choice = Integer.parseUnsignedInt(input) - 1;
+                availableOptions.get(choice).getHandler().run();
+            } catch (NumberFormatException | IndexOutOfBoundsException e) {
+                showError();
             }
-            if (!hasUsedToolCard() && hasPlacedDie()) {
-                handleSecondChoiceCard(input);
-            }
-        }
-        else subHandler.handle(input);
-    }
-
-     /**
-      * Handle the first move's choice setting the correct subHandler.
-      *
-      * @param input The action selected by the user between all the possible
-      *              actions left.
-      */
-    private void handleFirstChoice(String input) {
-        try {
-            int choice = Integer.parseInt(input.trim());
-            switch (choice) {
-                case 1:
-                    setSubHandler(new DiePlacementHandler(view, output, this));
-                    break;
-                case 2:
-                    setSubHandler(new ToolCardHandler(view, output, this));
-                    break;
-                case 3:
-                    setSubHandler(new SkipTurnHandler(view, output, this));
-                    break;
-                case 4:
-                    setSubHandler(new GameStatusHandler(view, output, this));
-                    break;
-                default:
-                    showError();
-                    break;
-            }
-        }
-        catch (NumberFormatException ex) {
-            showError();
-        }
-    }
-
-    /**
-     * Handle the second move's choice of the user when he has already placed a die
-     * setting the correct subHandler.
-     *
-     * @param input The action selected by the user between all the possible
-     *                actions left.
-     */
-    private void handleSecondChoiceCard(String input) {
-        try {
-            int choice = Integer.parseInt(input.trim());
-            switch (choice) {
-                case 1:
-                    setSubHandler(new ToolCardHandler(view, output, this));
-                    break;
-                case 2:
-                    setSubHandler(new SkipTurnHandler(view, output, this));
-                    break;
-                case 3:
-                    setSubHandler(new GameStatusHandler(view, output, this));
-                    break;
-                default:
-                    showError();
-                    break;
-            }
-        }
-        catch (NumberFormatException ex){
-            showError();
-        }
-    }
-
-    /**
-     * Handle the second move's choice of the user when he has already used a Tool Card
-     * setting the correct SubHandler.
-     *
-     * @param input The action selected by the user between all the possible
-     *              actions left.
-     */
-    private void handleSecondChoiceDie(String input) { //bloccante
-        try {
-            int choice = Integer.parseInt(input.trim());
-            switch (choice) {
-                case 1:
-                    setSubHandler(new DiePlacementHandler(view, output, this));
-                    break;
-                case 2:
-                    setSubHandler(new ToolCardHandler(view, output, this));
-                    break;
-                case 3:
-                    setSubHandler(new GameStatusHandler(view, output, this));
-                    break;
-                default:
-                    showError();
-                    break;
-            }
-        }
-        catch (NumberFormatException ex){
-            showError();
         }
     }
 
     /**
      * Shows the correct textual messages to the player in this phase
-     * according to what he can and what he has to insert.
+     * according to what he can do.
      */
     @Override
     public void showPrompt() {
         if (isNotMyTurn()) {
-            output.printTextNewLine("It's " + getDataOrganizer().getNextTurn().getPlayerName() + "'s turn, please wait");
+            if (getDataOrganizer().getNextTurn() == null)
+                getOutput().println("\nWaiting other players...");
+            else
+                getOutput().println("\nIt's " + getDataOrganizer().getNextTurn().getPlayerName() + "'s turn, please wait");
             return;
         }
-        if (!hasPlacedDie() && !hasUsedToolCard()) { //non ha ancora fatto niente
-            if (subHandler == null) {
-                showFirstActionPrompt();
-            } else {
-                subHandler.showPrompt();
-            }
-        }
+        if (subHandler != null)
+            subHandler.showPrompt();
         else {
-            if (subHandler == null) {
-                showSecondActionPrompt();
-            } else {
-                subHandler.showPrompt();
-            }
+            refillOptionMap();
+            getOutput().println("\n\nIt's your turn, choose between: ");
+            availableOptions.forEach(o -> getOutput().println(o.getPrompt()));
         }
     }
 
     /**
-     * Shows the first move's prompt.
+     * Resets the input manager.
      */
-    private void showFirstActionPrompt() {
-        output.printTextNewLine("It's your turn, enter:\n "
-                + "1 to place a die\n"
-                + "2 to use a tool card\n"
-                + "3 to skip your turn\n"
-                + "4 to see the game status");
-    }
-
-    /**
-     * Shows the second move's prompt.
-     */
-    private void showSecondActionPrompt() {
-        if (hasPlacedDie()) {
-            output.printTextNewLine("It's your turn, you have already placed a die, enter:\n"
-                    + "1 to use a tool card\n"
-                    + "2 to skip your turn\n"
-                    + "3 to see the game status");
-        } else {
-            output.printTextNewLine("It's your turn, you have already used a tool card, enter:\n"
-                    + "1 to place a die\n"
-                    + "2 to skip your turn\n"
-                    + "3 to see the game status");
-        }
-
+    @Override
+    public void reset() {
+        subHandler = null;
     }
 
     /**
@@ -231,15 +142,17 @@ public class TurnHandlingManager extends InputEventManager {
      * otherwise.
      */
     private boolean isNotMyTurn() {
-        return !view.getPlayerName().equals(getDataOrganizer().getNextTurn().getPlayerName());
+        if (getDataOrganizer().getNextTurn() == null)
+            return true;
+        return !getView().getPlayerName().equals(getDataOrganizer().getNextTurn().getPlayerName());
     }
 
     /**
-     * Setter for the subHandler.
-     * @param subHandler The correct subHandler for the turn handling set by the handle
-     *                   method.
+     * Setter for the sub-handler.
+     *
+     * @param subHandler The subHandler for turn handling.
      */
-    public void setSubHandler(InputEventManager subHandler) {
+    void setSubHandler(InputEventManager subHandler) {
         this.subHandler = subHandler;
     }
 

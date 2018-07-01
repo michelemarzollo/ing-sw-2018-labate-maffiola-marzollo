@@ -1,6 +1,7 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.events.*;
+import it.polimi.se2018.model.viewmodel.ViewDataOrganizer;
 import it.polimi.se2018.networking.client.Client;
 import it.polimi.se2018.networking.client.NetworkHandlerFactory;
 import it.polimi.se2018.networking.server.ServerNetInterface;

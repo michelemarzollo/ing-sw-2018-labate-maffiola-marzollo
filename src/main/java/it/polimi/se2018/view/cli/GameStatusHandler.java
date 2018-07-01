@@ -2,87 +2,97 @@ package it.polimi.se2018.view.cli;
 
 import it.polimi.se2018.view.ClientView;
 
+import java.util.Arrays;
+import java.util.List;
+
 
 /**
- * It is a subHandler for the turn management. It handles the input in the
- * case in which the player has chosen to ask for some information about
- * the game status.
+ * Input handler used to show the current game status.
  */
-public class GameStatusHandler extends InputEventManager{
+public class GameStatusHandler extends InputEventManager {
+
+    /**
+     * Prompt messages for the possible options.
+     */
+    private static final String PATTERN_PROMPT = "1. patterns";
+    private static final String DRAFT_POOL_PROMPT = "2. draft pool";
+    private static final String ROUND_TRACK_PROMPT = "3. round track";
+    private static final String PRIVATE_OBJ_PROMPT = "4. private objective card";
+    private static final String PUBLIC_OBJ_PROMPT = "5. public objective cards";
+    private static final String TOOL_CARD_PROMPT = "6. tool cards";
 
     /**
      * Reference to the manager of the turn. It's used to set the
      * subHandler to null when the task has been accomplished.
      */
-    private TurnHandlingManager manager;
+    private final TurnHandlingManager manager;
 
     /**
-     * Constructor of the class
-     * @param view The view to which this manager is bounded.
-     * @param output The output destination where the prompts of this manager
-     *               are shown.
+     * The list of options.
+     */
+    private final List<Option> options = Arrays.asList(
+            new Option(PATTERN_PROMPT, this::handlePatterns),
+            new Option(DRAFT_POOL_PROMPT,
+                    () -> getOutput().printDraftPool(getDraftPool())),
+            new Option(ROUND_TRACK_PROMPT,
+                    () -> getOutput().printRoundTrack(getRoundTrack())),
+            new Option(PRIVATE_OBJ_PROMPT,
+                    () -> getOutput().printPrivateObjectiveCards(getPrivateCards())),
+            new Option(PUBLIC_OBJ_PROMPT,
+                    () -> getOutput().printPublicObjectiveCards(getPublicCards())),
+            new Option(TOOL_CARD_PROMPT,
+                    () -> getOutput().printToolCards(getToolCards()))
+    );
+
+    /**
+     * Constructor of the class.
+     *
+     * @param view    The view to which this manager is bounded.
+     * @param output  The output destination where the prompts of this manager
+     *                are shown.
      * @param manager The TurnHandlingManager.
      */
-    public GameStatusHandler(ClientView view, CliImagePrinter output, TurnHandlingManager manager) {
+    public GameStatusHandler(ClientView view, CliPrinter output, TurnHandlingManager manager) {
         super(view, output);
         this.manager = manager;
     }
 
     /**
-     * This method is the one delegated for handling the input entered by the user
-     * in a correct way. When all the data have been gathered the handling is delegated
-     * to the {@link ClientView} that will create the correct message for sending it
-     * on the network.
-     * @param input The String inserted by the user that represents his choice.
+     * Handles the input entered by the user.
+     * <p>After collecting the player choice, prints the requested information.</p>
+     *
+     * @param input The String inserted by the user.
      */
     @Override
     public void handle(String input) {
         try {
-            int choice = Integer.parseInt(input.trim());
-            switch (choice) {
-                case 1:
-                    if (!isSinglePlayer()) output.printPatterns(getPlayers());
-                    else output.printPattern(getPattern());
-                    manager.setSubHandler(null);
-                    break;
-                case 2:
-                    output.printRoundTrack(getRoundTrack());
-                    manager.setSubHandler(null);
-                    break;
-                case 3:
-                    output.printPrivateObjectiveCards(getPrivateCards());
-                    manager.setSubHandler(null);
-                    break;
-                case 4:
-                    output.printPublicObjectiveCards(getPublicCards());
-                    manager.setSubHandler(null);
-                    break;
-                case 5:
-                    output.printToolCards(getToolCards());
-                    manager.setSubHandler(null);
-                    break;
-                default:
-                    showError();
-                    break;
-            }
-        }
-        catch (NumberFormatException ex){
+            int choice = Integer.parseUnsignedInt(input.trim());
+
+            options.get(choice - 1).getHandler().run();
+            manager.setSubHandler(null);
+
+        } catch (NumberFormatException | IndexOutOfBoundsException ex) {
             showError();
         }
     }
 
     /**
+     * Prints the patter according to game mode.
+     */
+    private void handlePatterns(){
+        if (!isSinglePlayer())
+            getOutput().printPatterns(getPlayers());
+        else
+            getOutput().printPattern(getPattern());
+    }
+
+    /**
      * Shows the correct textual messages to the player in this phase
-     * according to what he can and what he has to insert.
+     * according to what he can do.
      */
     @Override
     public void showPrompt() {
-            output.printTextNewLine("What do you want to see? Enter\n" +
-                    "1 for Patterns\n" +
-                    "2 for Round Track\n" +
-                    "3 for Private Objective Cards\n" +
-                    "4 for Public Objective Cards\n" +
-                    "5 for Tool Cards"
-            );
+        getOutput().println("\nWhat do you want to see? Enter");
+        options.forEach(o -> getOutput().println(o.getPrompt()));
     }
 }

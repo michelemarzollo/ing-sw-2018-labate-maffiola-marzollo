@@ -7,8 +7,7 @@ import java.util.Scanner;
 /**
  * This class gatherers the input from the user and handles it continuously
  * through an {@link InputEventManager} that is set by the {@link CliDisplayer}.
- * A new thread must complete this task so that the user interaction does not
- * interfere with the network communication.
+ * <p>Input gathering can be done on an independent thread.</p>
  */
 public class CliInput implements Runnable {
 
@@ -26,62 +25,115 @@ public class CliInput implements Runnable {
     /**
      * Text scanner that parses the user's input.
      */
-    private Scanner scanner;
+    private final Scanner scanner;
+
+    /**
+     * Flag to indicate if a prompt has to be overridden.
+     */
+    private boolean overridePrompt = false;
+
+    /**
+     * Object used to synchronize prompt printing.
+     */
+    private final Object promptLock = new Object();
 
     /**
      * The constructor of the class.
+     *
      * @param inputStream The {@link InputStream} from which the {@code scanner}
      *                    scans input.
      */
     public CliInput(InputStream inputStream) {
-
         this.scanner = new Scanner(inputStream);
-        this.gameRunning = true;
     }
 
     /**
-     * The thread begins its execution.
+     * Starts a read-handle loop.
      */
     @Override
     public void run() {
-        String input;
-        while (gameRunning){
-            if(manager != null) {
-                //@TODO ci vuole una corretta sincronizzazione
-                manager.showPrompt();
-            }
-            input = scanner.nextLine();
-            if(manager != null) {
-                manager.handle(input);
-            }
+        gameRunning = true;
+        waitForEventManager();
 
+        // prompt-read-handle loop
+        while (gameRunning) {
+            synchronized (promptLock) {
+                manager.showPrompt();
+                overridePrompt = true;
+            }
+            String input = scanner.nextLine();
+            overridePrompt = false;
+            if (gameRunning)
+                manager.handle(input);
         }
     }
 
+    /**
+     * Waits until the event manager is set to a non-null value.
+     */
+    private synchronized void waitForEventManager() {
+        while (manager == null) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
 
     /**
      * Getter for the handler of input data.
+     *
      * @return the current handler.
      */
-    public InputEventManager getManager(){
+    public synchronized InputEventManager getManager() {
         return manager;
     }
 
-
     /**
      * Setter for the handler of input data.
+     * <p>It also prints a prompt in the case it has to be printed for the first time.</p>
+     *
      * @param manager the handler that has to be set.
      */
-    public void setManager(InputEventManager manager) {
+    public synchronized void setManager(InputEventManager manager) {
         this.manager = manager;
+        notifyAll();
+        updatePrompt();
     }
 
     /**
-     * Setter for the game running
-     * @param gameRunning is {@code true} when the game is currently running,
-     * {@code false} otherwise.
+     * Stops the read-handle loop.
      */
-    public void setGameRunning(boolean gameRunning) {
-        this.gameRunning = gameRunning;
+    void stop() {
+        this.gameRunning = false;
+    }
+
+    /**
+     * Tells if the game is running or not.
+     *
+     * @return {@code true} if the game is currently running; {@code false} otherwise.
+     */
+    boolean isGameRunning() {
+        return gameRunning;
+    }
+
+    /**
+     * Updates the prompted message if the read-handle loop hasn't done it yet.
+     */
+    private void updatePrompt() {
+        synchronized (promptLock) {
+            if (overridePrompt)
+                manager.showPrompt();
+        }
+    }
+
+    /**
+     * Resets the underlying input manager to its original state.
+     * <p>Also, forces the prompt to be displayed.</p>
+     */
+    void resetInputManager(){
+        manager.reset();
+        updatePrompt();
     }
 }

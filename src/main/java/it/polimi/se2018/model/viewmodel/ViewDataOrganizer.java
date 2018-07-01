@@ -1,4 +1,4 @@
-package it.polimi.se2018.view;
+package it.polimi.se2018.model.viewmodel;
 
 import it.polimi.se2018.model.Die;
 import it.polimi.se2018.model.events.*;
@@ -43,13 +43,19 @@ public class ViewDataOrganizer {
     private DraftPoolUpdate draftPool;
 
     /**
-     * The last {@link ModelUpdate} received.
-     */
-    private ModelUpdate lastUpdate;
-    /**
      * The name of the local player.
      */
     private String localPlayer;
+
+    /**
+     * Flag to flag to indicate whether the last update changed the turn.
+     */
+    private boolean turnChanged = false;
+
+    /**
+     * Index of the last altered player connection status.
+     */
+    private int changedConnectionIndex = -1;
 
     /**
      * Returns the game setup.
@@ -85,6 +91,7 @@ public class ViewDataOrganizer {
 
     /**
      * Helper method to find the player status for a player.
+     *
      * @param name The name of the player.
      * @return An optional player status.
      */
@@ -97,6 +104,7 @@ public class ViewDataOrganizer {
 
     /**
      * Returns the list of player status.
+     *
      * @return The list of player status.
      */
     public List<PlayerStatus> getAllPlayerStatus() {
@@ -117,6 +125,7 @@ public class ViewDataOrganizer {
 
     /**
      * Helper method to find the player connection status for a player.
+     *
      * @param name The name of the player.
      * @return An optional player connection status.
      */
@@ -129,6 +138,7 @@ public class ViewDataOrganizer {
 
     /**
      * Returns the list of all player connection status.
+     *
      * @return The list of all player connection status.
      */
     public List<PlayerConnectionStatus> getAllConnectionStatus() {
@@ -137,6 +147,7 @@ public class ViewDataOrganizer {
 
     /**
      * Returns the latest NextTurn message.
+     *
      * @return The latest NextTurn message.
      */
     public NextTurn getNextTurn() {
@@ -145,34 +156,29 @@ public class ViewDataOrganizer {
 
     /**
      * Returns the draft pool.
+     *
      * @return The draft pool or {@code null} if there isn't any.
      */
     public List<Die> getDraftPool() {
         if (draftPool != null)
             return draftPool.getDice();
-        return null;
+        return new ArrayList<>();
     }
 
     /**
      * Returns the round track.
+     *
      * @return The round track or {@code null} if there isn't any.
      */
     public List<List<Die>> getRoundTrack() {
         if (roundTrack != null)
             return roundTrack.getRoundTrack();
-        return null;
-    }
-
-    /**
-     * Returns the latest pushed ModelUpdate message.
-     * @return The latest pushed ModelUpdate message.
-     */
-    public ModelUpdate getLastUpdate() {
-        return lastUpdate;
+        return new ArrayList<>();
     }
 
     /**
      * Pushes a GameSetup message.
+     *
      * @param gameSetup The message to push.
      */
     public void push(GameSetup gameSetup) {
@@ -181,6 +187,7 @@ public class ViewDataOrganizer {
 
     /**
      * Pushes a GameEnd message.
+     *
      * @param gameEnd The message to push.
      */
     public void push(GameEnd gameEnd) {
@@ -189,6 +196,7 @@ public class ViewDataOrganizer {
 
     /**
      * Pushes a PlayerStatus message.
+     *
      * @param playerStatus The message to push.
      */
     public void push(PlayerStatus playerStatus) {
@@ -200,24 +208,32 @@ public class ViewDataOrganizer {
 
     /**
      * Pushes a PlayerConnectionStatus message.
+     *
      * @param connectionStatus The message to push.
      */
     public void push(PlayerConnectionStatus connectionStatus) {
         this.playerStatusList
                 .removeIf(p -> p.getPlayerName().equals(connectionStatus.getPlayerName()));
         this.connectionStatusList.add(connectionStatus);
+        changedConnectionIndex = connectionStatusList.indexOf(connectionStatus);
     }
 
     /**
      * Pushes a NextTurn message.
+     *
      * @param nextTurn The message to push.
      */
     public void push(NextTurn nextTurn) {
+        if(this.nextTurn != null)
+           turnChanged = !this.nextTurn.equals(nextTurn);
+        else
+            turnChanged = true;
         this.nextTurn = nextTurn;
     }
 
     /**
      * Pushes a RoundTrackUpdate message.
+     *
      * @param roundTrack The message to push.
      */
     public void push(RoundTrackUpdate roundTrack) {
@@ -226,6 +242,7 @@ public class ViewDataOrganizer {
 
     /**
      * Pushes a DraftPoolUpdate message.
+     *
      * @param draftPool The message to push.
      */
     public void push(DraftPoolUpdate draftPool) {
@@ -235,15 +252,18 @@ public class ViewDataOrganizer {
     /**
      * Pushes a generic ModelUpdate message.
      * <p>The push is achieved through a visitor pattern.</p>
+     *
      * @param update the message to push.
      */
     public void push(ModelUpdate update) {
+        turnChanged = false;
+        changedConnectionIndex = -1;
         update.pushInto(this);
-        this.lastUpdate = update;
     }
 
     /**
      * Setter for the local player name.
+     *
      * @param playerName The name of the local player.
      */
     public void setLocalPlayer(String playerName) {
@@ -252,9 +272,29 @@ public class ViewDataOrganizer {
 
     /**
      * Getter for the local player name.
+     *
      * @return The local player name.
      */
     public String getLocalPlayer() {
         return localPlayer;
+    }
+
+    /**
+     * Getter for the turn changed flag.
+     *
+     * @return {@code true} if the last update changed the turn status; {@code false} otherwise.
+     */
+    public boolean isTurnChanged() {
+        return turnChanged;
+    }
+
+    /**
+     * Getter for the index of the player connection status changed with last update.
+     *
+     * @return The index of the player connection status changed by the last update, or -1
+     * if it isn't the case.
+     */
+    public int getChangedConnectionIndex() {
+        return changedConnectionIndex;
     }
 }

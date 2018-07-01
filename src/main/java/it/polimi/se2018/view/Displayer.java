@@ -1,5 +1,7 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.model.viewmodel.ViewDataOrganizer;
+
 /**
  * Interface for a display manager.
  * <p>It's used by the view to display data on screen.</p>
@@ -25,11 +27,6 @@ public interface Displayer {
      * @param error The error message.
      */
     void displayError(String error);
-
-    /**
-     * Displays a wait message before the starting of the game.
-     */
-    void displayWaitMessage();
 
     /**
      * Asks the player to select a pattern among candidates.

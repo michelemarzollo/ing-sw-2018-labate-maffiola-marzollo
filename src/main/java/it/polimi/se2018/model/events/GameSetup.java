@@ -1,7 +1,7 @@
 package it.polimi.se2018.model.events;
 
 import it.polimi.se2018.model.*;
-import it.polimi.se2018.view.ViewDataOrganizer;
+import it.polimi.se2018.model.viewmodel.ViewDataOrganizer;
 
 import java.util.Arrays;
 

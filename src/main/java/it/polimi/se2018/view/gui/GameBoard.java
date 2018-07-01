@@ -8,7 +8,7 @@ import it.polimi.se2018.model.events.PlayerStatus;
 import it.polimi.se2018.utils.Coordinates;
 import it.polimi.se2018.utils.Logger;
 import it.polimi.se2018.view.Displayer;
-import it.polimi.se2018.view.ViewDataOrganizer;
+import it.polimi.se2018.model.viewmodel.ViewDataOrganizer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;

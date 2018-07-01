@@ -1,6 +1,6 @@
 package it.polimi.se2018.model.events;
 
-import it.polimi.se2018.view.ViewDataOrganizer;
+import it.polimi.se2018.model.viewmodel.ViewDataOrganizer;
 
 /**
  * Event to update views about the change in the connection

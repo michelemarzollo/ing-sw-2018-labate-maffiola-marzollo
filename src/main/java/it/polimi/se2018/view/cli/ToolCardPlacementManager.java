@@ -4,123 +4,75 @@ import it.polimi.se2018.utils.Coordinates;
 import it.polimi.se2018.view.ClientView;
 
 /**
- * This manager handles the use of the Tool Cards that needs as a
- * parameter the index of the chosen die and the coordinates
- * for the placement of the die (special manager for the Cork-Backed Straightedge).
- * It is set as manager for the input by the {@link CliDisplayer} when
- * the askIncrement method is invoked.
+ * Input manager used to place a die with a tool card.
  */
 public class ToolCardPlacementManager extends InputEventManager {
 
     /**
      * The index of the die in the Draft Pool.
      */
-    private int dieIndex;
+    private int dieIndex = -1;
 
     /**
      * The coordinates for the placement.
      */
-    private int row;
-    private int col;
-
-    /**
-     * Reference to the input gatherer class: it is necessary to restore the
-     * correct manager after the accomplishment of this task.
-     */
-    private CliInput gatherer;
+    private int row = -1;
+    private int col = -1;
 
     /**
      * Constructor of the class
-     * @param view The view to which this manager is bounded.
-     * @param output The output destination where the prompts of this manager
-     *               are shown.
-     *@param gatherer The input gatherer to which this manager is bounded.
+     *
+     * @param view     The view to which this manager is bounded.
+     * @param output   The output destination where the prompts of this manager
+     *                 are shown.
      */
-    public ToolCardPlacementManager(ClientView view, CliImagePrinter output, CliInput gatherer) {
+    public ToolCardPlacementManager(ClientView view, CliPrinter output) {
         super(view, output);
-        dieIndex = -1;
-        row = -1;
-        col = -1;
-        this.gatherer = gatherer;
     }
 
+
     /**
-     * This method is the one delegated for handling the input entered by the user
-     * in a correct way. When all the data have been gathered the handling is delegated
-     * to the {@link ClientView} that will create the correct message for sending it
-     * on the network.
-     * @param input The String inserted by the user that represents here the index or his
-     *              the coordinates for the placement.
+     * Handles the input entered by the user.
+     * <p>Calls the proper handler in {@link ClientView} after collecting
+     * the source index and the destination coordinates.</p>
+     *
+     * @param input The String inserted by the user.
      */
     @Override
     public void handle(String input) {
+        int choice;
         try {
-            int choice = Integer.parseInt(input);
-            if (dieIndex == -1) {
-                handleDieIndex(choice);
-            } else if (row == -1) {
-                handleRow(choice);
-            } else if (col == -1) {
-                handleCol(choice);
-            }
+            choice = Integer.parseUnsignedInt(input);
         } catch (NumberFormatException ex) {
             showError();
+            return;
         }
-    }
 
-    /**
-     * Handles the first move: the choice of the die in the Draft Pool.
-     * @param choice The index entered by the user.
-     */
-    private void handleDieIndex(int choice) {
-        if (choice < 0) {
-            showError();
-        } else {
+        if (dieIndex == -1) {
             dieIndex = choice;
-        }
-    }
-
-    /**
-     * Handles the second move: the choice of the row where to place the die.
-     * @param choice The input entered by the user.
-     */
-    private void handleRow(int choice) {
-        if (choice < 0) {
-            showError();
-        } else {
+        } else if (row == -1) {
             row = choice;
-        }
-    }
-
-    /**
-     * Handles the third move: the choice of the column where to place the die.
-     * @param choice The input entered by the user.
-     */
-    private void handleCol(int choice) {
-        if (choice < 0) {
-            showError();
-        } else {
+        } else if (col == -1) {
             col = choice;
-            view.handleToolCardUsage(dieIndex, new Coordinates(row, col));
-            gatherer.setManager(new TurnHandlingManager(view, output));
+            getView().handleToolCardUsage(dieIndex, new Coordinates(row, col));
         }
     }
 
     /**
      * Shows the correct textual messages to the player in this phase
-     * according to what he can and what he has to insert.
+     * according to what he can do.
      */
     @Override
     public void showPrompt() {
         if (dieIndex == -1) {
-            output.printDraftPool(getDraftPool());
-            output.printTextNewLine("Enter the index of the die:");
+            getOutput().printDraftPool(getDraftPool());
+            getOutput().println("Enter the index of the die:");
         } else if (row == -1) {
-            output.printPattern(getPattern());
-            output.printTextNewLine("Enter the coordinates for your placement:");
-            output.printText("Row (starting from 0): ");
+            getOutput().printPattern(getPattern());
+            getOutput().println("Enter the coordinates for your placement:");
+            getOutput().print("Row (starting from 0): ");
         } else if (col == -1) {
-            output.printText("Col (starting from 0): ");
+            getOutput().print("Col (starting from 0): ");
         }
     }
 }

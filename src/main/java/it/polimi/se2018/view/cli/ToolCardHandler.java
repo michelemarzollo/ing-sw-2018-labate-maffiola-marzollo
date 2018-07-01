@@ -3,16 +3,14 @@ package it.polimi.se2018.view.cli;
 import it.polimi.se2018.view.ClientView;
 
 /**
- * It is a subHandler for the turn management. It handles the input in the
- * case in which the player has chosen to use a Tool Card.
+ * Input manager used to select a tool card.
  */
 public class ToolCardHandler extends InputEventManager {
 
     /**
-     * Reference to the manager of the turn. It's used to set the
-     * subHandler to null when the task has been accomplished.
+     * Reference to the manager of the turn.
      */
-    private TurnHandlingManager manager;
+    private final TurnHandlingManager manager;
 
     /**
      * Indicates whether the user has confirmed to perform this action or not.
@@ -31,44 +29,43 @@ public class ToolCardHandler extends InputEventManager {
 
     /**
      * Constructor of the class
-     * @param view The view to which this manager is bounded.
-     * @param output The output destination where the prompts of this manager
-     *               are shown.
+     *
+     * @param view    The view to which this manager is bounded.
+     * @param output  The output destination where the prompts of this manager
+     *                are shown.
      * @param manager The TurnHandlingManager.
      */
-    public ToolCardHandler(ClientView view, CliImagePrinter output, TurnHandlingManager manager) {
+    public ToolCardHandler(ClientView view, CliPrinter output, TurnHandlingManager manager) {
         super(view, output);
         this.manager = manager;
         sacrificeIndex = -1;
     }
 
+
     /**
-     * This method is the one delegated for handling the input entered by the user
-     * in a correct way. When all the data have been gathered the handling is delegated
-     * to the {@link ClientView} that will create the correct message for sending it
-     * on the network.
-     * @param input The String inserted by the user that represents his choice.
+     * Handles the input entered by the user.
+     * <p>After collecting user confirmation, the card name and the sacrifice die
+     * index (if in single player mode), calls the proper handler in {@link ClientView}.</p>
+     *
+     * @param input The String inserted by the user.
      */
     @Override
     public void handle(String input) {
-        if(!confirmDone){
+        if (!confirmDone) {
             try {
-                int choice = Integer.parseInt(input.trim());
+                int choice = Integer.parseUnsignedInt(input.trim());
                 handleConfirm(choice);
-            }
-            catch (NumberFormatException ex){
+            } catch (NumberFormatException ex) {
                 showError();
             }
-        }
-        else if(name == null){
+        } else if (name == null)
             handleName(input);
-        }
-        else if(sacrificeIndex == -1 && isSinglePlayer()) {
+
+        else if (sacrificeIndex == -1 && isSinglePlayer()) {
             try {
-                int choice = Integer.parseInt(input.trim());
+                int choice = Integer.parseUnsignedInt(input.trim());
                 handleIndex(choice);
-            }
-            catch (NumberFormatException ex){
+            } catch (NumberFormatException ex) {
                 showError();
             }
         }
@@ -76,60 +73,52 @@ public class ToolCardHandler extends InputEventManager {
 
     /**
      * Handles the first choice: the confirmation of the will of placing a die.
+     *
      * @param choice The choice performed by the user.
      */
     private void handleConfirm(int choice) {
-        if(choice == 1){
+        if (choice == 1)
             setConfirmDone();
-        }
-        else{
+        else
             manager.setSubHandler(null);
-        }
     }
 
     /**
      * Handles the second choice: the name of the Tool Card.
+     *
      * @param input The choice performed by the user (the name entered).
      */
     private void handleName(String input) {
         name = input;
-        if (!isSinglePlayer()) {
-            manager.setSubHandler(null);
-            view.handleToolCardSelection(name);
-        }
+        if (!isSinglePlayer())
+            getView().handleToolCardSelection(name);
     }
 
     /**
      * Handles the third choice: the index of the die that has to be spent.
+     *
      * @param choice The choice performed by the user.
      */
     private void handleIndex(int choice) {
-        if(choice < 0){
-            showError();
-        }
-        else{
-            manager.setSubHandler(null);
-            view.handleToolCardSelection(name, sacrificeIndex);
-        }
+        sacrificeIndex = choice;
+        getView().handleToolCardSelection(name, sacrificeIndex);
     }
 
 
     /**
      * Shows the correct textual messages to the player in this phase
-     * according to what he can and what he has to insert.
+     * according to what he can do.
      */
     @Override
     public void showPrompt() {
         if (!confirmDone) {
             showConfirmPrompt();
-        }
-        else if (name == null) {
-            output.printToolCards(getToolCards());
-            output.printTextNewLine("Enter the name of the Tool Card:");
-        }
-        else if(sacrificeIndex == -1 && isSinglePlayer()){
-                output.printDraftPool(getDraftPool());
-                output.printTextNewLine("Enter the index of the die you want to spend to use the tool card:");
+        } else if (name == null) {
+            getOutput().printToolCards(getToolCards());
+            getOutput().println("Enter the name of the Tool Card:");
+        } else if (sacrificeIndex == -1 && isSinglePlayer()) {
+            getOutput().printDraftPool(getDraftPool());
+            getOutput().println("Enter the index of the die you want to spend to use the tool card:");
         }
 
     }
@@ -138,13 +127,13 @@ public class ToolCardHandler extends InputEventManager {
      * Shows the confirmation prompt.
      */
     private void showConfirmPrompt() {
-        output.printText("You chose to use a Tool Card, enter:\n" +
+        getOutput().print("You chose to use a Tool Card, enter:\n" +
                 "1 to confirm\n" +
                 "Any other number to go back");
     }
 
     /**
-     * Setter for the confirmation.
+     * Sets the confirmation flag.
      */
     private void setConfirmDone() {
         this.confirmDone = true;
