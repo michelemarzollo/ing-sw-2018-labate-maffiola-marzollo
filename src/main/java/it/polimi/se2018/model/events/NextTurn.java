@@ -130,6 +130,31 @@ public class NextTurn extends ModelUpdate {
         organizer.push(this);
     }
 
+    /**
+     * Defaults to Object.equals(Object).
+     * @param other The object to compare.
+     * @return {@code true} if this and other are equals.
+     * @see Object#equals(Object)
+     */
+    @Override
+    public boolean equals(Object other){
+        return super.equals(other);
+    }
+
+    /**
+     * Defaults to Object.hashCode().
+     * @return The hash code of the object.
+     */
+    @Override
+    public int hashCode(){
+        return super.hashCode();
+    }
+
+    /**
+     * Compare this object with the given one.
+     * @param other The NextTurn object to compare.
+     * @return {@code true} if the two objects are equals.
+     */
     public boolean equals(NextTurn other){
         return other.getPlayerName().equals(getPlayerName()) &&
                 other.isAlreadyPlacedDie() == isAlreadyPlacedDie() &&

@@ -37,4 +37,9 @@ public class DummyClient implements ClientNetInterface {
     public void notify(Message message) {
         //Do nothing
     }
+
+    @Override
+    public void close() {
+
+    }
 }

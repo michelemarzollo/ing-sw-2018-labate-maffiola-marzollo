@@ -24,4 +24,9 @@ public interface ClientNetInterface {
      * @param message the message that the client receives.
      */
     void notify(Message message);
+
+    /**
+     * Closes the client.
+     */
+    void close();
 }

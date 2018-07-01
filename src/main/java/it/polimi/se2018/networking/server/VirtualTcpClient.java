@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 
 /**
  * This class represents a Client on the server side (it implements
@@ -51,6 +52,11 @@ public class VirtualTcpClient implements ClientNetInterface, Runnable {
     private boolean isMultiPlayer;
 
     /**
+     * Flag to indicate if the connection is alive.
+     */
+    private boolean alive;
+
+    /**
      * Constructor of the class.
      *
      * @param server     The {@link ServerNetInterface} of the VirtualTcpClient that
@@ -62,6 +68,7 @@ public class VirtualTcpClient implements ClientNetInterface, Runnable {
         this.connection = connection;
         outputStream = new ObjectOutputStream(connection.getOutputStream());
         inputStream = new ObjectInputStream(connection.getInputStream());
+        alive = true;
     }
 
     /**
@@ -110,7 +117,7 @@ public class VirtualTcpClient implements ClientNetInterface, Runnable {
     @Override
     public void run() {
         initializeConnection();
-        while (!connection.isClosed()) {
+        while (alive) {
             try {
                 //Here the messages that arrive on the socket (when the send method is invoked
                 //in the NetWorkHandler) are read.
@@ -121,9 +128,11 @@ public class VirtualTcpClient implements ClientNetInterface, Runnable {
                     terminate();
                 else
                     server.send(message);
-            } catch (IOException e) {
-                Logger.getDefaultLogger().log("An error occurred, closing connection.");
+            }catch (SocketException e){
+                Logger.getDefaultLogger().log("Closing TCP connection.");
                 terminate();
+            } catch (IOException e) {
+                Logger.getDefaultLogger().log("An error occurred: " + e.getMessage());
             } catch (ClassNotFoundException e) {
                 Logger.getDefaultLogger().log("Serialized class cannot be found" + e.getMessage());
             }
@@ -161,8 +170,6 @@ public class VirtualTcpClient implements ClientNetInterface, Runnable {
         boolean added = server.addClient(this, isMultiPlayer);
         if (!added)
             terminate();
-
-        notify(new Message(Command.ACK, ""));
     }
 
     /**
@@ -170,11 +177,22 @@ public class VirtualTcpClient implements ClientNetInterface, Runnable {
      * <p>The server is informed that the connection is dropped.</p>
      */
     private void terminate() {
+        server.removeClient(this);
+        close();
+    }
+
+    /**
+     * Closes the TCP connection.
+     */
+    @Override
+    public void close(){
+        alive = false;
         try {
+            inputStream.close();
+            outputStream.close();
             connection.close();
         } catch (IOException e) {
             //Do nothing
         }
-        server.removeClient(this);
     }
 }

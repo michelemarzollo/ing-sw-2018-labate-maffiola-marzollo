@@ -1,8 +1,7 @@
 package it.polimi.se2018.networking.client;
 
+import it.polimi.se2018.networking.messages.Command;
 import it.polimi.se2018.networking.messages.Message;
-
-import java.rmi.RemoteException;
 
 /**
  * The implementation of the remote interface RmiClientInterface.
@@ -31,7 +30,7 @@ public class RmiClientImplementation implements RmiClientInterface {
      *
      * @return {@code client}.
      */
-    public String getUsername() throws RemoteException{
+    public String getUsername() {
         return client.getUsername();
     }
 
@@ -39,12 +38,18 @@ public class RmiClientImplementation implements RmiClientInterface {
      * The method to notify the client with a message.
      *
      * @param message the message that the client should receive.
-     * @throws RemoteException if there were problems of communication during
-     *                         the remote method call.
      */
     @Override
-    public void notify(Message message) throws RemoteException {
-        client.notify(message);
+    public void notify(Message message) {
+        if(message.getCommand() != Command.ACK)
+            client.notify(message);
+    }
+
+    /**
+     * Closes the underlying client interface.
+     */
+    public void close() {
+        client.close();
     }
 
 }

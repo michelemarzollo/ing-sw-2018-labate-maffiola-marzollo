@@ -5,6 +5,7 @@ import it.polimi.se2018.networking.messages.Message;
 import it.polimi.se2018.networking.server.ServerNetInterface;
 import it.polimi.se2018.utils.Logger;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -13,12 +14,13 @@ import java.net.SocketException;
 import java.util.concurrent.Semaphore;
 
 /**
- * This class represents the server on client side. It is the access point to
+ * This class represents the server on client side.
+ * <p>It is the access point to
  * the server on client's side: it implements {@link ServerNetInterface}. It is
  * associated to a client when creating it.
  * It implements Runnable because the client needs to start a new thread of
  * execution when launching TcpNetworkHandler because the interaction with the
- * socket's stream (that are present here) are blocking methods.
+ * socket's stream (that are present here) are blocking methods.</p>
  */
 public class TcpNetworkHandler implements ServerNetInterface, Runnable {
 
@@ -29,8 +31,7 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
 
     /**
      * The client socket that represents the ending point of the connection with
-     * the server on client's side, so this is the link with the server since we
-     * are on client side.
+     * the server on client's side.
      */
     private final Socket clientConnection;
 
@@ -49,6 +50,11 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
     private final Semaphore sentUsername = new Semaphore(0);
 
     /**
+     * Flag to indicate if the connection is alive.
+     */
+    private boolean alive;
+
+    /**
      * The constructor of the class. It bounds this handler to the {@code client} specified
      * and creates the client socket connecting to the server socket at the {@code address} and
      * {@code port} specified.
@@ -61,6 +67,7 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
         outputStream = new ObjectOutputStream(clientConnection.getOutputStream());
         inputStream = new ObjectInputStream(clientConnection.getInputStream());
         Thread networkThread = new Thread(this);
+        alive = true;
         networkThread.start();
     }
 
@@ -80,7 +87,7 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        while (!this.clientConnection.isClosed()) {
+        while (alive) {
             try {
                 Message message = (Message) inputStream.readObject();
                 if (message == null)
@@ -89,8 +96,9 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
                 else
                     client.notify(message);
 
-            } catch (SocketException e) {
+            } catch (SocketException | EOFException e) {
                 Logger.getDefaultLogger().log("Closed socket: terminating");
+                close();
             } catch (IOException e) {
                 Logger.getDefaultLogger().log("An error occurred: " + e.getMessage());
             } catch (ClassNotFoundException e) {
@@ -116,6 +124,7 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
 
         } catch (IOException e) {
             Logger.getDefaultLogger().log("An error occurred: " + e.getMessage());
+            client.close();
         }
     }
 
@@ -136,7 +145,7 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
         try {
             Message ack = (Message) inputStream.readObject();
             sentUsername.release();
-            return ack.getCommand() == Command.ACK;
+            return ack.getCommand() == Command.ACK && (Boolean)ack.getBody();
         } catch (IOException | ClassNotFoundException e) {
             return false;
         }
@@ -150,10 +159,15 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
     @Override
     public void removeClient(ClientNetInterface client) {
         close();
+        client.close();
     }
 
+    /**
+     * Closes the connection to the server.
+     */
     private void close() {
         try {
+            alive = false;
             clientConnection.close();
         } catch (IOException ignored) {
             //Do nothing

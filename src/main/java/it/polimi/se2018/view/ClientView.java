@@ -27,20 +27,6 @@ public class ClientView extends View {
     private Client client;
 
     /**
-     * This boolean represents the game's state: it becomes true only when all
-     * the players have chosen their pattern and the game is started, so when
-     * the showGame method(showMultiPlayerGame or showSinglePlayerGame) is invoked.
-     */
-    private boolean gameRunning;
-
-    /**
-     * This boolean represents the game's stat in Single Player mode: it becomes
-     * true only at the end of the game when the player has to choose between its
-     * two Private Objective cards.
-     */
-    private boolean gameEndSinglePlayer;
-
-    /**
      * Creates a ClientView instance that uses the given Displayer to
      * represent data on screen.
      *
@@ -52,26 +38,6 @@ public class ClientView extends View {
         //e il displayer non avrà bisogno del riferimento all'organizer, ma potrà accedervi tramite questa classe
         this.displayer.setView(this);
         displayer.displayLoginView();
-    }
-
-    /**
-     * Getter for {@code gameRunning}
-     *
-     * @return {@code true} if {@code gameRunning} has been set with the show method,
-     * {@code false} otherwise.
-     */
-    public boolean isGameRunning() {
-        return gameRunning;
-    }
-
-    /**
-     * Getter for {@code gameEndSinglePlayer}
-     *
-     * @return {@code true} if {@code gameEndSinglePlayer} has been set
-     * with the {@code showPrivateObjective} method, {@code false} otherwise.
-     */
-    public boolean isGameEndSinglePlayer() {
-        return gameEndSinglePlayer;
     }
 
     /**
@@ -88,7 +54,6 @@ public class ClientView extends View {
      */
     @Override
     public void showMultiPlayerGame() {
-        gameRunning = true;
         displayer.displayMultiPlayerGame();
     }
 
@@ -97,7 +62,6 @@ public class ClientView extends View {
      */
     @Override
     public void showSinglePlayerGame() {
-        gameRunning = true;
         displayer.displaySinglePlayerGame();
     }
 
@@ -124,7 +88,6 @@ public class ClientView extends View {
      */
     @Override
     public void showPrivateObjectiveSelection() {
-        gameEndSinglePlayer = true;
         displayer.askPrivateObjective();
     }
 
@@ -417,23 +380,39 @@ public class ClientView extends View {
         client.disconnect();
     }
 
-    public void handleLogin(String playerName, boolean multiPlayer, boolean rmi){
+    public void handleLogin(String playerName, boolean multiPlayer, boolean rmi) {
         setPlayerName(playerName);
         organizer.setLocalPlayer(playerName);
-        ServerNetInterface netHandler;
-        if (rmi)
-            netHandler = NetworkHandlerFactory.newRmiNetHandler();
-        else
-            netHandler = NetworkHandlerFactory.newTcpNetHandler();
 
-        client = new Client(this, netHandler);
-        client.connect(multiPlayer);
+        startClient(rmi, multiPlayer);
 
         notifyObservers(new ViewMessage(
                 this,
                 Action.REGISTER_PLAYER,
                 getPlayerName()
         ));
+    }
+
+    /**
+     * Starts the network client.
+     *
+     * @param isRmi         {@code true} if rmi is to be used; {@code false} if tcp is to be used.
+     * @param isMultiPlayer {@code true} if in multi player mode; {@code false} if in
+     *                      single player mode.
+     */
+    private void startClient(boolean isRmi, boolean isMultiPlayer) {
+        ServerNetInterface netHandler;
+        if (isRmi)
+            netHandler = NetworkHandlerFactory.newRmiNetHandler();
+        else
+            netHandler = NetworkHandlerFactory.newTcpNetHandler();
+
+        client = new Client(this, netHandler);
+        try {
+            client.connect(isMultiPlayer);
+        } catch (Client.ConnectionRefusedException e) {
+            client.getNetInterface().close();
+        }
     }
 
     /**
@@ -464,4 +443,5 @@ public class ClientView extends View {
                 getPlayerName()
         ));
     }
+
 }

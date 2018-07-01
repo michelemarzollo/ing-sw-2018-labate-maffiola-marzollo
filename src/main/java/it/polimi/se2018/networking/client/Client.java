@@ -57,7 +57,9 @@ public class Client {
      *                      if in single player mode.
      */
     public void connect(boolean isMultiPlayer) {
-        getServer().addClient(getNetInterface(), isMultiPlayer);
+        boolean success = getServer().addClient(getNetInterface(), isMultiPlayer);
+        if(!success)
+            throw new ConnectionRefusedException();
     }
 
     /**
@@ -65,5 +67,11 @@ public class Client {
      */
     public void disconnect() {
         getServer().removeClient(getNetInterface());
+    }
+
+    /**
+     * Exception to indicate the connection was refused.
+     */
+    public static class ConnectionRefusedException extends RuntimeException{
     }
 }
