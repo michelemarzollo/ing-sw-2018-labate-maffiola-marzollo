@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<tool_card xmlns="http://se2018.polimi.it/tool_card"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://se2018.polimi.it/tool_card  ../tool_card.xsd">
+
+    <name>Glazing Hammer</name>
+    <description>Re-roll all dice in the Draft Pool\n
+        This may only be used on your second turn before drafting</description>
+    <colour>BLUE</colour>
+
+</tool_card>

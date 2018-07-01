@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:tool="http://se2018.polimi.it/tool_card"
+            targetNamespace="http://se2018.polimi.it/tool_card"
+            elementFormDefault="qualified">
+
+    <xsd:simpleType name="dieColour">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="BLUE"/>
+            <xsd:enumeration value="GREEN"/>
+            <xsd:enumeration value="PURPLE"/>
+            <xsd:enumeration value="RED"/>
+            <xsd:enumeration value="YELLOW"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:element name="tool_card">
+        <xsd:complexType>
+            <xsd:all>
+                <xsd:element name="name" type="xsd:string"/>
+                <xsd:element name="description" type="xsd:string"/>
+                <xsd:element name="colour" type="tool:dieColour"/>
+            </xsd:all>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>

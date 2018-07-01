@@ -51,7 +51,7 @@ public class XmlClientConfigLoaderTest {
      */
     @Test
     public void testBadConfigurationLoading() {
-        String path = getClass().getClassLoader().getResource("it/polimi/se2018/utils/public_objective_cards/bad/bad_card.xml").toString();
+        String path = getClass().getClassLoader().getResource("it/polimi/se2018/utils/public_objective_cards/bad/xmls/bad_card.xml").toString();
         path = path.substring(5);
 
         try {

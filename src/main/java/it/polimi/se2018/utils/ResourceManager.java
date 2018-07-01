@@ -96,6 +96,14 @@ public class ResourceManager {
     }
 
     /**
+     * Retrieves the {@link InputStream} of the tool cards xsd.
+     * @return The {@link InputStream} of the tool cards xsd.
+     */
+    public InputStream getToolCardSchema() {
+        return getClass().getClassLoader().getResourceAsStream(BASE + "controller/tool_cards/tool_card.xsd");
+    }
+
+    /**
      * Retrieves the {@link InputStream} of the client configuration xsd.
      * @return The {@link InputStream} of the client configuration xsd.
      */

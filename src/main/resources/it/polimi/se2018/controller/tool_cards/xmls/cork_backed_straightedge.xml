@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<tool_card xmlns="http://se2018.polimi.it/tool_card"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://se2018.polimi.it/tool_card  ../tool_card.xsd">
+
+    <name>Cork-backed Straightedge</name>
+    <description>After drafting, place the die in a spot that is not adjacent to another die\n
+        You must obey all other placement restrictions</description>
+    <colour>YELLOW</colour>
+
+</tool_card>

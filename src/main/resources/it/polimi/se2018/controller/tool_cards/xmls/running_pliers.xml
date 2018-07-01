@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<tool_card xmlns="http://se2018.polimi.it/tool_card"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://se2018.polimi.it/tool_card  ../tool_card.xsd">
+
+    <name>Running Pliers</name>
+    <description>After your first turn, immediately draft a die\n
+        Skip your next turn this round</description>
+    <colour>RED</colour>
+
+</tool_card>

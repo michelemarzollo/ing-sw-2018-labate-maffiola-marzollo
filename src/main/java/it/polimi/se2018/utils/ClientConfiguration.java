@@ -9,6 +9,8 @@ package it.polimi.se2018.utils;
  */
 public class ClientConfiguration {
 
+    private static final String CONFIGURATION_EXCEPTION = "There is no valid configuration for the client!";
+
     /**
      * The server of the server the client has to connect to.
      */
@@ -65,7 +67,7 @@ public class ClientConfiguration {
     public static ClientConfiguration getInstance() throws MissingConfigurationException {
         if (instance != null)
             return instance;
-        else throw new MissingConfigurationException("There is no valid configuration for the client!");
+        else throw new MissingConfigurationException(CONFIGURATION_EXCEPTION);
     }
 
     /**

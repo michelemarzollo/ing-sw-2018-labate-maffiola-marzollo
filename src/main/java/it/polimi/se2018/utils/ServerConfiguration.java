@@ -9,6 +9,8 @@ package it.polimi.se2018.utils;
  */
 public class ServerConfiguration {
 
+    private static final String CONFIGURATION_EXCEPTION = "There is no valid configuration for the server!";
+
     /**
      * The number of the port of the server.
      */
@@ -98,7 +100,7 @@ public class ServerConfiguration {
     public static ServerConfiguration getInstance() throws MissingConfigurationException {
         if (instance != null)
             return instance;
-        else throw new MissingConfigurationException("There is no valid configuration for the server!");
+        else throw new MissingConfigurationException(CONFIGURATION_EXCEPTION);
     }
 
     /**

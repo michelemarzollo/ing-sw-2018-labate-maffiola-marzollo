@@ -32,7 +32,7 @@ public abstract class XmlLoader {
     protected Validator validator;
 
     /**
-     * The constructor of th abstract class.
+     * The constructor of the abstract class.
      *
      * @throws SAXException if sax validator or sax parser cannot be used.
      */
