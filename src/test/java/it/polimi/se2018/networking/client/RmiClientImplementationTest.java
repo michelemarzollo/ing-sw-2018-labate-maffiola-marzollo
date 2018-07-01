@@ -3,8 +3,6 @@ package it.polimi.se2018.networking.client;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.rmi.RemoteException;
-
 public class RmiClientImplementationTest {
 
     @Test
