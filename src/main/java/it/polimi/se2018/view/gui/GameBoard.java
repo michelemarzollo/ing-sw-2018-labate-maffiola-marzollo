@@ -27,8 +27,14 @@ import java.util.Map;
  */
 public abstract class GameBoard {
 
+    /**
+     * Ratio of objective cards.
+     */
     private static final double OBJECTIVE_CARD_RATIO = 1.400267738;
 
+    /**
+     * Ratio of tool cards.
+     */
     private static final double TOOL_CARD_RATIO = 1.422535211;
 
     /**
@@ -164,7 +170,7 @@ public abstract class GameBoard {
      */
     private boolean isPlayerTurn() {
         ViewDataOrganizer organizer = displayer.getDataOrganizer();
-        if(organizer.getNextTurn() != null)
+        if (organizer.getNextTurn() != null)
             return organizer.getNextTurn().getPlayerName().equals(organizer.getLocalPlayer());
         return false;
     }
@@ -341,7 +347,7 @@ public abstract class GameBoard {
     private void refreshPatterns() {
         for (Map.Entry<String, Pattern> entry : patterns.entrySet()) {
             PlayerStatus playerStatus = getDisplayer().getDataOrganizer().getPlayerStatus(entry.getKey());
-            if(playerStatus != null)
+            if (playerStatus != null)
                 entry.getValue().setStatus(playerStatus);
             checkConnected(entry.getValue(), entry.getKey());
         }
@@ -351,7 +357,8 @@ public abstract class GameBoard {
      * Checks if an opponent is connected or disconnected.
      * <p>If the player results disconnected, its pattern is altered in order to
      * display such information.</p>
-     * @param pattern The pattern layout of the player.
+     *
+     * @param pattern    The pattern layout of the player.
      * @param playerName The name of the player to be checked.
      */
     private void checkConnected(Pattern pattern, String playerName) {
@@ -394,16 +401,19 @@ public abstract class GameBoard {
             getTurnLabel().setText("");
     }
 
-    private void refreshDraftPool(){
+    /**
+     * Refreshes the dice displayed in the draft pool.
+     */
+    private void refreshDraftPool() {
         ViewDataOrganizer organizer = displayer.getDataOrganizer();
-        if (organizer.getDraftPool() != null){
+        if (organizer.getDraftPool() != null) {
             draftPoolFiller.setDice(displayer.getDataOrganizer().getDraftPool());
-            if(organizer.getNextTurn() != null){
+            if (isPlayerTurn()) {
                 int index = organizer.getNextTurn().getSacrificeIndex();
-                if(index != -1)
+                if (index != -1)
                     draftPoolFiller.setSacrifice(index);
                 index = organizer.getNextTurn().getForcedSelectionIndex();
-                if(index != -1)
+                if (index != -1)
                     draftPoolFiller.setForcedSelection(index);
             }
         }

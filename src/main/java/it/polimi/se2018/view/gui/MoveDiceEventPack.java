@@ -90,6 +90,11 @@ public class MoveDiceEventPack extends BoardEventPack {
         }
     }
 
+    /**
+     * Asks the player to continue moving dice.
+     *
+     * @return {@code true} if the player chose to continue; {@code false} otherwise.
+     */
     private boolean askContinue() {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setContentText("Move another die?");

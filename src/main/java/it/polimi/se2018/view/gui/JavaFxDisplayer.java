@@ -1,10 +1,10 @@
 package it.polimi.se2018.view.gui;
 
 import it.polimi.se2018.model.Die;
+import it.polimi.se2018.model.viewmodel.ViewDataOrganizer;
 import it.polimi.se2018.utils.Logger;
 import it.polimi.se2018.view.ClientView;
 import it.polimi.se2018.view.Displayer;
-import it.polimi.se2018.model.viewmodel.ViewDataOrganizer;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -64,6 +64,7 @@ public class JavaFxDisplayer extends Application implements Displayer {
 
     /**
      * Launches the gui.
+     *
      * @param callback The callback function to register the displayer.
      */
     public static void launchGui(Consumer<Displayer> callback) {
@@ -87,7 +88,7 @@ public class JavaFxDisplayer extends Application implements Displayer {
     }
 
     @Override
-    public void stop(){
+    public void stop() {
         getView().handleDisconnect();
     }
 
@@ -171,6 +172,8 @@ public class JavaFxDisplayer extends Application implements Displayer {
             errorAlert.setContentText(error);
             errorAlert.showAndWait();
         });
+        if (board != null)
+            Platform.runLater(() -> board.refreshData());
     }
 
     /**
@@ -312,6 +315,9 @@ public class JavaFxDisplayer extends Application implements Displayer {
         Platform.runLater(() -> board.setEventPack(eventPack));
     }
 
+    /**
+     * Refreshes all displayed data according to the current state of the view model.
+     */
     @Override
     public synchronized void refreshDisplayedData() {
         if (board != null) {
@@ -404,18 +410,27 @@ public class JavaFxDisplayer extends Application implements Displayer {
         return clientView;
     }
 
+    /**
+     * Asks the user to choose if increment or decrement the value of a die.
+     */
     @Override
     public void askIncrement() {
         BoardEventPack eventPack = new IncrementDieValueEventPack(clientView);
         Platform.runLater(() -> board.setEventPack(eventPack));
     }
 
+    /**
+     * Asks the user to place a die.
+     */
     @Override
     public void askPlacement() {
         BoardEventPack eventPack = new PlaceDieEventPack(clientView);
         Platform.runLater(() -> board.setEventPack(eventPack));
     }
 
+    /**
+     * Asks the user to confirm the usage of a tool card.
+     */
     @Override
     public void askConfirm() {
         Platform.runLater(() -> {

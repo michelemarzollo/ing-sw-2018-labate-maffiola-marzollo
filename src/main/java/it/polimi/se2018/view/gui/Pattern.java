@@ -145,8 +145,9 @@ public class Pattern {
     /**
      * Set the style for the specified cell.
      * <p>If url is empty, no background will be loaded.</p>
+     *
      * @param cell The node representing a cell.
-     * @param url The url of the background to use.
+     * @param url  The url of the background to use.
      */
     private void setCellStyle(AnchorPane cell, String url) {
         if (!url.isEmpty())
@@ -251,6 +252,7 @@ public class Pattern {
      * Sets a player as disconnected.
      * <p>Its name and pattern name labels will be set disabled to graphically
      * notify the player.</p>
+     *
      * @param disconnected Flag to indicate if the player has to be set connected or disconnected.
      */
     public void setDisconnected(boolean disconnected) {

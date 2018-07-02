@@ -71,17 +71,11 @@ public class PatternSelection {
      * on how many patterns must be shown.</p>
      */
     public void setGrid() {
-        int col;
-        int row;
+        mainGrid.addRow(0);
+        mainGrid.addRow(1);
         for (int i = 0; i < patterns.length; i++) {
-            if (i % 2 == 1) {
-                col = 1;
-                row = (i - 1) / 2;
-            } else {
-                col = 0;
-                row = i / 2;
-                mainGrid.addRow(i / 2);
-            }
+            int col = i % 2;
+            int row = i / 2;
             try {
                 FXMLLoader loader = new FXMLLoader();
 

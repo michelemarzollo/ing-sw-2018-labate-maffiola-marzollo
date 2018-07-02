@@ -16,12 +16,12 @@
                 AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
         <top>
             <VBox alignment="TOP_CENTER" BorderPane.alignment="CENTER">
-                <Label fx:id="playerNameLabel" text="Label">
+                <Label fx:id="playerNameLabel">
                     <font>
                         <Font size="30.0"/>
                     </font>
                 </Label>
-                <Label fx:id="patternNameLabel" text="Label">
+                <Label fx:id="patternNameLabel">
                     <font>
                         <Font size="20.0"/>
                     </font>

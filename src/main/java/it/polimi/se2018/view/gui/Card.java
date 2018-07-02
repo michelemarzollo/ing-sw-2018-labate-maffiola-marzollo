@@ -22,6 +22,9 @@ import java.util.function.Consumer;
  */
 public class Card {
 
+    /**
+     * Maximum size for the card zoom dialog.
+     */
     private static final double MAX_X = 450;
 
     /**
@@ -34,8 +37,14 @@ public class Card {
      */
     private BorderPane cardImage = new BorderPane();
 
+    /**
+     * The url of the card image.
+     */
     private String url;
 
+    /**
+     * The dialog to display a zoomed image of the card.
+     */
     private Dialog<Boolean> cardDialog;
 
     /**
@@ -43,6 +52,9 @@ public class Card {
      */
     private String cardName;
 
+    /**
+     * Ratio of the card (height/width)
+     */
     private final double ratio;
 
     /**
@@ -125,10 +137,12 @@ public class Card {
 
     /**
      * Creates a dialog to allow to zoom the card.
+     *
      * @return A dialog to allow to zoom the card.
      */
-    private Dialog<Boolean> getZoomDialog(){
+    private Dialog<Boolean> getZoomDialog() {
         cardDialog = new Dialog<>();
+        cardDialog.setTitle(cardName);
         DialogPane pane = new DialogPane();
         cardDialog.setDialogPane(pane);
         BorderPane borderPane = new BorderPane();
@@ -139,12 +153,12 @@ public class Card {
         Button close = new Button("Close");
         close.setOnMouseClicked(e -> close());
         buttonBar.getButtons().add(close);
-        if(handler != null) {
+        if (handler != null) {
             Button use = new Button("Use");
             use.setOnMouseClicked(e -> use());
             buttonBar.getButtons().add(use);
         }
-        buttonBar.setPadding(new Insets(15,0,0,0));
+        buttonBar.setPadding(new Insets(15, 0, 0, 0));
         borderPane.setBottom(buttonBar);
         return cardDialog;
     }
@@ -152,14 +166,14 @@ public class Card {
     /**
      * Handler to close a dialog.
      */
-    private void close(){
+    private void close() {
         cardDialog.setResult(false);
     }
 
     /**
      * Handler to use a card.
      */
-    private void use(){
+    private void use() {
         cardDialog.setResult(true);
     }
 }

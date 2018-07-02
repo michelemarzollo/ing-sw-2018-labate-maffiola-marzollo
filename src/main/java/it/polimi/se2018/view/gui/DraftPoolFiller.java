@@ -86,24 +86,45 @@ public class DraftPoolFiller {
         }
     }
 
-    private void disableDie(Node node){
+    /**
+     * Disables the die at the given node.
+     *
+     * @param node The node containing the die to disable.
+     */
+    private void disableDie(Node node) {
         ColorAdjust effect = new ColorAdjust();
         effect.setSaturation(-1);
         node.setDisable(true);
         node.setEffect(effect);
     }
 
-    public void setSacrifice(int index){
+    /**
+     * Disables the die at the given index.
+     *
+     * @param index The index of the die to disable.
+     */
+    public void setSacrifice(int index) {
         disableDie(diceContainer.getChildren().get(index));
     }
 
-    public void setForcedSelection(int index){
+    /**
+     * Disables all dice but the one at the given index.
+     *
+     * @param index The index of the die to keep enabled.
+     */
+    public void setForcedSelection(int index) {
         for (int i = 0; i < diceContainer.getChildren().size(); i++) {
-            if(i != index)
+            if (i != index)
                 disableDie(diceContainer.getChildren().get(i));
         }
     }
 
+    /**
+     * Fits a die in the dice container.
+     *
+     * @param dieImage The AnchorPane containing the image of the die.
+     * @param num      The number of dice in a row.
+     */
     private void fitDie(AnchorPane dieImage, int num) {
         dieImage.minHeightProperty().bind(dieImage.minWidthProperty());
         dieImage.maxHeightProperty().bind(dieImage.maxWidthProperty());
