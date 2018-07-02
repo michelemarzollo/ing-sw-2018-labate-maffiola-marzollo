@@ -26,7 +26,7 @@
             <Image url="@images/log_in_title.png" />
          </image>
       </ImageView>
-      <Button fx:id="startButton" layoutX="464.0" layoutY="337.0" mnemonicParsing="false" onAction="#login" prefHeight="25.0" prefWidth="72.0" text="Start" />
+      <Button layoutX="464.0" layoutY="337.0" mnemonicParsing="false" onAction="#login" prefHeight="25.0" prefWidth="72.0" text="Start" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e1e2e3d1" height="112.0" layoutX="99.0" layoutY="229.0" stroke="TRANSPARENT" strokeType="INSIDE" width="245.0" />
       <GridPane layoutX="122.0" layoutY="240.0">
         <columnConstraints>
@@ -51,17 +51,17 @@
             </Label>
             <RadioButton fx:id="rmiButton" mnemonicParsing="false" selected="true" text="RMI" GridPane.rowIndex="1">
                <toggleGroup>
-                  <ToggleGroup fx:id="networkingTechnology" />
+                  <ToggleGroup fx:id="connection" />
                </toggleGroup></RadioButton>
-            <RadioButton fx:id="socketButton" mnemonicParsing="false" text="Socket" toggleGroup="$networkingTechnology" GridPane.rowIndex="2" />
+            <RadioButton mnemonicParsing="false" text="Socket" toggleGroup="$connection" GridPane.rowIndex="2" />
             <RadioButton fx:id="multiPlayerButton" mnemonicParsing="false" selected="true" text="Multiplayer" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <toggleGroup>
                   <ToggleGroup fx:id="gameMode" />
                </toggleGroup></RadioButton>
-            <RadioButton fx:id="singlePlayerButton" mnemonicParsing="false" text="Single player" toggleGroup="$gameMode" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <RadioButton mnemonicParsing="false" text="Singleplayer" toggleGroup="$gameMode" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
-      <TextField fx:id="usernameText" layoutX="195.0" layoutY="189.0" promptText="Username" />
+      <TextField fx:id="usernameText" layoutX="195.0" layoutY="189.0" onAction="#login" promptText="Username" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e3e3e3d1" height="26.0" layoutX="99.0" layoutY="189.0" stroke="TRANSPARENT" strokeType="INSIDE" width="79.0" />
       <Label layoutX="107.0" layoutY="192.0" text="Username">
          <font>

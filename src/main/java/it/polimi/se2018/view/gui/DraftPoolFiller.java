@@ -20,6 +20,8 @@ import java.util.function.Consumer;
  */
 public class DraftPoolFiller {
 
+    private static final double MAX_DIMENSION = 100;
+
     /**
      * The container where dice are to be placed.
      */
@@ -38,6 +40,7 @@ public class DraftPoolFiller {
      */
     public DraftPoolFiller(HBox diceContainer) {
         this.diceContainer = diceContainer;
+        diceContainer.setMaxHeight(MAX_DIMENSION);
     }
 
     /**

@@ -21,7 +21,14 @@ public class AskDifficulty {
     /**
      * The maximum difficulty of the single-player game.
      */
-    private static final int MAX_DIFFICULTY = 5;
+    private static final int MIN_DIFFICULTY = 5;
+
+    /**
+     * The instructions for the user.
+     *
+     */
+    private static final String REQUEST_MESSAGE = "Please select the difficulty of the game:" +
+            "\nit must be a number between 1 (highest \ndifficulty) and " + MIN_DIFFICULTY + " (lowest difficulty):";
 
     /**
      * The main controller, which instantiates this one and has the reference to the
@@ -42,12 +49,6 @@ public class AskDifficulty {
     private TextField textField;
 
     /**
-     * The button to confirm the decision.
-     */
-    @FXML
-    private Button okButton;
-
-    /**
      * The method that handles the getting of the difficulty and the calling
      * of the method of the ClientView to notify the controller.
      *
@@ -58,7 +59,7 @@ public class AskDifficulty {
         if (textField.getText().length() == 1) {
             try {
                 int difficulty = Integer.parseInt(textField.getText());
-                if (difficulty < 1 || difficulty > MAX_DIFFICULTY)
+                if (difficulty < 1 || difficulty > MIN_DIFFICULTY)
                     parentController.displayError(ERROR_MESSAGE);
                 else {
                     parentController.displayWaitingView("The game is starting...");
@@ -78,8 +79,7 @@ public class AskDifficulty {
      */
     public void setController(JavaFxDisplayer parentController) {
         this.parentController = parentController;
-        label.setText("Please select the difficulty of the game:\nit must be a number between " +
-                "1 and " + MAX_DIFFICULTY + ":");
+        label.setText(REQUEST_MESSAGE);
     }
 
 }

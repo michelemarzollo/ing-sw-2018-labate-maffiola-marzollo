@@ -181,6 +181,8 @@ public class ClientView extends View {
     @Override
     public void update(ModelUpdate message) {
         organizer.push(message);
+        if(message.getEventType() == ModelEvent.GAME_SETUP)
+            showPatternSelection();
         if (organizer.getScoreBoard() != null)
             showScoreBoard();
         displayer.refreshDisplayedData();

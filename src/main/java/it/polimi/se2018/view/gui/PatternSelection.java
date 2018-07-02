@@ -5,7 +5,6 @@ import it.polimi.se2018.utils.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -23,6 +22,10 @@ import java.io.IOException;
  */
 public class PatternSelection {
 
+    private static final int ROW_HEIGHT = 350;
+
+    private static final String WAITING_MESSAGE = "The game is starting...";
+
     /**
      * The main controller of the gui.
      */
@@ -32,12 +35,6 @@ public class PatternSelection {
      * The array of patterns associated to the player.
      */
     private it.polimi.se2018.model.Pattern[] patterns;
-
-    /**
-     * The pane where the patterns are shown.
-     */
-    @FXML
-    private ScrollPane scrollPane;
 
     /**
      * The grid where the pattern are placed.
@@ -81,9 +78,10 @@ public class PatternSelection {
 
                 loader.setLocation(this.getClass().getResource("pattern.fxml"));
                 AnchorPane patternView = loader.load();
-                patternView.setMinHeight(500);      //to change when controller.minimize() will be usable
+                patternView.setMinHeight(ROW_HEIGHT);
                 Pattern controller = loader.getController();
 
+                mainGrid.setMinHeight(ROW_HEIGHT);
                 //creates a mock PlayerStatus to use the methods of the Pattern controller
                 PlayerStatus playerStatus = new PlayerStatus("", patterns[i].getDifficulty(), patterns[i]);
 
@@ -118,7 +116,7 @@ public class PatternSelection {
                 patterns[patterNumber].getName() + " pattern.");
 
         if (confirmed) {
-            parentController.displayWaitingView("The game is starting...");
+            parentController.displayWaitingView(WAITING_MESSAGE);
             parentController.getView().handlePatternSelection(patterns[patterNumber].getName());
         } else parentController.askPattern();
     }

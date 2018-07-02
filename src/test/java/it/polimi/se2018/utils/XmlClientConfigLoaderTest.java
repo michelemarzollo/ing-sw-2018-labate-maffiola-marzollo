@@ -29,7 +29,6 @@ public class XmlClientConfigLoaderTest {
     @Test
     public void testConfigurationLoading() {
 
-        // the path has to be "C:\\Users\\Michi\\IdeaProjects\\ing-sw-2018-labate-maffiola-marzollo\\src\\test\\resources\\it\\polimi\\se2018\\utils\\configuration\\client_configuration.xml"
         String path = getClass().getClassLoader().getResource("it/polimi/se2018/utils/configuration/client_configuration.xml").toString();
         path = path.substring(5);
 
