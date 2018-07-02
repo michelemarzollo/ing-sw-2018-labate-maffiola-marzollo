@@ -250,7 +250,6 @@ public class MultiPlayerController extends Controller {
             Logger.getDefaultLogger().log("connecting " + message.getPlayerName());
 
             getGame().registerObserver(message.getView());
-            message.getView().showPatternSelection();
             if (getGame().getPlayers().size() == 2) {
                 lobbyTimer.schedule(new StartingTask(getGame()), (long) timeOut * 1000);
             }

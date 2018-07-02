@@ -112,7 +112,7 @@ public class PullAgainAndPlaceBehaviour implements ToolCardBehaviour {
 
     /**
      * In the second step is given to the die the value chosen by the player, and the
-     * die is placed in the gird in the position decided by the player.
+     * die is placed in the grid in the position chosen by the player.
      *
      * @param game          the reference to the {@link Game}.
      * @param chooseMessage the message from the view, that contains the information
@@ -135,8 +135,8 @@ public class PullAgainAndPlaceBehaviour implements ToolCardBehaviour {
             Pattern currentPattern = currentTurn.getPlayer().getPattern();
             Pattern newPattern = currentPattern.placeDie(newDie, chooseMessage.getDestination());
             currentTurn.getPlayer().setPattern(newPattern);
-
             game.getDraftPool().draft(forcedSelection);
+
             currentTurn.placeDie();
             firstStepDone = false;
             return true;

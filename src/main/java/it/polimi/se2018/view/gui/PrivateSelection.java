@@ -13,18 +13,24 @@ import javafx.scene.image.ImageView;
  */
 public class PrivateSelection {
 
+    private static final String PATH = "images/cards/";
+
+    private static final String EXTENSION = ".jpg";
+
+    private static final String WAITING_REASON = "Calculating the score...";
+
     /**
      * The main controller of the gui.
      */
     private JavaFxDisplayer parentController;
 
     /**
-     * The name of hte card that will be placed on the left in the screen.
+     * The name of the card that will be placed on the left in the screen.
      */
     private String leftCardName;
 
     /**
-     * The name of hte card that will be placed on the right in the screen.
+     * The name of the card that will be placed on the right in the screen.
      */
     private String rightCardName;
 
@@ -62,7 +68,7 @@ public class PrivateSelection {
         boolean confirmed = parentController.displayConfirm(
                 "You chose the " + leftCardName + " card.");
         if (confirmed) {
-            parentController.displayWaitingView("Calculating the score...");
+            parentController.displayWaitingView(WAITING_REASON);
             parentController.getView().handlePrivateSelection(leftCardName);
         } else parentController.askPrivateObjective();
     }
@@ -78,7 +84,7 @@ public class PrivateSelection {
         boolean confirmed = parentController.displayConfirm(
                 "You chose the " + rightCardName + " card.");
         if (confirmed) {
-            parentController.displayWaitingView("Calculating the score...");
+            parentController.displayWaitingView(WAITING_REASON);
             parentController.getView().handlePrivateSelection(rightCardName);
         } else parentController.askPrivateObjective();
     }
@@ -96,10 +102,10 @@ public class PrivateSelection {
         rightCardName = parentController.
                 getDataOrganizer().getGameSetup().getPrivateObjectives()[0][1].getName();
 
-        Image image1 = new Image(getClass().getResourceAsStream("images/cards/" + leftCardName + ".jpg"));
+        Image image1 = new Image(getClass().getResourceAsStream(PATH + leftCardName + EXTENSION));
         leftCard.setImage(image1);
 
-        Image image2 = new Image(getClass().getResourceAsStream("images/cards/" + rightCardName + ".jpg"));
+        Image image2 = new Image(getClass().getResourceAsStream(PATH + rightCardName + EXTENSION));
         rightCard.setImage(image2);
 
     }

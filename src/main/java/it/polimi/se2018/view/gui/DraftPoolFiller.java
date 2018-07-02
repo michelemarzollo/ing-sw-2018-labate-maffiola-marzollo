@@ -20,6 +20,8 @@ import java.util.function.Consumer;
  */
 public class DraftPoolFiller {
 
+    private static final double MAX_DIMENSION = 100;
+
     /**
      * The container where dice are to be placed.
      */
@@ -38,6 +40,7 @@ public class DraftPoolFiller {
      */
     public DraftPoolFiller(HBox diceContainer) {
         this.diceContainer = diceContainer;
+        diceContainer.setMaxHeight(MAX_DIMENSION);
     }
 
     /**
@@ -86,6 +89,11 @@ public class DraftPoolFiller {
         }
     }
 
+    /**
+     * The method to disable the possibility of using a die, also
+     * changing it's colour.
+     * @param node the node that contains the die to disable.
+     */
     private void disableDie(Node node){
         ColorAdjust effect = new ColorAdjust();
         effect.setSaturation(-1);
@@ -93,10 +101,19 @@ public class DraftPoolFiller {
         node.setEffect(effect);
     }
 
+    /**
+     * The method to disable the die that was already sacrificed.
+     * @param index the index of the sacrificed die.
+     */
     public void setSacrifice(int index){
         disableDie(diceContainer.getChildren().get(index));
     }
 
+    /**
+     * The method to disable all dice except form the one that the player
+     * is obliged to use.
+     * @param index the index of the die that the player must use.
+     */
     public void setForcedSelection(int index){
         for (int i = 0; i < diceContainer.getChildren().size(); i++) {
             if(i != index)

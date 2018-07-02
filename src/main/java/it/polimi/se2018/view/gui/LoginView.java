@@ -1,7 +1,6 @@
 package it.polimi.se2018.view.gui;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 
@@ -12,6 +11,10 @@ import javafx.scene.control.TextField;
  * @author michelemarzollo
  */
 public class LoginView {
+
+    private static final String MISSING_USERNAME = "You must insert a username!";
+
+    private static final String WAITING_MESSAGE = "Waiting for other players to connect...";
 
     /**
      * The main controller, which instantiates this one and has the reference to the
@@ -26,34 +29,16 @@ public class LoginView {
     private TextField usernameText;
 
     /**
-     * The button to start the game when choice were made.
-     */
-    @FXML
-    private Button startButton;
-
-    /**
      * The {@link RadioButton} to choose the RMI connection.
      */
     @FXML
     private RadioButton rmiButton;
 
     /**
-     * The {@link RadioButton} to choose the socket connection.
-     */
-    @FXML
-    private RadioButton socketButton;
-
-    /**
      * The {@link RadioButton} to choose the multi-player game mode.
      */
     @FXML
     private RadioButton multiPlayerButton;
-
-    /**
-     * The {@link RadioButton} to choose the single-player game mode.
-     */
-    @FXML
-    private RadioButton singlePlayerButton;
 
     /**
      * The setter for the {@code parentController}.
@@ -78,10 +63,10 @@ public class LoginView {
 
         String username = usernameText.getText();
         if (username.equals(""))
-            parentController.displayError("You must insert a username!");
+            parentController.displayError(MISSING_USERNAME);
         else {
             parentController.getView().handleLogin(username, multiPlayer, rmi);
-            parentController.displayWaitingView("Waiting for connection...");
+            parentController.displayWaitingView(WAITING_MESSAGE);
         }
 
     }

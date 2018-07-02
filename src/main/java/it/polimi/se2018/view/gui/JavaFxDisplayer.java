@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -27,17 +28,25 @@ import java.util.function.Consumer;
 public class JavaFxDisplayer extends Application implements Displayer {
 
     /**
+     * The text to be shown when a confirmation is asked.
+     */
+    private static final String CONFIRMATION_TEXT = "\nDo you confirm your choice?";
+
+    /**
      * The primary stage of the gui.
      */
     private Stage primaryStage;
+
     /**
      * The root layout element.
      */
     private BorderPane root = new BorderPane();
+
     /**
      * The client view for this displayer.
      */
     private ClientView clientView;
+
     /**
      * The displayed game board JavaFX controller.
      */
@@ -166,6 +175,7 @@ public class JavaFxDisplayer extends Application implements Displayer {
     @Override
     public void displayError(String error) {
         Platform.runLater(() -> {
+            Locale.setDefault(Locale.ENGLISH);
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setHeaderText("Error");
             errorAlert.setContentText(error);
@@ -184,6 +194,7 @@ public class JavaFxDisplayer extends Application implements Displayer {
      */
     @Override
     public void askPattern() {
+
         try {
             FXMLLoader loader = new FXMLLoader();
 
@@ -192,7 +203,8 @@ public class JavaFxDisplayer extends Application implements Displayer {
             Platform.runLater(() -> {
                 root.setCenter(view);
                 primaryStage.setTitle("Window Pattern Card selection");
-                primaryStage.sizeToScene();
+                primaryStage.setHeight(650);
+                primaryStage.setWidth(1030);
             });
             patternSelection = loader.getController();
             refreshDisplayedData();
@@ -219,8 +231,8 @@ public class JavaFxDisplayer extends Application implements Displayer {
                 primaryStage.setTitle("Private Objective Card selection");
 
                 PrivateSelection controller = loader.getController();
-                controller.setCards();
                 controller.setParentController(this);
+                controller.setCards();
                 primaryStage.sizeToScene();
             });
         } catch (IOException e) {
@@ -352,12 +364,11 @@ public class JavaFxDisplayer extends Application implements Displayer {
             loader.setLocation(this.getClass().getResource("waiting_view.fxml"));
             AnchorPane view = loader.load();
 
-            primaryStage.sizeToScene();
-
             WaitingView controller = loader.getController();
             controller.setText(reason);
             root.setCenter(view);
             primaryStage.setTitle("Wait");
+            primaryStage.sizeToScene();
 
         } catch (IOException e) {
             Logger.getDefaultLogger().log(e.getMessage());
@@ -372,11 +383,11 @@ public class JavaFxDisplayer extends Application implements Displayer {
      * @return {@code true} if he confirmed the choice, {@code} false otherwise.
      */
     public boolean displayConfirm(String text) {
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, text, ButtonType.NO, ButtonType.OK);
+        Locale.setDefault(Locale.ENGLISH);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, text + CONFIRMATION_TEXT, ButtonType.NO, ButtonType.YES);
         Optional<ButtonType> response = alert.showAndWait();
 
-        return response.orElse(ButtonType.NO) == ButtonType.OK;
+        return response.orElse(ButtonType.NO) == ButtonType.YES;
     }
 
     /**
@@ -424,10 +435,12 @@ public class JavaFxDisplayer extends Application implements Displayer {
     @Override
     public void askConfirm() {
         Platform.runLater(() -> {
+            Locale.setDefault(Locale.ENGLISH);
             Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
             Optional<ButtonType> response = confirm.showAndWait();
             if (response.orElse(ButtonType.CLOSE) == ButtonType.OK)
                 clientView.handleToolCardUsage();
         });
     }
+
 }
