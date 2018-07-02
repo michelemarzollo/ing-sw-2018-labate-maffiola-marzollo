@@ -3,60 +3,58 @@ package it.polimi.se2018.view.cli;
 import it.polimi.se2018.view.ClientView;
 
 /**
- * It is a subHandler for the turn management. It handles the input in the
- * case in which the player has chosen to skip his turn.
+ * Input manager used to let the player ends its turn early.
  */
-public class SkipTurnHandler extends InputEventManager{
+public class SkipTurnHandler extends InputEventManager {
 
     /**
-     * Reference to the manager of the turn. It's used to set the
-     * subHandler to null when the task has been accomplished.
+     * Reference to the manager of the turn.
      */
-    private TurnHandlingManager manager;
+    private final TurnHandlingManager manager;
 
     /**
-     * Constructor of the class
-     * @param view The view to which this manager is bounded.
-     * @param output The output destination where the prompts of this manager
-     *               are shown.
+     * Constructor of the class.
+     *
+     * @param view    The view to which this manager is bounded.
+     * @param output  The output destination where the prompts of this manager
+     *                are shown.
      * @param manager The TurnHandlingManager.
      */
-    public SkipTurnHandler(ClientView view, CliImagePrinter output, TurnHandlingManager manager) {
+    public SkipTurnHandler(ClientView view, CliPrinter output, TurnHandlingManager manager) {
         super(view, output);
         this.manager = manager;
     }
 
+
     /**
-     * This method is the one delegated for handling the input entered by the user
-     * in a correct way. When all the data have been gathered the handling is delegated
-     * to the {@link ClientView} that will create the correct message for sending it
-     * on the network.
-     * @param input The String inserted by the user that represents his choice.
+     * Handles the input entered by the user.
+     * <p>After asking the user confirmation, calls the proper handler
+     * in {@link ClientView} if tha player confirmed.</p>
+     *
+     * @param input The String inserted by the user.
      */
     @Override
     public void handle(String input) {
         try {
             int choice = Integer.parseInt(input.trim());
-            if (choice == 1) {
+            if (choice == 1)
+                getView().handleEndTurn();
+            else
                 manager.setSubHandler(null);
-                view.handleEndTurn();
-            } else {
-                manager.setSubHandler(null);
-            }
-        }
-        catch (NumberFormatException ex){
+
+        } catch (NumberFormatException ex) {
             showError();
         }
     }
 
     /**
      * Shows the correct textual messages to the player in this phase
-     * according to what he can and what he has to insert.
+     * according to what he can do.
      */
     @Override
     public void showPrompt() {
-            output.printTextNewLine("You chose to skip your turn, enter:\n" +
-                    "1 to confirm\n" +
-                    "Any other number to go back");
+        getOutput().println("You chose to skip your turn, enter:\n" +
+                "1 to confirm\n" +
+                "Any other number to go back");
     }
 }

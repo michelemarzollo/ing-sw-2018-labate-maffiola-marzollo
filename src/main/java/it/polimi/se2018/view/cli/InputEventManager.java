@@ -4,37 +4,78 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.events.GameSetup;
 import it.polimi.se2018.model.events.PlayerStatus;
 import it.polimi.se2018.view.ClientView;
-import it.polimi.se2018.view.ViewDataOrganizer;
+import it.polimi.se2018.model.viewmodel.ViewDataOrganizer;
 
 import java.util.List;
 
 /**
- * This class represents an handler for the user input: it handles the
- * user's input in the right way and shows the correct prompts to him
- * relying on the current game state.
- * There is a correct manager for every game phase and every
- * manager has to extends this abstract class.
+ * Abstract base class for input managers.
+ * <p>Concrete subclasses will handle user's input and prompt pertinent messages
+ * depending on the current game state and their purpose.</p>
  */
 public abstract class InputEventManager {
 
     /**
+     * Inner class used to represent an option.
+     */
+    static class Option {
+        /**
+         * The prompt message for this option.
+         */
+        private final String prompt;
+        /**
+         * The handler to manage this option.
+         */
+        private final Runnable handler;
+
+        /**
+         * Creates a new Option with the specified data.
+         *
+         * @param prompt  The prompt message for this option.
+         * @param handler The handler to manage this option.
+         */
+        Option(String prompt, Runnable handler) {
+            this.prompt = prompt;
+            this.handler = handler;
+        }
+
+        /**
+         * Getter for the prompt message.
+         *
+         * @return The prompt message.
+         */
+        String getPrompt() {
+            return prompt;
+        }
+
+        /**
+         * Getter for the option handler.
+         *
+         * @return The option handler.
+         */
+        Runnable getHandler() {
+            return handler;
+        }
+    }
+
+    /**
      * The view to which all the managers will be bound.
      */
-    protected ClientView view;
+    private ClientView view;
 
     /**
      * The output destination to which all the managers will be
      * associated.
      */
-    protected CliImagePrinter output;
-
+    private CliPrinter output;
 
     /**
      * Constructor of the class.
-     * @param view The client view.
+     *
+     * @param view   The client view.
      * @param output The output destination.
      */
-    public InputEventManager(ClientView view, CliImagePrinter output){
+    public InputEventManager(ClientView view, CliPrinter output) {
         this.view = view;
         this.output = output;
     }
@@ -42,6 +83,7 @@ public abstract class InputEventManager {
     /**
      * This method handles in the correct way the user input: it is invoked
      * every time the user enters some input.
+     *
      * @param input The String inserted by the user.
      */
     public abstract void handle(String input);
@@ -54,6 +96,7 @@ public abstract class InputEventManager {
 
     /**
      * Getter for the client view.
+     *
      * @return The view to which the manager is bounded.
      */
     public ClientView getView() {
@@ -62,9 +105,10 @@ public abstract class InputEventManager {
 
     /**
      * Getter for the output destination.
+     *
      * @return The associated output destination.
      */
-    public CliImagePrinter getOutput() {
+    public CliPrinter getOutput() {
         return output;
     }
 
@@ -94,7 +138,7 @@ public abstract class InputEventManager {
         for (int i = 0; i < names.length; i++) {
             if (name.equals(names[i])) return i;
         }
-        return 0; //non capita mai
+        return -1;
     }
 
     /**
@@ -164,28 +208,31 @@ public abstract class InputEventManager {
 
     /**
      * Verifies the game mode.
+     *
      * @return {@code true} if the selected mode is Single Player,
      * {@code false} otherwise.
      */
-    boolean isSinglePlayer(){
+    boolean isSinglePlayer() {
         return getDataOrganizer().getAllPlayerStatus().size() == 1;
     }
 
     /**
      * Verifies if the user has already placed a die in his turn or not.
+     *
      * @return {@code true} it the user has already placed a die,
      * {@code false} otherwise.
      */
-    boolean hasPlacedDie(){
+    boolean hasPlacedDie() {
         return view.getDataOrganizer().getNextTurn().isAlreadyPlacedDie();
     }
 
     /**
      * Verifies if the user has already used a Tool Card in his turn or not.
+     *
      * @return {@code true} it the user has already used a Tool Card,
      * {@code false} otherwise.
      */
-    boolean hasUsedToolCard(){
+    boolean hasUsedToolCard() {
         return view.getDataOrganizer().getNextTurn().isAlreadyUsedToolCard();
     }
 
@@ -193,8 +240,17 @@ public abstract class InputEventManager {
      * Displays an error message when the user insert an incorrect input
      * from a 'syntactical' point of view.
      */
-    void showError(){
-        output.printTextNewLine("Invalid Input!");
+    void showError() {
+        output.println("Invalid Input!");
     }
 
+    /**
+     * Resets the event manager.
+     * <p>By default, this operation is not supported.</p>
+     *
+     * @throws UnsupportedOperationException if not implemented by subclass.
+     */
+    public void reset() {
+        throw new UnsupportedOperationException();
+    }
 }

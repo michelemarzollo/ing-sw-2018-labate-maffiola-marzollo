@@ -4,155 +4,108 @@ import it.polimi.se2018.utils.Coordinates;
 import it.polimi.se2018.view.ClientView;
 
 /**
- * It is a subHandler for the turn management. It handles the input in the
- * case in which the player has chosen to place a die.
+ * Input manager used to place a die in player's pattern.
  */
-public class DiePlacementHandler extends  InputEventManager{
+public class DiePlacementHandler extends InputEventManager {
 
     /**
      * Indicates whether the user has confirmed to perform this action or not.
      */
-    private boolean confirmDone;
+    private boolean confirmDone = false;
 
     /**
      * The chosen index of the die in the DraftPool that has to be placed.
      */
-    private int dieIndex;
+    private int dieIndex = -1;
 
     /**
      * The row coordinate for the placement.
      */
-    private int row;
+    private int row = -1;
 
     /**
      * The column coordinate for the placement.
      */
-    private int col;
+    private int col = -1;
 
     /**
-     * Reference to the manager of the turn. It's used to set the
-     * subHandler to null when the task has been accomplished.
+     * Reference to the manager of the turn.
      */
-    private TurnHandlingManager manager;
+    private final TurnHandlingManager manager;
 
     /**
-     * Constructor of the class
-     * @param view The view to which this manager is bounded.
-     * @param output The output destination where the prompts of this manager
-     *               are shown.
+     * Constructor of the class.
+     *
+     * @param view    The view to which this manager is bounded.
+     * @param output  The output destination where the prompts of this manager
+     *                are shown.
      * @param manager The TurnHandlingManager.
      */
-    public DiePlacementHandler(ClientView view, CliImagePrinter output, TurnHandlingManager manager) {
+    public DiePlacementHandler(ClientView view, CliPrinter output, TurnHandlingManager manager) {
         super(view, output);
         this.manager = manager;
-        dieIndex = -1;
-        row = -1;
-        col = -1;
     }
 
     /**
-     * This method is the one delegated for handling the input entered by the user
-     * in a correct way. When all the data have been gathered the handling is delegated
-     * to the {@link ClientView} that will create the correct message for sending it
-     * on the network.
-     * @param input The String inserted by the user that represents his choice.
+     * Handles the choice of the user if to confirm or not to place a die.
+     *
+     * @param choice The choice performed by the user.
+     */
+    private void handleConfirm(int choice) {
+        if (choice == 1) {
+            setConfirmDone();
+        } else {
+            manager.setSubHandler(null);
+        }
+    }
+
+    /**
+     * Handles the input entered by the user.
+     * <p>After collecting user confirmation, the source index and the destiantion coordinates,
+     * calls the proper handler of {@link ClientView}.</p>
+     *
+     * @param input The String inserted by the user.
      */
     @Override
     public void handle(String input) {
+        int choice;
         try {
-            int choice = Integer.parseInt(input);
-            if (!confirmDone) {
-                handleConfirm(choice);
-            } else if (dieIndex == -1) {
-                handleDieIndex(choice);
-            } else if (row == -1) {
-                handleRow(choice);
-            } else if (col == -1) {
-                handleCol(choice);
-            }
-        }
-        catch (NumberFormatException ex){
+            choice = Integer.parseUnsignedInt(input);
+        } catch (NumberFormatException ex) {
             showError();
+            return;
         }
-    }
 
-    /**
-     * Handles the first choice: the confirmation of the will of placing a die.
-     * @param choice The choice performed by the user.
-     */
-    private void handleConfirm(int choice){
-        if(choice == 1){
-            setConfirmDone();
-        }
-        else{
-            manager.setSubHandler(null);
-        }
-    }
-
-    /**
-     * Handles the second choice: the index of the die in the DraftPool.
-     * @param choice The choice performed by the user.
-     */
-    private void handleDieIndex(int choice){
-        if(choice < 0){
-            showError();
-        }
-        else {
+        if (!confirmDone) {
+            handleConfirm(choice);
+        } else if (dieIndex == -1) {
             dieIndex = choice;
-        }
-    }
-
-    /**
-     * Handles the third choice: the row for the placement
-     * @param choice The choice performed by the user.
-     */
-    private void handleRow(int choice) {
-        if(choice < 0){
-            showError();
-        }
-        else {
+        } else if (row == -1) {
             row = choice;
-        }
-    }
-
-    /**
-     * Handles the fourth choice: the column for the placement
-     * @param choice The choice performed by the user.
-     */
-    private void handleCol(int choice) {
-        if(choice < 0){
-            showError();
-        }
-        else{
+        } else if (col == -1) {
             col = choice;
-            manager.setSubHandler(null);
-            view.handlePlacement(dieIndex, new Coordinates(row, col));
+            getView().handlePlacement(dieIndex, new Coordinates(row, col));
         }
     }
-
-
 
     /**
      * Shows the correct textual messages to the player in this phase
-     * according to what he can and what he has to insert.
+     * according to what he can do.
      */
     @Override
     public void showPrompt() {
-        if(!confirmDone){
+        if (!confirmDone) {
             showConfirmPrompt();
-        }
-        else{
-            if(dieIndex == -1){
-                output.printDraftPool(getDraftPool());
-                output.printTextNewLine("Enter the index of the die:");
-            }
-            else if(row == -1){
-                output.printPattern(getPattern());
-                output.printTextNewLine("Enter the coordinates for your placement:");
-                output.printText("Row (starting from 0): ");
-            }
-            else if(col == -1){
-                output.printText("Col (starting from 0): ");
+        } else {
+            if (dieIndex == -1) {
+                getOutput().printDraftPool(getDraftPool());
+                getOutput().println("Enter the index of the die:");
+            } else if (row == -1) {
+                getOutput().printPattern(getPattern());
+                getOutput().println("Enter the coordinates for your placement:");
+                getOutput().print("Row (starting from 0): ");
+            } else if (col == -1) {
+                getOutput().print("Col (starting from 0): ");
 
             }
         }
@@ -162,13 +115,13 @@ public class DiePlacementHandler extends  InputEventManager{
      * Shows the confirmation prompt.
      */
     private void showConfirmPrompt() {
-        output.printTextNewLine("You chose to place a die, enter:\n" +
+        getOutput().println("You chose to place a die, enter:\n" +
                 "1 to confirm\n" +
                 "Any other number to go back");
     }
 
     /**
-     * Setter for the confirmation.
+     * Sets the confirmation flag.
      */
     private void setConfirmDone() {
         this.confirmDone = true;

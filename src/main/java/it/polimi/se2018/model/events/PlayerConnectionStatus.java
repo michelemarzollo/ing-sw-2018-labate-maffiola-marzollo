@@ -1,6 +1,7 @@
 package it.polimi.se2018.model.events;
 
-import it.polimi.se2018.view.ViewDataOrganizer;
+import it.polimi.se2018.model.Player;
+import it.polimi.se2018.model.viewmodel.ViewDataOrganizer;
 
 /**
  * Event to update views about the change in the connection
@@ -20,13 +21,12 @@ public class PlayerConnectionStatus extends ModelUpdate {
 
     /**
      * Creates a new instance with the specified name and connection flag.
-     * @param playerName The name of the player who changed his connection status.
-     * @param connected Flag for the new connection status.
+     * @param player The player who changed its connection status.
      */
-    public PlayerConnectionStatus(String playerName, boolean connected) {
+    public PlayerConnectionStatus(Player player) {
         super(ModelEvent.PLAYER_CONNECTION_STATUS);
-        this.playerName = playerName;
-        this.connected = connected;
+        this.playerName = player.getName();
+        this.connected = player.isConnected();
     }
 
     /**

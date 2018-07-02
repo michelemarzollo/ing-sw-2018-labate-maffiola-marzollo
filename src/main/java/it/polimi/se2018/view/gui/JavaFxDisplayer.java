@@ -4,7 +4,7 @@ import it.polimi.se2018.model.Die;
 import it.polimi.se2018.utils.Logger;
 import it.polimi.se2018.view.ClientView;
 import it.polimi.se2018.view.Displayer;
-import it.polimi.se2018.view.ViewDataOrganizer;
+import it.polimi.se2018.model.viewmodel.ViewDataOrganizer;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -181,11 +181,6 @@ public class JavaFxDisplayer extends Application implements Displayer {
             errorAlert.setContentText(error);
             errorAlert.showAndWait();
         });
-    }
-
-    @Override
-    public void displayWaitMessage() {
-        askPattern();
     }
 
     /**

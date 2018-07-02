@@ -32,7 +32,7 @@ public class ClientImplementation  extends Observable<ModelUpdate>
     /**
      * Map that associates a name with a show method of the view.
      */
-    private final Map<String, ShowMethod> showMethods;
+    private final Map<String, Runnable> showMethods;
 
     /**
      * The client the implementation refers to.
@@ -61,7 +61,7 @@ public class ClientImplementation  extends Observable<ModelUpdate>
      *
      * @param showMethods The map where show methods are stored.
      */
-    private void registerShowMethods(Map<String, ShowMethod> showMethods) {
+    private void registerShowMethods(Map<String, Runnable> showMethods) {
         showMethods.put("showMultiPlayerGame", view::showMultiPlayerGame);
         showMethods.put("showSinglePlayerGame", view::showSinglePlayerGame);
         showMethods.put("showPatternSelection", view::showPatternSelection);
@@ -102,14 +102,13 @@ public class ClientImplementation  extends Observable<ModelUpdate>
             view.showError((String) message.getBody());
         else if (message.getCommand() == Command.SHOW) {
             String showWhat = (String) message.getBody();
-            Logger.getDefaultLogger().log("show: " + showWhat);
-            ShowMethod showMethod = showMethods.get(showWhat);
+            Runnable showMethod = showMethods.get(showWhat);
             if (showMethod != null)
-                showMethod.show();
+                showMethod.run();
             else
                 view.showError("Server sent strange a strange message");
         } else
-            view.showError("Server sent an unknown message");
+            view.showError("Server sent an unknown message: " + message.getCommand());
     }
 
     /**
@@ -120,5 +119,16 @@ public class ClientImplementation  extends Observable<ModelUpdate>
     @Override
     public void update(ViewMessage message) {
         client.getServer().send(new Message(Command.VIEW_MESSAGE, message));
+    }
+
+    /**
+     * Terminates the client.
+     */
+    @Override
+    public void close(){
+        String message = "Connection dropped by server.";
+        Logger.getDefaultLogger().log(message);
+        view.showError(message);
+        System.exit(0);
     }
 }

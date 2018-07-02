@@ -4,6 +4,7 @@ import it.polimi.se2018.controller.MatchMaker;
 import it.polimi.se2018.model.events.Action;
 import it.polimi.se2018.model.events.ViewMessage;
 import it.polimi.se2018.networking.client.ClientNetInterface;
+import it.polimi.se2018.networking.messages.Command;
 import it.polimi.se2018.networking.messages.Message;
 import it.polimi.se2018.view.VirtualView;
 
@@ -98,6 +99,8 @@ public class DefaultNetInterface implements ServerNetInterface {
     public boolean addClient(ClientNetInterface client, boolean isMultiPlayer) {
         boolean clientAdded = server.addClient(client);
 
+        client.notify(new Message(Command.ACK, clientAdded));
+
         if (!clientAdded)
             return false;
 
@@ -122,5 +125,6 @@ public class DefaultNetInterface implements ServerNetInterface {
         }
 
         server.removeClient(client);
+        client.close();
     }
 }

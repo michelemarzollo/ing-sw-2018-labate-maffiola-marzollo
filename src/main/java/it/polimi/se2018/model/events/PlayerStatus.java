@@ -2,7 +2,7 @@ package it.polimi.se2018.model.events;
 
 import it.polimi.se2018.model.Pattern;
 import it.polimi.se2018.model.Player;
-import it.polimi.se2018.view.ViewDataOrganizer;
+import it.polimi.se2018.model.viewmodel.ViewDataOrganizer;
 
 /**
  * Represents a message containing information about a player status, excluded

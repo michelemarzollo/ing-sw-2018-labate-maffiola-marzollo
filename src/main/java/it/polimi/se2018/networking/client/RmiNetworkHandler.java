@@ -34,7 +34,7 @@ public class RmiNetworkHandler implements ServerNetInterface {
     /**
      * The exported interface.
      */
-    private RmiClientInterface rmiClientInterface;
+    private RmiClientImplementation rmiClient;
 
     /**
      * The string to print in case of {@link RemoteException}.
@@ -73,6 +73,7 @@ public class RmiNetworkHandler implements ServerNetInterface {
             server.send(message);
         } catch (RemoteException e) {
             Logger.getDefaultLogger().log(ERROR_STRING + e.getMessage() + "!");
+            rmiClient.close();
         }
     }
 
@@ -89,9 +90,9 @@ public class RmiNetworkHandler implements ServerNetInterface {
     @Override
     public boolean addClient(ClientNetInterface client, boolean isMultiPlayer) {
         try {
-            rmiClientInterface = new RmiClientImplementation(client);
+            rmiClient = new RmiClientImplementation(client);
             remoteRef = (RmiClientInterface) UnicastRemoteObject.exportObject(
-                    rmiClientInterface, 0);
+                    rmiClient, 0);
             return server.addClient(remoteRef, isMultiPlayer);
         } catch (RemoteException e) {
             Logger.getDefaultLogger().log(ERROR_STRING + e.getMessage() + "!");
@@ -108,7 +109,8 @@ public class RmiNetworkHandler implements ServerNetInterface {
     public void removeClient(ClientNetInterface client) {
         try {
             server.removeClient(remoteRef);
-            UnicastRemoteObject.unexportObject(rmiClientInterface, true);
+            UnicastRemoteObject.unexportObject(rmiClient, true);
+            client.close();
         } catch (RemoteException e) {
             Logger.getDefaultLogger().log(ERROR_STRING + e.getMessage() + "!");
         }

@@ -1,5 +1,6 @@
 package it.polimi.se2018.view.gui;
 
+import it.polimi.se2018.model.viewmodel.ViewDataOrganizer;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -92,7 +93,7 @@ public class PrivateSelection {
     /**
      * The method  to set the images of the cards on the {@link ImageView}.
      * The information of which cards to show is contained in the
-     * {@link it.polimi.se2018.view.ViewDataOrganizer}, whose reference is contained
+     * {@link ViewDataOrganizer}, whose reference is contained
      * in {@code parentController}.
      */
     public void setCards() {

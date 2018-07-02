@@ -1,18 +1,21 @@
 package it.polimi.se2018.view.cli;
 
-import it.polimi.se2018.model.*;
+import it.polimi.se2018.model.DiceBag;
+import it.polimi.se2018.model.Pattern;
 import it.polimi.se2018.model.events.*;
-import it.polimi.se2018.view.*;
+import it.polimi.se2018.view.ClientView;
+import it.polimi.se2018.view.Displayer;
+import it.polimi.se2018.model.viewmodel.ViewDataOrganizer;
 
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.function.Consumer;
 
 /**
- * This class displays the game through the command line interface. It is used
- * by the View to display the game on CLI. It receives the model update and just
- * set the correct {@link InputEventManager} for the user interaction and prints
- * what is necessary.
+ * This class displays the game through the command line interface.
+ * <p>It is used by the View to display the game on CLI. It receives the model update
+ * and just set the correct {@link InputEventManager} for the user interaction and prints
+ * what is necessary.</p>
  */
 public class CliDisplayer implements Displayer {
 
@@ -26,14 +29,22 @@ public class CliDisplayer implements Displayer {
      * The 'printer' through which the CliDisplayer displays some information on a
      * {@link PrintStream}.
      */
-    private CliImagePrinter output;
+    private CliPrinter output;
 
     /**
      * The {@link ClientView} to which the CliDisplayer is bound.
      */
     private ClientView view;
 
+    /**
+     * Callback function to use upon instantiation.
+     */
     private static Consumer<Displayer> callback;
+
+    /**
+     * Flag to indicate if game setup has already been displayed.
+     */
+    private boolean alreadySetup = false;
 
     /**
      * Constructor of the class.
@@ -44,7 +55,8 @@ public class CliDisplayer implements Displayer {
      */
     private CliDisplayer(InputStream inputStream, PrintStream output) {
         this.input = new CliInput(inputStream); //faccio partire il thread
-        this.output = new CliImagePrinter(output);
+        new Thread(input).start();
+        this.output = new CliPrinter(output);
         callback.accept(this);
     }
 
@@ -90,292 +102,222 @@ public class CliDisplayer implements Displayer {
     }
 
     /**
-     * Forces the displayed data to be refreshed. It is invoked every time
-     * a {@link it.polimi.se2018.model.events.ModelUpdate} is notified to
-     * the client and it is used to refresh the view selected by the
-     * {@link ClientView}.
-     * If the last Model Update is a {@link PlayerConnectionStatus} message
+     * Forces the displayed data to be refreshed.
+     * <p>If the last Model Update is a {@link PlayerConnectionStatus} message
      * then all the clients will be notified. If it is a {@link GameSetup}
      * message then we are at the begging phase of the game and the pattern's
      * choice can be displayed. If it is a {@link NextTurn} message it means
      * that we are in the central phase of the game and a turn view is displayed.
      * Finally, if it is a {@link GameEnd} message it means that the game is ended
-     * and the final score board can be displayed.
+     * and the final score board can be displayed.</p>
      */
     @Override
     public void refreshDisplayedData() {
-        if (getDataOrganizer().getLastUpdate().getEventType().equals(ModelEvent.PLAYER_CONNECTION_STATUS)) {
-            PlayerConnectionStatus connectionStatus = (PlayerConnectionStatus) getDataOrganizer().getLastUpdate();
+        int index = getDataOrganizer().getChangedConnectionIndex();
+        if (index != -1) {
+            PlayerConnectionStatus connectionStatus
+                    = getDataOrganizer().getAllConnectionStatus().get(index);
             if (connectionStatus.isConnected()) {
-                output.printTextNewLine(connectionStatus.getPlayerName() + "reconnected!");
+                output.println(connectionStatus.getPlayerName() + " reconnected!");
             } else {
-                output.printTextNewLine(connectionStatus.getPlayerName() + "disconnected!");
+                output.println(connectionStatus.getPlayerName() + " disconnected!");
             }
             return;
         }
-        if (!view.isGameRunning() && getDataOrganizer().getLastUpdate().getEventType().equals(ModelEvent.GAME_SETUP)) {
-            askPattern();
-            return;
-        }
-        if (view.isGameRunning() && getDataOrganizer().getLastUpdate().getEventType().equals(ModelEvent.NEXT_TURN)) {
-            displayTurnView();
-            return;
-        }
-        if (view.isGameRunning() && getDataOrganizer().getLastUpdate().getEventType().equals(ModelEvent.GAME_END)) {
+
+        if (getDataOrganizer().getScoreBoard() != null && input.isGameRunning()) {
             displayScoreBoard();
+            return;
+        }
+
+        if (!alreadySetup || input.isGameRunning() && mustUpdatePrompt()) {
+            alreadySetup = true;
+            restoreInputManager();
         }
     }
 
     /**
-     * Displays the first screen and select the appropriate manager for the
-     * {@link CliInput}. This method will be invoked in the main: the user
-     * is not connected yet.
+     * Tries to reset the input manager of the input gatherer.
+     * <p>If it fails, the manager is rolled back to the turn manager.</p>
+     */
+    private void restoreInputManager() {
+        try {
+            input.resetInputManager();
+        } catch (UnsupportedOperationException e) {
+            //Can't reset, roll back to turn manager
+            input.setManager(new TurnHandlingManager(view, output));
+        }
+    }
+
+    /**
+     * Tells if it is the case to update the prompt message.
+     * <p>This is the case only when a new turn has to be notified to the player.</p>
+     * @return {@code true} if the prompt has to be updated; {@code false} otherwise.
+     */
+    private boolean mustUpdatePrompt() {
+        NextTurn nextTurn = getDataOrganizer().getNextTurn();
+        if (nextTurn == null)
+            return false;
+        return getDataOrganizer().isTurnChanged() &&
+                !(nextTurn.isAlreadyPlacedDie() && nextTurn.isAlreadyUsedToolCard());
+    }
+
+    /**
+     * Displays the login screen and select the appropriate manager for the
+     * {@link CliInput}.
      */
     @Override
     public void displayLoginView() {
-        output.printTextNewLine(
-                "███████╗ █████╗  ██████╗ ██████╗  █████╗ ██████╗  █████╗ \n" +
-                        "██╔════╝██╔══██╗██╔════╝ ██╔══██╗██╔══██╗██╔══██╗██╔══██╗\n" +
-                        "███████╗███████║██║  ███╗██████╔╝███████║██║  ██║███████║\n" +
-                        "╚════██║██╔══██║██║   ██║██╔══██╗██╔══██║██║  ██║██╔══██║\n" +
-                        "███████║██║  ██║╚██████╔╝██║  ██║██║  ██║██████╔╝██║  ██║\n" +
-                        "╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝\n");
-
+        output.printHeader();
         input.setManager(new LoginManager(view, output));
-        input.getManager().showPrompt();
     }
 
     /**
-     * Displays a wait message: this message is displayed after a correct connection
-     * to the server and before the starting of the game.
-     */
-    @Override
-    public void displayWaitMessage() {
-        output.printTextNewLine("You're connected, wait for the game to start");
-    }
-
-    /**
-     * Display the pattern's choice setting the correct manager for the {@link CliInput}:
-     * it is invoked only when the game has been correctly set up.
+     * Allows the user to select a pattern among its candidates by setting the appropriate
+     * manager for the {@link CliInput}.
      */
     @Override
     public void askPattern() {
         input.setManager(new PatternSelectionManager(view, output));
-        input.getManager().showPrompt();
     }
 
     /**
-     * Displays a wait message when the Game view is selected by the
-     * {@link ClientView}. The user has correctly chosen his pattern
-     * and has now to wait for the game to start.
+     * Displays the multi player game by setting the correct input event handler
+     * in {@link ClientView}.
      */
     @Override
     public void displayMultiPlayerGame() {
-        output.printTextNewLine("Your pattern is:");
-        output.printPattern(getPattern());
-        output.printTextNewLine("Wait for the game to start");
+        displayGame();
     }
 
     /**
-     * Sets the correct manager to display the general Game (Turn) view
-     * when the game is actually begun. It is invoked during the regular development
-     * of the central phase of the game.
-     */
-    private void displayTurnView() {
-        input.setManager(new TurnHandlingManager(view, output));
-        input.getManager().showPrompt();
-    }
-
-    /**
-     * Displays an error message sent from the Model and restore the correct
-     * view state.
+     * Displays an error message sent from the Model and restores the view state.
      *
      * @param error The error message.
      */
     @Override
-    public void displayError(String error) { //NB: è da qua che si resetta correttamente (anche gli handler devono essere resettati correttamente!)
-        output.printTextNewLine(error);
-        if (getDataOrganizer().getAllPlayerStatus().size() != 1) {//MP
-            restoreDisplayMultiPlayer();
-        } else {//SP
-            restoreDisplaySinglePlayer();
-        }
-    }
-
-    /**
-     * Restores the correct View after showing an error in MultiPlayer mode.
-     */
-    private void restoreDisplayMultiPlayer() {
-        //The first error that a player can commit is about the pattern's selection
-        if (!view.isGameRunning()) {
-            //If the pattern's choice is not correct, here it is redisplayed.
-            askPattern();
-            return;
-        }
-        if (view.isGameRunning()) {
-            //If an error is made during the user's turn the Turn View is restored.
-            displayTurnView();
-        }
-    }
-
-    /**
-     * Restores the correct View after showing an error in SinglePlayer mode.
-     */
-    private void restoreDisplaySinglePlayer() {
-        if (!view.isGameRunning() && getDataOrganizer().getGameSetup() == null) {
-            //The committed error is necessarily on the difficulty selection in this case.
-            //The correct view is restored.
-            askDifficulty();
-            return;
-        }
-        if (!view.isGameRunning() && getDataOrganizer().getGameSetup() != null) {
-            //The first error that a player can commit is about the pattern's selection
-            //when the game is not started but the setup is complete.
-            //If the pattern's choice is not correct, here it is redisplayed.
-            askPattern();
-            return;
-        }
-        if (view.isGameRunning()) {
-            if (!view.isGameEndSinglePlayer()) {
-                //If an error is made during the user's turn the Turn View is restored.
-                displayTurnView();
-            }
-            //The committed error is necessarily on the Private Objective Card's choice
-            //if the game is ended in Single Player mode. The correct view is restored.
-            else askPrivateObjective();
-        }
+    public void displayError(String error) {
+        output.println(error);
+        restoreInputManager();
     }
 
     /**
      * Displays the final score board at the end of the game.
+     * <p>Also, ensures the connection is gracefully closed.</p>
      */
     @Override
     public void displayScoreBoard() {
-        input.setManager(null);//@TODO come si gestisce questa parte finale per il thread dell'input che continua a girare?
-        input.setGameRunning(false);
-        output.printTextNewLine("The game is finished");
+        output.println("\n\nThe game is finished.");
         output.printScoreBoard(getDataOrganizer().getScoreBoard());
+        output.println("Press enter to exit.");
+        input.stop();
+        getView().handleDisconnect();
     }
 
     /**
-     * Sets the correct manager for the selection of a die inserting
-     * an appropriate input.
-     * It is invoked when activating certain Tool Cards that request
-     * the choice of a die by the user (Flux Brush).
+     * Sets the appropriate manager to select a die from the draft pool.
      */
     @Override
     public void selectDie() {
-        input.setManager(new SelectDieManager(view, output, input));
-        input.getManager().showPrompt();
+        input.setManager(new SelectDieManager(view, output));
     }
 
     /**
-     * Sets the correct manager when there is the possibility of moving a die
-     * on the user's Pattern inserting an appropriate input. It is invoked by
-     * the Tool Cards that allow to move dice on the Pattern.
+     * Sets the correct manager when there is the possibility of moving some dice
+     * on the user's Pattern.
      *
-     * @param amount The maximum amount of dice to be moved.
+     * @param amount  The maximum amount of dice to be moved.
      * @param moveAll Indicates whether the Tool Card forces to move exactly
-     *                two dice ({@code true}) or if it allows to move at most
-     *                two dice ({@code false}).
+     *                the maximum amount of dice ({@code true}) or if it allows to move at
+     *                most the given amount of dice ({@code false}).
      */
-
     @Override
     public void moveDice(int amount, boolean moveAll) {
-        input.setManager(new MoveDiceManager(view, output, input, amount, moveAll));
-        input.getManager().showPrompt();
+        input.setManager(new MoveDiceManager(view, output, amount, moveAll));
     }
 
     /**
      * Sets the correct manager to handle the possibility of swapping two dice
-     * between the Draft Pool and the RoundTrack inserting an appropriate input.
-     * It is invoked by the {@link it.polimi.se2018.controller.SwapDiceBehaviour},
-     * it updates the dedicated view for it.
+     * between the Draft Pool and the RoundTrack.
      */
     @Override
     public void askDiceToSwap() {
-        input.setManager(new DiceSwappingManager(view, output, input));
-        input.getManager().showPrompt();
+        input.setManager(new DiceSwappingManager(view, output));
     }
 
     /**
      * Selects the correct manager to handle the possibility of choosing a value
-     * for a die drafted from the {@link DiceBag} and to put it on the user's Pattern
-     * inserting an appropriate input.
-     * It is invoked from the {@link it.polimi.se2018.controller.PullAgainAndPlaceBehaviour},
-     * it updates the view for the second step of its usage.
+     * for a die drafted from the {@link DiceBag} and to put it on the user's Pattern.
      */
     @Override
     public void askValueDestination() {
-        input.setManager(new ValueAndDestinationManager(view, output, input));
-        input.getManager().showPrompt();
+        input.setManager(new ValueAndDestinationManager(view, output));
     }
 
     /**
      * Selects the correct manager for the selection of a die and the choice
-     * about incrementing or decrementing its value inserting an appropriate input.
-     * It is invoked by the {@link it.polimi.se2018.controller.AlterDieValueBehaviour},
-     * it updates the dedicated view for it.
+     * about incrementing or decrementing its value.
      */
     @Override
     public void askIncrement() {
-        input.setManager(new DieIncrementManager(view, output, input));
-        input.getManager().showPrompt();
+        input.setManager(new DieIncrementManager(view, output));
     }
 
 
     /**
-     * Selects the correct manager to handle the placement of a die through a
-     * Tool Card usage ({@link it.polimi.se2018.controller.PlaceDieBehaviour}).
+     * Selects the correct manager to handle the placement of a die through a Tool Card.
      */
     @Override
     public void askPlacement() {
-        input.setManager(new ToolCardPlacementManager(view, output, input));
-        input.getManager().showPrompt();
+        input.setManager(new ToolCardPlacementManager(view, output));
     }
 
     /**
-     * Selects the correct manager to handle the confirm when activating a Tool Card
-     * that will no ask for parameter
-     * ({@link it.polimi.se2018.controller.ReRollDraftPoolBehaviour}).
+     * Selects the correct manager to handle confirmation when activating a Tool Card
+     * that needs no parameters.
      */
     @Override
     public void askConfirm() {
-        input.setManager(new ToolCardConfirmManager(view, output, input));
-        input.getManager().showPrompt();
+        input.setManager(new ToolCardConfirmManager(view, output));
     }
 
     /**
-     * Displays a wait message when the Game view is selected by the
-     * {@link ClientView}. The user has correctly chosen his pattern
-     * and has now to wait for the game to start.
+     * Displays the single player game by setting the correct input event handler
+     * in {@link ClientView}.
      */
     @Override
     public void displaySinglePlayerGame() {
-        output.printTextNewLine("Your pattern is:");
+        displayGame();
+    }
+
+    /**
+     * Prints the player pattern and allows the player to interact by setting an appropriate
+     * input event manager in {@link CliInput}.
+     */
+    private void displayGame(){
+        output.println("\n\nYour pattern is:");
         output.printPattern(getPattern());
-        output.printTextNewLine("Wait for the game to start");
+        output.println("Wait for the game to start");
+
+        input.setManager(new TurnHandlingManager(view, output));
     }
 
     /**
      * Selects the correct manager to handle the possibility of choosing
-     * the game's difficulty level in SinglePlayer mode inserting an appropriate input.
+     * the game's difficulty level in SinglePlayer mode.
      */
     @Override
     public void askDifficulty() {
         input.setManager(new DifficultyManager(view, output));
-        input.getManager().showPrompt();
     }
 
     /**
      * Selects the correct manager for the moment of choosing between the user's
-     * two Private Objective Cards at the end of the game in Single Player mode
-     * inserting an appropriate input.
+     * two Private Objective Cards at the end of the game in Single Player mode.
      */
     @Override
     public void askPrivateObjective() {
         input.setManager(new PrivateObjectiveManager(view, output));
-        input.getManager().showPrompt();
     }
 
     /**

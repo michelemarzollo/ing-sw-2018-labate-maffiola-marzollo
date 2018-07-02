@@ -126,7 +126,7 @@ public class Player {
      */
     public void setConnected(boolean connected) {
         this.connected = connected;
-        PlayerConnectionStatus message = new PlayerConnectionStatus(getName(), connected);
+        PlayerConnectionStatus message = new PlayerConnectionStatus(this);
         game.notifyObservers(message);
     }
 

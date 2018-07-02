@@ -10,8 +10,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import java.io.File;
-import java.net.URISyntaxException;
 import java.util.Random;
 
 import static org.junit.Assert.*;

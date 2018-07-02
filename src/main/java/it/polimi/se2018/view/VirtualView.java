@@ -28,6 +28,8 @@ public class VirtualView extends View {
      */
     private ClientNetInterface client;
 
+    private boolean notifyDisconnection = false;
+
     /**
      * Creates a new virtual view with the specified player name that is
      * associated with the given client.
@@ -52,9 +54,9 @@ public class VirtualView extends View {
      *
      * @param client The client connection the player is using to communicate
      *               with the server.
-     * @throws IllegalArgumentException if {@code client} is null.
      */
     public synchronized void setClient(ClientNetInterface client) {
+        notifyDisconnection = client == null;
         this.client = client;
     }
 
@@ -67,7 +69,8 @@ public class VirtualView extends View {
      * has died.
      */
     private synchronized ClientNetInterface getClient() {
-        if (client == null) {
+        if (client == null && notifyDisconnection) {
+            notifyDisconnection = false;
             // disconnected, notify controller
             new Thread(() ->
                     handle(new ViewMessage(this, Action.DISCONNECT_PLAYER, this.getPlayerName())))

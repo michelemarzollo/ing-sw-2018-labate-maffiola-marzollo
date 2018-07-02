@@ -1,5 +1,6 @@
 package it.polimi.se2018.networking.server;
 
+import it.polimi.se2018.networking.client.ClientNetInterface;
 import it.polimi.se2018.utils.Logger;
 
 import java.io.IOException;
@@ -86,8 +87,10 @@ public class TcpServer extends Server {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-
         isRunning = false;
+
+        for(ClientNetInterface client : getClients())
+            getServerNetInterface().removeClient(client);
     }
 
     /**

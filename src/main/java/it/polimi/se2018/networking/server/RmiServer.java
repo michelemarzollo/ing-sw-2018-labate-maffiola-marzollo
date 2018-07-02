@@ -1,5 +1,6 @@
 package it.polimi.se2018.networking.server;
 
+import it.polimi.se2018.networking.client.ClientNetInterface;
 import it.polimi.se2018.utils.Logger;
 
 import java.net.MalformedURLException;
@@ -88,8 +89,8 @@ public class RmiServer extends Server {
     @Override
     public void stop() {
         try {
-            Naming.unbind(url);
             UnicastRemoteObject.unexportObject(serverImplementation, true);
+            Naming.unbind(url);
         } catch (RemoteException e) {
             Logger.getDefaultLogger().log("Connection error: " + e.getMessage() + "!");
         } catch (NotBoundException e) {
@@ -99,6 +100,9 @@ public class RmiServer extends Server {
             Logger.getDefaultLogger().log("It is impossible to deregister the indicated object!");
         }
         isRunning = false;
+
+        for (ClientNetInterface client : getClients())
+            getServerNetInterface().removeClient(client);
     }
 
     /**

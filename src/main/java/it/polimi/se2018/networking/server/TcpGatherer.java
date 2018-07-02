@@ -75,14 +75,13 @@ public class TcpGatherer implements Runnable {
                 this.threadPool.execute(client);
 
             } catch (SocketException e) {
-                Logger.getDefaultLogger().log("Shutting down TCP gatherer.");
+                Logger.getDefaultLogger().log("Shutting down TCP gatherer...");
                 close();
             } catch (IOException e) {
                 Logger.getDefaultLogger().log("An error occurred when waiting for a connection: " +
                         e.getMessage());
             }
         }
-
     }
 
     /**

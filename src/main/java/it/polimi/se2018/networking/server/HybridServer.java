@@ -1,5 +1,7 @@
 package it.polimi.se2018.networking.server;
 
+import it.polimi.se2018.networking.client.ClientNetInterface;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +44,8 @@ public class HybridServer extends Server {
      */
     @Override
     public void stop() {
+        for(ClientNetInterface client : getClients())
+            getServerNetInterface().removeClient(client);
         for(Server server : subServers)
             server.stop();
     }

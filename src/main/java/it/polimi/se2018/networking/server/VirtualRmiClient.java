@@ -73,4 +73,12 @@ public class VirtualRmiClient implements ClientNetInterface {
             Logger.getDefaultLogger().log("Connection error: " + e.getMessage() + "!");
         }
     }
+
+    /**
+     * Does nothing, since RMI connections are handled automatically.
+     */
+    @Override
+    public void close(){
+        //Does nothing, since RMI connections are handled automatically.
+    }
 }
