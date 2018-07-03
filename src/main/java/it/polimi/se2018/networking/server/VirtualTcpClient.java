@@ -133,6 +133,7 @@ public class VirtualTcpClient implements ClientNetInterface, Runnable {
                 terminate();
             } catch (IOException e) {
                 Logger.getDefaultLogger().log("An error occurred: " + e.getMessage());
+                terminate();
             } catch (ClassNotFoundException e) {
                 Logger.getDefaultLogger().log("Serialized class cannot be found" + e.getMessage());
             }
@@ -188,8 +189,8 @@ public class VirtualTcpClient implements ClientNetInterface, Runnable {
     public void close(){
         alive = false;
         try {
-            inputStream.close();
             outputStream.close();
+            inputStream.close();
             connection.close();
         } catch (IOException e) {
             //Do nothing

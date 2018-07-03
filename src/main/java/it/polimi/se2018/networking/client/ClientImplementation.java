@@ -126,9 +126,7 @@ public class ClientImplementation  extends Observable<ModelUpdate>
      */
     @Override
     public void close(){
-        String message = "Connection dropped by server.";
-        Logger.getDefaultLogger().log(message);
-        view.showError(message);
+        Logger.getDefaultLogger().log("Connection dropped.");
         System.exit(0);
     }
 }

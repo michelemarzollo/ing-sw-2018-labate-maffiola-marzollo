@@ -14,7 +14,7 @@ public class RmiClientImplementation implements RmiClientInterface {
      * The interface that contains the methods for the clients,
      * independently from the type of their implementation.
      */
-    private ClientNetInterface client;
+    private final ClientNetInterface client;
 
     /**
      * The constructor of the class.
@@ -41,15 +41,17 @@ public class RmiClientImplementation implements RmiClientInterface {
      */
     @Override
     public void notify(Message message) {
-        if(message.getCommand() != Command.ACK)
+        if (message.getCommand() != Command.ACK)
             client.notify(message);
     }
 
     /**
-     * Closes the underlying client interface.
+     * Getter for the underlying client net interface.
+     *
+     * @return The underlying client net interface.
      */
-    public void close() {
-        client.close();
+    public ClientNetInterface getClient() {
+        return client;
     }
 
 }
