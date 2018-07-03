@@ -139,6 +139,10 @@ public class PullAgainAndPlaceBehaviour implements ToolCardBehaviour {
 
             currentTurn.placeDie();
             firstStepDone = false;
+
+            if(currentTurn.getSacrificeIndex() > currentTurn.getForcedSelectionIndex())
+                currentTurn.setSacrificeIndex(currentTurn.getSacrificeIndex() - 1);
+
             return true;
 
         } catch (PlacementErrorException e) {

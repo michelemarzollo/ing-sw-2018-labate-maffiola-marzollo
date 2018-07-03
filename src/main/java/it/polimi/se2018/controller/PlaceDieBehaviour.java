@@ -86,6 +86,9 @@ public class PlaceDieBehaviour implements ToolCardBehaviour {
             else
                 currentTurn.placeDie();
 
+            if(currentTurn.getSacrificeIndex() > placeDie.getDieIndex())
+                currentTurn.setSacrificeIndex(currentTurn.getSacrificeIndex() - 1);
+
             return true;
 
         } catch (PlacementErrorException e) {

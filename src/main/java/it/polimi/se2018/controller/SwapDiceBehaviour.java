@@ -54,9 +54,7 @@ public class SwapDiceBehaviour implements ToolCardBehaviour {
      */
     @Override
     public boolean useToolCard(Game game, ViewMessage message) {
-
         DiceSwap swapMessage = (DiceSwap) message;
-
         Die fromDraftPool = game.getDraftPool().select(swapMessage.getSourceIndex());
 
         try {
@@ -65,18 +63,15 @@ public class SwapDiceBehaviour implements ToolCardBehaviour {
             if (fromRoundTrack != null) {
                 //Update of the DraftPool inserting the die from the RoundTrack
                 List<Die> dice = game.getDraftPool().getDice();
-                dice.remove(swapMessage.getSourceIndex());
-                dice.add(swapMessage.getSourceIndex(), fromRoundTrack);
+                dice.set(swapMessage.getSourceIndex(), fromRoundTrack);
                 game.getDraftPool().setDice(dice);
                 //Setting of the forced selection in the current turn
                 game.getTurnManager().getCurrentTurn().setForcedSelectionIndex(
                         swapMessage.getSourceIndex());
                 return true;
-            } else {
-                swapMessage.getView().showError(
-                        "There is no die in that position in the Round Track!"
-                );
-            }
+            } else
+                swapMessage.getView()
+                        .showError("There is no die in that position in the Round Track!");
         } catch (IndexOutOfBoundsException e) {
             swapMessage.getView().showError("There is no die in that position in the Draft Pool!");
         }

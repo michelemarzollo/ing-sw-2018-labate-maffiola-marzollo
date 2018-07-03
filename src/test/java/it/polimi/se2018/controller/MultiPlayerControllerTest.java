@@ -414,15 +414,21 @@ public class MultiPlayerControllerTest {
 
     @Test
     public void testValidReconnectPlayer() {
-        Game game = GameUtils.getSetUpGame(true);
+        Game game = GameUtils.getStartedGame(true);
         if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view1 = new MockView("Pippo");
-        game.getPlayers().get(0).setConnected(false);
-        ViewMessage msg = new ViewMessage(view1, Action.RECONNECT_PLAYER, "Pippo");
-        controller.reconnectPlayer(msg);
-        assertTrue(game.getPlayers().get(0).isConnected());
+
+        Player player = game.getPlayers().get(0);
+
+        ViewMessage disconnect = new ViewMessage(view1, Action.DISCONNECT_PLAYER, player.getName());
+        controller.disconnectPlayer(disconnect);
+
+        ViewMessage register = new ViewMessage(view1, Action.REGISTER_PLAYER, player.getName());
+        controller.registerPlayer(register);
+
+        assertTrue(player.isConnected());
     }
 
     @Test
@@ -432,10 +438,16 @@ public class MultiPlayerControllerTest {
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
         MockView view1 = new MockView("Pippo");
-        game.getPlayers().get(0).setConnected(false);
-        ViewMessage msg = new ViewMessage(view1, Action.RECONNECT_PLAYER, "Paperino");
-        controller.reconnectPlayer(msg);
-        assertFalse(game.getPlayers().get(0).isConnected());
+
+        Player player = game.getPlayers().get(0);
+
+        ViewMessage disconnect = new ViewMessage(view1, Action.DISCONNECT_PLAYER, player.getName());
+        controller.disconnectPlayer(disconnect);
+
+        ViewMessage register = new ViewMessage(view1, Action.REGISTER_PLAYER, "_AAAAAA");
+        controller.registerPlayer(register);
+
+        assertFalse(player.isConnected());
     }
 
 }

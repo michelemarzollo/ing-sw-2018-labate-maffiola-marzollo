@@ -9,7 +9,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
-import java.util.Timer;
 
 import static org.junit.Assert.*;
 
@@ -24,7 +23,7 @@ public class ControllerTest {
     @Test
     public void testAddPublicScoreStrategy() {
         Game game = new Game();
-        Controller controller = new SinglePlayerController(game, 10, 10);
+        Controller controller = new SinglePlayerController(game, 10);
         DiagonalScore diagonalScore = new DiagonalScore(2, true);
         controller.addPublicScoreStrategy(diagonalScore);
         assertEquals(diagonalScore, controller.getPublicScoreCalculators().get(0));
@@ -36,7 +35,7 @@ public class ControllerTest {
     @Test
     public void testGetPublicScoreCalculators() {
         Game game = new Game();
-        Controller controller = new SinglePlayerController(game, 10, 10);
+        Controller controller = new SinglePlayerController(game, 10);
         DiagonalScore diagonalScore = new DiagonalScore(2, true);
         RowVarietyScore rowVarietyScore = new RowVarietyScore(2, true);
         controller.addPublicScoreStrategy(diagonalScore);

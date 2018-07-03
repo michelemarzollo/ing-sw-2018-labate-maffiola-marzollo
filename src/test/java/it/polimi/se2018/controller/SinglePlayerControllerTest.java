@@ -41,7 +41,7 @@ public class SinglePlayerControllerTest {
     @Test
     public void testUpdate() {
         game = new Game();
-        controller = new SinglePlayerController(game, 100, 100);
+        controller = new SinglePlayerController(game, 100);
         ViewMessage msg = new ViewMessage(view, Action.REGISTER_PLAYER, playerName);
         controller.update(msg);
         assertEquals(playerName, game.getPlayers().get(0).getName());
@@ -66,7 +66,7 @@ public class SinglePlayerControllerTest {
         game = GameUtils.getStartedGame(false);
         if (game == null)
             Assert.fail("Error on game initialization");
-        controller = new SinglePlayerController(game, 100, 100);
+        controller = new SinglePlayerController(game, 100);
         game = GameUtils.getHalfwayGame();
         PlaceDie msg = new PlaceDie(2, new Coordinates(2, 7), view, Action.PLACE_DIE, playerName);
         controller.performAction(msg);
@@ -82,7 +82,7 @@ public class SinglePlayerControllerTest {
     @Test
     public void testRegisterPlayers() {
         game = new Game();
-        controller = new SinglePlayerController(game, 100, 100);
+        controller = new SinglePlayerController(game, 100);
         ViewMessage msg = new ViewMessage(view, Action.REGISTER_PLAYER, playerName);
         controller.performAction(msg);
         assertEquals(playerName, game.getPlayers().get(0).getName());
@@ -102,7 +102,7 @@ public class SinglePlayerControllerTest {
         game = GameUtils.getStartedGame(false);
         if (game == null)
             Assert.fail("Error on game initialization");
-        controller = new SinglePlayerController(game, 100, 100);
+        controller = new SinglePlayerController(game, 100);
         ViewMessage msg = new ViewMessage(view, Action.REGISTER_PLAYER, "Paperino");
         controller.performAction(msg);
         assertEquals(playerName, game.getPlayers().get(0).getName());
@@ -118,7 +118,7 @@ public class SinglePlayerControllerTest {
     @Test
     public void testCorrectSetUpGame() {
         game = new Game();
-        controller = new SinglePlayerController(game, 100, 100);
+        controller = new SinglePlayerController(game, 100);
         //registers a player to the game
         ViewMessage msg1 = new ViewMessage(view, Action.REGISTER_PLAYER, playerName);
         controller.performAction(msg1);
@@ -141,7 +141,7 @@ public class SinglePlayerControllerTest {
     @Test
     public void testSetUpGameBeforeRegisterPlayer() {
         game = new Game();
-        controller = new SinglePlayerController(game, 100, 100);
+        controller = new SinglePlayerController(game, 100);
         SelectDifficulty msg = new SelectDifficulty(4, view, playerName);
         controller.performAction(msg);
         assertTrue(view.getCalledMethods().contains("showError: There is no registered player!"));
@@ -166,7 +166,7 @@ public class SinglePlayerControllerTest {
     @Test
     public void testFirstWrongSetUpGame() {
         game = new Game();
-        controller = new SinglePlayerController(game, 100, 100);
+        controller = new SinglePlayerController(game, 100);
         ViewMessage msg1 = new ViewMessage(view, Action.REGISTER_PLAYER, playerName);
         controller.performAction(msg1);
         SelectDifficulty msg2 = new SelectDifficulty(0, view, playerName);
@@ -196,7 +196,7 @@ public class SinglePlayerControllerTest {
     @Test
     public void testSecondWrongSetUpGame() {
         game = new Game();
-        controller = new SinglePlayerController(game, 100, 100);
+        controller = new SinglePlayerController(game, 100);
         ViewMessage msg1 = new ViewMessage(view, Action.REGISTER_PLAYER, playerName);
         controller.performAction(msg1);
         SelectDifficulty msg2 = new SelectDifficulty(7, view, playerName);
@@ -217,9 +217,8 @@ public class SinglePlayerControllerTest {
     @Test
     public void testEndGame() {
         game = new Game();
-        controller = new SinglePlayerController(game, 100, 100);
-        GameUtils gameUtils = new GameUtils();
-        game = gameUtils.getCompleteSinglePlayerGame(game, controller);
+        controller = new SinglePlayerController(game, 100);
+        game = GameUtils.getCompleteSinglePlayerGame(game, controller);
         ViewMessage msg = new ViewMessage(view, Action.END_TURN, playerName);
 
         controller.endGame(msg);
@@ -237,9 +236,8 @@ public class SinglePlayerControllerTest {
     @Test
     public void testNegativeSelectPrivateObjective() {
         game = new Game();
-        controller = new SinglePlayerController(game, 100, 100);
-        GameUtils gameUtils = new GameUtils();
-        game = gameUtils.getCompleteSinglePlayerGame(game, controller);
+        controller = new SinglePlayerController(game, 100);
+        game = GameUtils.getCompleteSinglePlayerGame(game, controller);
         ViewMessage msg = new ViewMessage(view, Action.END_TURN, playerName);
 
         controller.endGame(msg);
@@ -270,9 +268,8 @@ public class SinglePlayerControllerTest {
     @Test
     public void testCalculateScores() {
         game = new Game();
-        controller = new SinglePlayerController(game, 100, 100);
-        GameUtils gameUtils = new GameUtils();
-        game = gameUtils.getCompleteSinglePlayerGame(game, controller);
+        controller = new SinglePlayerController(game, 100);
+        game = GameUtils.getCompleteSinglePlayerGame(game, controller);
 
         ViewMessage msg = new ViewMessage(view, Action.END_TURN, playerName);
 
@@ -306,14 +303,13 @@ public class SinglePlayerControllerTest {
     @Test
     public void testFillScoreBoard() {
         game = new Game();
-        controller = new SinglePlayerController(game, 100, 100);
-        GameUtils gameUtils = new GameUtils();
-        game = gameUtils.getCompleteSinglePlayerGame(game, controller);
+        controller = new SinglePlayerController(game, 100);
+        game = GameUtils.getCompleteSinglePlayerGame(game, controller);
+        if(game == null)
+            Assert.fail("Error on game initialization");
 
         game.getDraftPool().setDice(new ArrayList<>());
-
         ViewMessage msg = new ViewMessage(view, Action.END_TURN, playerName);
-
         controller.endGame(msg);
 
         //gets the colour of the first Private Objective of the game
@@ -321,6 +317,7 @@ public class SinglePlayerControllerTest {
         //the message to send to choose the card
         ViewMessage msg2 = new SelectCard(
                 name, view, Action.SELECT_PRIVATE_OBJECTIVE, playerName);
+
         controller.performAction(msg2);
         assertTrue(game.getDraftPool().getDice().isEmpty());
         assertEquals(19, game.getPlayers().get(1).getScore());
@@ -329,7 +326,8 @@ public class SinglePlayerControllerTest {
         List<Player> scoreBoard = game.getScoreBoard();
         assertEquals(scoreBoard.get(0), game.getPlayers().get(1));
         assertEquals(scoreBoard.get(1), game.getPlayers().get(0));
-        assertEquals("showScoreBoard", view.getCalledMethods().get(view.getCalledMethods().size() - 1));
+        Assert.assertEquals(1, view.getCalledMethods().size());
+        assertEquals("showPrivateObjectiveSelection", view.getCalledMethods().get(0));
     }
 
     /**
@@ -355,7 +353,7 @@ public class SinglePlayerControllerTest {
                 new Die(6, new Random(), Colour.PURPLE)));
 
         game.getDraftPool().setDice(dice);
-        Controller controller = new SinglePlayerController(game, 100, 100);
+        Controller controller = new SinglePlayerController(game, 100);
         SelectCardSP msg = new SelectCardSP("Grozing Pliers", view, Action.ACTIVATE_TOOL_CARD, "Pippo", 3);
         boolean canUse = controller.canUseToolCard(msg, toolCards[0]);
         assertTrue(canUse);
@@ -388,7 +386,7 @@ public class SinglePlayerControllerTest {
 
         game.getDraftPool().setDice(dice);
         toolCards[0].use();
-        Controller controller = new SinglePlayerController(game, 100, 100);
+        Controller controller = new SinglePlayerController(game, 100);
         SelectCardSP msg = new SelectCardSP("Grozing Pliers", view, Action.ACTIVATE_TOOL_CARD, "Pippo", 3);
         boolean canUse = controller.canUseToolCard(msg, toolCards[0]);
         assertFalse(canUse);
@@ -422,7 +420,7 @@ public class SinglePlayerControllerTest {
 
         game.getDraftPool().setDice(dice);
 
-        Controller controller = new SinglePlayerController(game, 100, 100);
+        Controller controller = new SinglePlayerController(game, 100);
         SelectCardSP msg = new SelectCardSP("Grozing Pliers", view, Action.ACTIVATE_TOOL_CARD, "Pippo", 2);
         boolean canUse = controller.canUseToolCard(msg, toolCards[0]);
         assertFalse(canUse);
@@ -439,9 +437,8 @@ public class SinglePlayerControllerTest {
     @Test
     public void testDisplayGame() {
         game = new Game();
-        controller = new SinglePlayerController(game, 100, 100);
-        GameUtils gameUtils = new GameUtils();
-        game = gameUtils.getCompleteSinglePlayerGame(game, controller);
+        controller = new SinglePlayerController(game, 100);
+        game = GameUtils.getCompleteSinglePlayerGame(game, controller);
         ViewMessage msg = new ViewMessage(view, Action.END_TURN, "Pippo"); //generic action, just to have a ViewMessage
         controller.displayGame(msg);
         assertEquals("showSinglePlayerGame", view.getCalledMethods().get(view.getCalledMethods().size() - 1));
@@ -456,9 +453,8 @@ public class SinglePlayerControllerTest {
     @Test
     public void testGetDraftAmount() {
         game = new Game();
-        controller = new SinglePlayerController(game, 100, 100);
-        GameUtils gameUtils = new GameUtils();
-        game = gameUtils.getCompleteSinglePlayerGame(game, controller);
+        controller = new SinglePlayerController(game, 100);
+        game = GameUtils.getCompleteSinglePlayerGame(game, controller);
         assertEquals(4, controller.getDraftAmount());
     }
 
@@ -486,7 +482,7 @@ public class SinglePlayerControllerTest {
         game.getDraftPool().setDice(dice);
         game.getTurnManager().getCurrentTurn().setSacrificeIndex(3);
 
-        Controller controller = new SinglePlayerController(game, 100, 100);
+        Controller controller = new SinglePlayerController(game, 100);
         game.getTurnManager().getCurrentTurn().setSelectedToolCard(toolCards[0]);
         IncrementDieValue msg = new IncrementDieValue(2, true, view, Action.APPLY_TOOL_CARD, playerName);
         controller.consumeResources(msg);
@@ -514,7 +510,7 @@ public class SinglePlayerControllerTest {
         Game game = GameUtils.getSetUpGame(false);
         if (game == null)
             Assert.fail("Error on game initialization");
-        Controller controller = new SinglePlayerController(game, 100, 100);
+        Controller controller = new SinglePlayerController(game, 100);
         ViewMessage msg = new ViewMessage(view, Action.DISCONNECT_PLAYER, playerName);
         controller.disconnectPlayer(msg);
         assertFalse(game.getPlayers().get(0).isConnected());
@@ -532,48 +528,10 @@ public class SinglePlayerControllerTest {
         Game game = GameUtils.getSetUpGame(false);
         if (game == null)
             Assert.fail("Error on game initialization");
-        Controller controller = new SinglePlayerController(game, 100, 100);
+        Controller controller = new SinglePlayerController(game, 100);
         ViewMessage msg = new ViewMessage(view, Action.DISCONNECT_PLAYER, "Pluto");
         controller.disconnectPlayer(msg);
         assertTrue(game.getPlayers().get(0).isConnected());
-        assertEquals(1, game.getPlayers().size());
-    }
-
-    /**
-     * Tests the reconnection of the player when the player can reconnect.
-     *
-     * @see SinglePlayerController#reconnectPlayer(ViewMessage)
-     */
-    @Test
-    public void testValidReconnectPlayer() {
-        Game game = GameUtils.getSetUpGame(false);
-        if (game == null)
-            Assert.fail("Error on game initialization");
-        Controller controller = new SinglePlayerController(game, 100, 100);
-        game.getPlayers().get(0).setConnected(false);
-        ViewMessage msg = new ViewMessage(view, Action.RECONNECT_PLAYER, playerName);
-        controller.reconnectPlayer(msg);
-        assertTrue(game.getPlayers().get(0).isConnected());
-        assertEquals(1, game.getPlayers().size());
-    }
-
-    /**
-     * Tests the reconnection of the player when the player that wants to reconnect can't
-     * reconnect, because it has a wrong name.
-     *
-     * @see SinglePlayerController#reconnectPlayer(ViewMessage)
-     */
-    @Test
-    public void testInvalidReconnectPlayer() {
-        Game game = GameUtils.getSetUpGame(false);
-        if (game == null)
-            Assert.fail("Error on game initialization");
-        Controller controller = new SinglePlayerController(game, 100, 100);
-        MockView view1 = new MockView("Pippo");
-        game.getPlayers().get(0).setConnected(false);
-        ViewMessage msg = new ViewMessage(view1, Action.RECONNECT_PLAYER, "Paperino");
-        controller.reconnectPlayer(msg);
-        assertFalse(game.getPlayers().get(0).isConnected());
         assertEquals(1, game.getPlayers().size());
     }
 }

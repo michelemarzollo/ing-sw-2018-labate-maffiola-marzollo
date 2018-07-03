@@ -93,9 +93,8 @@ public class AlterDieValueBehaviour implements ToolCardBehaviour {
             List<Die> dice = game.getDraftPool().getDice();
 
             Die die = dice.get(selectMessage.getDieIndex());
-            dice.remove(selectMessage.getDieIndex());
             die = alterDie(die, selectMessage);
-            dice.add(selectMessage.getDieIndex(), die);
+            dice.set(selectMessage.getDieIndex(), die);
 
             game.getDraftPool().setDice(dice);
 

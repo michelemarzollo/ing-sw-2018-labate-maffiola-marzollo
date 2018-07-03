@@ -4,8 +4,6 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.events.*;
 
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.function.Consumer;
 
 
@@ -49,17 +47,9 @@ public class SinglePlayerController extends Controller {
     private static final int EMPTY_CELL_PENALTY = 3;
 
     /**
-     * Timer that is used to keep the Game 'alive' for
-     * a predefined {@code timeout} when the Player disconnects.
+     * The amount of dice to draft each round.
      */
-    private Timer disconnectedTimer;
-
-    /**
-     * Amount of time (in seconds) for which the Controller
-     * has to wait when the Player disconnects. At the end
-     * of this period the {@link Game} is canceled.
-     */
-    private int timeOut;
+    private static final int DICE_PER_ROUND = 4;
 
 
     /**
@@ -69,16 +59,10 @@ public class SinglePlayerController extends Controller {
      * @param game         The game that has to be bound
      *                     to the controller.
      * @param turnDuration The time that the player have to consume his turn.
-     * @param timeOut      Period that has to be waited keeping the current {@link Game}
-     *                     still valid and after which the {@link Game} has to be
-     *                     deleted.
      */
-    public SinglePlayerController(Game game, int turnDuration, int timeOut) {
+    public SinglePlayerController(Game game, int turnDuration) {
         super(game, turnDuration);
-        disconnectedTimer = new Timer();
-        this.timeOut = timeOut;
     }
-
 
     /**
      * Allows to register custom action handlers. It registers
@@ -98,7 +82,6 @@ public class SinglePlayerController extends Controller {
         actions.put(Action.APPLY_TOOL_CARD, this::applyToolCard);
         actions.put(Action.END_TURN, this::endTurn);
         actions.put(Action.DISCONNECT_PLAYER, this::disconnectPlayer);
-        actions.put(Action.RECONNECT_PLAYER, this::reconnectPlayer);
         actions.put(Action.SELECT_PRIVATE_OBJECTIVE, this::selectPrivateObjective);
         actions.put(Action.CHOOSE_VALUE, this::applyToolCard);
 
@@ -205,6 +188,7 @@ public class SinglePlayerController extends Controller {
                 getGame().addPlayer(new Player("RoundTrack"));
                 calculateScores();
                 fillScoreBoard(); //this invocation in Game generates the GAME_END message
+                finalizeMatch();
                 return;
             }
         }
@@ -221,18 +205,16 @@ public class SinglePlayerController extends Controller {
     @Override
     protected void calculateScores() {
         int publicScore = 0;
-        int privateScore;
-        int emptySpacePenalty;
         Cell[][] patternGrid = getGame().getPlayers().get(0).getPattern().getGrid();
         for (PublicObjectiveScore publicScoreCalculator : getPublicScoreCalculators()) {
             publicScore += publicScoreCalculator.getScore(patternGrid);
         }
         //The chosen PrivateObjectiveCard is placed in the first position of the array (0).
         Colour privateObjectiveColour = getGame().getPlayers().get(0).getCards()[0].getColour();
-        privateScore = PrivateObjectiveScore.getInstance().
+        int privateScore = PrivateObjectiveScore.getInstance().
                 getScore(patternGrid, privateObjectiveColour);
 
-        emptySpacePenalty = EMPTY_CELL_PENALTY * getGame().getPlayers().get(0).getPattern().emptyCells();
+        int emptySpacePenalty = EMPTY_CELL_PENALTY * getGame().getPlayers().get(0).getPattern().emptyCells();
         //Player in position 0 is the user.
         getGame().getPlayers().get(0).
                 setScore(publicScore + privateScore - emptySpacePenalty);
@@ -268,20 +250,18 @@ public class SinglePlayerController extends Controller {
         SelectCardSP selectionMessage = (SelectCardSP) message;
         int dieIndex = selectionMessage.getDieIndex();
         if (!toolCard.isUsed()) {
-            if (super.getGame().getDraftPool().getDice().get(dieIndex).getColour().
+            if (getGame().getDraftPool().getDice().get(dieIndex).getColour().
                     equals(toolCard.getColour())) {
                 getGame().getTurnManager().getCurrentTurn().
                         setSacrificeIndex(dieIndex);
                 return true;
-            } else {
-                selectionMessage.getView().showError("The requested die doesn't match the Tool Card's colour.");
-                return false;
-            }
-        } else {
+            } else
+                selectionMessage.getView()
+                        .showError("The requested die doesn't match the Tool Card's colour.");
+        } else
             //The toolCard has been already used.
             selectionMessage.getView().showError("The Tool Card has already been used.");
-            return false;
-        }
+        return false;
     }
 
     /**
@@ -305,7 +285,7 @@ public class SinglePlayerController extends Controller {
      */
     @Override
     protected int getDraftAmount() {
-        return 4;
+        return DICE_PER_ROUND;
     }
 
     /**
@@ -314,20 +294,14 @@ public class SinglePlayerController extends Controller {
      */
     @Override
     protected void consumeResources(ViewMessage message) {
-        int dieIndex = getGame().getTurnManager().getCurrentTurn().getSacrificeIndex();
+        Turn currentTurn = getGame().getTurnManager().getCurrentTurn();
+        int dieIndex = currentTurn.getSacrificeIndex();
         getGame().getDraftPool().draft(dieIndex);
-    }
+        currentTurn.getSelectedToolCard().use();
 
-    /**
-     * This inner class is necessary in the case in which the Player disconnects
-     * and the disconnectedTimer expires: the run method contains the actions that has to be
-     * performed in that moment.
-     */
-    private class EndGameTask extends TimerTask {
-        @Override
-        public void run() {
-            finalizeMatch();
-        }
+        if (currentTurn.getForcedSelectionIndex() > currentTurn.getSacrificeIndex() &&
+                currentTurn.getSacrificeIndex() != -1)
+            currentTurn.setForcedSelectionIndex(currentTurn.getForcedSelectionIndex() - 1);
     }
 
     /**
@@ -339,29 +313,9 @@ public class SinglePlayerController extends Controller {
      */
     @Override
     protected void disconnectPlayer(ViewMessage message) {
-        disconnectedTimer.schedule(new EndGameTask(), (long) timeOut * 1000);
-
         if (getGame().getPlayers().get(0).getName().equals(message.getPlayerName())) {
             getGame().getPlayers().get(0).setConnected(false);
+            finalizeMatch();
         }
     }
-
-    /**
-     * This method receives a message of {@code RECONNECT_PLAYER} and
-     * it interrupts the disconnectedTimer because the Player has reconnected within
-     * the established period of time.
-     *
-     * @param message The message generated by the view.
-     */
-    @Override
-    protected void reconnectPlayer(ViewMessage message) {
-        if (message.getPlayerName().equals(getGame().getPlayers().get(0).getName())) {
-            disconnectedTimer.cancel();
-            getGame().getPlayers().get(0).setConnected(true);
-        } else {
-            message.getView().showError("Your username doesn't match with the actual player's username");
-        }
-    }
-
-
 }

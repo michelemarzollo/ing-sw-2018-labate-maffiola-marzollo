@@ -49,8 +49,8 @@ public class ReRollDieBehaviour implements ToolCardBehaviour {
         SelectDie selectDie = (SelectDie) message;
         try {
             List<Die> draftPool = game.getDraftPool().getDice();
-            Die rerolledDie = draftPool.remove(selectDie.getDieIndex()).roll();
-            draftPool.add(rerolledDie);
+            Die rerolledDie = draftPool.get(selectDie.getDieIndex()).roll();
+            draftPool.set(selectDie.getDieIndex(), rerolledDie);
             game.getDraftPool().setDice(draftPool);
 
             // force next selection

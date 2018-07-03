@@ -48,19 +48,19 @@ public class XmlPublicObjectiveLoaderTest {
 
         try {
             Game game = new Game();
-            Controller controller = new SinglePlayerController(game, 100, 100);
-            GameUtils gameUtils = new GameUtils();
-            game = gameUtils.getCompleteSinglePlayerGame(game, controller);
+            Controller controller = new SinglePlayerController(game, 100);
+            GameUtils.getCompleteSinglePlayerGame(game, controller);
             XmlPublicObjectiveLoader loader = new XmlPublicObjectiveLoader(listPath, LIST_NAME, controller);
             PublicObjectiveCard[] cards = loader.load(1);
 
+            Assert.assertEquals(1, cards.length);
             Assert.assertEquals("Color Diagonals", cards[0].getName());
             Assert.assertEquals(1, cards[0].getVictoryPoints());
 
             //The first 3 classes, set in getCompleteSinglePlayerGame, are already in the controller.
             //the new one will be the third
+            Assert.assertEquals(4, controller.getPublicScoreCalculators().size());
             Assert.assertTrue(controller.getPublicScoreCalculators().get(3) instanceof DiagonalScore);
-            Assert.assertEquals(1, cards.length);
 
 
         } catch (SAXException e) {
@@ -93,9 +93,8 @@ public class XmlPublicObjectiveLoaderTest {
 
         try {
             Game game = new Game();
-            Controller controller = new SinglePlayerController(game, 100, 100);
-            GameUtils gameUtils = new GameUtils();
-            game = gameUtils.getCompleteSinglePlayerGame(game, controller);
+            Controller controller = new SinglePlayerController(game, 100);
+            GameUtils.getCompleteSinglePlayerGame(game,controller);
             XmlPublicObjectiveLoader loader = new XmlPublicObjectiveLoader(listPath, LIST_NAME, controller);
             PublicObjectiveCard[] cards = loader.load(12);
 

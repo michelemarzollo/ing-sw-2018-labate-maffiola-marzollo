@@ -54,13 +54,10 @@ public class MatchMaker {
         if (controller == null || !controller.acceptsNewPlayers()) {
             try {
                 ServerConfiguration configuration = ServerConfiguration.getInstance();
-
                 controller = new MultiPlayerController(new Game(),
                         configuration.getTurnDuration(), configuration.getMultiPlayerTimeOut());
 
                 multiPlayer = new WeakReference<>(controller);
-
-
             } catch (MissingConfigurationException e) {
                 Logger.getDefaultLogger().log(e.getMessage());
                 return;
@@ -79,7 +76,7 @@ public class MatchMaker {
             ServerConfiguration configuration = ServerConfiguration.getInstance();
 
             Controller singlePlayer = new SinglePlayerController(new Game(),
-                    configuration.getTurnDuration(), configuration.getSinglePlayerTimeOut());
+                    configuration.getTurnDuration());
 
             view.registerObserver(singlePlayer);
         } catch (MissingConfigurationException e) {
