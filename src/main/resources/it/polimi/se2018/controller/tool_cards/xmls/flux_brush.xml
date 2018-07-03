@@ -5,8 +5,8 @@
            xsi:schemaLocation="http://se2018.polimi.it/tool_card  ../tool_card.xsd">
 
     <name>Flux Brush</name>
-    <description>After drafting, re-roll the drafted die\n
-        If it cannot be placed, return it to the Draft Pool</description>
+    <description>After drafting, re-roll the drafted die
+                 If it cannot be placed, return it to the Draft Pool</description>
     <colour>PURPLE</colour>
 
 </tool_card>
