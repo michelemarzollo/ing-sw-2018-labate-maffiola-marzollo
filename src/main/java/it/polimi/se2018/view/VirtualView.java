@@ -28,6 +28,9 @@ public class VirtualView extends View {
      */
     private ClientNetInterface client;
 
+    /**
+     * Flag to indicate if disconnection has to be notified.
+     */
     private boolean notifyDisconnection = false;
 
     /**
@@ -150,6 +153,9 @@ public class VirtualView extends View {
         show("showDieSelection");
     }
 
+    /**
+     * Informs the associated client to show the die increment/decrement view.
+     */
     @Override
     public void showDieIncrementSelection() {
         show("showDieIncrementSelection");
@@ -157,7 +163,6 @@ public class VirtualView extends View {
 
     /**
      * Informs the associated client to show the move die selection view.
-     * <p><strong>Note: there are troubles with the sending of the argument.</strong></p>
      *
      * @param amount The amount of selection to make.
      */
@@ -166,6 +171,10 @@ public class VirtualView extends View {
         show("showMoveSelection" + amount);
     }
 
+    /**
+     * Informs the associated client to show move die selection view where at most 2 dice
+     * can be moved.
+     */
     @Override
     public void showMoveUpToTwo() {
         show("showMoveUpToTwo");
@@ -195,11 +204,17 @@ public class VirtualView extends View {
         show("showValueDestinationSelection");
     }
 
+    /**
+     * Informs the associated client to show the die placement through tool card view.
+     */
     @Override
     public void showPlaceDie() {
         show("showPlaceDie");
     }
 
+    /**
+     * Informs the associated client to show the confirmation view.
+     */
     @Override
     public void showConfirm() {
         show("showConfirm");
@@ -235,5 +250,14 @@ public class VirtualView extends View {
      */
     public boolean isNotExpired() {
         return !expired;
+    }
+
+    /**
+     * Sets the view as expired, since it has been dropped by the observable it was
+     * linked to.
+     */
+    @Override
+    public void dropped() {
+        expired = true;
     }
 }
