@@ -110,7 +110,10 @@ public class MultiPlayerControllerTest {
         assertEquals(1, game.getPlayers().get(0).getTokens());
     }
 
-
+    /**
+     * Tests that View's showMultiplayerGame is invoked when the
+     * displayGame is performed.
+     */
     @Test
     public void testDisplayGame() {
         Game game = GameUtils.getStartedGame(true);
@@ -128,6 +131,10 @@ public class MultiPlayerControllerTest {
     }
 
 
+    /**
+     * Tests that the number of dice to be drafted is correct: it must be
+     * equals to n * number of players.
+     */
     @Test
     public void testGetDraftAmount() {
         Game game = GameUtils.getStartedGame(true);
@@ -141,7 +148,10 @@ public class MultiPlayerControllerTest {
         assertEquals(5, controller.getDraftAmount());
     }
 
-
+    /**
+     * Tests that the player's tokens are decremented only of one token if
+     * he uses a Tool Card that has not been used until this moment.
+     */
     @Test
     public void testConsumeResourcesNotUsedToolCard() {
         Game game = GameUtils.getStartedGame(true);
@@ -161,8 +171,8 @@ public class MultiPlayerControllerTest {
     }
 
     /**
-     * Similar to the previous, but in this casse the game also has
-     * Public Objective cards, and a player gets points from one if those.
+     * Tests that the player's tokens are decremented of two tokens
+     * if he uses an already used Tool Card.
      */
     @Test
     public void testConsumeResourcesUsedToolCard() {
@@ -222,7 +232,8 @@ public class MultiPlayerControllerTest {
     }
 
     /**
-     * Same as the previous one, but also with points given by the public objective cards.
+     * Similar to the previous, but in this case the game also has
+     * Public Objective cards, and a player gets points from one if those.
      */
     @Test
     public void testCalculateScoresWithCards() {
@@ -277,6 +288,10 @@ public class MultiPlayerControllerTest {
         assertEquals(5 - 19 + 4 + plutoPublicScore, pluto.getScore());
     }
 
+    /**
+     * Tests that the players are correctly registered and that the isSetUpComplete
+     * flag is set when the maximum number of registrations is reached.
+     */
     @Test
     public void testRegisterPlayerSetUpComplete() {
         Game game = new Game();
@@ -323,6 +338,10 @@ public class MultiPlayerControllerTest {
         assertTrue(view5.getCalledMethods().contains("showError: There are already four registered players!"));
     }
 
+    /**
+     * Tests that the players are correctly registered and that the isSetUpComplete
+     * flag is not set because the maximum number of registrations is not still reached.
+     */
     @Test
     public void testRegisterPlayerSetUpNotComplete() {
         Game game = new Game();
@@ -339,6 +358,11 @@ public class MultiPlayerControllerTest {
         assertFalse(game.isSetupComplete());
     }
 
+    /**
+     * Tests that all the actions to be performed at the end of the game
+     * are actually performed: the scores are calculated and the score board
+     * is set.
+     */
     @Test
     public void testEndGame() {
         Game game = GameUtils.getStartedGame(true);
@@ -356,7 +380,6 @@ public class MultiPlayerControllerTest {
         assertTrue(game.getPlayers().get(1).getScore() != 0);
         //before endGame method invocation the scoreBoard is not even instantiated.
         assertNotNull(game.getScoreBoard());
-        // assertTrue(view.getCalledMethods().contains("showFinalView"));
         assertEquals(0, view.getCalledMethods().size());
     }
 
@@ -400,6 +423,10 @@ public class MultiPlayerControllerTest {
         assertTrue(game.getPlayers().get(1).isConnected());
     }
 
+    /**
+     * Tests that the player's disconnection actually removes the player from
+     * a not started game.
+     */
     @Test
     public void testDisconnectPlayerSetUpNotCompleted() {
         Game game = new Game();
@@ -412,6 +439,10 @@ public class MultiPlayerControllerTest {
         assertTrue(game.getPlayers().isEmpty());
     }
 
+    /**
+     * Tests that the player is correctly reconnected: the {@link Player} instance is
+     * the same as before and the isConnected flag is now set as {@code true}.
+     */
     @Test
     public void testValidReconnectPlayer() {
         Game game = GameUtils.getStartedGame(true);
@@ -425,12 +456,18 @@ public class MultiPlayerControllerTest {
         ViewMessage disconnect = new ViewMessage(view1, Action.DISCONNECT_PLAYER, player.getName());
         controller.disconnectPlayer(disconnect);
 
+        assertFalse(player.isConnected());
+
         ViewMessage register = new ViewMessage(view1, Action.REGISTER_PLAYER, player.getName());
         controller.registerPlayer(register);
 
         assertTrue(player.isConnected());
     }
 
+    /**
+     * Tests that the player is not reconnected if the reconnection is tried
+     * with another name.
+     */
     @Test
     public void testInvalidReconnectPlayer() {
         Game game = GameUtils.getSetUpGame(true);
