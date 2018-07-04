@@ -3,6 +3,7 @@ package it.polimi.se2018.model.events;
 /**
  * This enum contains all the possible actions that a player may want to perform
  * or that he automatically performs in both SinglePlayer mode and MultiPlayer mode.
+ * <p>It describes the action of messages that extend {@link ViewMessage}.</p>
  */
 public enum Action {
 

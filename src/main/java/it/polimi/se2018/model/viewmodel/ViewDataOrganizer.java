@@ -1,12 +1,10 @@
 package it.polimi.se2018.model.viewmodel;
 
 import it.polimi.se2018.model.Die;
+import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.model.events.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * This class is used to store all information sent by the server to the view.
@@ -17,26 +15,32 @@ public class ViewDataOrganizer {
      * GameSetup message.
      */
     private GameSetup gameSetup;
+
     /**
      * GameEnd message.
      */
     private GameEnd gameEnd;
+
     /**
      * List of latest PlayerStatus messages.
      */
     private List<PlayerStatus> playerStatusList = new ArrayList<>();
+
     /**
      * List of latest PlayerConnectionStatus messages.
      */
     private List<PlayerConnectionStatus> connectionStatusList = new ArrayList<>();
+
     /**
      * NextTurn message.
      */
     private NextTurn nextTurn;
+
     /**
      * Latest RoundTrackUpdate message.
      */
     private RoundTrackUpdate roundTrack;
+
     /**
      * Latest DraftPoolUpdate message.
      */
@@ -56,6 +60,12 @@ public class ViewDataOrganizer {
      * Index of the last altered player connection status.
      */
     private int changedConnectionIndex = -1;
+
+    /**
+     * The map that contains the names of the ToolCards of the game,
+     * and a boolean value to sye if they were used.
+     */
+    private Map<String, Boolean> usedToolCards = new LinkedHashMap<>();
 
     /**
      * Returns the game setup.
@@ -178,11 +188,16 @@ public class ViewDataOrganizer {
 
     /**
      * Pushes a GameSetup message.
+     * Also initializes the map {@code usedToolCards}, adding all keys (the name of
+     * the ToolCards) and setting {@code false} for each key.
      *
      * @param gameSetup The message to push.
      */
     public void push(GameSetup gameSetup) {
         this.gameSetup = gameSetup;
+        for (ToolCard toolCard : gameSetup.getToolCards()) {
+            usedToolCards.put(toolCard.getName(), false);
+        }
     }
 
     /**
@@ -224,8 +239,8 @@ public class ViewDataOrganizer {
      * @param nextTurn The message to push.
      */
     public void push(NextTurn nextTurn) {
-        if(this.nextTurn != null)
-           turnChanged = !this.nextTurn.equals(nextTurn);
+        if (this.nextTurn != null)
+            turnChanged = !this.nextTurn.equals(nextTurn);
         else
             turnChanged = true;
         this.nextTurn = nextTurn;
@@ -247,6 +262,16 @@ public class ViewDataOrganizer {
      */
     public void push(DraftPoolUpdate draftPool) {
         this.draftPool = draftPool;
+    }
+
+    /**
+     * Sets to {@code true} the value of the map corresponding to the
+     * key given by the name of the ToolCard in the message.
+     *
+     * @param usedToolCard the message that contains the name of the ToolCard.
+     */
+    public void push(UseToolCard usedToolCard) {
+        usedToolCards.replace(usedToolCard.getToolCardName(), true);
     }
 
     /**
@@ -296,5 +321,14 @@ public class ViewDataOrganizer {
      */
     public int getChangedConnectionIndex() {
         return changedConnectionIndex;
+    }
+
+    /**
+     * The getter of the map of used ToolCards.
+     *
+     * @return the map.
+     */
+    public Map<String, Boolean> getUsedToolCards() {
+        return usedToolCards;
     }
 }
