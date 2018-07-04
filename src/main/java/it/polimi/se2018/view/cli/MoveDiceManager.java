@@ -140,7 +140,7 @@ public class MoveDiceManager extends InputEventManager {
 
         getOutput().print("Insert the ");
         if (lastRow == -1) {
-            getOutput().printPattern(getPattern());
+            getOutput().printPatternLarger(getPattern());
             String target = (sources.size() == destinations.size()) ? "source" : "destination";
             getOutput().print((destinations.size() + 1) + ". " + target + " row: ");
         } else if (sources.size() == destinations.size()) {
