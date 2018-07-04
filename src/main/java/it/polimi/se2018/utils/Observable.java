@@ -38,10 +38,17 @@ public abstract class Observable<T> {
      * between the two objects.
      */
     public synchronized boolean deregisterObserver(Observer<T> observer) {
-        return observers.remove(observer);
+        boolean removed = observers.remove(observer);
+        if (removed)
+            observer.dropped();
+        return removed;
     }
 
+    /**
+     * Removes all registered observers.
+     */
     public synchronized void deregisterAll() {
+        observers.forEach(Observer::dropped);
         observers.clear();
     }
 

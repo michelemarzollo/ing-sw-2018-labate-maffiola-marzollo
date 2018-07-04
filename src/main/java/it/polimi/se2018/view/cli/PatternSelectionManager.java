@@ -13,6 +13,11 @@ public class PatternSelectionManager extends InputEventManager {
     private boolean alreadyChosen = false;
 
     /**
+     * Flag to indicate if the player has already been prompted.
+     */
+    private boolean alreadyPrompted = false;
+
+    /**
      * Constructor of the class.
      *
      * @param view   The view to which this manager is bounded.
@@ -31,8 +36,10 @@ public class PatternSelectionManager extends InputEventManager {
      */
     @Override
     public void handle(String input) {
-        alreadyChosen = true;
-        getView().handlePatternSelection(input);
+        if (!alreadyChosen) {
+            alreadyChosen = true;
+            getView().handlePatternSelection(input);
+        }
     }
 
     /**
@@ -41,22 +48,21 @@ public class PatternSelectionManager extends InputEventManager {
      */
     @Override
     public void showPrompt() {
-        if(alreadyChosen)
+        if (alreadyChosen || alreadyPrompted)
             return;
 
-        if (getDataOrganizer().getGameSetup() != null) {
-            int playerIndex = findPlayerIndex(getView().getPlayerName(), getDataOrganizer().getGameSetup().getPlayers());
-            getOutput().printPatternSelection(getDataOrganizer().getGameSetup().getCandidates()[playerIndex]);
-            getOutput().println("Enter the name of the pattern you want to choose:");
-        } else
-            getOutput().println("Waiting...");
+        int playerIndex = findPlayerIndex(getView().getPlayerName(), getDataOrganizer().getGameSetup().getPlayers());
+        getOutput().printPatternSelection(getDataOrganizer().getGameSetup().getCandidates()[playerIndex]);
+        getOutput().println("Enter the name of the pattern you want to choose:");
+        alreadyPrompted = true;
     }
 
     /**
      * Resets the input manager.
      */
     @Override
-    public void reset(){
+    public void reset() {
         alreadyChosen = false;
+        alreadyPrompted = false;
     }
 }

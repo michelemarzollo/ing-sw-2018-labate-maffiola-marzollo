@@ -17,4 +17,11 @@ public interface Observer<T> {
      *                the event
      */
     void update(T message);
+
+    /**
+     * Gets called whenever an Observable drops the link to the Observer.
+     */
+    default void dropped(){
+        //Do nothing by default.
+    }
 }

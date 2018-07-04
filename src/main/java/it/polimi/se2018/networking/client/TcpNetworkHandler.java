@@ -98,7 +98,7 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
 
             } catch (SocketException | EOFException e) {
                 Logger.getDefaultLogger().log("Closed socket: terminating");
-                close();
+                removeClient(client);
             } catch (IOException e) {
                 Logger.getDefaultLogger().log("An error occurred: " + e.getMessage());
             } catch (ClassNotFoundException e) {
@@ -168,6 +168,8 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
     private void close() {
         try {
             alive = false;
+            outputStream.close();
+            inputStream.close();
             clientConnection.close();
         } catch (IOException ignored) {
             //Do nothing

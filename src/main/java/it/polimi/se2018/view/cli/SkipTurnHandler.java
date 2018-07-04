@@ -11,6 +11,10 @@ public class SkipTurnHandler extends InputEventManager {
      * Reference to the manager of the turn.
      */
     private final TurnHandlingManager manager;
+    /**
+     * Flag to indicate if the player has already confirmed.
+     */
+    private boolean gotConfirmation = false;
 
     /**
      * Constructor of the class.
@@ -37,10 +41,11 @@ public class SkipTurnHandler extends InputEventManager {
     public void handle(String input) {
         try {
             int choice = Integer.parseInt(input.trim());
-            if (choice == 1)
+            if (choice == 1) {
+                gotConfirmation = true;
                 getView().handleEndTurn();
-            else
-                manager.setSubHandler(null);
+            }else
+                manager.reset();
 
         } catch (NumberFormatException ex) {
             showError();
@@ -53,6 +58,7 @@ public class SkipTurnHandler extends InputEventManager {
      */
     @Override
     public void showPrompt() {
+        if (!gotConfirmation)
         getOutput().println("You chose to skip your turn, enter:\n" +
                 "1 to confirm\n" +
                 "Any other number to go back");

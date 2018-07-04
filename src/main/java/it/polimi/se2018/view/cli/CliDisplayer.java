@@ -2,10 +2,13 @@ package it.polimi.se2018.view.cli;
 
 import it.polimi.se2018.model.DiceBag;
 import it.polimi.se2018.model.Pattern;
-import it.polimi.se2018.model.events.*;
+import it.polimi.se2018.model.events.GameEnd;
+import it.polimi.se2018.model.events.GameSetup;
+import it.polimi.se2018.model.events.NextTurn;
+import it.polimi.se2018.model.events.PlayerConnectionStatus;
+import it.polimi.se2018.model.viewmodel.ViewDataOrganizer;
 import it.polimi.se2018.view.ClientView;
 import it.polimi.se2018.view.Displayer;
-import it.polimi.se2018.model.viewmodel.ViewDataOrganizer;
 
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -124,16 +127,12 @@ public class CliDisplayer implements Displayer {
             }
             return;
         }
-
-        if (getDataOrganizer().getScoreBoard() != null && input.isGameRunning()) {
-            displayScoreBoard();
-            return;
-        }
-
-        if (!alreadySetup || input.isGameRunning() && mustUpdatePrompt()) {
+        if(!alreadySetup){
             alreadySetup = true;
+            input.updatePrompt();
+        } else if (input.isGameRunning() && mustUpdatePrompt())
             restoreInputManager();
-        }
+
     }
 
     /**

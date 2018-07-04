@@ -6,7 +6,6 @@ import it.polimi.se2018.networking.client.Client;
 import it.polimi.se2018.networking.client.NetworkHandlerFactory;
 import it.polimi.se2018.networking.server.ServerNetInterface;
 import it.polimi.se2018.utils.Coordinates;
-import it.polimi.se2018.utils.Logger;
 
 /**
  * This class represents the client-side view.
@@ -36,7 +35,6 @@ public class ClientView extends View {
     public ClientView(Displayer displayer) {
         organizer = new ViewDataOrganizer();
         this.displayer = displayer;
-        //e il displayer non avrà bisogno del riferimento all'organizer, ma potrà accedervi tramite questa classe
         this.displayer.setView(this);
         displayer.displayLoginView();
     }
@@ -189,7 +187,6 @@ public class ClientView extends View {
      */
     @Override
     public void update(ModelUpdate message) {
-        Logger.getDefaultLogger().log("Got: " + message.getEventType());
         organizer.push(message);
         if (message.getEventType() == ModelEvent.GAME_SETUP)
             showPatternSelection();

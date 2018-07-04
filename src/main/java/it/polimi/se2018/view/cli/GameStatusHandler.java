@@ -69,7 +69,7 @@ public class GameStatusHandler extends InputEventManager {
             int choice = Integer.parseUnsignedInt(input.trim());
 
             options.get(choice - 1).getHandler().run();
-            manager.setSubHandler(null);
+            manager.reset();
 
         } catch (NumberFormatException | IndexOutOfBoundsException ex) {
             showError();

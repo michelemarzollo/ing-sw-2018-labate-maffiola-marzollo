@@ -1,6 +1,7 @@
 package it.polimi.se2018.networking.server;
 
 import it.polimi.se2018.networking.client.RmiClientInterface;
+import it.polimi.se2018.networking.messages.Command;
 import it.polimi.se2018.networking.messages.Message;
 
 import java.rmi.RemoteException;
@@ -66,7 +67,8 @@ public class RmiServerImplementation extends UnicastRemoteObject implements RmiS
      */
     @Override
     public void send(Message message) {
-        server.send(message);
+        if(message.getCommand() != Command.PING)
+            server.send(message);
     }
 
     /**

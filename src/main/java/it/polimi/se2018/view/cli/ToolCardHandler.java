@@ -80,7 +80,7 @@ public class ToolCardHandler extends InputEventManager {
         if (choice == 1)
             setConfirmDone();
         else
-            manager.setSubHandler(null);
+            manager.reset();
     }
 
     /**

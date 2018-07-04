@@ -1,5 +1,6 @@
 package it.polimi.se2018.networking.client;
 
+import it.polimi.se2018.networking.messages.Command;
 import it.polimi.se2018.networking.messages.Message;
 import it.polimi.se2018.networking.server.RmiServerInterface;
 import it.polimi.se2018.networking.server.ServerNetInterface;
@@ -10,6 +11,8 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * The network handler: it simulates the sever on the client.
@@ -36,6 +39,10 @@ public class RmiNetworkHandler implements ServerNetInterface {
      */
     private RmiClientImplementation rmiClient;
 
+    private Timer pingTimer;
+
+    private static final int PING_TIMEOUT = 15000;
+
     /**
      * The string to print in case of {@link RemoteException}.
      */
@@ -49,7 +56,7 @@ public class RmiNetworkHandler implements ServerNetInterface {
      * @param serviceName the name of the service.
      */
     public RmiNetworkHandler(String address, String serviceName) {
-
+        pingTimer = new Timer("Ping-Timer");
         try {
             server = (RmiServerInterface) Naming.lookup("//" + address + "/" + serviceName);
 
@@ -73,14 +80,16 @@ public class RmiNetworkHandler implements ServerNetInterface {
             server.send(message);
         } catch (RemoteException e) {
             Logger.getDefaultLogger().log(ERROR_STRING + e.getMessage() + "!");
-            rmiClient.close();
+            removeClient(rmiClient.getClient());
         }
     }
 
     /**
-     * The method to add a client to the server. It creates the Skeleton
+     * The method to add a client to the server.
+     * <p>It creates the Skeleton
      * of the client, to interact with the Stub of the server, and passes the
-     * remote reference of the client to the server.
+     * remote reference of the client to the server.</p>
+     * <p>It also starts a timer that pings the server to detect if the connection is down.</p>
      *
      * @param client        the client to connect.
      * @param isMultiPlayer {@code true} if the client is playing in multi player mode;
@@ -93,7 +102,14 @@ public class RmiNetworkHandler implements ServerNetInterface {
             rmiClient = new RmiClientImplementation(client);
             remoteRef = (RmiClientInterface) UnicastRemoteObject.exportObject(
                     rmiClient, 0);
-            return server.addClient(remoteRef, isMultiPlayer);
+            boolean added = server.addClient(remoteRef, isMultiPlayer);
+            if (added)
+                pingTimer.schedule(new TimerTask() {
+                    public void run() {
+                        send(new Message(Command.PING, ""));
+                    }
+                }, PING_TIMEOUT, PING_TIMEOUT);
+            return added;
         } catch (RemoteException e) {
             Logger.getDefaultLogger().log(ERROR_STRING + e.getMessage() + "!");
         }
@@ -110,9 +126,11 @@ public class RmiNetworkHandler implements ServerNetInterface {
         try {
             server.removeClient(remoteRef);
             UnicastRemoteObject.unexportObject(rmiClient, true);
-            client.close();
         } catch (RemoteException e) {
             Logger.getDefaultLogger().log(ERROR_STRING + e.getMessage() + "!");
         }
+        pingTimer.cancel();
+        client.close();
     }
+
 }
