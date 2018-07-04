@@ -25,7 +25,7 @@ public class Card {
     /**
      * Maximum size for the card zoom dialog.
      */
-    private static final double MAX_X = 450;
+    private static final double MAX_X = 350;
 
     /**
      * The container holding the card.

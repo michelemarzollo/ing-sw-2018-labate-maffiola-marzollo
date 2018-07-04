@@ -150,6 +150,9 @@ public class VirtualView extends View {
         show("showDieSelection");
     }
 
+    /**
+     * Informs the associated client to show the increment selection view.
+     */
     @Override
     public void showDieIncrementSelection() {
         show("showDieIncrementSelection");
@@ -195,14 +198,28 @@ public class VirtualView extends View {
         show("showValueDestinationSelection");
     }
 
+    /**
+     * Informs the associated client to show the place die view.
+     */
     @Override
     public void showPlaceDie() {
         show("showPlaceDie");
     }
 
+    /**
+     * Informs the associated client to show the confirmation view.
+     */
     @Override
     public void showConfirm() {
         show("showConfirm");
+    }
+
+    /**
+     * Informs the associated client to show the login view.
+     */
+    @Override
+    public void showLoginView() {
+        show("showLoginView");
     }
 
     /**

@@ -175,6 +175,14 @@ public class ClientView extends View {
     }
 
     /**
+     * Shows the login view.
+     */
+    @Override
+    public void showLoginView() {
+        displayer.displayLoginView();
+    }
+
+    /**
      * Updates the displayed data.
      *
      * @param message An object containing the data to define

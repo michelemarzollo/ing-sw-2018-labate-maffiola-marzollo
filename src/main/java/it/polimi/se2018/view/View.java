@@ -110,4 +110,9 @@ public abstract class View extends Observable<ViewMessage>
      * Shows a confirmation view.
      */
     public abstract void showConfirm();
+
+    /**
+     * Shows the login view.
+     */
+    public abstract void showLoginView();
 }

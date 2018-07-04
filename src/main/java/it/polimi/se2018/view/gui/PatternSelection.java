@@ -22,7 +22,7 @@ import java.io.IOException;
  */
 public class PatternSelection {
 
-    private static final int ROW_HEIGHT = 350;
+    private static final int ROW_HEIGHT = 400;
 
     private static final String WAITING_MESSAGE = "The game is starting...";
 

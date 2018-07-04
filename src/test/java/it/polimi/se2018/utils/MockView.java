@@ -128,17 +128,33 @@ public class MockView extends View {
         calledMethods.add("showValueDestinationSelection");
     }
 
+    /**
+     * The method to simulate the corresponding method in the view.
+     */
     @Override
     public void showPlaceDie() {
         calledMethods.add("showPlaceDie");
     }
 
+    /**
+     * The method to simulate the corresponding method in the view.
+     */
     @Override
     public void showConfirm() {
         calledMethods.add("showConfirm");
     }
 
+    /**
+     * The method to simulate the corresponding method in the view.
+     */
+    @Override
+    public void showLoginView() {
+        calledMethods.add("showLoginView");
+    }
 
+    /**
+     * The method to simulate the corresponding method in the view.
+     */
     @Override
     public void update(ModelUpdate message) {
         calledMethods.add("update: " + message.getEventType());
