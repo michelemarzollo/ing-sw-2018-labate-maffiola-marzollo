@@ -18,6 +18,8 @@ public class ViewDataOrganizerTest {
 
     /**
      * Tests if a GameSetup message is pushed correctly into the data organizer.
+     * The method must have also initialized the map {@code usedToolCards}, with
+     * all values set to false.
      */
     @Test
     public void testPushGameSetup() {
@@ -29,6 +31,8 @@ public class ViewDataOrganizerTest {
         organizer.push(gameSetup);
 
         Assert.assertEquals(gameSetup, organizer.getGameSetup());
+        Assert.assertEquals(12, organizer.getUsedToolCards().size());
+        Assert.assertEquals(false, organizer.getUsedToolCards().get("Lathekin"));
     }
 
     /**
@@ -122,7 +126,7 @@ public class ViewDataOrganizerTest {
      * Tests if a NextTurn message is pushed correctly into the data organizer.
      */
     @Test
-    public void testPushNextTurn(){
+    public void testPushNextTurn() {
         Game game = GameUtils.getStartedGame(true);
         if (game == null)
             Assert.fail("Error on game initialization");
@@ -139,7 +143,7 @@ public class ViewDataOrganizerTest {
      * Tests if local player name is set correctly.
      */
     @Test
-    public void testSetLocalPlayer(){
+    public void testSetLocalPlayer() {
         ViewDataOrganizer organizer = new ViewDataOrganizer();
         String playerName = "pippo";
         organizer.setLocalPlayer(playerName);
@@ -147,10 +151,34 @@ public class ViewDataOrganizerTest {
     }
 
     /**
+     * Tests that when a UseToolCard message is received, the value corresponding
+     * to the name of the ToolCard in the map {@code usedToolCards} is set to {@code true}.
+     * The other values mustn't be changed.
+     */
+    @Test
+    public void testPushUseToolCard() {
+        //sets up the game
+        Game game = GameUtils.getSetUpGame(true);
+        if (game == null)
+            Assert.fail("Error on game initialization");
+        ModelUpdate gameSetup = new GameSetup(game);
+        ViewDataOrganizer organizer = new ViewDataOrganizer();
+        organizer.push(gameSetup);
+
+        //the UseToolCard message is created
+        UseToolCard useToolCardMessage = new UseToolCard("Lens Cutter");
+        organizer.push(useToolCardMessage);
+        Assert.assertEquals(12, organizer.getUsedToolCards().size());
+        Assert.assertEquals(false, organizer.getUsedToolCards().get("Lathekin"));
+        Assert.assertEquals(false, organizer.getUsedToolCards().get("Flux Brush"));
+        Assert.assertEquals(true, organizer.getUsedToolCards().get("Lens Cutter"));
+    }
+
+    /**
      * Tests that the data organizer returns the default values for missing data.
      */
     @Test
-    public void testNoPushedData(){
+    public void testNoPushedData() {
         ViewDataOrganizer organizer = new ViewDataOrganizer();
         Assert.assertTrue(organizer.getDraftPool().isEmpty());
         Assert.assertTrue(organizer.getRoundTrack().isEmpty());
@@ -163,4 +191,5 @@ public class ViewDataOrganizerTest {
         Assert.assertTrue(organizer.getAllPlayerStatus().isEmpty());
         Assert.assertNull(organizer.getLocalPlayer());
     }
+
 }

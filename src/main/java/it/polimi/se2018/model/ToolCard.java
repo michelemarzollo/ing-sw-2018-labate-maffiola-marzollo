@@ -1,5 +1,9 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.model.events.ModelUpdate;
+import it.polimi.se2018.model.events.UseToolCard;
+import it.polimi.se2018.utils.Observable;
+
 import java.io.Serializable;
 
 /**
@@ -9,7 +13,7 @@ import java.io.Serializable;
  * <p>No thread-safety has yet been implemented.</p>
  * @author dvdmff
  */
-public class ToolCard implements Serializable {
+public class ToolCard extends Observable<ModelUpdate> implements Serializable {
     /**
      * The name of the tool card.
      */
@@ -88,5 +92,6 @@ public class ToolCard implements Serializable {
      */
     public void use() {
         this.used = true;
+        notifyObservers(new UseToolCard(name));
     }
 }

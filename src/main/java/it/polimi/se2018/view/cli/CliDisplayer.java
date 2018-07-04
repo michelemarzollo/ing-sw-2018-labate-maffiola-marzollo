@@ -127,7 +127,7 @@ public class CliDisplayer implements Displayer {
             }
             return;
         }
-        if(!alreadySetup){
+        if (!alreadySetup) {
             alreadySetup = true;
             input.updatePrompt();
         } else if (input.isGameRunning() && mustUpdatePrompt())
@@ -151,6 +151,7 @@ public class CliDisplayer implements Displayer {
     /**
      * Tells if it is the case to update the prompt message.
      * <p>This is the case only when a new turn has to be notified to the player.</p>
+     *
      * @return {@code true} if the prompt has to be updated; {@code false} otherwise.
      */
     private boolean mustUpdatePrompt() {
@@ -293,7 +294,7 @@ public class CliDisplayer implements Displayer {
      * Prints the player pattern and allows the player to interact by setting an appropriate
      * input event manager in {@link CliInput}.
      */
-    private void displayGame(){
+    private void displayGame() {
         output.println("\n\nYour pattern is:");
         output.printPatternLarger(getPattern());
         output.println("Wait for the game to start");
