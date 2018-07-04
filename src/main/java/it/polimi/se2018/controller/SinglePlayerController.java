@@ -2,6 +2,7 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.events.*;
+import it.polimi.se2018.utils.Logger;
 
 import java.util.Map;
 import java.util.function.Consumer;
@@ -98,6 +99,7 @@ public class SinglePlayerController extends Controller {
     @Override
     protected void registerPlayer(ViewMessage message) {
         if (getGame().getPlayers().isEmpty()) {
+            Logger.getDefaultLogger().log("connecting " + message.getPlayerName());
             getGame().registerObserver(message.getView());
             getGame().addPlayer(new Player(message.getPlayerName()));
             message.getView().showDifficultySelection();
@@ -130,8 +132,6 @@ public class SinglePlayerController extends Controller {
                 //the number of ToolCards depend on the level of difficulty chosen.
                 cardDealer.deal(NUM_OF_PUBLIC_OBJECTIVE, NUM_OF_PRIVATE_OBJECTIVE, difficulty.getDifficulty(), this);
                 getGame().terminateSetup(); //this invocation in Game generates the GAME_SET_UP message
-                //now to begin the Game the only missing thing is the choice of a Pattern.
-                message.getView().showPatternSelection();
             }
         } else message.getView().showError("There is no registered player!");
     }
@@ -314,6 +314,7 @@ public class SinglePlayerController extends Controller {
     @Override
     protected void disconnectPlayer(ViewMessage message) {
         if (getGame().getPlayers().get(0).getName().equals(message.getPlayerName())) {
+            Logger.getDefaultLogger().log("disconnecting " + message.getPlayerName());
             getGame().getPlayers().get(0).setConnected(false);
             finalizeMatch();
         }

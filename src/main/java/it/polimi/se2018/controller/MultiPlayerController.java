@@ -331,7 +331,6 @@ public class MultiPlayerController extends Controller {
      */
     private void reconnectPlayer(ViewMessage message) {
         Logger.getDefaultLogger().log("Reconnecting " + message.getPlayerName());
-        Logger.getDefaultLogger().log(message.getAction() + "");
 
         String playerName = message.getPlayerName();
         Optional<Player> maybePlayer = getGame().getPlayers().stream()

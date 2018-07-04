@@ -121,7 +121,7 @@ public class CliInput implements Runnable {
     /**
      * Updates the prompted message if the read-handle loop hasn't done it yet.
      */
-    private void updatePrompt() {
+    void updatePrompt() {
         synchronized (promptLock) {
             if (overridePrompt)
                 manager.showPrompt();

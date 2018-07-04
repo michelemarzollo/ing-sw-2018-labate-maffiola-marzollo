@@ -8,11 +8,16 @@ import it.polimi.se2018.view.ClientView;
 public class ToolCardConfirmManager extends InputEventManager {
 
     /**
+     * Flag to indicate if the player has already confirmed.
+     */
+    private boolean gotConfirmation = false;
+
+    /**
      * Constructor of the class.
      *
-     * @param view     The view to which this manager is bounded.
-     * @param output   The output destination where the prompts of this manager
-     *                 are shown.
+     * @param view   The view to which this manager is bounded.
+     * @param output The output destination where the prompts of this manager
+     *               are shown.
      */
     public ToolCardConfirmManager(ClientView view, CliPrinter output) {
         super(view, output);
@@ -29,8 +34,10 @@ public class ToolCardConfirmManager extends InputEventManager {
     public void handle(String input) {
         try {
             int choice = Integer.parseInt(input.trim());
-            if (choice == 1)
+            if (choice == 1) {
+                gotConfirmation = true;
                 getView().handleToolCardUsage();
+            }
 
         } catch (NumberFormatException ex) {
             showError();
@@ -43,8 +50,9 @@ public class ToolCardConfirmManager extends InputEventManager {
      */
     @Override
     public void showPrompt() {
-        getOutput().print("Do you want to activate the Tool Card effect? Enter:\n" +
-                "1 to confirm\n" +
-                "Any other number to go back");
+        if (!gotConfirmation)
+            getOutput().print("Do you want to activate the Tool Card effect? Enter:\n" +
+                    "1 to confirm\n" +
+                    "Any other number to go back");
     }
 }

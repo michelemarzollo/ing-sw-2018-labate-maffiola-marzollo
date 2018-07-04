@@ -20,7 +20,10 @@ import java.util.function.Consumer;
  */
 public class DraftPoolFiller {
 
-    private static final double MAX_DIMENSION = 100;
+    /**
+     * Maximum height for the dice container.
+     */
+    private static final double MAX_HEIGHT = 100;
 
     /**
      * The container where dice are to be placed.
@@ -40,7 +43,7 @@ public class DraftPoolFiller {
      */
     public DraftPoolFiller(HBox diceContainer) {
         this.diceContainer = diceContainer;
-        diceContainer.setMaxHeight(MAX_DIMENSION);
+        diceContainer.setMaxHeight(MAX_HEIGHT);
     }
 
     /**
@@ -70,7 +73,24 @@ public class DraftPoolFiller {
         if (handler != null) {
             Node source = (Node) event.getSource();
             int index = diceContainer.getChildren().indexOf(source);
+            setSelected(index);
             handler.accept(index);
+        }
+    }
+
+    /**
+     * Sets the node at the given index as selected.
+     * @param index The index of the node to select.
+     */
+    private void setSelected(int index){
+        for(int i = 0; i < diceContainer.getChildren().size(); ++i){
+            ColorAdjust effect = new ColorAdjust();
+            if(i == index) {
+                effect.setBrightness(0.4);
+                effect.setContrast(0.2);
+            } else
+                effect = null;
+            diceContainer.getChildren().get(i).setEffect(effect);
         }
     }
 

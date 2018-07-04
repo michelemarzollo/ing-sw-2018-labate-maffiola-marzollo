@@ -132,7 +132,7 @@ public class TurnHandlingManager extends InputEventManager {
      */
     @Override
     public void reset() {
-        subHandler = null;
+        setSubHandler(null);
     }
 
     /**
@@ -152,7 +152,7 @@ public class TurnHandlingManager extends InputEventManager {
      *
      * @param subHandler The subHandler for turn handling.
      */
-    void setSubHandler(InputEventManager subHandler) {
+    private void setSubHandler(InputEventManager subHandler) {
         this.subHandler = subHandler;
     }
 

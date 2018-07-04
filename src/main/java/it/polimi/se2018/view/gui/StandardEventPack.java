@@ -91,7 +91,7 @@ public class StandardEventPack extends BoardEventPack {
     /**
      * Makes a request through the client view to activate a tool card.
      * <p>If the single player rule set is active, the user has to select a
-     * die beforehand, otherwise nothing is done.</p>
+     * die beforehand, otherwise an error message is shown.</p>
      * @param cardName The name of the tool card.
      */
     @Override
@@ -100,6 +100,8 @@ public class StandardEventPack extends BoardEventPack {
             getClientView().handleToolCardSelection(cardName);
         else if (index != -1)
             getClientView().handleToolCardSelection(cardName, index);
+        else
+            getClientView().showError("You must select a die to use the tool card!");
 
     }
 }
