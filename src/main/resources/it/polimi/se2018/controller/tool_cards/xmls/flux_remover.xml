@@ -6,8 +6,7 @@
 
     <name>Flux Remover</name>
     <description>After drafting, return the die to the Dice Bag and pull 1 die from the bags
-                 Choose a value and place the new die, obeying all placement restrictions, or
-                 return it to the Draft Pool</description>
+        Choose a value and place the new die, obeying all placement restrictions, or return it to the Draft Pool</description>
     <colour>PURPLE</colour>
 
 </tool_card>

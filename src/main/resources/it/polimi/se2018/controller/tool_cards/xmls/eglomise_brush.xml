@@ -6,7 +6,7 @@
 
     <name>Eglomise Brush</name>
     <description>Move any one die in your window ignoring color restrictions
-                 You must obey all other placement restrictions</description>
+        You must obey all other placement restrictions</description>
     <colour>BLUE</colour>
 
 </tool_card>

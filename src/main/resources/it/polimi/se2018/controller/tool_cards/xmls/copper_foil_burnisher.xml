@@ -6,7 +6,7 @@
 
     <name>Copper Foil Burnisher</name>
     <description>Move any one die in your window ignoring value restrictions
-                 You must obey all other placement restrictions</description>
+        You must obey all other placement restrictions</description>
     <colour>RED</colour>
 
 </tool_card>
