@@ -166,6 +166,8 @@ public class Game extends Observable<ModelUpdate> {
      */
     public void setToolCards(ToolCard[] toolCards) {
         this.toolCards = toolCards;
+        for(ToolCard toolCard : toolCards)
+            toolCard.setGame(this);
     }
 
     /**

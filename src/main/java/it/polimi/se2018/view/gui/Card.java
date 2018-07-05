@@ -1,5 +1,6 @@
 package it.polimi.se2018.view.gui;
 
+import it.polimi.se2018.model.viewmodel.ViewDataOrganizer;
 import it.polimi.se2018.utils.ResourceManager;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
@@ -62,6 +63,8 @@ public class Card {
      */
     private Consumer<String> handler;
 
+    private ViewDataOrganizer organizer;
+
     /**
      * Creates a new Card instance.
      *
@@ -81,7 +84,8 @@ public class Card {
      *
      * @param handler The handler to be called during click events.
      */
-    public void setOnClick(Consumer<String> handler) {
+    public void setOnClick(ViewDataOrganizer organizer, Consumer<String> handler) {
+        this.organizer = organizer;
         this.handler = handler;
     }
 
@@ -142,7 +146,7 @@ public class Card {
      */
     private Dialog<Boolean> getZoomDialog() {
         cardDialog = new Dialog<>();
-        cardDialog.setTitle(cardName);
+        cardDialog.setTitle(getTitle());
         DialogPane pane = new DialogPane();
         cardDialog.setDialogPane(pane);
         BorderPane borderPane = new BorderPane();
@@ -161,6 +165,14 @@ public class Card {
         buttonBar.setPadding(new Insets(15, 0, 0, 0));
         borderPane.setBottom(buttonBar);
         return cardDialog;
+    }
+
+    private String getTitle() {
+        String title = cardName;
+        Boolean used = organizer.getUsedToolCards().get(cardName);
+        if((used == null) ? false : used)
+            title += " (Already used once)";
+        return title;
     }
 
     /**

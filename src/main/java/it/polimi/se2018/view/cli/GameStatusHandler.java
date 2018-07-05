@@ -41,7 +41,7 @@ public class GameStatusHandler extends InputEventManager {
             new Option(PUBLIC_OBJ_PROMPT,
                     () -> getOutput().printPublicObjectiveCards(getPublicCards())),
             new Option(TOOL_CARD_PROMPT,
-                    () -> getOutput().printToolCards(getToolCards()))
+                    () -> getOutput().printToolCards(getToolCards(), getUsedToolCards()))
     );
 
     /**

@@ -35,6 +35,9 @@ public class DraftPoolFiller {
      */
     private Consumer<Integer> handler;
 
+    private int forcedSelectionIndex = -1;
+    private int sacrificeIndex = -1;
+
     /**
      * Creates a new DraftPoolFiller instance that will use the specified HBox to
      * display dice.
@@ -80,18 +83,21 @@ public class DraftPoolFiller {
 
     /**
      * Sets the node at the given index as selected.
+     * <p>If a die is already set as </p>
      *
      * @param index The index of the node to select.
      */
     private void setSelected(int index) {
         for (int i = 0; i < diceContainer.getChildren().size(); ++i) {
-            ColorAdjust effect = new ColorAdjust();
+            Node node = diceContainer.getChildren().get(i);
             if (i == index) {
-                effect.setBrightness(0.4);
-                effect.setContrast(0.2);
-            } else
-                effect = null;
-            diceContainer.getChildren().get(i).setEffect(effect);
+                ColorAdjust colorAdjust = new ColorAdjust();
+                colorAdjust.setBrightness(0.4);
+                colorAdjust.setContrast(0.2);
+                node.setEffect(colorAdjust);
+            } else if ((sacrificeIndex != -1 && sacrificeIndex != i)
+                    || i == forcedSelectionIndex)
+                node.setEffect(null);
         }
     }
 
@@ -101,6 +107,8 @@ public class DraftPoolFiller {
      * @param dice The list of dice in the draft pool.
      */
     public void setDice(List<Die> dice) {
+        forcedSelectionIndex = -1;
+        sacrificeIndex = -1;
         diceContainer.getChildren().clear();
         for (Die die : dice) {
             AnchorPane dieImage = getImageFor(die);
@@ -128,6 +136,7 @@ public class DraftPoolFiller {
      * @param index The index of the die to disable.
      */
     public void setSacrifice(int index) {
+        sacrificeIndex = index;
         disableDie(diceContainer.getChildren().get(index));
     }
 
@@ -137,6 +146,7 @@ public class DraftPoolFiller {
      * @param index The index of the die to keep enabled.
      */
     public void setForcedSelection(int index) {
+        forcedSelectionIndex = index;
         for (int i = 0; i < diceContainer.getChildren().size(); i++) {
             if (i != index)
                 disableDie(diceContainer.getChildren().get(i));

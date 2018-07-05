@@ -122,7 +122,9 @@ public class TurnHandlingManager extends InputEventManager {
             subHandler.showPrompt();
         else {
             refillOptionMap();
-            getOutput().println("\n\nIt's your turn, choose between: ");
+            String turnNumber
+                    = getDataOrganizer().getNextTurn().isSecondTurnAvailable() ? "T1" : "T2";
+            getOutput().println("\n\nIt's your turn (" + turnNumber + "), choose between: ");
             availableOptions.forEach(o -> getOutput().println(o.getPrompt()));
         }
     }

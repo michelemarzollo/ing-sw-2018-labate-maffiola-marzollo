@@ -1,8 +1,6 @@
 package it.polimi.se2018.model;
 
-import it.polimi.se2018.model.events.ModelUpdate;
 import it.polimi.se2018.model.events.UseToolCard;
-import it.polimi.se2018.utils.Observable;
 
 import java.io.Serializable;
 
@@ -13,7 +11,7 @@ import java.io.Serializable;
  * <p>No thread-safety has yet been implemented.</p>
  * @author dvdmff
  */
-public class ToolCard extends Observable<ModelUpdate> implements Serializable {
+public class ToolCard implements Serializable {
     /**
      * The name of the tool card.
      */
@@ -32,6 +30,7 @@ public class ToolCard extends Observable<ModelUpdate> implements Serializable {
      * used during the game.
      */
     private boolean used;
+    private transient Game game;
 
 
     /**
@@ -44,6 +43,14 @@ public class ToolCard extends Observable<ModelUpdate> implements Serializable {
         this.name = name;
         this.description = description;
         this.colour = colour;
+    }
+
+    /**
+     * Binds the tool card to the given game.
+     * @param game The game to bind the tool card to.
+     */
+    void setGame(Game game){
+        this.game = game;
     }
 
     /**
@@ -92,6 +99,7 @@ public class ToolCard extends Observable<ModelUpdate> implements Serializable {
      */
     public void use() {
         this.used = true;
-        notifyObservers(new UseToolCard(name));
+        if(game != null)
+            game.notifyObservers(new UseToolCard(name));
     }
 }
