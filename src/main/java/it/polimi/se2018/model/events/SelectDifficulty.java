@@ -3,11 +3,10 @@ package it.polimi.se2018.model.events;
 import it.polimi.se2018.view.View;
 
 /**
- * This class is used to encapsulate the data needed
- * to select the difficulty level in Solo mode.
- * The setup of the Game will depend on this choice:
- * the chosen number of ToolCards depends on the difficulty
- * level the user wishes to play.
+ * This class is used to encapsulate the data needed to select the difficulty level
+ * in SinglePlayer mode.
+ * The setup of the Game will depend on this choice: the chosen number of ToolCards
+ * depends on the difficulty level the user wishes to play.
  *
  * @author giorgiolabate
  */

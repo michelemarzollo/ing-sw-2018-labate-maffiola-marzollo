@@ -50,7 +50,7 @@ public class MoveDice extends ViewMessage {
     }
 
     /**
-     * Getter for the current positions of the Die
+     * Getter for the current positions of the dice
      * on the Pattern.
      *
      * @return An array of two coordinates that indicate

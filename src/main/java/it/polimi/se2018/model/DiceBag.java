@@ -6,7 +6,7 @@ import java.util.Random;
 
 /**
  * The class represents the DiceBag. It's main role is to
- * keep trace of all the dice of the Game, but that have not
+ * keep trace of all the dice of the Game that have not
  * been drafted yet and to draft new dice at the beginning of
  * each round.
  *
@@ -46,16 +46,17 @@ public class DiceBag {
     /**
      * Draft the indicated number of dice from the DiceBag
      * in a random way.
+     *
      * @param n The number of dice to be drafted.
-     * @return An ArrayList containing the drafted dice
+     * @return A List containing the drafted dice
      * in the drafted order.
      */
-    public List<Die> draft (int n){
+    public List<Die> draft(int n) {
         int diceCounter = 0;
         ArrayList<Die> draftPool = new ArrayList<>();
         if (this.dice.size() < n)
-            throw new IllegalArgumentException ("The DiceBag is empty or doesn't contain enough elements");
-        for (; diceCounter < n; diceCounter++){
+            throw new IllegalArgumentException("The DiceBag is empty or doesn't contain enough elements");
+        for (; diceCounter < n; diceCounter++) {
             //index is a random value between 0 and dice's size -1
             //to randomly choose the die from the DiceBag.
             int index = random.nextInt(dice.size());
@@ -68,9 +69,10 @@ public class DiceBag {
 
     /**
      * Return a die to the DiceBag.
+     *
      * @param d The Die that has to be returned to the DiceBag.
      */
-    public void pushBack(Die d){
+    public void pushBack(Die d) {
         dice.add(d);
     }
 

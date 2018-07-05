@@ -3,10 +3,10 @@ package it.polimi.se2018.model.events;
 import it.polimi.se2018.view.View;
 
 /**
- * This class is used to encapsulate the data needed to
- * select a {@link it.polimi.se2018.model.ToolCard} that
- * the Player would like to use or to choose his {@link it.polimi.se2018.model.Pattern}
- * among their candidates, or to choose the {@link it.polimi.se2018.model.PrivateObjectiveCard}
+ * This class is used to encapsulate the data needed to select a
+ * {@link it.polimi.se2018.model.ToolCard} that the Player would like to use
+ * or to choose his {@link it.polimi.se2018.model.Pattern} among his candidates,
+ * or to choose the {@link it.polimi.se2018.model.PrivateObjectiveCard}
  * at the end of a single player match.
  */
 public class SelectCard extends ViewMessage{

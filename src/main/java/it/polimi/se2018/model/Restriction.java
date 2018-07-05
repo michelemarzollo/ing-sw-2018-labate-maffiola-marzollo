@@ -24,8 +24,9 @@ public enum Restriction {
 
     /**
      * Creates an entry with the specified mandatory constraints.
+     *
      * @param checkColour {@code true} if colour constraints are mandatory.
-     * @param checkValue {@code true} if value constraints are mandatory.
+     * @param checkValue  {@code true} if value constraints are mandatory.
      */
     Restriction(boolean checkColour, boolean checkValue) {
         this.checkColour = checkColour;
