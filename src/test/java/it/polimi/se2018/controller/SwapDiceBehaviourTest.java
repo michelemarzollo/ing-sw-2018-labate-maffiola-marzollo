@@ -79,9 +79,9 @@ public class SwapDiceBehaviourTest {
         );
 
         SwapDiceBehaviour behaviour = new SwapDiceBehaviour();
-        boolean success = behaviour.useToolCard(game, message);
+        ToolCardBehaviourResponse response = behaviour.useToolCard(game, message);
 
-        Assert.assertTrue(success);
+        Assert.assertEquals(ToolCardBehaviourResponse.SUCCESS, response);
         return game;
     }
 
@@ -108,9 +108,9 @@ public class SwapDiceBehaviourTest {
         );
 
         SwapDiceBehaviour behaviour = new SwapDiceBehaviour();
-        boolean success = behaviour.useToolCard(game, message);
+        ToolCardBehaviourResponse response = behaviour.useToolCard(game, message);
 
-        Assert.assertFalse(success);
+        Assert.assertEquals(ToolCardBehaviourResponse.FAILURE, response);
         return game;
     }
 

@@ -50,11 +50,11 @@ public class ReRollDraftPoolBehaviour implements ToolCardBehaviour {
      * @return Always {@code true}.
      */
     @Override
-    public boolean useToolCard(Game game, ViewMessage message) {
+    public ToolCardBehaviourResponse useToolCard(Game game, ViewMessage message) {
         List<Die> newDraftPool = game.getDraftPool().getDice().stream()
                 .map(Die::roll)
                 .collect(Collectors.toList());
         game.getDraftPool().setDice(newDraftPool);
-        return true;
+        return ToolCardBehaviourResponse.SUCCESS;
     }
 }

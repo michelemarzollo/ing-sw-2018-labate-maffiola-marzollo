@@ -95,10 +95,20 @@ public class DraftPoolFiller {
                 colorAdjust.setBrightness(0.4);
                 colorAdjust.setContrast(0.2);
                 node.setEffect(colorAdjust);
-            } else if ((sacrificeIndex != -1 && sacrificeIndex != i)
-                    || i == forcedSelectionIndex)
+            } else if (resetEffect(i))
                 node.setEffect(null);
         }
+    }
+
+    /**
+     * Tells if the effect of the die at the given index can be reset.
+     * @param index The index of the die.
+     * @return {@code true} if the effect can be reset.
+     */
+    private boolean resetEffect(int index){
+        return (sacrificeIndex != -1 && sacrificeIndex != index)
+                || index == forcedSelectionIndex
+                || (sacrificeIndex == -1 && forcedSelectionIndex == -1);
     }
 
     /**

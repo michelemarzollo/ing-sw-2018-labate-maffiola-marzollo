@@ -468,11 +468,11 @@ public abstract class Controller implements Observer<ViewMessage> {
                 toolCardBehaviors.get(game.getTurnManager().getCurrentTurn().getSelectedToolCard().getName());
 
         if (behavior != null) {
-            boolean success = behavior.useToolCard(getGame(), message);
-            if (success) {
-                getGame().getTurnManager().getCurrentTurn().useToolCard();
+            ToolCardBehaviourResponse response = behavior.useToolCard(getGame(), message);
+            if(response.consumeResources())
                 consumeResources(message);
-            }
+            if(response.useTurn())
+                getGame().getTurnManager().getCurrentTurn().useToolCard();
         }
     }
 

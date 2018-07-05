@@ -9,6 +9,11 @@ import it.polimi.se2018.view.ClientView;
 public class SelectDieEventPack extends BoardEventPack {
 
     /**
+     * Reference to the game board.
+     */
+    private GameBoard board;
+
+    /**
      * Creates a new instance that uses the specified client view to handle
      * requests.
      * @param clientView The client view responsible for requests.
@@ -23,6 +28,7 @@ public class SelectDieEventPack extends BoardEventPack {
      */
     @Override
     public void draftPoolHandler(int index) {
+        board.restoreTurn();
         getClientView().handleToolCardUsage(index);
     }
 
@@ -50,6 +56,7 @@ public class SelectDieEventPack extends BoardEventPack {
      */
     @Override
     public void prepareControls(GameBoard board) {
+        this.board = board;
         board.getDraftPoolContainer().setDisable(false);
         board.getPlayerPatternContainer().setDisable(true);
         board.getToolCardContainer().setDisable(true);

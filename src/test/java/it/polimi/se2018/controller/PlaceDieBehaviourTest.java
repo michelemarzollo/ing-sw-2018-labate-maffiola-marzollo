@@ -88,9 +88,9 @@ public class PlaceDieBehaviourTest {
         );
 
         ToolCardBehaviour behaviour = new PlaceDieBehaviour(false, Restriction.NOT_ADJACENT);
-        boolean success = behaviour.useToolCard(game, message);
+        ToolCardBehaviourResponse response = behaviour.useToolCard(game, message);
 
-        Assert.assertTrue(success);
+        Assert.assertEquals(ToolCardBehaviourResponse.SUCCESS, response);
         Die expectedDie = GameUtils.getDice(false).get(1);
         Die actualDie = player.getPattern().getGrid()[3][3].getDie();
 
@@ -135,9 +135,9 @@ public class PlaceDieBehaviourTest {
         );
 
         ToolCardBehaviour behaviour = new PlaceDieBehaviour(true, Restriction.DEFAULT);
-        boolean success = behaviour.useToolCard(game, message);
+        ToolCardBehaviourResponse response = behaviour.useToolCard(game, message);
 
-        Assert.assertTrue(success);
+        Assert.assertEquals(ToolCardBehaviourResponse.SUCCESS, response);
         Assert.assertEquals(0, mockView.getCalledMethods().size());
 
         Assert.assertTrue(game.getTurnManager().getPlayersToSkip().contains(player));
@@ -188,9 +188,9 @@ public class PlaceDieBehaviourTest {
         );
 
         ToolCardBehaviour behaviour = new PlaceDieBehaviour(true, Restriction.DEFAULT);
-        boolean success = behaviour.useToolCard(game, message);
+        ToolCardBehaviourResponse response = behaviour.useToolCard(game, message);
 
-        Assert.assertFalse(success);
+        Assert.assertEquals(ToolCardBehaviourResponse.FAILURE, response);
         return game;
     }
 

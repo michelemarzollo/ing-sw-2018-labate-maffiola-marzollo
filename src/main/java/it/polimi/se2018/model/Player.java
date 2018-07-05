@@ -216,6 +216,7 @@ public class Player {
             throw new NotEnoughTokensException("Not enough tokens to use the Toolcard");
         }
         tokens -= n;
+        game.notifyObservers(new PlayerStatus(this));
     }
 
     /**

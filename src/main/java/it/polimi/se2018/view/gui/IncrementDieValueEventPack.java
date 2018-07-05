@@ -13,6 +13,8 @@ import java.util.Optional;
  */
 public class IncrementDieValueEventPack extends BoardEventPack {
 
+    private GameBoard board;
+
     /**
      * Creates a new instance that uses the specified client view as request handler
      * and the given dialog to interact with the user.
@@ -39,6 +41,7 @@ public class IncrementDieValueEventPack extends BoardEventPack {
 
         Optional<ButtonType> response = alert.showAndWait();
         boolean isIncrement = response.orElse(increment) == increment;
+        board.restoreTurn();
         getClientView().handleToolCardUsage(index, isIncrement);
     }
 
@@ -75,6 +78,7 @@ public class IncrementDieValueEventPack extends BoardEventPack {
      */
     @Override
     public void prepareControls(GameBoard board) {
+        this.board = board;
         board.getPlayerPatternContainer().setDisable(true);
         board.getDraftPoolContainer().setDisable(false);
         board.getToolCardContainer().setDisable(true);

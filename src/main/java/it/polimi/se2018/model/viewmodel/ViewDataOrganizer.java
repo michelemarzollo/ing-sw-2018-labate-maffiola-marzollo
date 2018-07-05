@@ -65,7 +65,7 @@ public class ViewDataOrganizer {
      * The map that contains the names of the ToolCards of the game,
      * and a boolean value to see if they were used.
      */
-    private Map<String, Boolean> usedToolCards = new LinkedHashMap<>();
+    private Map<String, Boolean> usedToolCards = new HashMap<>();
 
     /**
      * Returns the game setup.

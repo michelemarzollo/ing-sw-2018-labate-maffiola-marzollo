@@ -18,6 +18,10 @@ public class SwapDiceEventPack extends BoardEventPack {
      */
     private Coordinates roundTrackSelection;
 
+    /**
+     * Reference to the game board.
+     */
+    private GameBoard board;
 
     /**
      * Creates a new instance that uses the specified client view to handle
@@ -34,6 +38,7 @@ public class SwapDiceEventPack extends BoardEventPack {
      */
     private void trySwap() {
         if (index != -1 && roundTrackSelection != null) {
+            board.restoreTurn();
             getClientView().handleToolCardUsage(index, roundTrackSelection, true);
             reset();
         }
@@ -76,6 +81,7 @@ public class SwapDiceEventPack extends BoardEventPack {
      */
     @Override
     public void prepareControls(GameBoard board) {
+        this.board = board;
         board.getPlayerPatternContainer().setDisable(true);
         board.getDraftPoolContainer().setDisable(false);
         board.getToolCardContainer().setDisable(true);

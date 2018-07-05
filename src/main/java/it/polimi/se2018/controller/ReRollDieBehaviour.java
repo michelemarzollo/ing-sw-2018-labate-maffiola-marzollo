@@ -45,7 +45,7 @@ public class ReRollDieBehaviour implements ToolCardBehaviour {
      * {@code false} otherwise.
      */
     @Override
-    public boolean useToolCard(Game game, ViewMessage message) {
+    public ToolCardBehaviourResponse useToolCard(Game game, ViewMessage message) {
         SelectDie selectDie = (SelectDie) message;
         try {
             List<Die> draftPool = game.getDraftPool().getDice();
@@ -59,8 +59,8 @@ public class ReRollDieBehaviour implements ToolCardBehaviour {
 
         } catch (IndexOutOfBoundsException e) {
             selectDie.getView().showError("Invalid selection: index too big!");
-            return false;
+            return ToolCardBehaviourResponse.FAILURE;
         }
-        return true;
+        return ToolCardBehaviourResponse.SUCCESS;
     }
 }

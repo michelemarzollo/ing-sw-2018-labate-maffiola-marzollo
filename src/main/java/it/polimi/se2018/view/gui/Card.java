@@ -169,9 +169,11 @@ public class Card {
 
     private String getTitle() {
         String title = cardName;
-        Boolean used = organizer.getUsedToolCards().get(cardName);
-        if((used == null) ? false : used)
-            title += " (Already used once)";
+        if (organizer != null) {
+            Boolean used = organizer.getUsedToolCards().get(cardName);
+            if ((used == null) ? false : used)
+                title += " (Already used once)";
+        }
         return title;
     }
 
