@@ -25,6 +25,16 @@ import java.util.TimerTask;
 public class RmiNetworkHandler implements ServerNetInterface {
 
     /**
+     * The time to wait between pings.
+     */
+    private static final int PING_TIMEOUT = 15000;
+
+    /**
+     * The string to print in case of {@link RemoteException}.
+     */
+    private static final String ERROR_STRING = "Connection error: ";
+
+    /**
      * The server interface to exchange message with.
      */
     private RmiServerInterface server;
@@ -39,14 +49,10 @@ public class RmiNetworkHandler implements ServerNetInterface {
      */
     private RmiClientImplementation rmiClient;
 
-    private Timer pingTimer;
-
-    private static final int PING_TIMEOUT = 15000;
-
     /**
-     * The string to print in case of {@link RemoteException}.
+     * The timer to ping the server to detect of the connection is down.
      */
-    private static final String ERROR_STRING = "Connection error: ";
+    private Timer pingTimer;
 
     /**
      * The constructor of the class: it asks the Stub of the server and creates
@@ -86,10 +92,11 @@ public class RmiNetworkHandler implements ServerNetInterface {
 
     /**
      * The method to add a client to the server.
-     * <p>It creates the Skeleton
-     * of the client, to interact with the Stub of the server, and passes the
-     * remote reference of the client to the server.</p>
-     * <p>It also starts a timer that pings the server to detect if the connection is down.</p>
+     * <p>It creates the Skeleton of the client, to interact
+     * with the Stub of the server, and passes the remote reference of
+     * the client to the server.</p>
+     * <p>It also starts a timer that pings the server to detect if the
+     * connection is down.</p>
      *
      * @param client        the client to connect.
      * @param isMultiPlayer {@code true} if the client is playing in multi player mode;

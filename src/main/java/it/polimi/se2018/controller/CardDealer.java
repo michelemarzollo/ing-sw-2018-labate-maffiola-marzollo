@@ -94,7 +94,7 @@ public class CardDealer {
      * @param privateObj The number of private objective cards per player.
      */
     private void dealPrivateObjectives(int privateObj) {
-        PrivateObjectiveFactory privateObjectiveFactory = new PrivateObjectiveFactory();
+        PrivateObjectiveFactory privateObjectiveFactory = PrivateObjectiveFactory.getInstance();
         List<Player> players = getGame().getPlayers();
         PrivateObjectiveCard[] cards = privateObjectiveFactory.newInstances(players.size() * privateObj);
 

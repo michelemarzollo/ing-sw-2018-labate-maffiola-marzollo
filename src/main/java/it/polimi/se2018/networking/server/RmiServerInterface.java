@@ -16,7 +16,7 @@ public interface RmiServerInterface extends Remote {
     /**
      * The method to add a client to the server.
      *
-     * @param client the client to add.
+     * @param client        the client to add.
      * @param isMultiPlayer {@code true} if the client wants to play in multi player mode;
      *                      {@code false} if it wants ti play in single player mode.
      * @return {@code true} if the client has been added; {@code false} otherwise.

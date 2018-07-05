@@ -9,6 +9,10 @@ package it.polimi.se2018.utils;
  */
 public class ClientConfiguration {
 
+    /**
+     * The message to show in case of someone tries to get the ClientConfiguration
+     * but there is non instance for it.
+     */
     private static final String CONFIGURATION_EXCEPTION = "There is no valid configuration for the client!";
 
     /**
@@ -71,7 +75,7 @@ public class ClientConfiguration {
     }
 
     /**
-     * Resets the instance to null;
+     * Resets the instance to null.
      */
     public static void reset(){
         instance = null;

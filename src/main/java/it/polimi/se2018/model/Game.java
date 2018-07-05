@@ -12,14 +12,13 @@ import java.util.Map;
 
 /**
  * The class that represents the status of the game
- * <strong>Must be adjusted after implementing the Controller</strong>
  *
  * @author michelemarzollo
  */
 public class Game extends Observable<ModelUpdate> {
 
     /**
-     * The DraftPool, which contains the dice that can be drafted by players
+     * The DraftPool, which contains the dice that can be drafted by players.
      */
     private DraftPool draftPool;
 
@@ -34,54 +33,54 @@ public class Game extends Observable<ModelUpdate> {
     private boolean setupComplete = false;
 
     /**
-     * The list of players
+     * The list of players.
      */
     private List<Player> players = new ArrayList<>();
 
     /**
-     * The container of the dice of the game that weren't already drafted
+     * The container of the dice of the game that weren't already drafted.
      */
     private DiceBag diceBag;
 
     /**
-     * The object that handles the rounds
+     * The object that handles the rounds.
      */
     private RoundTrack roundTrack;
 
     /**
-     * The object that handles the turn sequence
+     * The object that handles the turn sequence.
      */
     private TurnManager turnManager;
 
     /**
-     * The array of the PublicObjectiveCards of the game
+     * The array of the PublicObjectiveCards of the game.
      */
     private PublicObjectiveCard[] publicObjectiveCards;
 
     /**
-     * The array of the ToolCards of the game
+     * The array of the ToolCards of the game.
      */
     private ToolCard[] toolCards;
 
     /**
-     * The array containing the players in the order of the final ranking
+     * The array containing the players in the order of the final ranking.
      */
     private List<Player> scoreBoard;
 
 
     /**
-     * The getter of the DraftPool
+     * The getter of the DraftPool.
      *
-     * @return The DraftPool
+     * @return The DraftPool.
      */
     public DraftPool getDraftPool() {
         return draftPool;
     }
 
     /**
-     * The getter for the list of players
+     * The getter for the list of players.
      *
-     * @return The list
+     * @return The list.
      */
     public List<Player> getPlayers() {
         return players;
@@ -107,36 +106,36 @@ public class Game extends Observable<ModelUpdate> {
     }
 
     /**
-     * The getter for the DiceBag
+     * The getter for the DiceBag.
      *
-     * @return The DiceBag
+     * @return The DiceBag.
      */
     public DiceBag getDiceBag() {
         return diceBag;
     }
 
     /**
-     * The getter for the RoundTrack
+     * The getter for the RoundTrack.
      *
-     * @return The RoundTrack
+     * @return The RoundTrack.
      */
     public RoundTrack getRoundTrack() {
         return roundTrack;
     }
 
     /**
-     * The getter for the TurnManager
+     * The getter for the TurnManager.
      *
-     * @return The TurnManager
+     * @return The TurnManager.
      */
     public TurnManager getTurnManager() {
         return turnManager;
     }
 
     /**
-     * The getter for the array of PublicObjectiveCards
+     * The getter for the array of PublicObjectiveCards.
      *
-     * @return The array
+     * @return The array.
      */
     public PublicObjectiveCard[] getPublicObjectiveCards() {
         return publicObjectiveCards;
@@ -152,27 +151,27 @@ public class Game extends Observable<ModelUpdate> {
     }
 
     /**
-     * The getter for the array of ToolCards
+     * The getter for the array of ToolCards.
      *
-     * @return The array
+     * @return The array.
      */
     public ToolCard[] getToolCards() {
         return toolCards;
     }
 
     /**
-     * The setter for the array of ToolCards
+     * The setter for the array of ToolCards.
      *
-     * @param toolCards The array to be set
+     * @param toolCards The array to be set.
      */
     public void setToolCards(ToolCard[] toolCards) {
         this.toolCards = toolCards;
     }
 
     /**
-     * The getter for {@code scoreBoard}
+     * The getter for {@code scoreBoard}.
      *
-     * @return The final ranking as an array of players
+     * @return The final ranking as an array of players.
      */
     public List<Player> getScoreBoard() {
         return scoreBoard;

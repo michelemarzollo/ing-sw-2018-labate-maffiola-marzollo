@@ -14,10 +14,19 @@ import javafx.scene.image.ImageView;
  */
 public class PrivateSelection {
 
+    /**
+     * The path were to find the cards to show.
+     */
     private static final String PATH = "images/cards/";
 
+    /**
+     * The extension of the files that contain the images of the cards.
+     */
     private static final String EXTENSION = ".jpg";
 
+    /**
+     * The message to show after the selection.
+     */
     private static final String WAITING_REASON = "Calculating the score...";
 
     /**

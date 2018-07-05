@@ -18,7 +18,7 @@ public class DiagonalScore extends PublicObjectiveScore {
      * @param victoryPoints the victory points related to the card.
      * @param propertyIsColour the property of the die on which the card works.
      */
-    public DiagonalScore(int victoryPoints, boolean propertyIsColour) {
+    DiagonalScore(int victoryPoints, boolean propertyIsColour) {
         super(victoryPoints, propertyIsColour);
     }
 
@@ -26,7 +26,7 @@ public class DiagonalScore extends PublicObjectiveScore {
      * The method that calculates the score associated to the card.
      * <p>
      * The score is given by the number of dice in the grid that are
-     * diagonally adjacent to at least one other die with the same property.
+     * diagonally adjacent to at least one other die with the same property (value or colour).
      * To be clearer, each die of the grid in position (i, j) adds one (and only one)
      * point to the score if there is a die with the same property in at least one of the
      * following positions: (i-1, j-1), (i+1, j-1), (i-1, j+1), (i+1, j+1).</p>

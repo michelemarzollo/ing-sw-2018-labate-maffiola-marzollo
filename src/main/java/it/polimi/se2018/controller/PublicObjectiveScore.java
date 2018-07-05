@@ -27,8 +27,8 @@ public abstract class PublicObjectiveScore {
     /**
      * The constructor of the class.
      *
-     * @param victoryPoints the victory points related to the card.
-     * @param propertyIsColour      the die's property on which the card works.
+     * @param victoryPoints    the victory points related to the card.
+     * @param propertyIsColour the die's property on which the card works.
      */
     PublicObjectiveScore(int victoryPoints, boolean propertyIsColour) {
         this.victoryPoints = victoryPoints;
@@ -36,7 +36,7 @@ public abstract class PublicObjectiveScore {
     }
 
     /**
-     * The method to calculate the score on the final {@link it.polimi.se2018.model.Pattern}
+     * The method to calculate the score on the final {@link it.polimi.se2018.model.Pattern},
      * related to the {@link it.polimi.se2018.model.PublicObjectiveCard}.
      *
      * @param grid the grid of the Pattern.

@@ -7,6 +7,8 @@ import it.polimi.se2018.model.Die;
 /**
  * The class to calculate the score given by the {@link it.polimi.se2018.model.PrivateObjectiveCard}
  * to the player at the end of the game.
+ *
+ * @author michelemarzollo
  */
 public class PrivateObjectiveScore {
 

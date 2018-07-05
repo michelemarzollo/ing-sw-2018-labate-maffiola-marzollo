@@ -22,8 +22,15 @@ import java.io.IOException;
  */
 public class PatternSelection {
 
+    /**
+     * The height of the rows where to show patterns.
+     */
     private static final int ROW_HEIGHT = 400;
 
+    /**
+     * The message to show after the selection of the pattern, waiting
+     * for the next scene.
+     */
     private static final String WAITING_MESSAGE = "The game is starting...";
 
     /**

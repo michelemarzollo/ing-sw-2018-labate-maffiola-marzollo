@@ -62,7 +62,7 @@ public class GameUtils {
      */
     private static void assignPrivateObjectives(Player first, Player second, boolean multiPlayer) {
         PrivateObjectiveCard[] allCards =
-                new PrivateObjectiveFactory().newInstances(5);
+                PrivateObjectiveFactory.getInstance().newInstances(5);
 
         PrivateObjectiveCard blueCard = Arrays.stream(allCards)
                 .filter(c -> c.getColour() == Colour.BLUE)

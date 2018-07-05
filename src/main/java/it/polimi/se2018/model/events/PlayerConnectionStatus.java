@@ -6,6 +6,7 @@ import it.polimi.se2018.model.viewmodel.ViewDataOrganizer;
 /**
  * Event to update views about the change in the connection
  * status of a player.
+ *
  * @author dvdmff
  */
 public class PlayerConnectionStatus extends ModelUpdate {
@@ -21,6 +22,7 @@ public class PlayerConnectionStatus extends ModelUpdate {
 
     /**
      * Creates a new instance with the specified name and connection flag.
+     *
      * @param player The player who changed its connection status.
      */
     public PlayerConnectionStatus(Player player) {
@@ -31,6 +33,7 @@ public class PlayerConnectionStatus extends ModelUpdate {
 
     /**
      * Getter for the involved player name.
+     *
      * @return The name of the involved player.
      */
     public String getPlayerName() {
@@ -39,6 +42,7 @@ public class PlayerConnectionStatus extends ModelUpdate {
 
     /**
      * Getter for the connection flag.
+     *
      * @return {@code true} if the player is connected;
      * {@code false} otherwise.
      */
@@ -48,6 +52,7 @@ public class PlayerConnectionStatus extends ModelUpdate {
 
     /**
      * Pushes this instance of PlayerConnectionStatus into the organizer.
+     *
      * @param organizer The organizer where the message will be pushed into.
      */
     @Override

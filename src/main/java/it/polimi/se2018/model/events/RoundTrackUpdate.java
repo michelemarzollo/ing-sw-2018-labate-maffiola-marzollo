@@ -20,6 +20,7 @@ public class RoundTrackUpdate extends ModelUpdate {
 
     /**
      * The constructor of the class.
+     *
      * @param roundTrack The matrix of dice in the round track.
      */
     public RoundTrackUpdate(List<List<Die>> roundTrack) {
@@ -29,6 +30,7 @@ public class RoundTrackUpdate extends ModelUpdate {
 
     /**
      * Getter for the dice in the round track.
+     *
      * @return A matrix of dice that are in the round track.
      */
     public List<List<Die>> getRoundTrack() {
@@ -37,6 +39,7 @@ public class RoundTrackUpdate extends ModelUpdate {
 
     /**
      * Pushes this instance of RoundTrackUpdate into the organizer.
+     *
      * @param organizer The organizer where the message will be pushed into.
      */
     @Override

@@ -7,6 +7,8 @@ import java.rmi.RemoteException;
 
 /**
  * Interface for an Rmi client.
+ *
+ * @author michelemarzollo
  */
 public interface RmiClientInterface extends Remote {
 
@@ -20,7 +22,8 @@ public interface RmiClientInterface extends Remote {
     void notify(Message message) throws RemoteException;
 
     /**
-     * Getter for the username
+     * Getter for the username.
+     *
      * @return The username associated with the client.
      * @throws RemoteException if there is some connectivity error.
      */

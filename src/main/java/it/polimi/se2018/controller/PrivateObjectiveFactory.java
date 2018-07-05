@@ -17,6 +17,29 @@ import java.util.List;
 public class PrivateObjectiveFactory {
 
     /**
+     * The instance of the singleton.
+     */
+    private static PrivateObjectiveFactory instance = null;
+
+    /**
+     * The private constructor.
+     */
+    private PrivateObjectiveFactory(){
+
+    }
+
+    /**
+     * The method to get (and eventually create) the instance of the singleton.
+     *
+     * @return the instance of the singleton.
+     */
+    public static PrivateObjectiveFactory getInstance() {
+        if (instance == null)
+            instance = new PrivateObjectiveFactory();
+        return instance;
+    }
+
+    /**
      * The method creates randomly and returns an array of PrivateObjectiveCards,
      * with the specified dimension.
      *

@@ -9,6 +9,10 @@ package it.polimi.se2018.utils;
  */
 public class ServerConfiguration {
 
+    /**
+     * The message to be thrown when someone wants to get the instance
+     * of the class, but there is none.
+     */
     private static final String CONFIGURATION_EXCEPTION = "There is no valid configuration for the server!";
 
     /**
@@ -39,13 +43,6 @@ public class ServerConfiguration {
     private int multiPlayerTimeOut;
 
     /**
-     * The timeout for single-player mode.
-     *
-     * @see it.polimi.se2018.controller.SinglePlayerController#timeOut
-     */
-    private int singlePlayerTimeOut;
-
-    /**
      * The instance of the singleton.
      */
     private static ServerConfiguration instance = null;
@@ -58,16 +55,14 @@ public class ServerConfiguration {
      * @param serviceName         The name of the RMI service.
      * @param turnDuration        The duration of a turn of the match.
      * @param multiPlayerTimeOut  The timeout for multi-player mode.
-     * @param singlePlayerTimeOut The timeout for single-player mode.
      */
     private ServerConfiguration(int portNumber, String address, String serviceName, int turnDuration,
-                                int multiPlayerTimeOut, int singlePlayerTimeOut) {
+                                int multiPlayerTimeOut) {
         this.portNumber = portNumber;
         this.address = address;
         this.serviceName = serviceName;
         this.turnDuration = turnDuration;
         this.multiPlayerTimeOut = multiPlayerTimeOut;
-        this.singlePlayerTimeOut = singlePlayerTimeOut;
     }
 
     /**
@@ -79,15 +74,14 @@ public class ServerConfiguration {
      * @param serviceName         The name of the RMI service.
      * @param turnDuration        The duration of a turn of the match.
      * @param multiPlayerTimeOut  The timeout for multi-player mode.
-     * @param singlePlayerTimeOut The timeout for single-player mode.
      */
     public static void makeInstance(
             int portNumber, String address, String serviceName,
-            int turnDuration, int multiPlayerTimeOut, int singlePlayerTimeOut) {
+            int turnDuration, int multiPlayerTimeOut) {
 
         if (instance == null)
             instance = new ServerConfiguration(portNumber, address, serviceName,
-                    turnDuration, multiPlayerTimeOut, singlePlayerTimeOut);
+                    turnDuration, multiPlayerTimeOut);
     }
 
     /**
@@ -153,15 +147,6 @@ public class ServerConfiguration {
      */
     public int getMultiPlayerTimeOut() {
         return multiPlayerTimeOut;
-    }
-
-    /**
-     * The getter for {@code singlePlayerTimeOut}.
-     *
-     * @return The timeout for single-player mode.
-     */
-    public int getSinglePlayerTimeOut() {
-        return singlePlayerTimeOut;
     }
 
 }

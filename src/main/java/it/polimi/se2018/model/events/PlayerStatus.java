@@ -8,6 +8,7 @@ import it.polimi.se2018.model.viewmodel.ViewDataOrganizer;
  * Represents a message containing information about a player status, excluded
  * connection status.
  * <p>This class is immutable.</p>
+ *
  * @author dvdmff
  */
 public class PlayerStatus extends ModelUpdate {
@@ -42,11 +43,12 @@ public class PlayerStatus extends ModelUpdate {
     /**
      * A second constructor, to create a mock PlayerStatus without
      * using a {@link Player}.
-     * @param name the name of the player.
+     *
+     * @param name       the name of the player.
      * @param difficulty the number of tokens of the player (in the
      *                   use of this constructor it will be the difficulty
      *                   of the pattern).
-     * @param pattern the pattern.
+     * @param pattern    the pattern.
      */
     public PlayerStatus(String name, int difficulty, Pattern pattern) {
         super(ModelEvent.PLAYER_STATUS);
@@ -57,6 +59,7 @@ public class PlayerStatus extends ModelUpdate {
 
     /**
      * Getter for the player name.
+     *
      * @return The player name.
      */
     public String getPlayerName() {
@@ -65,6 +68,7 @@ public class PlayerStatus extends ModelUpdate {
 
     /**
      * Getter for the number of tokens of the player.
+     *
      * @return The number of tokens of the player.
      */
     public int getTokens() {
@@ -73,6 +77,7 @@ public class PlayerStatus extends ModelUpdate {
 
     /**
      * Getter for the pattern of the player.
+     *
      * @return The pattern of the player.
      */
     public Pattern getPattern() {
@@ -81,6 +86,7 @@ public class PlayerStatus extends ModelUpdate {
 
     /**
      * Pushes this instance of PlayerStatus into the organizer.
+     *
      * @param organizer The organizer where the message will be pushed into.
      */
     @Override

@@ -23,7 +23,7 @@ public class PrivateObjectiveCard extends ObjectiveCard {
      * @param description the description of the card.
      */
     public PrivateObjectiveCard(String name, Colour colour, String description) {
-        super (name, description);
+        super(name, description);
         this.colour = colour;
     }
 

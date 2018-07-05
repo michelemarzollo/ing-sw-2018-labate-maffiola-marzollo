@@ -2,6 +2,11 @@ package it.polimi.se2018.model;
 
 import java.io.Serializable;
 
+/**
+ * The abstract class that contains common features of Objective Cards.
+ *
+ * @author michelemarzollo
+ */
 public abstract class ObjectiveCard implements Serializable {
 
     /**
@@ -17,10 +22,11 @@ public abstract class ObjectiveCard implements Serializable {
 
     /**
      * The constructor of the class.
-     * @param name The name of the Objective Card.
+     *
+     * @param name        The name of the Objective Card.
      * @param description The description of the card.
      */
-    protected ObjectiveCard(String name, String description){
+    protected ObjectiveCard(String name, String description) {
         this.name = name;
         this.description = description;
     }

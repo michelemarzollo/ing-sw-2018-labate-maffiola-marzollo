@@ -96,7 +96,7 @@ public class PlayerTest {
     @Test
     public void testCardsSinglePlayer() {
 
-        PrivateObjectiveFactory p = new PrivateObjectiveFactory();
+        PrivateObjectiveFactory p =  PrivateObjectiveFactory.getInstance();
         PrivateObjectiveCard[] cards = p.newInstances(2);
         player.setCards(cards);
         assertTrue(cards[0] == player.getCards()[0] &&
@@ -110,7 +110,7 @@ public class PlayerTest {
     @Test
     public void testCardsMultiPlayer() {
 
-        PrivateObjectiveFactory p = new PrivateObjectiveFactory();
+        PrivateObjectiveFactory p =  PrivateObjectiveFactory.getInstance();
         PrivateObjectiveCard[] cards = p.newInstances(1);
         player.setCards(cards);
         assertTrue(cards[0] == player.getCards()[0]);

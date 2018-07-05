@@ -41,7 +41,6 @@ public class XmlServerConfigLoaderTest {
             assertEquals("MyServer", configuration.getServiceName());
             assertEquals(300, configuration.getTurnDuration());
             assertEquals(20, configuration.getMultiPlayerTimeOut());
-            assertEquals(100, configuration.getSinglePlayerTimeOut());
 
         } catch (SAXException e) {
             Assert.fail(e.getMessage());

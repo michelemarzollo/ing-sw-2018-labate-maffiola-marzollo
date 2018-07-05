@@ -26,9 +26,9 @@ public class GridVarietyScore extends PublicObjectiveScore {
      *
      * @param victoryPoints the victory points related to the card.
      * @param propertyIsColour the property of the die on which the card works.
-     * @param elements      the elements on which
+     * @param elements      the elements that must be counted in the occurrences.
      */
-    public GridVarietyScore(int victoryPoints, boolean propertyIsColour, Object[] elements) {
+    GridVarietyScore(int victoryPoints, boolean propertyIsColour, Object[] elements) {
         super(victoryPoints, propertyIsColour);
         this.elements = elements;
     }
@@ -40,7 +40,7 @@ public class GridVarietyScore extends PublicObjectiveScore {
      * <p>The score is given by the number of occurrences multiplied by
      * the victory points of the {@link it.polimi.se2018.model.PublicObjectiveCard}</p>
      *
-     * @param grid the grid where to count the number of value-shades.
+     * @param grid the grid where to count the number of values or shades.
      * @return the number of complete occurrences.
      */
     @Override

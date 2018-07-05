@@ -43,6 +43,7 @@ public class GameEnd extends ModelUpdate {
 
     /**
      * Pushes this instance of GameEnd into the organizer.
+     *
      * @param organizer The organizer where the message will be pushed into.
      */
     @Override

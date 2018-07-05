@@ -10,6 +10,11 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
+/**
+ * The implementation of the server that uses RMI technology.
+ *
+ * @author michelemarzollo
+ */
 public class RmiServer extends Server {
 
     /**
