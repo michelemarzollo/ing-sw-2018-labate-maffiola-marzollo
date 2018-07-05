@@ -114,7 +114,7 @@ public class ToolCardHandler extends InputEventManager {
         if (!confirmDone) {
             showConfirmPrompt();
         } else if (name == null) {
-            getOutput().printToolCards(getToolCards());
+            getOutput().printToolCards(getToolCards(), getUsedToolCards());
             getOutput().println("Enter the name of the Tool Card:");
         } else if (sacrificeIndex == -1 && isSinglePlayer()) {
             getOutput().printDraftPool(getDraftPool());

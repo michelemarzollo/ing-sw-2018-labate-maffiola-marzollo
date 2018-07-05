@@ -227,7 +227,7 @@ public class ViewDataOrganizer {
      * @param connectionStatus The message to push.
      */
     public void push(PlayerConnectionStatus connectionStatus) {
-        this.playerStatusList
+        this.connectionStatusList
                 .removeIf(p -> p.getPlayerName().equals(connectionStatus.getPlayerName()));
         this.connectionStatusList.add(connectionStatus);
         changedConnectionIndex = connectionStatusList.indexOf(connectionStatus);

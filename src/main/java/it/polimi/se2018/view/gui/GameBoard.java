@@ -3,6 +3,7 @@ package it.polimi.se2018.view.gui;
 import it.polimi.se2018.model.ObjectiveCard;
 import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.model.events.GameSetup;
+import it.polimi.se2018.model.events.NextTurn;
 import it.polimi.se2018.model.events.PlayerConnectionStatus;
 import it.polimi.se2018.model.events.PlayerStatus;
 import it.polimi.se2018.utils.Coordinates;
@@ -321,7 +322,7 @@ public abstract class GameBoard {
         for (ToolCard toolCard : setup.getToolCards()) {
             Card card = new Card(getToolCardContainer(), toolCard.getName(), TOOL_CARD_RATIO);
             card.insert();
-            card.setOnClick(this::handleToolCardSelection);
+            card.setOnClick(getDisplayer().getDataOrganizer(), this::handleToolCardSelection);
         }
     }
 
@@ -375,14 +376,16 @@ public abstract class GameBoard {
      * Prepares the game board for local player's turn.
      */
     private void prepareTurnForLocalPlayer() {
-        boolean canPlace = !displayer.getDataOrganizer().getNextTurn().isAlreadyPlacedDie();
-        boolean canUseToolCard = !displayer.getDataOrganizer().getNextTurn().isAlreadyUsedToolCard();
+        NextTurn nextTurn = displayer.getDataOrganizer().getNextTurn();
+        boolean canPlace = !nextTurn.isAlreadyPlacedDie();
+        boolean canUseToolCard = !nextTurn.isAlreadyUsedToolCard();
         setEventPack(new StandardEventPack(
                 displayer.getView(),
                 canPlace,
                 canUseToolCard,
                 isMultiPlayer()));
-        getTurnLabel().setText("It's your turn.");
+        String turnNumber = nextTurn.isSecondTurnAvailable() ? "T1" : "T2";
+        getTurnLabel().setText("It's your turn (" + turnNumber + ").");
     }
 
     /**

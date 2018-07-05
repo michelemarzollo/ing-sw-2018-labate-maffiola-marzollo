@@ -7,6 +7,7 @@ import it.polimi.se2018.view.ClientView;
 import it.polimi.se2018.model.viewmodel.ViewDataOrganizer;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Abstract base class for input managers.
@@ -160,6 +161,14 @@ public abstract class InputEventManager {
      */
     List<Die> getDraftPool() {
         return getDataOrganizer().getDraftPool();
+    }
+
+    /**
+     * Getter for the map of used tool cards.
+     * @return The map of used tool cards.
+     */
+    Map<String, Boolean> getUsedToolCards(){
+        return getDataOrganizer().getUsedToolCards();
     }
 
     /**

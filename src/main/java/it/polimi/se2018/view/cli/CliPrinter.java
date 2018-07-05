@@ -35,7 +35,7 @@ public class CliPrinter {
         println("Name: " + name);
     }
 
-    private void printDescription(String description){
+    private void printDescription(String description) {
         println("Description: " + description);
     }
 
@@ -287,11 +287,11 @@ public class CliPrinter {
      *
      * @param n The number of horizontal cells.
      */
-    private void printRoundTrackSeparator(int n){
-            for (int i = 0; i < n; i++) {
-                stream.print(" ---- ");
-            }
-            stream.print("\n");
+    private void printRoundTrackSeparator(int n) {
+        for (int i = 0; i < n; i++) {
+            stream.print(" ---- ");
+        }
+        stream.print("\n");
     }
 
     /**
@@ -323,12 +323,12 @@ public class CliPrinter {
      *
      * @param card The card that has to be displayed.
      */
-    private void printToolCard(ToolCard card) {
+    private void printToolCard(ToolCard card, boolean used) {
         printName(card.getName());
         printDescription(card.getDescription());
         stream.println("Colour: " + card.getColour());
         stream.print("Used: ");
-        if (card.isUsed()) {
+        if (used) {
             stream.println("✓");
         } else {
             stream.println("✗");
@@ -420,9 +420,10 @@ public class CliPrinter {
      * @param toolCards The cards that have to be displayed, they
      *                  will be all the cards actually in the game.
      */
-    public void printToolCards(ToolCard[] toolCards) {
+    public void printToolCards(ToolCard[] toolCards, Map<String, Boolean> usedToolCards) {
         for (ToolCard card : toolCards) {
-            printToolCard(card);
+            Boolean used = usedToolCards.get(card.getName());
+            printToolCard(card, (used == null) ? false : used);
         }
     }
 

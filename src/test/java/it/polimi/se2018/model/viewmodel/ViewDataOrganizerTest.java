@@ -116,6 +116,10 @@ public class ViewDataOrganizerTest {
         ViewDataOrganizer organizer = new ViewDataOrganizer();
         organizer.push(playerConnectionStatus);
 
+        player.setConnected(false);
+        playerConnectionStatus = new PlayerConnectionStatus(player);
+        organizer.push(playerConnectionStatus);
+
         Assert.assertEquals(1, organizer.getAllConnectionStatus().size());
         Assert.assertEquals(playerConnectionStatus, organizer.getConnectionStatus(player.getName()));
         int index = organizer.getAllConnectionStatus().indexOf(playerConnectionStatus);
