@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://se2018.polimi.it/tool_card  ../tool_card.xsd">
 
     <name>Glazing Hammer</name>
-    <description>Re-roll all dice in the Draft Pool
+    <description>Re-roll all dice in the Draft Pool.
         This may only be used on your second turn before drafting</description>
     <colour>BLUE</colour>
 

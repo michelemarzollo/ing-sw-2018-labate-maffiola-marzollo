@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://se2018.polimi.it/tool_card  ../tool_card.xsd">
 
     <name>Grinding Stone</name>
-    <description>After drafting, flip the die to its opposite side
+    <description>After drafting, flip the die to its opposite side.
         6 flips to 1, 5 to 2, 4 to 3, etc.</description>
     <colour>GREEN</colour>
 

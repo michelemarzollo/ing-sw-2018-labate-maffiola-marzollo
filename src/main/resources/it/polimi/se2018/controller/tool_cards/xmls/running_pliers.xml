@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://se2018.polimi.it/tool_card  ../tool_card.xsd">
 
     <name>Running Pliers</name>
-    <description>After your first turn, immediately draft a die
+    <description>After your first turn, immediately draft a die.
         Skip your next turn this round</description>
     <colour>RED</colour>
 

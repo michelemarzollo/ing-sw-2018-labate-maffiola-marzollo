@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://se2018.polimi.it/tool_card  ../tool_card.xsd">
 
     <name>Eglomise Brush</name>
-    <description>Move any one die in your window ignoring color restrictions
+    <description>Move any one die in your window ignoring color restrictions.
         You must obey all other placement restrictions</description>
     <colour>BLUE</colour>
 

@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://se2018.polimi.it/tool_card  ../tool_card.xsd">
 
     <name>Tap Wheel</name>
-    <description>Move up to two dice of the same color that match the color of a die on the Round Track
+    <description>Move up to two dice of the same color that match the color of a die on the Round Track.
         You must obey all placement restrictions</description>
     <colour>BLUE</colour>
 

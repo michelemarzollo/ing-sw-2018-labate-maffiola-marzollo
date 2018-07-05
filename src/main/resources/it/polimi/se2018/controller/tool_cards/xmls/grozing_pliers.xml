@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://se2018.polimi.it/tool_card  ../tool_card.xsd">
 
     <name>Grozing Pliers</name>
-    <description>After drafting, increase or decrease the value of the drafted die by 1
+    <description>After drafting, increase or decrease the value of the drafted die by 1.
         1 may not change to 6, or 6 to 1</description>
     <colour>PURPLE</colour>
 

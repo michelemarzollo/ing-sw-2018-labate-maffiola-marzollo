@@ -167,7 +167,7 @@ public class ViewDataOrganizerTest {
 
         //the UseToolCard message is created
         UseToolCard useToolCardMessage = new UseToolCard("Lens Cutter");
-        organizer.push(useToolCardMessage);
+        useToolCardMessage.pushInto(organizer);
         Assert.assertEquals(12, organizer.getUsedToolCards().size());
         Assert.assertEquals(false, organizer.getUsedToolCards().get("Lathekin"));
         Assert.assertEquals(false, organizer.getUsedToolCards().get("Flux Brush"));

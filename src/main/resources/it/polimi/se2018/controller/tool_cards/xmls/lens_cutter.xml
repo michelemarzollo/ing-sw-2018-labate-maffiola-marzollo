@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://se2018.polimi.it/tool_card  ../tool_card.xsd">
 
     <name>Lens Cutter</name>
-    <description>After drafting, swap the drafted die with a die from the Round Track</description>
+    <description>After drafting, swap the drafted die with a die from the Round Track.</description>
     <colour>GREEN</colour>
 
 </tool_card>

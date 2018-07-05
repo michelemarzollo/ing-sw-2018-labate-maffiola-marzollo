@@ -109,7 +109,7 @@ public class GameUtils {
     /**
      * Deals all public objective cards to the specified game.
      *
-     * @param game The game where to public objective cards.
+     * @param game The game where to deal public objective cards.
      */
     private static void dealPublicObjectives(Game game) {
         PublicObjectiveCard[] publicObjectives = new PublicObjectiveFactory().newInstances(10);
