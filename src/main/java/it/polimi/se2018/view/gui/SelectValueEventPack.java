@@ -41,6 +41,11 @@ public class SelectValueEventPack extends BoardEventPack {
     private int value = -1;
 
     /**
+     * Reference to the game board.
+     */
+    private GameBoard board;
+
+    /**
      * Creates a new instance that uses the specified client view to handle
      * requests.
      *
@@ -103,8 +108,10 @@ public class SelectValueEventPack extends BoardEventPack {
      */
     @Override
     public void patternHandler(Coordinates coordinates) {
-        if (value != -1)
+        if (value != -1){
+            board.restoreTurn();
             getClientView().handleToolCardUsage(coordinates, value);
+        }
     }
 
     /**
@@ -128,8 +135,10 @@ public class SelectValueEventPack extends BoardEventPack {
      */
     @Override
     public void prepareControls(GameBoard board) {
+        this.board = board;
+        board.getPlayerPatternContainer().setDisable(false);
         board.getToolCardContainer().setDisable(true);
-        board.getDraftPoolContainer().setDisable(true);
+        board.getDraftPoolContainer().setDisable(false);
         Optional<Integer> result = makeDialog().showAndWait();
         value = result.orElse(-1);
         if (value > 0)

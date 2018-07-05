@@ -69,9 +69,9 @@ public class ReRollDraftPoolBehaviourTest {
         );
 
         ReRollDraftPoolBehaviour behaviour = new ReRollDraftPoolBehaviour();
-        boolean success = behaviour.useToolCard(game, message);
+        ToolCardBehaviourResponse response = behaviour.useToolCard(game, message);
 
-        Assert.assertTrue(success);
+        Assert.assertEquals(ToolCardBehaviourResponse.SUCCESS, response);
         Assert.assertEquals(0, mockView.getCalledMethods().size());
         List<Die> oldDraftPool = GameUtils.getDice(false);
         List<Die> newDraftPool = game.getDraftPool().getDice();

@@ -376,14 +376,8 @@ public abstract class GameBoard {
      * Prepares the game board for local player's turn.
      */
     private void prepareTurnForLocalPlayer() {
+        restoreTurn();
         NextTurn nextTurn = displayer.getDataOrganizer().getNextTurn();
-        boolean canPlace = !nextTurn.isAlreadyPlacedDie();
-        boolean canUseToolCard = !nextTurn.isAlreadyUsedToolCard();
-        setEventPack(new StandardEventPack(
-                displayer.getView(),
-                canPlace,
-                canUseToolCard,
-                isMultiPlayer()));
         String turnNumber = nextTurn.isSecondTurnAvailable() ? "T1" : "T2";
         getTurnLabel().setText("It's your turn (" + turnNumber + ").");
     }
@@ -431,10 +425,11 @@ public abstract class GameBoard {
         if (displayer.getDataOrganizer().getRoundTrack() != null)
             roundTrackFiller.setLeftoverDice(displayer.getDataOrganizer().getRoundTrack());
 
-        if (!isPlayerTurn())
-            prepareTurnForRemotePlayer();
-        else
-            prepareTurnForLocalPlayer();
+        if (getDisplayer().getDataOrganizer().isTurnChanged() || eventPack == null)
+            if (!isPlayerTurn())
+                prepareTurnForRemotePlayer();
+            else
+                prepareTurnForLocalPlayer();
 
         refreshPatterns();
     }
@@ -496,5 +491,18 @@ public abstract class GameBoard {
      */
     final DraftPoolFiller getDraftPoolFiller() {
         return draftPoolFiller;
+    }
+
+    /**
+     * Restores the turn state for the current player.
+     */
+    void restoreTurn() {
+        NextTurn nextTurn = displayer.getDataOrganizer().getNextTurn();
+        BoardEventPack turnPack = new StandardEventPack(displayer.getView(),
+                !nextTurn.isAlreadyPlacedDie(),
+                !nextTurn.isAlreadyUsedToolCard(),
+                isMultiPlayer()
+        );
+        setEventPack(turnPack);
     }
 }

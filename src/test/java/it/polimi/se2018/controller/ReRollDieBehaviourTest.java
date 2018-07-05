@@ -71,9 +71,9 @@ public class ReRollDieBehaviourTest {
         );
 
         ReRollDieBehaviour behaviour = new ReRollDieBehaviour();
-        boolean success = behaviour.useToolCard(game, message);
+        ToolCardBehaviourResponse response = behaviour.useToolCard(game, message);
 
-        Assert.assertTrue(success);
+        Assert.assertEquals(ToolCardBehaviourResponse.SUCCESS, response);
         Assert.assertEquals(0, mockView.getCalledMethods().size());
 
         List<Die> expectedDraftPool = GameUtils.getDice(false);
@@ -137,9 +137,9 @@ public class ReRollDieBehaviourTest {
         );
 
         ReRollDieBehaviour behaviour = new ReRollDieBehaviour();
-        boolean success = behaviour.useToolCard(game, message);
+        ToolCardBehaviourResponse response = behaviour.useToolCard(game, message);
 
-        Assert.assertFalse(success);
+        Assert.assertEquals(ToolCardBehaviourResponse.FAILURE, response);
         Assert.assertEquals(1, mockView.getCalledMethods().size());
         boolean isError = mockView.getCalledMethods().get(0).startsWith("showError");
         Assert.assertTrue(isError);

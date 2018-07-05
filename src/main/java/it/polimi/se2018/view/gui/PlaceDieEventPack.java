@@ -11,6 +11,11 @@ public class PlaceDieEventPack extends BoardEventPack {
     private int index = -1;
 
     /**
+     * Reference to the game board.
+     */
+    private GameBoard board;
+
+    /**
      * Creates a new instance that uses the specified client view to handle
      * requests.
      *
@@ -48,6 +53,7 @@ public class PlaceDieEventPack extends BoardEventPack {
     @Override
     public void patternHandler(Coordinates coordinates) {
         if(index != -1){
+            board.restoreTurn();
             getClientView().handleToolCardUsage(index, coordinates);
             index = -1;
         }
@@ -60,6 +66,7 @@ public class PlaceDieEventPack extends BoardEventPack {
      */
     @Override
     public void prepareControls(GameBoard board) {
+        this.board = board;
         board.getToolCardContainer().setDisable(true);
         board.getPlayerPatternContainer().setDisable(false);
         board.getDraftPoolContainer().setDisable(false);

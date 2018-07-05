@@ -69,7 +69,7 @@ public class PlaceDieBehaviour implements ToolCardBehaviour {
      * @return {@code true} on success; {@code false} otherwise.
      */
     @Override
-    public boolean useToolCard(Game game, ViewMessage message) {
+    public ToolCardBehaviourResponse useToolCard(Game game, ViewMessage message) {
 
         PlaceDie placeDie = (PlaceDie) message;
         Die selectedDie = game.getDraftPool().select(placeDie.getDieIndex());
@@ -89,7 +89,7 @@ public class PlaceDieBehaviour implements ToolCardBehaviour {
             if(currentTurn.getSacrificeIndex() > placeDie.getDieIndex())
                 currentTurn.setSacrificeIndex(currentTurn.getSacrificeIndex() - 1);
 
-            return true;
+            return ToolCardBehaviourResponse.SUCCESS;
 
         } catch (PlacementErrorException e) {
             placeDie.getView().showError(
@@ -99,9 +99,13 @@ public class PlaceDieBehaviour implements ToolCardBehaviour {
             placeDie.getView().showError("Bad selection!");
         }
 
-        return false;
+        return ToolCardBehaviourResponse.FAILURE;
     }
 
+    /**
+     * Removes the possibility for the current player to use his second turn this round.
+     * @param game The game the tool card has been applied to.
+     */
     private void consumeSecondTurn(Game game) {
         try {
             game.getTurnManager().consumeSecondTurn(

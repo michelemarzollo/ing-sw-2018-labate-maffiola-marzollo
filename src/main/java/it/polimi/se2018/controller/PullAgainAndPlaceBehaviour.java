@@ -61,7 +61,7 @@ public class PullAgainAndPlaceBehaviour implements ToolCardBehaviour {
      * {@code false} otherwise.
      */
     @Override
-    public boolean useToolCard(Game game, ViewMessage message) {
+    public ToolCardBehaviourResponse useToolCard(Game game, ViewMessage message) {
 
         if (!firstStepDone) {
             SelectDie selectMessage = (SelectDie) message;
@@ -87,7 +87,7 @@ public class PullAgainAndPlaceBehaviour implements ToolCardBehaviour {
      *                      to make the move and the reference to the view.
      * @return always {@code false} since the application is not finished.
      */
-    private boolean firstStep(Game game, SelectDie selectMessage) {
+    private ToolCardBehaviourResponse firstStep(Game game, SelectDie selectMessage) {
         try {
             List<Die> dice = game.getDraftPool().getDice();
 
@@ -104,10 +104,11 @@ public class PullAgainAndPlaceBehaviour implements ToolCardBehaviour {
 
             firstStepDone = true;
             selectMessage.getView().showValueDestinationSelection();
+            return ToolCardBehaviourResponse.CONSUME;
         } catch (IndexOutOfBoundsException e) {
             selectMessage.getView().showError("Bad index!");
         }
-        return false;
+        return ToolCardBehaviourResponse.FAILURE;
     }
 
     /**
@@ -120,7 +121,7 @@ public class PullAgainAndPlaceBehaviour implements ToolCardBehaviour {
      * @return {@code true} if this step has been successfully applied;
      * {@code false} otherwise.
      */
-    private boolean secondStep(Game game, ChooseValue chooseMessage) {
+    private ToolCardBehaviourResponse secondStep(Game game, ChooseValue chooseMessage) {
 
         int forcedSelection = game.getTurnManager().getCurrentTurn().getForcedSelectionIndex();
         Die oldDie = game.getDraftPool().getDice().get(forcedSelection);
@@ -142,14 +143,14 @@ public class PullAgainAndPlaceBehaviour implements ToolCardBehaviour {
 
             if(currentTurn.getSacrificeIndex() > currentTurn.getForcedSelectionIndex())
                 currentTurn.setSacrificeIndex(currentTurn.getSacrificeIndex() - 1);
-
-            return true;
+            currentTurn.setForcedSelectionIndex(-1);
+            return ToolCardBehaviourResponse.USE;
 
         } catch (PlacementErrorException e) {
             chooseMessage.getView().showError(
                     "Placement doesn't respect restrictions!\n" + e.getMessage()
             );
         }
-        return false;
+        return ToolCardBehaviourResponse.FAILURE;
     }
 }

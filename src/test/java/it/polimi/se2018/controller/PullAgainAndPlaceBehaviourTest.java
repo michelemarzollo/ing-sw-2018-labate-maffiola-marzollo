@@ -75,8 +75,9 @@ public class PullAgainAndPlaceBehaviourTest {
         game.getDiceBag().draft(73);
 
         PullAgainAndPlaceBehaviour behaviour = new PullAgainAndPlaceBehaviour();
-        boolean success = behaviour.useToolCard(game, message);
-        Assert.assertFalse(success);
+        ToolCardBehaviourResponse response = behaviour.useToolCard(game, message);
+
+        Assert.assertEquals(ToolCardBehaviourResponse.CONSUME, response);
 
         return behaviour;
     }
@@ -131,9 +132,9 @@ public class PullAgainAndPlaceBehaviourTest {
         game.getDiceBag().draft(73);
 
         PullAgainAndPlaceBehaviour behaviour = new PullAgainAndPlaceBehaviour();
-        boolean success = behaviour.useToolCard(game, message);
+        ToolCardBehaviourResponse response = behaviour.useToolCard(game, message);
 
-        Assert.assertFalse(success);
+        Assert.assertEquals(ToolCardBehaviourResponse.FAILURE, response);
         List<Die> oldDraftPool = GameUtils.getDice(false);
         List<Die> newDraftPool = game.getDraftPool().getDice();
 
@@ -180,9 +181,9 @@ public class PullAgainAndPlaceBehaviourTest {
         game.getTurnManager().getCurrentTurn().setForcedSelectionIndex(0);
         Die red2 = new Die(2, new Random(), Colour.RED);
 
-        boolean success = behaviour.useToolCard(game, message);
+        ToolCardBehaviourResponse response = behaviour.useToolCard(game, message);
 
-        Assert.assertTrue(success);
+        Assert.assertEquals(ToolCardBehaviourResponse.USE, response);
         Assert.assertEquals(1, mockView.getCalledMethods().size());
         boolean isError = mockView.getCalledMethods().get(0).startsWith("showError");
         Assert.assertFalse(isError);
@@ -229,9 +230,9 @@ public class PullAgainAndPlaceBehaviourTest {
         game.getTurnManager().getCurrentTurn().setForcedSelectionIndex(0);
         Die red2 = new Die(2, new Random(), Colour.RED);
 
-        boolean success = behaviour.useToolCard(game, message);
+        ToolCardBehaviourResponse response = behaviour.useToolCard(game, message);
 
-        Assert.assertFalse(success);
+        Assert.assertEquals(ToolCardBehaviourResponse.FAILURE, response);
         Assert.assertEquals(2, mockView.getCalledMethods().size());
         boolean isError = mockView.getCalledMethods().get(1).startsWith("showError");
         Assert.assertTrue(isError);

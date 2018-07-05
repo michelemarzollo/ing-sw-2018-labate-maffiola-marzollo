@@ -173,9 +173,12 @@ public class MoveSomeDiceBehaviourTest {
         Assert.assertTrue("Error on placement", control);
 
         MoveSomeDiceBehaviour behaviour = new MoveSomeDiceBehaviour();
-        boolean success = behaviour.useToolCard(game, message);
+        ToolCardBehaviourResponse response = behaviour.useToolCard(game, message);
 
-        Assert.assertEquals(isSuccess, success);
+        if(isSuccess)
+            Assert.assertEquals(ToolCardBehaviourResponse.SUCCESS, response);
+        else
+            Assert.assertEquals(ToolCardBehaviourResponse.FAILURE, response);
 
         return game;
     }

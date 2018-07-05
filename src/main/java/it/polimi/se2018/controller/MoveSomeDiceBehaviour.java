@@ -17,14 +17,14 @@ import java.util.stream.Collectors;
 public class MoveSomeDiceBehaviour implements ToolCardBehaviour {
 
     /**
-     * Always returns true because this tool card has no specific requirements.
+     * Allows the usage of the tool card if the round track isn't empty.
      *
      * @param game The game the tool card will be applied to.
-     * @return Always {@code true}.
+     * @return {@code true} if the round track isn't empty; {@code false} otherwise.
      */
     @Override
     public boolean areRequirementsSatisfied(Game game) {
-        return true;
+        return game.getRoundTrack().getSum() != 0;
     }
 
     /**
@@ -128,12 +128,12 @@ public class MoveSomeDiceBehaviour implements ToolCardBehaviour {
      * {@code false} otherwise.
      */
     @Override
-    public boolean useToolCard(Game game, ViewMessage message) {
+    public ToolCardBehaviourResponse useToolCard(Game game, ViewMessage message) {
         MoveDice moveDice = (MoveDice) message;
 
         if (!checkAmounts(moveDice)) {
             moveDice.getView().showError("Bad amount of selected positions");
-            return false;
+            return ToolCardBehaviourResponse.FAILURE;
         }
 
         Player player = game.getTurnManager().getCurrentTurn().getPlayer();
@@ -142,17 +142,17 @@ public class MoveSomeDiceBehaviour implements ToolCardBehaviour {
 
         if (!isSelectionValid(selected, game.getRoundTrack().getLeftovers())) {
             moveDice.getView().showError("Invalid selection: bad colours!");
-            return false;
+            return ToolCardBehaviourResponse.FAILURE;
         }
 
         try {
             Pattern newPattern =
                     pattern.moveDice(moveDice.getSources(), moveDice.getDestinations());
             player.setPattern(newPattern);
-            return true;
+            return ToolCardBehaviourResponse.SUCCESS;
         } catch (PlacementErrorException e) {
             moveDice.getView().showError("Bad selection: cannot move");
         }
-        return false;
+        return ToolCardBehaviourResponse.FAILURE;
     }
 }

@@ -81,25 +81,25 @@ public class MoveDiceBehaviour implements ToolCardBehaviour {
      * @return {@code true} on success; {@code false} otherwise.
      */
     @Override
-    public boolean useToolCard(Game game, ViewMessage message) {
+    public ToolCardBehaviourResponse useToolCard(Game game, ViewMessage message) {
         MoveDice moveDice = (MoveDice) message;
         Coordinates[] sources = moveDice.getSources();
         Coordinates[] destinations = moveDice.getDestinations();
 
         if (sources.length != amount || destinations.length != amount) {
             message.getView().showError(BAD_SIZES_ERROR);
-            return false;
+            return ToolCardBehaviourResponse.FAILURE;
         }
 
         Player player = game.getTurnManager().getCurrentTurn().getPlayer();
         try {
             player.setPattern(player.getPattern().moveDice(sources, destinations, restriction));
-            return true;
+            return ToolCardBehaviourResponse.SUCCESS;
         } catch (PlacementErrorException ex) {
             message.getView().showError(ex.getMessage());
         } catch (IndexOutOfBoundsException ex) {
             message.getView().showError(BAD_INDEX_ERROR);
         }
-        return false;
+        return ToolCardBehaviourResponse.FAILURE;
     }
 }

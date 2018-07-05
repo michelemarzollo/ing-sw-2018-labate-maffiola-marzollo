@@ -249,18 +249,22 @@ public class SinglePlayerController extends Controller {
     protected boolean canUseToolCard(ViewMessage message, ToolCard toolCard) {
         SelectCardSP selectionMessage = (SelectCardSP) message;
         int dieIndex = selectionMessage.getDieIndex();
-        if (!toolCard.isUsed()) {
-            if (getGame().getDraftPool().getDice().get(dieIndex).getColour().
-                    equals(toolCard.getColour())) {
-                getGame().getTurnManager().getCurrentTurn().
-                        setSacrificeIndex(dieIndex);
-                return true;
+        try {
+            if (!toolCard.isUsed()) {
+                if (getGame().getDraftPool().getDice().get(dieIndex).getColour().
+                        equals(toolCard.getColour())) {
+                    getGame().getTurnManager().getCurrentTurn().
+                            setSacrificeIndex(dieIndex);
+                    return true;
+                } else
+                    selectionMessage.getView()
+                            .showError("The requested die doesn't match the Tool Card's colour.");
             } else
-                selectionMessage.getView()
-                        .showError("The requested die doesn't match the Tool Card's colour.");
-        } else
-            //The toolCard has been already used.
-            selectionMessage.getView().showError("The Tool Card has already been used.");
+                //The toolCard has been already used.
+                selectionMessage.getView().showError("The Tool Card has already been used.");
+        } catch (IndexOutOfBoundsException e){
+            selectionMessage.getView().showError("Bad index!");
+        }
         return false;
     }
 

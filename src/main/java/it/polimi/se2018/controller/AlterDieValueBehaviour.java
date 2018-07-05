@@ -87,7 +87,7 @@ public class AlterDieValueBehaviour implements ToolCardBehaviour {
      * @return {@code true} on success; {@code false} otherwise.
      */
     @Override
-    public boolean useToolCard(Game game, ViewMessage message) {
+    public ToolCardBehaviourResponse useToolCard(Game game, ViewMessage message) {
         SelectDie selectMessage = (SelectDie) message;
         try {
             List<Die> dice = game.getDraftPool().getDice();
@@ -101,12 +101,12 @@ public class AlterDieValueBehaviour implements ToolCardBehaviour {
             //Setting of the forced selection in the current turn
             game.getTurnManager().getCurrentTurn().setForcedSelectionIndex(
                     selectMessage.getDieIndex());
-            return true;
+            return ToolCardBehaviourResponse.SUCCESS;
         } catch (DieValueException ex) {
             selectMessage.getView().showError(ex.getMessage());
         } catch (IndexOutOfBoundsException e) {
             selectMessage.getView().showError("Bad index!");
         }
-        return false;
+        return ToolCardBehaviourResponse.FAILURE;
     }
 }

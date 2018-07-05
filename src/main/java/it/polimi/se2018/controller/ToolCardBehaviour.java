@@ -32,5 +32,5 @@ public interface ToolCardBehaviour {
      * @return {@code true} if the tool card has been successfully applied;
      * {@code false} otherwise.
      */
-    boolean useToolCard(Game game, ViewMessage message);
+    ToolCardBehaviourResponse useToolCard(Game game, ViewMessage message);
 }

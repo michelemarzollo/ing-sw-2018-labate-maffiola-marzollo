@@ -23,17 +23,33 @@ public class MoveDiceEventPack extends BoardEventPack {
      */
     private List<Coordinates> destinations = new ArrayList<>();
 
+    /**
+     * Index of the last selected source-destination pair.
+     */
     private int currentIndex = 0;
 
+    /**
+     * Flag used to tell if the max amount of dice has to be moved.
+     */
     private boolean moveAll;
 
+    /**
+     * The amount of dice to move.
+     */
     private int amount;
+
+    /**
+     * Reference to the game board.
+     */
+    private GameBoard board;
 
     /**
      * Creates a new instance that uses the specified client view to handle
      * requests.
      *
      * @param clientView The client view responsible for requests.
+     * @param amount The max amount of dice to move.
+     * @param moveAll {@code true} if exactly {@code amount} dice have to be moved.
      */
     public MoveDiceEventPack(ClientView clientView, int amount, boolean moveAll) {
         super(clientView);
@@ -83,6 +99,7 @@ public class MoveDiceEventPack extends BoardEventPack {
                 goOn = askContinue();
         }
         if (!goOn || currentIndex == amount) {
+            board.restoreTurn();
             getClientView().handleToolCardUsage(
                     sources.toArray(new Coordinates[0]),
                     destinations.toArray(new Coordinates[0]));
@@ -110,6 +127,7 @@ public class MoveDiceEventPack extends BoardEventPack {
      */
     @Override
     public void prepareControls(GameBoard board) {
+        this.board = board;
         board.getPlayerPatternContainer().setDisable(false);
         board.getDraftPoolContainer().setDisable(true);
         board.getToolCardContainer().setDisable(true);

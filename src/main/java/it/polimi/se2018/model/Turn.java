@@ -119,6 +119,7 @@ public class Turn {
      */
     public void useToolCard() {
         this.alreadyUsedToolCard = true;
+        selectedToolCard = null;
         notifyChange();
     }
 

@@ -112,13 +112,13 @@ public class JavaFxDisplayer extends Application implements Displayer {
         Node node;
         try {
             node = loader.load();
+            board = loader.getController();
         } catch (IOException e) {
             Logger.getDefaultLogger().log(e.getMessage());
             return;
         }
         Platform.runLater(() -> {
             root.setCenter(node);
-            board = loader.getController();
             board.setDisplayer(this);
             primaryStage.sizeToScene();
             primaryStage.setTitle("Sagrada");
