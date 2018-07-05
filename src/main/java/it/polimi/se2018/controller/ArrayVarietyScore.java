@@ -5,7 +5,7 @@ import it.polimi.se2018.model.Die;
 
 /**
  * The class that contains a useful method for it's subclasses
- * to see if all elements of an array of cell are different for
+ * to see if all elements of an array of cells are different for
  * a certain property.
  *
  * @author michelemarzollo

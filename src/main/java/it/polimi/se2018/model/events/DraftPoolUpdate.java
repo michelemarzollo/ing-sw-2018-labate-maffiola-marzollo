@@ -21,7 +21,7 @@ public class DraftPoolUpdate extends ModelUpdate {
     /**
      * The constructor of the class.
      *
-     * @param dice                 The dice in the draft pool.
+     * @param dice The dice in the draft pool.
      */
     public DraftPoolUpdate(List<Die> dice) {
         super(ModelEvent.DRAFT_POOL_UPDATE);
@@ -30,6 +30,7 @@ public class DraftPoolUpdate extends ModelUpdate {
 
     /**
      * Getter for the dice list.
+     *
      * @return The dice in the draft pool.
      */
     public List<Die> getDice() {
@@ -38,6 +39,7 @@ public class DraftPoolUpdate extends ModelUpdate {
 
     /**
      * Pushes this instance of DraftPoolUpdate into the organizer.
+     *
      * @param organizer The organizer where the message will be pushed into.
      */
     @Override

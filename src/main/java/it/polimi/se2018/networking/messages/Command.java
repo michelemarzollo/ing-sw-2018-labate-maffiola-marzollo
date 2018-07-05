@@ -14,6 +14,7 @@ public enum Command {
     VIEW_MESSAGE,
     ACK,
     LOGIN_MP,
-    PING, LOGIN_SP
+    PING,
+    LOGIN_SP
 
 }

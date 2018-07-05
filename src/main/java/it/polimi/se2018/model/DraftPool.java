@@ -7,8 +7,6 @@ import java.util.List;
 
 /**
  * The class represents the dice in the draft pool at a certain moment in the game.
- * It also contains, eventually, the die that must be used by the player while using a
- * specific ToolCard.
  *
  * @author michelemarzollo
  */
@@ -25,8 +23,7 @@ public class DraftPool {
     private final Game game;
 
     /**
-     * The constructor of the class. When the class is built there is no forced selection:
-     * the attribute <code>forcedSelection</code> is set to a non valid value -1.
+     * The constructor of the class.
      *
      * @param game The game to which the DraftPool has to be bound.
      */
@@ -66,7 +63,7 @@ public class DraftPool {
     }
 
     /**
-     * The method to draft a die form the DraftPool.
+     * The method to remove a die form the DraftPool.
      *
      * @param index the position of the die to draft in the list.
      * @throws IndexOutOfBoundsException if the index is out of range.
@@ -77,7 +74,7 @@ public class DraftPool {
     }
 
     /**
-     * The method to select a die from the DraftPool.
+     * The method to select a die from the DraftPool, without removing it.
      *
      * @param index the index of the die to select in the DraftPool.
      * @return the die.

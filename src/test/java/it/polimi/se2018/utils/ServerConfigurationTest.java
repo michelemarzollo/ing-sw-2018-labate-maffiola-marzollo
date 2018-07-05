@@ -26,7 +26,7 @@ public class ServerConfigurationTest {
      */
     @Test
     public void testMakeInstance() {
-        ServerConfiguration.makeInstance(2, "indirizzo", "nome", 2, 3, 4);
+        ServerConfiguration.makeInstance(2, "indirizzo", "nome", 2, 3);
         assertTrue(tryGetConfigurationInstance() != null);
     }
 
@@ -35,16 +35,15 @@ public class ServerConfigurationTest {
      */
     @Test
     public void testNegativeMakeInstance() {
-        ServerConfiguration.makeInstance(2, "indirizzo", "nome", 2, 3, 4);
+        ServerConfiguration.makeInstance(2, "indirizzo", "nome", 2, 3);
         assertTrue(tryGetConfigurationInstance() != null);
-        ServerConfiguration.makeInstance(20, "indirizzo1", "nome1", 20, 30, 40);
+        ServerConfiguration.makeInstance(20, "indirizzo1", "nome1", 20, 30 );
         try {
             ServerConfiguration serverConfiguration = ServerConfiguration.getInstance();
             assertTrue(serverConfiguration != null);
             assertEquals(2, serverConfiguration.getTurnDuration());
             assertEquals(2, serverConfiguration.getPortNumber());
             assertEquals(3, serverConfiguration.getMultiPlayerTimeOut());
-            assertEquals(4, serverConfiguration.getSinglePlayerTimeOut());
             assertEquals("indirizzo", serverConfiguration.getAddress());
             assertEquals("nome", serverConfiguration.getServiceName());
         } catch (MissingConfigurationException e) {
@@ -58,13 +57,12 @@ public class ServerConfigurationTest {
      */
     @Test
     public void testGetInstance() {
-        ServerConfiguration.makeInstance(2, "indirizzo", "nome", 2, 3, 4);
+        ServerConfiguration.makeInstance(2, "indirizzo", "nome", 2, 3);
         ServerConfiguration serverConfiguration = tryGetConfigurationInstance();
         assertTrue(serverConfiguration != null);
         assertEquals(2, serverConfiguration.getTurnDuration());
         assertEquals(2, serverConfiguration.getPortNumber());
         assertEquals(3, serverConfiguration.getMultiPlayerTimeOut());
-        assertEquals(4, serverConfiguration.getSinglePlayerTimeOut());
         assertEquals("indirizzo", serverConfiguration.getAddress());
         assertEquals("nome", serverConfiguration.getServiceName());
     }
@@ -74,7 +72,7 @@ public class ServerConfigurationTest {
      */
     @Test
     public void testReset() {
-        ServerConfiguration.makeInstance(2, "indirizzo", "nome", 2, 3, 4);
+        ServerConfiguration.makeInstance(2, "indirizzo", "nome", 2, 3);
         assertTrue(tryGetConfigurationInstance() != null);
         ServerConfiguration.reset();
         try {

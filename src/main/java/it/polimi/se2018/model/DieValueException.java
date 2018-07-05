@@ -7,9 +7,8 @@ package it.polimi.se2018.model;
  * @author giorgiolbt
  */
 
-//NON HA SENSO CHE SIA RUNTIME!!!
-public class DieValueException extends RuntimeException{ //eccezione unchecked
-    public DieValueException(String msg){
+public class DieValueException extends RuntimeException {
+    public DieValueException(String msg) {
         super(msg);
     }
 }

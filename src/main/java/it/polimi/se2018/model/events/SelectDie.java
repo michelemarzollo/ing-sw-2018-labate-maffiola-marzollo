@@ -3,11 +3,10 @@ package it.polimi.se2018.model.events;
 import it.polimi.se2018.view.View;
 
 /**
- * This class is used to encapsulate the data needed
- * to select a Die in the {@link it.polimi.se2018.model.DraftPool}.
+ * This class is used to encapsulate the data needed to select a Die in the
+ * {@link it.polimi.se2018.model.DraftPool}.
  * This action is needed when using 'Flux Brush', 'Flux Remover',
- * 'Grinding Stone' and 'Running Pliers'
- * {@link it.polimi.se2018.model.ToolCard}.
+ * 'Grinding Stone' and 'Running Pliers' {@link it.polimi.se2018.model.ToolCard}.
  */
 public class SelectDie extends ViewMessage {
 

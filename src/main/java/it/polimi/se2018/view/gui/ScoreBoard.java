@@ -11,6 +11,8 @@ import java.util.Map;
 
 /**
  * This class is a JavaFX controller to handle the display of the score board.
+ *
+ * @author dvdmff
  */
 public class ScoreBoard {
 

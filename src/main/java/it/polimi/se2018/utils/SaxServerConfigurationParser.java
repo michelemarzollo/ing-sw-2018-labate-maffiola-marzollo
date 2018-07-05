@@ -36,11 +36,6 @@ public class SaxServerConfigurationParser extends DefaultHandler {
      */
     private boolean inMultiPlayerTo;
 
-    /**
-     * The flag to say is the 'single_player_timeout' tag is being read.
-     */
-    private boolean inSinglePlayerTo;
-
 
     /**
      * The number of the port of the server.
@@ -68,11 +63,6 @@ public class SaxServerConfigurationParser extends DefaultHandler {
     private int multiPlayerTimeOut;
 
     /**
-     * The timeout for single-player mode.
-     */
-    private int singlePlayerTimeOut;
-
-    /**
      * The method that sets all flags to false when the document is starting to be read.
      */
     @Override
@@ -82,7 +72,6 @@ public class SaxServerConfigurationParser extends DefaultHandler {
         inServiceName = false;
         inTurnDuration = false;
         inMultiPlayerTo = false;
-        inSinglePlayerTo = false;
     }
 
     /**
@@ -111,8 +100,6 @@ public class SaxServerConfigurationParser extends DefaultHandler {
             inTurnDuration = true;
         if (qualifiedName.equals("multi_player_timeout"))
             inMultiPlayerTo = true;
-        if (qualifiedName.equals("single_player_timeout"))
-            inSinglePlayerTo = true;
     }
 
     /**
@@ -139,8 +126,6 @@ public class SaxServerConfigurationParser extends DefaultHandler {
             inTurnDuration = false;
         if (qualifiedName.equals("multi_player_timeout"))
             inMultiPlayerTo = false;
-        if (qualifiedName.equals("single_player_timeout"))
-            inSinglePlayerTo = false;
     }
 
     /**
@@ -166,8 +151,6 @@ public class SaxServerConfigurationParser extends DefaultHandler {
             turnDuration = Integer.parseInt(string);
         if (inMultiPlayerTo)
             multiPlayerTimeOut = Integer.parseInt(string);
-        if (inSinglePlayerTo)
-            singlePlayerTimeOut = Integer.parseInt(string);
     }
 
     /**
@@ -177,7 +160,7 @@ public class SaxServerConfigurationParser extends DefaultHandler {
     @Override
     public void endDocument() {
         ServerConfiguration.makeInstance(portNumber, address,
-                serviceName, turnDuration, multiPlayerTimeOut, singlePlayerTimeOut);
+                serviceName, turnDuration, multiPlayerTimeOut);
     }
 
 }

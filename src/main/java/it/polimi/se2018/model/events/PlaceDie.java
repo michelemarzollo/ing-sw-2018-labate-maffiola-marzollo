@@ -4,12 +4,10 @@ import it.polimi.se2018.view.View;
 import it.polimi.se2018.utils.Coordinates;
 
 /**
- * This class is used to encapsulate the data needed to
- * place a Die in the Player's Pattern.
- * It is used for a regular placement or when
- * exploiting 'Cork-backed Straightedge'
- * {@link it.polimi.se2018.model.ToolCard}.
- *
+ * This class is used to encapsulate the data needed to place a Die in the
+ * Player's Pattern.
+ * It is used for a regular placement or when exploiting
+ * 'Cork-backed Straightedge' {@link it.polimi.se2018.model.ToolCard}.
  */
 public class PlaceDie extends ViewMessage {
 
@@ -27,16 +25,17 @@ public class PlaceDie extends ViewMessage {
 
     /**
      * Constructor of the Class.
-     * @param dieIndex The position of the chosen Die
-     *                 in the DraftPool.
+     *
+     * @param dieIndex    The position of the chosen Die
+     *                    in the DraftPool.
      * @param destination The coordinates that indicates
      *                    the position on the Player's Pattern
      *                    where the Die has to be placed.
-     * @param view The view reference.
-     * @param action The action that the Player wants
-     *               to perform.
-     * @param playerName The name of the player that
-     *                   is performing the action.
+     * @param view        The view reference.
+     * @param action      The action that the Player wants
+     *                    to perform.
+     * @param playerName  The name of the player that
+     *                    is performing the action.
      */
     public PlaceDie(int dieIndex, Coordinates destination,
                     View view, Action action, String playerName) {
@@ -47,6 +46,7 @@ public class PlaceDie extends ViewMessage {
 
     /**
      * Getter for the position of the chosen Die.
+     *
      * @return The index of the Die in the DraftPool.
      */
     public int getDieIndex() {
@@ -56,6 +56,7 @@ public class PlaceDie extends ViewMessage {
     /**
      * Getter for the row and column of the destination
      * chosen for the Die.
+     *
      * @return The Coordinates of the chosen position.
      */
     public Coordinates getDestination() {

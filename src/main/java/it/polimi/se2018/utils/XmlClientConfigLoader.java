@@ -43,7 +43,7 @@ public class XmlClientConfigLoader extends XmlLoader {
                 SaxClientConfigurationParser clientConfigurationParser = new SaxClientConfigurationParser();
 
                 if (isValid(inputStream)) {
-                    //I create again the strem because it was destroyed
+                    //I create again the stream because it was destroyed
                     try (FileInputStream stream = new FileInputStream(path)) {
                         saxParser.parse(stream, clientConfigurationParser);
                         return tryGetConfigurationInstance();
@@ -60,7 +60,7 @@ public class XmlClientConfigLoader extends XmlLoader {
 
     /**
      * Helper method for {@code loadConfiguration()}: it tries to get the instance of
-     * {@link ClientConfiguration}. It should never enter in the catch branch, beacause
+     * {@link ClientConfiguration}. It should never enter in the catch branch, because
      * at this point the ClientConfiguration should have been instantiated.
      *
      * @return the instance of {@link ClientConfiguration}.

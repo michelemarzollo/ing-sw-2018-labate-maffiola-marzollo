@@ -17,26 +17,32 @@ public class NextTurn extends ModelUpdate {
      * The name of the next player to move.
      */
     private final String playerName;
+
     /**
      * Flag to indicate if the player has a second turn this round.
      */
     private final boolean secondTurnAvailable;
+
     /**
      * Flag to indicate if the player has already placed a die this turn.
      */
     private final boolean alreadyPlacedDie;
+
     /**
      * Flag to indicate if the player has already used a tool card this turn.
      */
     private final boolean alreadyUsedToolCard;
+
     /**
      * Index of the only die the player can draft.
      */
     private final int forcedSelectionIndex;
+
     /**
      * Index of the die that will be sacrificed to activate a tool card.
      */
     private final int sacrificeIndex;
+
     /**
      * The currently active tool card.
      */
@@ -99,6 +105,7 @@ public class NextTurn extends ModelUpdate {
 
     /**
      * Getter for the index of the forced selection.
+     *
      * @return The index of the forced selection.
      */
     public int getForcedSelectionIndex() {
@@ -107,6 +114,7 @@ public class NextTurn extends ModelUpdate {
 
     /**
      * Getter for the index of the sacrifice die.
+     *
      * @return The index of the sacrifice die.
      */
     public int getSacrificeIndex() {
@@ -115,6 +123,7 @@ public class NextTurn extends ModelUpdate {
 
     /**
      * Getter for the currently active tool card.
+     *
      * @return The currently active tool card.
      */
     public ToolCard getActiveToolCard() {
@@ -123,6 +132,7 @@ public class NextTurn extends ModelUpdate {
 
     /**
      * Pushes this instance of NextTurn into the organizer.
+     *
      * @param organizer The organizer where the message will be pushed into.
      */
     @Override
@@ -132,30 +142,33 @@ public class NextTurn extends ModelUpdate {
 
     /**
      * Defaults to Object.equals(Object).
+     *
      * @param other The object to compare.
      * @return {@code true} if this and other are equals.
      * @see Object#equals(Object)
      */
     @Override
-    public boolean equals(Object other){
+    public boolean equals(Object other) {
         return super.equals(other);
     }
 
     /**
      * Defaults to Object.hashCode().
+     *
      * @return The hash code of the object.
      */
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return super.hashCode();
     }
 
     /**
      * Compare this object with the given one.
+     *
      * @param other The NextTurn object to compare.
      * @return {@code true} if the two objects are equals.
      */
-    public boolean equals(NextTurn other){
+    public boolean equals(NextTurn other) {
         return other.getPlayerName().equals(getPlayerName()) &&
                 other.isAlreadyPlacedDie() == isAlreadyPlacedDie() &&
                 other.isAlreadyUsedToolCard() == isAlreadyUsedToolCard() &&

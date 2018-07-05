@@ -38,7 +38,8 @@ public abstract class ModelUpdate implements Serializable {
     }
 
     /**
-     * Pushed the update message into the organizer.
+     * Pushes the update message into the organizer.
+     *
      * @param organizer The organizer where the message will be pushed into.
      */
     public abstract void pushInto(ViewDataOrganizer organizer);

@@ -13,7 +13,6 @@ import java.util.Map;
  * that are required for the correct operations the network protocol they implement.</p>
  * <p>This class is immutable and thread-safe.</p>
  *
- * @author michelemarzollo
  * @author dvdmff
  */
 public abstract class Server {

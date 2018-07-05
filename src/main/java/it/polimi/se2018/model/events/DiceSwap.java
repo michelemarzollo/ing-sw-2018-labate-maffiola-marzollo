@@ -4,9 +4,8 @@ import it.polimi.se2018.view.View;
 import it.polimi.se2018.utils.Coordinates;
 
 /**
- * This class is used to encapsulate the data needed for
- * the action of swapping one Die
- * from the {@link it.polimi.se2018.model.DraftPool}
+ * This class is used to encapsulate the data needed for the action of swapping
+ * one Die from the {@link it.polimi.se2018.model.DraftPool}
  * with a Die of the {@link it.polimi.se2018.model.RoundTrack}.
  * This action is allowed by the {@link it.polimi.se2018.model.ToolCard}
  * 'Lens Cutter'.
@@ -15,15 +14,13 @@ import it.polimi.se2018.utils.Coordinates;
  */
 public class DiceSwap extends ViewMessage {
     /**
-     * The index of the Die in the DraftPool
-     * that is chosen to be swapped.
+     * The index of the Die in the DraftPool that is chosen to be swapped.
      */
     private int sourceIndex;
 
     /**
-     * The indexes that refers to the position
-     * of the Die in the RoundTrack that must
-     * be swapped with the Die in the DraftPool.
+     * The indexes that refers to the position of the Die in the RoundTrack
+     * that must be swapped with the Die in the DraftPool.
      */
     private Coordinates destination;
 

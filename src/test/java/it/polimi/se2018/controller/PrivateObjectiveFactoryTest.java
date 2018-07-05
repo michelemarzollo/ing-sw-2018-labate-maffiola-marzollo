@@ -18,7 +18,7 @@ public class PrivateObjectiveFactoryTest {
     @Test
     public void testCorrectNumberOfInstances() {
         int instances = 4;
-        PrivateObjectiveFactory factory = new PrivateObjectiveFactory();
+        PrivateObjectiveFactory factory = PrivateObjectiveFactory.getInstance();
         PrivateObjectiveCard[] cards = factory.newInstances(instances);
 
         long actualInstances = cards.length;
@@ -33,7 +33,7 @@ public class PrivateObjectiveFactoryTest {
     @Test
     public void testNoCardRepetition() {
         int instances = 5;
-        PrivateObjectiveFactory factory = new PrivateObjectiveFactory();
+        PrivateObjectiveFactory factory =  PrivateObjectiveFactory.getInstance();
         PrivateObjectiveCard[] cards = factory.newInstances(instances);
 
         long distinctCards = Arrays.stream(cards)
@@ -51,7 +51,7 @@ public class PrivateObjectiveFactoryTest {
     @Test
     public void testRequestTooManyCards() {
         int instances = 20;
-        PrivateObjectiveFactory factory = new PrivateObjectiveFactory();
+        PrivateObjectiveFactory factory =  PrivateObjectiveFactory.getInstance();
         try {
             PrivateObjectiveCard[] cards = factory.newInstances(instances);
             Assert.fail();

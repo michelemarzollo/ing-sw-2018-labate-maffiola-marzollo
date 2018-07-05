@@ -12,8 +12,14 @@ import javafx.scene.control.TextField;
  */
 public class LoginView {
 
+    /**
+     * The message to show if the username wasn't entered.
+     */
     private static final String MISSING_USERNAME = "You must insert a username!";
 
+    /**
+     * The message to show after the login.
+     */
     private static final String WAITING_MESSAGE = "Waiting for other players to connect...";
 
     /**

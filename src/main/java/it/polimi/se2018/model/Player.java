@@ -18,7 +18,7 @@ public class Player {
     private final String name;
 
     /**
-     * The game the player is bound to.
+     * The game to which the player is bound to.
      */
     private Game game;
 
@@ -59,6 +59,7 @@ public class Player {
 
     /**
      * The constructor of Player
+     *
      * @param name is the Player's name.
      */
     public Player(String name) {
@@ -67,7 +68,8 @@ public class Player {
     }
 
     /**
-     * Getter for the attribute name of Player.
+     * Getter for the name attribute of Player.
+     *
      * @return the name of Player.
      */
     public String getName() {
@@ -75,7 +77,8 @@ public class Player {
     }
 
     /**
-     * Getter for the attribute score
+     * Getter for the score attribute.
+     *
      * @return the score of Player.
      */
     public int getScore() {
@@ -84,6 +87,7 @@ public class Player {
 
     /**
      * Setter for the score of Player
+     *
      * @param score is the value set for the attribute.
      *              This value is computed at the end of the Game.
      */
@@ -93,6 +97,7 @@ public class Player {
 
     /**
      * Getter for the attribute tokens of Player.
+     *
      * @return the tokens of Player.
      */
     public int getTokens() {
@@ -101,6 +106,7 @@ public class Player {
 
     /**
      * Setter for the attribute tokens of Player.
+     *
      * @param tokens The new token amount.
      */
     public void setTokens(int tokens) {
@@ -110,6 +116,7 @@ public class Player {
 
     /**
      * Getter for the attribute connected.
+     *
      * @return {@code true} if Player result connected
      * to the Server, {@code false} otherwise.
      */
@@ -118,11 +125,12 @@ public class Player {
     }
 
     /**
-     * Setter for the attribute connected.
+     * Setter for the attribute connected. It also generates
+     * a {@link PlayerConnectionStatus} message.
+     *
      * @param connected Is the value set for the attribute:
      *                  it will be {@code true} if the Player
      *                  is connected, {@code false} otherwise.
-     *
      */
     public void setConnected(boolean connected) {
         this.connected = connected;
@@ -133,6 +141,7 @@ public class Player {
 
     /**
      * Getter for the attribute candidates.
+     *
      * @return the {@link Pattern} candidates of Player.
      */
     public Pattern[] getCandidates() {
@@ -141,6 +150,7 @@ public class Player {
 
     /**
      * Setter for the attribute candidates.
+     *
      * @param candidates are the {@link Pattern} array
      *                   among which the Player has to make
      *                   his choice.
@@ -151,6 +161,7 @@ public class Player {
 
     /**
      * Getter for the attribute pattern.
+     *
      * @return the Pattern chosen by the player.
      */
     public Pattern getPattern() {
@@ -158,7 +169,9 @@ public class Player {
     }
 
     /**
-     * Setter for the attribute pattern.
+     * Setter for the attribute pattern. It also generates
+     * a {@link PlayerStatus} message.
+     *
      * @param pattern is the {@link Pattern} set for the attribute.
      *                This method also set the number of tokens of the player
      *                that depends on the {@code difficulty} of the {@link Pattern}.
@@ -171,6 +184,7 @@ public class Player {
 
     /**
      * Getter for the attribute cards
+     *
      * @return the array of PrivateObjectiveCards
      * of the player.
      */
@@ -180,8 +194,9 @@ public class Player {
 
     /**
      * Setter for the attribute cards.
-     * @param cards is array of PrivateObjectiveCards assigned
-     *             to the Player.
+     *
+     * @param cards the array of PrivateObjectiveCards assigned
+     *              to the Player.
      */
     public void setCards(PrivateObjectiveCard[] cards) {
         this.cards = cards;
@@ -190,13 +205,14 @@ public class Player {
     /**
      * Method for decrementing the number of tokens of Player
      * when using a {@link ToolCard}.
+     *
      * @param n is the number of tokens needed for the usage of
-     *         the {@link ToolCard}.
+     *          the {@link ToolCard}.
      * @throws NotEnoughTokensException when the player doesn't
-     * have enough tokens to use the {@link ToolCard}.
+     *                                  have enough tokens to use the {@link ToolCard}.
      */
-    public void consumeTokens(int n) throws NotEnoughTokensException{
-        if(n > getTokens()){
+    public void consumeTokens(int n) throws NotEnoughTokensException {
+        if (n > getTokens()) {
             throw new NotEnoughTokensException("Not enough tokens to use the Toolcard");
         }
         tokens -= n;
@@ -205,6 +221,7 @@ public class Player {
 
     /**
      * Setter for the game the player is bound to.
+     *
      * @param game The game the player is bound to.
      */
     void setGame(Game game) {
@@ -213,9 +230,10 @@ public class Player {
 
     /**
      * Getter for the game the player is bound to.
+     *
      * @return The game the player is bound to.
      */
-    Game getGame(){
+    Game getGame() {
         return game;
     }
 }

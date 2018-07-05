@@ -9,6 +9,7 @@ import java.io.IOException;
 
 /**
  * Static class to decouple network handler instantiation from its usage.
+ *
  * @author dvdmff
  */
 public class NetworkHandlerFactory {

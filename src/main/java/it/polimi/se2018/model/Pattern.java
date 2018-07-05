@@ -274,7 +274,7 @@ public class Pattern implements Serializable {
     /**
      * Move two dice from a position to another one in a
      * {@link Player}'s Pattern. This action is available
-     * only through the use of 'Lathekin' {@link ToolCard}.
+     * only through the use of 'Lathekin' and 'Tap Wheel' {@link ToolCard}.
      *
      * @param sources      The present positions of the dice
      *                     on the Pattern.
@@ -316,7 +316,7 @@ public class Pattern implements Serializable {
      * the Die that has to be placed is the first one or not.
      *
      * @param g The grid to be analyzed.
-     * @return {@code true } if the grid {@code g} is empty.
+     * @return {@code true} if the grid {@code g} is empty.
      * {@code false} otherwise.
      */
     private boolean isEmpty(Cell[][] g) {

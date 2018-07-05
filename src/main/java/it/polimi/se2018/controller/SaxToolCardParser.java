@@ -37,7 +37,7 @@ public class SaxToolCardParser extends DefaultHandler {
     private String description;
 
     /**
-     * The colour of the toolcard (for single player mode)
+     * The colour of the ToolCard (for single player mode)
      *
      * @see it.polimi.se2018.model.ToolCard#colour
      */

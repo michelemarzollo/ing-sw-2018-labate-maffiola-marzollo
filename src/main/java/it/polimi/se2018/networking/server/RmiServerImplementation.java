@@ -67,7 +67,7 @@ public class RmiServerImplementation extends UnicastRemoteObject implements RmiS
      */
     @Override
     public void send(Message message) {
-        if(message.getCommand() != Command.PING)
+        if (message.getCommand() != Command.PING)
             server.send(message);
     }
 

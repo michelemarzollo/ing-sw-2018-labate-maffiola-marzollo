@@ -4,7 +4,7 @@ import it.polimi.se2018.model.Cell;
 
 /**
  * The class to calculate the score related to the property of having all
- * rows with different values for a certain property.
+ * rows with different values for a certain property (value or colour).
  * <p>
  * It extends the intermediate abstract class {@link ArrayVarietyScore},
  * which contains the method to check if a single row respects
@@ -23,7 +23,7 @@ public class RowVarietyScore extends ArrayVarietyScore {
      * @param victoryPoints the victory points related to the card.
      * @param propertyIsColour the property of the die on which the card works.
      */
-    public RowVarietyScore(int victoryPoints, boolean propertyIsColour) {
+    RowVarietyScore(int victoryPoints, boolean propertyIsColour) {
         super(victoryPoints, propertyIsColour);
     }
 

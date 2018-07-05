@@ -5,12 +5,10 @@ import it.polimi.se2018.view.View;
 import java.io.Serializable;
 
 /**
- * This Class represents the event through
- * which the view(Observable) notifies the
- * controller(Observer) about an action performed
- * by the user. Possible additional data requested
- * to perform the action requested will be encapsulated
- * by more specific events that inherit from this class.
+ * This Class represents the event through which the View(Observable) notifies the
+ * Controller(Observer) about an action performed by the user.
+ * Possible additional data requested to perform an action will be
+ * encapsulated by more specific events that inherit from this class.
  *
  * @author giorgiolabate
  */
@@ -23,15 +21,13 @@ public class ViewMessage implements Serializable {
 
     /**
      * Action that describes what the user want to do.
-     * The {@link it.polimi.se2018.controller.Controller}
-     * will distinguish which action to perform through
-     * this attribute actual value.
+     * The {@link it.polimi.se2018.controller.Controller} will distinguish which
+     * action to perform through this attribute actual value.
      */
     private Action action;
 
     /**
-     * Name of Player that is
-     * performing the action.
+     * Name of Player that is performing the action.
      */
     private String playerName;
 
@@ -60,11 +56,9 @@ public class ViewMessage implements Serializable {
     }
 
     /**
-     * Getter for the String that describes the
-     * action.
+     * Getter for the Action.
      *
-     * @return a String that describes the
-     * action.
+     * @return the Action that has to be performed.
      */
     public Action getAction() {
         return action;
@@ -81,7 +75,12 @@ public class ViewMessage implements Serializable {
         return playerName;
     }
 
-    public void setView(View view){
+    /**
+     * Setter for the View reference.
+     *
+     * @param view the View reference.
+     */
+    public void setView(View view) {
         this.view = view;
     }
 }

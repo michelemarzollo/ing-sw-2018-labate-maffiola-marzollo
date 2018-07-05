@@ -37,7 +37,7 @@ public class GameSetup extends ModelUpdate {
 
     /**
      * The array of quartets of patterns. Each cell of {@code candidates[]} contains an
-     * array of 4 pattern cards, among which the player will choose the one to use in
+     * array of pattern cards, among which the player will choose the one to use in
      * the game. There is a correspondence of indexes with the array {@code players}.
      */
     private final Pattern[][] candidates;
@@ -70,7 +70,7 @@ public class GameSetup extends ModelUpdate {
     /**
      * The getter for {@code players}.
      *
-     * @return {@code players}
+     * @return {@code players}.
      */
     public String[] getPlayers() {
         return players;
@@ -79,7 +79,7 @@ public class GameSetup extends ModelUpdate {
     /**
      * The getter for {@code privateObjectives}.
      *
-     * @return {@code privateObjectives}
+     * @return {@code privateObjectives}.
      */
     public PrivateObjectiveCard[][] getPrivateObjectives() {
         return privateObjectives;
@@ -88,7 +88,7 @@ public class GameSetup extends ModelUpdate {
     /**
      * The getter for {@code toolCards}.
      *
-     * @return {@code toolCards}
+     * @return {@code toolCards}.
      */
     public ToolCard[] getToolCards() {
         return toolCards;
@@ -97,7 +97,7 @@ public class GameSetup extends ModelUpdate {
     /**
      * The getter for {@code publicObjectives}.
      *
-     * @return {@code publicObjectives}
+     * @return {@code publicObjectives}.
      */
     public PublicObjectiveCard[] getPublicObjectives() {
         return publicObjectives;
@@ -106,7 +106,7 @@ public class GameSetup extends ModelUpdate {
     /**
      * The getter for {@code candidates}.
      *
-     * @return {@code candidates}
+     * @return {@code candidates}.
      */
     public Pattern[][] getCandidates() {
         return candidates;
@@ -114,6 +114,7 @@ public class GameSetup extends ModelUpdate {
 
     /**
      * Pushes this instance of GameSetup into the organizer.
+     *
      * @param organizer The organizer where the message will be pushed into.
      */
     @Override

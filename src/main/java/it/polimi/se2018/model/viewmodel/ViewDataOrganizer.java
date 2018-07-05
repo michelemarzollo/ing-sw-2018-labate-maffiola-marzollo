@@ -52,7 +52,7 @@ public class ViewDataOrganizer {
     private String localPlayer;
 
     /**
-     * Flag to flag to indicate whether the last update changed the turn.
+     * Flag to indicate whether the last update changed the turn.
      */
     private boolean turnChanged = false;
 
@@ -63,7 +63,7 @@ public class ViewDataOrganizer {
 
     /**
      * The map that contains the names of the ToolCards of the game,
-     * and a boolean value to sye if they were used.
+     * and a boolean value to see if they were used.
      */
     private Map<String, Boolean> usedToolCards = new HashMap<>();
 

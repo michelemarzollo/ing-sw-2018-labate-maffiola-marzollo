@@ -60,7 +60,7 @@ public class XmlServerConfigLoader extends XmlLoader {
 
     /**
      * Helper method for {@code loadConfiguration()}: it tries to get the instance of
-     * {@link ServerConfiguration}. It should never enter in the catch branch, beacause
+     * {@link ServerConfiguration}. It should never enter in the catch branch, because
      * at this point the ServerConfiguration should have been instantiated.
      *
      * @return the instance of {@link ServerConfiguration}.
