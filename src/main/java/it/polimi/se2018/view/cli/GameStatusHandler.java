@@ -83,7 +83,7 @@ public class GameStatusHandler extends InputEventManager {
         if (!isSinglePlayer())
             getOutput().printPatterns(getPlayers());
         else
-            getOutput().printPattern(getPattern());
+            getOutput().printPatternLarger(getPattern());
     }
 
     /**

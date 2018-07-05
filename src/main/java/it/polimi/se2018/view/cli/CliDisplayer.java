@@ -296,9 +296,8 @@ public class CliDisplayer implements Displayer {
      */
     private void displayGame() {
         output.println("\n\nYour pattern is:");
-        output.printPattern(getPattern());
+        output.printPatternLarger(getPattern());
         output.println("Wait for the game to start");
-
         input.setManager(new TurnHandlingManager(view, output));
     }
 

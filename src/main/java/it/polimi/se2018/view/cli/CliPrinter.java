@@ -175,7 +175,7 @@ public class CliPrinter {
      * @param pattern The pattern that has to be displayed.
      */
     //How do we prefer to show a pattern?
-    private void printPatternLarger(Pattern pattern) {
+    public void printPatternLarger(Pattern pattern) {
         Cell[][] grid = pattern.getGrid();
         printName(pattern.getName());
         stream.println("Difficulty: " + pattern.getDifficulty());
@@ -261,7 +261,7 @@ public class CliPrinter {
      *                   have to be displayed.
      */
     public void printRoundTrack(List<List<Die>> roundTrack) {
-        printSeparator(roundTrack.size());
+        printRoundTrackSeparator(roundTrack.size());
         for (int i = 0; i < 9; i++) { //9 is the max number of dice that can be left in a turn.
             for (List<Die> aRoundTrack : roundTrack) {
                 if (aRoundTrack.size() >= i + 1) {
@@ -278,6 +278,20 @@ public class CliPrinter {
             }
             stream.print("\n");
         }
+    }
+
+    /**
+     * Helper method for the {@code printRoundTrack}
+     * to print the horizontal separators of the cells with one white space on
+     * the left and one on the right.
+     *
+     * @param n The number of horizontal cells.
+     */
+    private void printRoundTrackSeparator(int n){
+            for (int i = 0; i < n; i++) {
+                stream.print(" ---- ");
+            }
+            stream.print("\n");
     }
 
     /**

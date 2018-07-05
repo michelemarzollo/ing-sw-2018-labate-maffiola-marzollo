@@ -64,7 +64,7 @@ public class ValueAndDestinationManager extends InputEventManager {
     @Override
     public void showPrompt() {
         if (value == -1) {
-            getOutput().printPattern(getPattern());
+            getOutput().printPatternLarger(getPattern());
             getOutput().printDraftPool(getDraftPool());
             getOutput().println("The index of your chosen die in the draft pool is" +
                     getDataOrganizer().getNextTurn().getForcedSelectionIndex());

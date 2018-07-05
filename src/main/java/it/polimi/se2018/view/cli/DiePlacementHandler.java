@@ -101,7 +101,7 @@ public class DiePlacementHandler extends InputEventManager {
                 getOutput().printDraftPool(getDraftPool());
                 getOutput().println("Enter the index of the die:");
             } else if (row == -1) {
-                getOutput().printPattern(getPattern());
+                getOutput().printPatternLarger(getPattern());
                 getOutput().println("Enter the coordinates for your placement:");
                 getOutput().print("Row (starting from 0): ");
             } else if (col == -1) {
