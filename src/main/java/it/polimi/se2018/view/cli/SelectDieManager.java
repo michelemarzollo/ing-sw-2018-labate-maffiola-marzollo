@@ -5,6 +5,8 @@ import it.polimi.se2018.view.ClientView;
 
 /**
  * Input manager used to select a die from the draft pool.
+ *
+ * @author giorgiolabate
  */
 public class SelectDieManager extends InputEventManager {
 
@@ -16,9 +18,9 @@ public class SelectDieManager extends InputEventManager {
     /**
      * Constructor of the class.
      *
-     * @param view     The view to which this manager is bounded.
-     * @param output   The output destination where the prompts of this manager
-     *                 are shown.
+     * @param view   The view to which this manager is bounded.
+     * @param output The output destination where the prompts of this manager
+     *               are shown.
      */
     public SelectDieManager(ClientView view, CliPrinter output) {
         super(view, output);

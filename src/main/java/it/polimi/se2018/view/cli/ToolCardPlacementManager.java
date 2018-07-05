@@ -5,6 +5,8 @@ import it.polimi.se2018.view.ClientView;
 
 /**
  * Input manager used to place a die with a tool card.
+ *
+ * @author giorgiolabate
  */
 public class ToolCardPlacementManager extends InputEventManager {
 
@@ -22,9 +24,9 @@ public class ToolCardPlacementManager extends InputEventManager {
     /**
      * Constructor of the class
      *
-     * @param view     The view to which this manager is bounded.
-     * @param output   The output destination where the prompts of this manager
-     *                 are shown.
+     * @param view   The view to which this manager is bounded.
+     * @param output The output destination where the prompts of this manager
+     *               are shown.
      */
     public ToolCardPlacementManager(ClientView view, CliPrinter output) {
         super(view, output);

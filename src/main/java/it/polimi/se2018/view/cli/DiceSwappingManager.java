@@ -5,6 +5,8 @@ import it.polimi.se2018.view.ClientView;
 
 /**
  * Input manager used to swap a die from the draft pool with a die from the round track.
+ *
+ * @author giorgiolabate
  */
 public class DiceSwappingManager extends InputEventManager {
 
@@ -21,7 +23,8 @@ public class DiceSwappingManager extends InputEventManager {
 
     /**
      * Constructor of the class.
-     * @param view The view to which this manager is bounded.
+     *
+     * @param view   The view to which this manager is bounded.
      * @param output The output destination where the prompts of this manager
      *               are shown.
      */
@@ -50,8 +53,7 @@ public class DiceSwappingManager extends InputEventManager {
                     getView().handleToolCardUsage(index, new Coordinates(row, col), true);
                 }
             } else showError();
-        }
-        catch (NumberFormatException ex){
+        } catch (NumberFormatException ex) {
             showError();
         }
     }
@@ -62,17 +64,15 @@ public class DiceSwappingManager extends InputEventManager {
      */
     @Override
     public void showPrompt() {
-        if(index == -1){
+        if (index == -1) {
             getOutput().printDraftPool(getDraftPool());
             getOutput().printRoundTrack(getRoundTrack());
             getOutput().println("Enter the index of the die in the Draft Pool you want to swap:");
-        }
-        else if(row == -1){
+        } else if (row == -1) {
             getOutput().println("Enter the coordinates of the die in the Round Track you want to swap:");
             getOutput().print("Row (starting from 0): ");
 
-        }
-        else if(col == -1){
+        } else if (col == -1) {
             getOutput().print("Col (starting from 0): ");
         }
     }

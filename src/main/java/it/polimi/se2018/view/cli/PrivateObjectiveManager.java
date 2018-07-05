@@ -5,6 +5,8 @@ import it.polimi.se2018.view.ClientView;
 
 /**
  * Input manager used to select a private objective card among candidates.
+ *
+ * @author giorgiolabate
  */
 public class PrivateObjectiveManager extends InputEventManager {
 
@@ -56,7 +58,7 @@ public class PrivateObjectiveManager extends InputEventManager {
      * Resets the input manager.
      */
     @Override
-    public void reset(){
+    public void reset() {
         name = null;
     }
 }

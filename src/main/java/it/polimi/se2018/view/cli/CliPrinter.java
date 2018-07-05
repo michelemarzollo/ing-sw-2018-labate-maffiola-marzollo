@@ -13,6 +13,8 @@ import java.util.Map;
  * and directs them to the indicated {@link PrintStream}.
  * The print methods are used to print the Model's elements on a command line
  * environment.
+ *
+ * @author giorgiolabate
  */
 public class CliPrinter {
 

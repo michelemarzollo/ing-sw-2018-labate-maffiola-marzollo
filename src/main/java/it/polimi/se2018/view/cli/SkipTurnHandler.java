@@ -4,6 +4,8 @@ import it.polimi.se2018.view.ClientView;
 
 /**
  * Input manager used to let the player ends its turn early.
+ *
+ * @author giorgiolabate
  */
 public class SkipTurnHandler extends InputEventManager {
 
@@ -44,7 +46,7 @@ public class SkipTurnHandler extends InputEventManager {
             if (choice == 1) {
                 gotConfirmation = true;
                 getView().handleEndTurn();
-            }else
+            } else
                 manager.reset();
 
         } catch (NumberFormatException ex) {
@@ -59,8 +61,8 @@ public class SkipTurnHandler extends InputEventManager {
     @Override
     public void showPrompt() {
         if (!gotConfirmation)
-        getOutput().println("You chose to skip your turn, enter:\n" +
-                "1 to confirm\n" +
-                "Any other number to go back");
+            getOutput().println("You chose to skip your turn, enter:\n" +
+                    "1 to confirm\n" +
+                    "Any other number to go back");
     }
 }

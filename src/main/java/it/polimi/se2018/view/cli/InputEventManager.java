@@ -13,6 +13,8 @@ import java.util.Map;
  * Abstract base class for input managers.
  * <p>Concrete subclasses will handle user's input and prompt pertinent messages
  * depending on the current game state and their purpose.</p>
+ *
+ * @author giorgiolabate
  */
 public abstract class InputEventManager {
     /**
@@ -165,9 +167,10 @@ public abstract class InputEventManager {
 
     /**
      * Getter for the map of used tool cards.
+     *
      * @return The map of used tool cards.
      */
-    Map<String, Boolean> getUsedToolCards(){
+    Map<String, Boolean> getUsedToolCards() {
         return getDataOrganizer().getUsedToolCards();
     }
 

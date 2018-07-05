@@ -4,6 +4,8 @@ import it.polimi.se2018.view.ClientView;
 
 /**
  * Input manager used to increment or decrement a die.
+ *
+ * @author giorgiolabate
  */
 public class DieIncrementManager extends InputEventManager {
 
@@ -21,9 +23,9 @@ public class DieIncrementManager extends InputEventManager {
     /**
      * Constructor of the class.
      *
-     * @param view     The view to which this manager is bounded.
-     * @param output   The output destination where the prompts of this manager
-     *                 are shown.
+     * @param view   The view to which this manager is bounded.
+     * @param output The output destination where the prompts of this manager
+     *               are shown.
      */
     public DieIncrementManager(ClientView view, CliPrinter output) {
         super(view, output);

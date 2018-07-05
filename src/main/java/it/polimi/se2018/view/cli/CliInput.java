@@ -8,6 +8,8 @@ import java.util.Scanner;
  * This class gatherers the input from the user and handles it continuously
  * through an {@link InputEventManager} that is set by the {@link CliDisplayer}.
  * <p>Input gathering can be done on an independent thread.</p>
+ *
+ * @author giorgiolabate
  */
 public class CliInput implements Runnable {
 
@@ -132,7 +134,7 @@ public class CliInput implements Runnable {
      * Resets the underlying input manager to its original state.
      * <p>Also, forces the prompt to be displayed.</p>
      */
-    void resetInputManager(){
+    void resetInputManager() {
         manager.reset();
         updatePrompt();
     }

@@ -8,6 +8,8 @@ import java.util.List;
 
 /**
  * Input handler used to show the current game status.
+ *
+ * @author giorgiolabate
  */
 public class GameStatusHandler extends InputEventManager {
 
@@ -79,7 +81,7 @@ public class GameStatusHandler extends InputEventManager {
     /**
      * Prints the patter according to game mode.
      */
-    private void handlePatterns(){
+    private void handlePatterns() {
         if (!isSinglePlayer())
             getOutput().printPatterns(getPlayers());
         else

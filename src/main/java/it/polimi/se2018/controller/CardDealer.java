@@ -8,9 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * This Class is used in the game's setup to
- * deal the cards of each type in the right way
- * according to the game's rules.
+ * This Class is used in the game's setup to deal the cards of each type in
+ * the right way according to the game's rules.
  *
  * @author giorgiolabate
  */
@@ -22,18 +21,14 @@ public class CardDealer {
     private static final int CANDIDATES_PER_PLAYER = 4;
 
     /**
-     * A reference to the {@link Game}'s
-     * instance to which the CardDealer is
-     * associated.
+     * A reference to the {@link Game}'s instance to which the CardDealer is associated.
      */
     private Game game;
 
     /**
-     * Creates a new CardDealer associated to the
-     * specified game instance.
+     * Creates a new CardDealer associated to the specified game instance.
      *
-     * @param game The {@link Game} instance to which
-     *             the CardDealer has to refer.
+     * @param game The {@link Game} instance to which the CardDealer has to refer.
      */
     public CardDealer(Game game) {
         this.game = game;
@@ -42,8 +37,7 @@ public class CardDealer {
     /**
      * Getter for the actual game instance.
      *
-     * @return The reference to the actual
-     * game instance to which the CardDealer
+     * @return The reference to the actual game instance to which the CardDealer
      * is associated.
      */
     public Game getGame() {
@@ -51,9 +45,8 @@ public class CardDealer {
     }
 
     /**
-     * Deals the cards according to the passed
-     * parameters. It also deals the 4 {@link Pattern} to
-     * each player.
+     * Deals the cards according to the passed parameters. It also deals
+     * the 4 {@link Pattern} to each player.
      *
      * @param publicObj  The number of {@link PublicObjectiveCard}
      *                   to be dealt.
@@ -109,7 +102,7 @@ public class CardDealer {
      * @param toolCards The number of tool cards to deal.
      */
     private void dealToolCards(int toolCards) {
-        if (ToolCardFactory.getInstance() == null){
+        if (ToolCardFactory.getInstance() == null) {
             try {
                 XmlToolCardLoader xmlToolCardLoader = new XmlToolCardLoader();
                 xmlToolCardLoader.createToolCardFactory();

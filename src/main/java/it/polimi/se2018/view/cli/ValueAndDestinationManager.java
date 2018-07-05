@@ -5,6 +5,8 @@ import it.polimi.se2018.view.ClientView;
 
 /**
  * Input manager used to select a value for a die and place it on the player's pattern.
+ *
+ * @author giorgiolabate
  */
 public class ValueAndDestinationManager extends InputEventManager {
 

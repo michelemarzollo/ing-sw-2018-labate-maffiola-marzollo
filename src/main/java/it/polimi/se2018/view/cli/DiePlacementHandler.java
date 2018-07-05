@@ -5,6 +5,8 @@ import it.polimi.se2018.view.ClientView;
 
 /**
  * Input manager used to place a die in player's pattern.
+ *
+ * @author giorgiolabate
  */
 public class DiePlacementHandler extends InputEventManager {
 

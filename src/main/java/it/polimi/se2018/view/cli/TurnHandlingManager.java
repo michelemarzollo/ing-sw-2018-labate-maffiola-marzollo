@@ -7,6 +7,8 @@ import java.util.List;
 
 /**
  * Input manager used to let the user select the available options during his turn.
+ *
+ * @author giorgiolabate
  */
 public class TurnHandlingManager extends InputEventManager {
 

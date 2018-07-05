@@ -8,6 +8,8 @@ import java.util.List;
 
 /**
  * Input manager used to move dice on player's pattern.
+ *
+ * @author giorgiolabate
  */
 public class MoveDiceManager extends InputEventManager {
 

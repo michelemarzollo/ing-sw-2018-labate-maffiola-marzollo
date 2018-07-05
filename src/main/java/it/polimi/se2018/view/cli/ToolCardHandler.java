@@ -4,6 +4,8 @@ import it.polimi.se2018.view.ClientView;
 
 /**
  * Input manager used to select a tool card.
+ *
+ * @author giorgiolabate
  */
 public class ToolCardHandler extends InputEventManager {
 

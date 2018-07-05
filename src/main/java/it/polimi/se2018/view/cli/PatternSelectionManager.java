@@ -4,6 +4,8 @@ import it.polimi.se2018.view.ClientView;
 
 /**
  * Input manager used to select a pattern among candidates.
+ *
+ * @author giorgiolabate
  */
 public class PatternSelectionManager extends InputEventManager {
 

@@ -4,6 +4,8 @@ import it.polimi.se2018.view.ClientView;
 
 /**
  * Input manager used to select the difficulty in single player mode.
+ *
+ * @author giorgiolabate
  */
 public class DifficultyManager extends InputEventManager {
 

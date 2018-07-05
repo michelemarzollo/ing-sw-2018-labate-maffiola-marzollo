@@ -4,6 +4,8 @@ import it.polimi.se2018.view.ClientView;
 
 /**
  * Input manager used to allow the player to login.
+ *
+ * @author giorgiolabate
  */
 public class LoginManager extends InputEventManager {
 
@@ -121,7 +123,7 @@ public class LoginManager extends InputEventManager {
             getOutput().println("Choose the game mode, enter: \n" +
                     "1 for SinglePlayer\n" +
                     "2 for MultiPlayer");
-        } else if(userName == null) {
+        } else if (userName == null) {
             getOutput().println("Enter your username:");
         }
     }

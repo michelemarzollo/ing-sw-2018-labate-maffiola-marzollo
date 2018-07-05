@@ -19,6 +19,8 @@ import java.util.function.Consumer;
  * <p>It is used by the View to display the game on CLI. It receives the model update
  * and just set the correct {@link InputEventManager} for the user interaction and prints
  * what is necessary.</p>
+ *
+ * @author giorgiolabate
  */
 public class CliDisplayer implements Displayer {
 
@@ -57,7 +59,7 @@ public class CliDisplayer implements Displayer {
      * @param output      The {@link PrintStream} on which the game will be displayed.
      */
     private CliDisplayer(InputStream inputStream, PrintStream output) {
-        this.input = new CliInput(inputStream); //faccio partire il thread
+        this.input = new CliInput(inputStream);
         new Thread(input).start();
         this.output = new CliPrinter(output);
         callback.accept(this);
