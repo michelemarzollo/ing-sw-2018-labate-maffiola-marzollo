@@ -21,6 +21,8 @@ import java.util.concurrent.Semaphore;
  * It implements Runnable because the client needs to start a new thread of
  * execution when launching TcpNetworkHandler because the interaction with the
  * socket's stream (that are present here) are blocking methods.</p>
+ *
+ * @author giorgiolabate
  */
 public class TcpNetworkHandler implements ServerNetInterface, Runnable {
 
@@ -131,10 +133,9 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
     /**
      * The method to add a client to the server.
      *
-     * @param client the client to add.
+     * @param client        the client to add.
      * @param isMultiPlayer {@code true} if the client is playing in multi player mode;
      *                      {@code false} if it's playing in single player mode.
-     *
      * @return {@code true} if the client had been added; {@code false} otherwise.
      */
     @Override
@@ -145,7 +146,7 @@ public class TcpNetworkHandler implements ServerNetInterface, Runnable {
         try {
             Message ack = (Message) inputStream.readObject();
             sentUsername.release();
-            return ack.getCommand() == Command.ACK && (Boolean)ack.getBody();
+            return ack.getCommand() == Command.ACK && (Boolean) ack.getBody();
         } catch (IOException | ClassNotFoundException e) {
             return false;
         }

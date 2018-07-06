@@ -18,6 +18,8 @@ import java.util.concurrent.Executors;
  * It implements Runnable because the server needs to start a new thread of
  * execution when launching TcpGatherer because the accept method of
  * {@link ServerSocket} is a blocking method.
+ *
+ * @author giorgiolabate
  */
 public class TcpGatherer implements Runnable {
 
@@ -87,7 +89,7 @@ public class TcpGatherer implements Runnable {
     /**
      * Terminates the loop in TcpGatherer and frees resources.
      */
-    public void close(){
+    public void close() {
         try {
             serverSocket.close();
         } catch (IOException ignored) {

@@ -50,7 +50,8 @@ public class DiceSwappingManager extends InputEventManager {
                     row = choice;
                 } else if (col == -1) {
                     col = choice;
-                    getView().handleToolCardUsage(index, new Coordinates(row, col), true);
+                    //indexes are inverted because the RoundTrack is represented reversed
+                    getView().handleToolCardUsage(index, new Coordinates(col, row), true);
                 }
             } else showError();
         } catch (NumberFormatException ex) {

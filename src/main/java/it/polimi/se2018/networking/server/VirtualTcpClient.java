@@ -17,6 +17,8 @@ import java.net.SocketException;
  * It implements Runnable because the gatherer needs to start a new thread of
  * execution when launching VirtualTcpClient because the interaction with the
  * socket's stream (that are present here) are blocking methods.
+ *
+ * @author giorgiolabate
  */
 public class VirtualTcpClient implements ClientNetInterface, Runnable {
 
@@ -128,7 +130,7 @@ public class VirtualTcpClient implements ClientNetInterface, Runnable {
                     terminate();
                 else
                     server.send(message);
-            }catch (SocketException e){
+            } catch (SocketException e) {
                 Logger.getDefaultLogger().log("Closing TCP connection.");
                 terminate();
             } catch (IOException e) {
@@ -186,7 +188,7 @@ public class VirtualTcpClient implements ClientNetInterface, Runnable {
      * Closes the TCP connection.
      */
     @Override
-    public void close(){
+    public void close() {
         alive = false;
         try {
             outputStream.close();

@@ -68,7 +68,7 @@ public class ValueAndDestinationManager extends InputEventManager {
         if (value == -1) {
             getOutput().printPatternLarger(getPattern());
             getOutput().printDraftPool(getDraftPool());
-            getOutput().println("The index of your chosen die in the draft pool is" +
+            getOutput().println("The index of your chosen die in the draft pool is " +
                     getDataOrganizer().getNextTurn().getForcedSelectionIndex());
             getOutput().println("Enter the value you want to assign to the chosen die:");
         } else if (row == -1) {

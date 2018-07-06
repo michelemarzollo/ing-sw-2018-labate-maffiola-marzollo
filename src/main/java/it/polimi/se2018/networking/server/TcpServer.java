@@ -10,6 +10,8 @@ import java.io.IOException;
  * The {@link HybridServer} will create an instance of this class (will be
  * its master server) and will then starts this server in tandem with the
  * {@link RmiServer}.
+ *
+ * @author giorgiolabate
  */
 public class TcpServer extends Server {
 
@@ -35,7 +37,7 @@ public class TcpServer extends Server {
     /**
      * Constructor to make this server a super-server.
      *
-     * @param port    The port at which the server is bound.
+     * @param port The port at which the server is bound.
      */
     public TcpServer(int port) {
         super();
@@ -45,8 +47,8 @@ public class TcpServer extends Server {
     /**
      * Constructor to make this server a slave-server.
      *
-     * @param server  The master-server
-     * @param port    The port at which the server is bound.
+     * @param server The master-server
+     * @param port   The port at which the server is bound.
      */
     public TcpServer(Server server, int port) {
         //The super class constructor instantiates also the serverNetInterface
@@ -80,7 +82,7 @@ public class TcpServer extends Server {
     @Override
     public void stop() {
         try {
-            if(gatherer != null)
+            if (gatherer != null)
                 gatherer.close();
             if (gathererThread != null)
                 gathererThread.join();
@@ -89,7 +91,7 @@ public class TcpServer extends Server {
         }
         isRunning = false;
 
-        for(ClientNetInterface client : getClients())
+        for (ClientNetInterface client : getClients())
             getServerNetInterface().removeClient(client);
     }
 
