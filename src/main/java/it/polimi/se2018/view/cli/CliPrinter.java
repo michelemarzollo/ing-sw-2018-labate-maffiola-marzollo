@@ -331,9 +331,9 @@ public class CliPrinter {
         stream.println("Colour: " + card.getColour());
         stream.print("Used: ");
         if (used) {
-            stream.println("✓");
+            stream.println("Yes");
         } else {
-            stream.println("✗");
+            stream.println("No");
         }
         stream.print("\n");
     }
@@ -359,7 +359,7 @@ public class CliPrinter {
      */
     private void printTokens(int num) {
         stream.print("tokens:");
-        for (int i = 0; i < num; i++) stream.print("⚪");
+        for (int i = 0; i < num; i++) stream.print("O");
         stream.print("\n");
     }
 

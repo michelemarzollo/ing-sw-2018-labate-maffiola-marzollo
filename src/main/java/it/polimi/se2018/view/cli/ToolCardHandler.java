@@ -129,7 +129,7 @@ public class ToolCardHandler extends InputEventManager {
      * Shows the confirmation prompt.
      */
     private void showConfirmPrompt() {
-        getOutput().print("You chose to use a Tool Card, enter:\n" +
+        getOutput().println("You chose to use a Tool Card, enter:\n" +
                 "1 to confirm\n" +
                 "Any other number to go back");
     }
