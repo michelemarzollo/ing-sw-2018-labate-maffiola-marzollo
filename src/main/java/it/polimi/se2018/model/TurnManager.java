@@ -14,7 +14,6 @@ import java.util.*;
  * first turn this round, then the correct distribution of turns will be
  * {1, 2, 3, 3, 2, 1}.</p>
  * <p>The class is mutable.</p>
- * No thread safety mechanism has yet been introduced.
  * @author dvdmff
  */
 public class TurnManager {

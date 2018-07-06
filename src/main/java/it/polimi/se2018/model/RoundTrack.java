@@ -11,7 +11,7 @@ import java.util.List;
  * <p>Its role is to keep track of all the dice that
  * are left unused after each round, since they still may
  * be used in some cases</p>
- * <p>The class is immutable, but is not yet thread-safe.</p>
+ * <p>The class is immutable.</p>
  * @author dvdmff
  */
 public class RoundTrack {
