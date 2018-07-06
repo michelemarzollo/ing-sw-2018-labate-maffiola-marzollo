@@ -361,7 +361,6 @@ public class GameUtils {
      *
      * @param game the game to work on.
      * @return the game
-     * @author michelemarzollo
      */
     public static Game getCompleteSinglePlayerGame(Game game) {
         Pattern sunCatcher;

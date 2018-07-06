@@ -11,7 +11,6 @@ import java.util.Arrays;
  * Shade Variety, Color Variety.</p>
  *
  * @author michelemarzollo
- * @see this#getScore(Cell[][])
  */
 public class GridVarietyScore extends PublicObjectiveScore {
 

@@ -2,8 +2,11 @@ it.polimi.se2018
 it.polimi.se2018.controller
 it.polimi.se2018.model
 it.polimi.se2018.model.events
+it.polimi.se2018.model.viewmodel
 it.polimi.se2018.networking.client
 it.polimi.se2018.networking.messages
 it.polimi.se2018.networking.server
 it.polimi.se2018.utils
 it.polimi.se2018.view
+it.polimi.se2018.view.cli
+it.polimi.se2018.view.gui

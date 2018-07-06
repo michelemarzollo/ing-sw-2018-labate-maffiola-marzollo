@@ -13,7 +13,6 @@ import it.polimi.se2018.model.Cell;
  * It's used for the cards 'Column Color Variety' and 'Column Color Variety'.</p>
  *
  * @author michelemarzollo
- * @see this#getScore(Cell[][])
  */
 public class ColumnVarietyScore extends ArrayVarietyScore {
 
