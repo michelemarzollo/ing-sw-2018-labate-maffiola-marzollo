@@ -45,20 +45,22 @@ public class CardDealer {
     }
 
     /**
-     * Deals the cards according to the passed parameters. It also deals
-     * the 4 {@link Pattern} to each player.
+     * Deals the cards according to the passed parameters and returns to
+     * the controller the object to calculate scores given by PublicObjectiveCards.
+     * It also deals the 4 {@link Pattern} to each player.
      *
      * @param publicObj  The number of {@link PublicObjectiveCard}
      *                   to be dealt.
      * @param privateObj The number of {@link PrivateObjectiveCard} per player
      *                   to be dealt.
      * @param toolCards  The number of {@link ToolCard} to be dealt.
+     * @return The array of objects that calculate the scores given by PublicObjectiveCards.
      */
-    public void deal(int publicObj, int privateObj, int toolCards, Controller controller) {
-        dealPublicObjectives(publicObj, controller);
+    public PublicObjectiveScore[] deal(int publicObj, int privateObj, int toolCards) {
         dealToolCards(toolCards);
         dealPrivateObjectives(privateObj);
         dealCandidates();
+        return dealPublicObjectives(publicObj);
     }
 
     /**
@@ -115,16 +117,28 @@ public class CardDealer {
 
     /**
      * Deals public objectives.
+     * <p>Sets the PublicObjectiveCards in the model and returns an array
+     * of PublicObjectiveScores to the controller.</p>
      *
      * @param publicObj The number of public objectives to deal.
+     * @return the array of PublicObjectiveScores to be set in the controller.
      */
-    private void dealPublicObjectives(int publicObj, Controller controller) {
+    private PublicObjectiveScore[] dealPublicObjectives(int publicObj) {
+
         try {
-            XmlPublicObjectiveLoader publicObjectiveFactory = new XmlPublicObjectiveLoader(controller);
-            this.getGame().setPublicObjectiveCards(publicObjectiveFactory.load(publicObj));
+            XmlPublicObjectiveLoader publicObjectiveFactory = new XmlPublicObjectiveLoader();
+            PublicObjectiveElements publicObjectiveElements = publicObjectiveFactory.load(publicObj);
+
+            //sets the cards in the model
+            this.getGame().setPublicObjectiveCards(publicObjectiveElements.getCards());
+            //returns the objects to calculate the score to the controller
+            return publicObjectiveElements.getScoreCalculators();
+
         } catch (SAXException e) {
             Logger.getDefaultLogger().log("USAXException " + e);
         }
+
+        return new PublicObjectiveScore[]{};
     }
 
 

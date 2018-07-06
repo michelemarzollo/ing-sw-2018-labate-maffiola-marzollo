@@ -195,7 +195,7 @@ public class MultiPlayerControllerTest {
 
 
     /**
-     * Tests the calculateScores supposing not to have PublicObjectiveCards.
+     * Tests the calculateScores supposing to have just one PublicObjectiveCards, tht gives no points.
      * The test suppose that Pippo has placed a blue die with value 6 in position [1][0]
      * and that Pluto has placed a red die with value 5 in the same position.
      * Pippo's score must be : 6 (value of the die of his private objective placed) -
@@ -211,6 +211,8 @@ public class MultiPlayerControllerTest {
         if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
+        //The score calculators in controller are set, but they will give no points
+        controller.setPublicScoreCalculators(new PublicObjectiveScore[]{new DiagonalScore(1, true)});
         Die blue6 = new Die(6, new Random(), Colour.BLUE);
         Die red5 = new Die(5, new Random(), Colour.RED);
         Player pippo = game.getPlayers().get(0);
@@ -252,12 +254,14 @@ public class MultiPlayerControllerTest {
         try {
             String basePath = "it/polimi/se2018/utils/public_objective_cards/";
             String listName = "cards.list";
-            XmlPublicObjectiveLoader publicObjectiveFactory = new XmlPublicObjectiveLoader(basePath, listName, controller);
-            game.setPublicObjectiveCards(publicObjectiveFactory.load(2));
+            XmlPublicObjectiveLoader publicObjectiveFactory = new XmlPublicObjectiveLoader(basePath, listName);
+            PublicObjectiveElements publicObjectiveElements = publicObjectiveFactory.load(2);
+            game.setPublicObjectiveCards(publicObjectiveElements.getCards());
+            controller.setPublicScoreCalculators(publicObjectiveElements.getScoreCalculators());
+
         } catch (SAXException e) {
             Logger.getDefaultLogger().log("USAXException " + e);
         }
-
         //sets patterns
         try {
             Pattern newPattern1 = pippo.getPattern()
@@ -369,6 +373,8 @@ public class MultiPlayerControllerTest {
         if (game == null)
             Assert.fail("Error on game initialization");
         Controller controller = new MultiPlayerController(game, 100, 100);
+        //The score calculators in controller are set to avoid a NullPointerException
+        controller.setPublicScoreCalculators(new PublicObjectiveScore[]{new DiagonalScore(1, true)});
         MockView view = new MockView("Pippo");
         //The endGame method is invoked as a consequence of EndRound when the Game is finished.
         //Its ViewMessage could be, for example, an EndTurn message.

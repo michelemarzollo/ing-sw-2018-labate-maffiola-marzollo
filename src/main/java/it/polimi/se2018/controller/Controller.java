@@ -58,10 +58,10 @@ public abstract class Controller implements Observer<ViewMessage> {
     private Timer turnTimer;
 
     /**
-     * The list of objects that contain the method to calculate the score of
+     * The array of objects that contain the method to calculate the score of
      * {@link PublicObjectiveCard}s.
      */
-    private List<PublicObjectiveScore> publicScoreCalculators = new ArrayList<>();
+    private PublicObjectiveScore[] publicScoreCalculators;
 
     /**
      * Tells if the given tool card can be used.
@@ -88,7 +88,6 @@ public abstract class Controller implements Observer<ViewMessage> {
      * new round.
      */
     protected abstract int getDraftAmount();
-
 
     /**
      * Consumes resources after the usage of a tool card.
@@ -156,23 +155,21 @@ public abstract class Controller implements Observer<ViewMessage> {
     }
 
     /**
-     * Adds a new class to calculate the score of a {@link PublicObjectiveCard}
-     * at the end of the game.
-     * In the model there is the corresponding {@link PublicObjectiveCard}.
-     *
-     * @param scoreStrategy the class to calculate the score related to a certain card.
-     */
-    protected void addPublicScoreStrategy(PublicObjectiveScore scoreStrategy) {
-        publicScoreCalculators.add(scoreStrategy);
-    }
-
-    /**
      * The getter for {@code publicScoreCalculators}.
      *
      * @return a copy of {@code publicScoreCalculators}.
      */
-    protected List<PublicObjectiveScore> getPublicScoreCalculators() {
-        return new ArrayList<>(publicScoreCalculators);
+    protected PublicObjectiveScore[] getPublicScoreCalculators() {
+        return Arrays.copyOf(publicScoreCalculators, publicScoreCalculators.length);
+    }
+
+    /**
+     * The setter for {@code publicScoreCalculators}.
+     *
+     * @param publicScoreCalculators the array of PublicObjectiveScore
+     */
+    protected void setPublicScoreCalculators(PublicObjectiveScore[] publicScoreCalculators) {
+        this.publicScoreCalculators = publicScoreCalculators;
     }
 
     /**
@@ -469,9 +466,9 @@ public abstract class Controller implements Observer<ViewMessage> {
 
         if (behavior != null) {
             ToolCardBehaviourResponse response = behavior.useToolCard(getGame(), message);
-            if(response.consumeResources())
+            if (response.consumeResources())
                 consumeResources(message);
-            if(response.useTurn())
+            if (response.useTurn())
                 getGame().getTurnManager().getCurrentTurn().useToolCard();
         }
     }

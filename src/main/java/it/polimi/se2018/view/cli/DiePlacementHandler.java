@@ -63,7 +63,7 @@ public class DiePlacementHandler extends InputEventManager {
 
     /**
      * Handles the input entered by the user.
-     * <p>After collecting user confirmation, the source index and the destiantion coordinates,
+     * <p>After collecting user confirmation, the source index and the destination coordinates,
      * calls the proper handler of {@link ClientView}.</p>
      *
      * @param input The String inserted by the user.

@@ -4,10 +4,12 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.events.*;
 import it.polimi.se2018.utils.Coordinates;
 import it.polimi.se2018.utils.GameUtils;
+import it.polimi.se2018.utils.Logger;
 import it.polimi.se2018.utils.MockView;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 import java.util.*;
 
@@ -218,7 +220,11 @@ public class SinglePlayerControllerTest {
     public void testEndGame() {
         game = new Game();
         controller = new SinglePlayerController(game, 100);
-        game = GameUtils.getCompleteSinglePlayerGame(game, controller);
+        game = GameUtils.getCompleteSinglePlayerGame(game);
+        //sets the public Objective Cards in the game
+        if (game != null){
+            setPublicCards(game, controller);
+        } else Assert.fail();
         ViewMessage msg = new ViewMessage(view, Action.END_TURN, playerName);
 
         controller.endGame(msg);
@@ -237,7 +243,11 @@ public class SinglePlayerControllerTest {
     public void testNegativeSelectPrivateObjective() {
         game = new Game();
         controller = new SinglePlayerController(game, 100);
-        game = GameUtils.getCompleteSinglePlayerGame(game, controller);
+        game = GameUtils.getCompleteSinglePlayerGame(game);
+        //sets the public Objective Cards in the game
+        if (game != null){
+            setPublicCards(game, controller);
+        } else Assert.fail();
         ViewMessage msg = new ViewMessage(view, Action.END_TURN, playerName);
 
         controller.endGame(msg);
@@ -269,7 +279,11 @@ public class SinglePlayerControllerTest {
     public void testCalculateScores() {
         game = new Game();
         controller = new SinglePlayerController(game, 100);
-        game = GameUtils.getCompleteSinglePlayerGame(game, controller);
+        game = GameUtils.getCompleteSinglePlayerGame(game);
+        //sets the public Objective Cards in the game
+        if (game != null){
+            setPublicCards(game, controller);
+        } else Assert.fail();
 
         ViewMessage msg = new ViewMessage(view, Action.END_TURN, playerName);
 
@@ -304,9 +318,11 @@ public class SinglePlayerControllerTest {
     public void testFillScoreBoard() {
         game = new Game();
         controller = new SinglePlayerController(game, 100);
-        game = GameUtils.getCompleteSinglePlayerGame(game, controller);
+        game = GameUtils.getCompleteSinglePlayerGame(game);
         if(game == null)
             Assert.fail("Error on game initialization");
+        //sets the public Objective Cards in the game
+        setPublicCards(game, controller);
 
         game.getDraftPool().setDice(new ArrayList<>());
         ViewMessage msg = new ViewMessage(view, Action.END_TURN, playerName);
@@ -438,7 +454,11 @@ public class SinglePlayerControllerTest {
     public void testDisplayGame() {
         game = new Game();
         controller = new SinglePlayerController(game, 100);
-        game = GameUtils.getCompleteSinglePlayerGame(game, controller);
+        game = GameUtils.getCompleteSinglePlayerGame(game);
+        //sets the public Objective Cards in the game
+        if (game != null){
+            setPublicCards(game, controller);
+        } else Assert.fail();
         ViewMessage msg = new ViewMessage(view, Action.END_TURN, "Pippo"); //generic action, just to have a ViewMessage
         controller.displayGame(msg);
         assertEquals("showSinglePlayerGame", view.getCalledMethods().get(view.getCalledMethods().size() - 1));
@@ -454,7 +474,11 @@ public class SinglePlayerControllerTest {
     public void testGetDraftAmount() {
         game = new Game();
         controller = new SinglePlayerController(game, 100);
-        game = GameUtils.getCompleteSinglePlayerGame(game, controller);
+        game = GameUtils.getCompleteSinglePlayerGame(game);
+        //sets the public Objective Cards in the game
+        if (game != null){
+            setPublicCards(game, controller);
+        } else Assert.fail();
         assertEquals(4, controller.getDraftAmount());
     }
 
@@ -533,5 +557,17 @@ public class SinglePlayerControllerTest {
         controller.disconnectPlayer(msg);
         assertTrue(game.getPlayers().get(0).isConnected());
         assertEquals(1, game.getPlayers().size());
+    }
+
+    private void setPublicCards(Game game, Controller controller){
+        //sets the public Objective Cards in the game
+        try {
+            XmlPublicObjectiveLoader publicObjectiveFactory = new XmlPublicObjectiveLoader();
+            PublicObjectiveElements publicObjectiveElements = publicObjectiveFactory.load(3);
+            game.setPublicObjectiveCards(publicObjectiveElements.getCards());
+            controller.setPublicScoreCalculators(publicObjectiveElements.getScoreCalculators());
+        } catch (SAXException e) {
+            Logger.getDefaultLogger().log("USAXException " + e);
+        }
     }
 }

@@ -25,8 +25,8 @@ public class ControllerTest {
         Game game = new Game();
         Controller controller = new SinglePlayerController(game, 10);
         DiagonalScore diagonalScore = new DiagonalScore(2, true);
-        controller.addPublicScoreStrategy(diagonalScore);
-        assertEquals(diagonalScore, controller.getPublicScoreCalculators().get(0));
+        controller.setPublicScoreCalculators(new PublicObjectiveScore[]{diagonalScore});
+        assertEquals(diagonalScore, controller.getPublicScoreCalculators()[0]);
     }
 
     /**
@@ -36,12 +36,13 @@ public class ControllerTest {
     public void testGetPublicScoreCalculators() {
         Game game = new Game();
         Controller controller = new SinglePlayerController(game, 10);
+        //the public objective scores are set in the controller
         DiagonalScore diagonalScore = new DiagonalScore(2, true);
         RowVarietyScore rowVarietyScore = new RowVarietyScore(2, true);
-        controller.addPublicScoreStrategy(diagonalScore);
-        controller.addPublicScoreStrategy(rowVarietyScore);
-        PublicObjectiveScore publicObjectiveScore1 = controller.getPublicScoreCalculators().get(0);
-        PublicObjectiveScore publicObjectiveScore2 = controller.getPublicScoreCalculators().get(1);
+        PublicObjectiveScore[] publicObjectiveScores = new PublicObjectiveScore[]{diagonalScore, rowVarietyScore};
+        controller.setPublicScoreCalculators(publicObjectiveScores);
+        PublicObjectiveScore publicObjectiveScore1 = controller.getPublicScoreCalculators()[0];
+        PublicObjectiveScore publicObjectiveScore2 = controller.getPublicScoreCalculators()[1];
         assertEquals(diagonalScore, publicObjectiveScore1);
         assertEquals(rowVarietyScore, publicObjectiveScore2);
     }
@@ -206,10 +207,13 @@ public class ControllerTest {
     @Test
     public void testEndRoundGameFinished() {
         Game game = GameUtils.getFinishedGame(true);
+
         if (game == null)
             Assert.fail("Error on game initialization");
         assertNull(game.getScoreBoard());
         Controller controller = new MultiPlayerController(game, 100, 100);
+        //The score calculators in controller are set to avoid a NullPointerException, but aren't relevant for the method
+        controller.setPublicScoreCalculators(new PublicObjectiveScore[]{new DiagonalScore(1, true)});
         MockView view1 = new MockView("Pippo");
         ViewMessage msg = new ViewMessage(view1, Action.END_TURN, "Pippo");
         controller.endRound(msg); //game is over, it will invoke the 'endGame' method.
