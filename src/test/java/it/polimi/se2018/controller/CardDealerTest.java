@@ -21,8 +21,7 @@ public class CardDealerTest {
         ToolCardFactory.reset();
         Game game =  new Game();
         CardDealer cardDealer =  new CardDealer(game);
-        Controller controller =  new MultiPlayerController(game, 3, 4);
-        cardDealer.deal(2, 3, 5, controller);
+        cardDealer.deal(2, 3, 5);
         Assert.assertTrue(ToolCardFactory.getInstance()!=null);
     }
 }

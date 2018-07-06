@@ -41,7 +41,7 @@ public class MultiPlayerController extends Controller {
 
     /**
      * The error to show when a player tries to connect or reconnect to a game with
-     * already four registerd players.
+     * already four registered players.
      */
     private static final String ALREADY_FOUR_REGISTERED_PLAYERS = "There are already four registered players!";
 
@@ -289,7 +289,9 @@ public class MultiPlayerController extends Controller {
         if (!getGame().isSetupComplete()) {
             lobbyTimer.cancel();
             CardDealer cardDealer = new CardDealer(getGame());
-            cardDealer.deal(NUM_OF_PUBLIC_OBJECTIVE, NUM_OF_PRIVATE_OBJECTIVE, NUM_OF_TOOL_CARDS, this);
+            PublicObjectiveScore[] publicScoreCalculators = cardDealer
+                    .deal(NUM_OF_PUBLIC_OBJECTIVE, NUM_OF_PRIVATE_OBJECTIVE, NUM_OF_TOOL_CARDS);
+            setPublicScoreCalculators(publicScoreCalculators);
             getGame().terminateSetup();
         }
     }

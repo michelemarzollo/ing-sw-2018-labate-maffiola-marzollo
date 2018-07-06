@@ -16,11 +16,6 @@ import java.util.Map;
 public class SaxPublicObjectiveBuilder extends DefaultHandler {
 
     /**
-     * The controller that is handling the loading of the files.
-     */
-    private Controller controller;
-
-    /**
      * Says if the content of the tag 'name' is being read.
      */
     private boolean inName;
@@ -96,15 +91,6 @@ public class SaxPublicObjectiveBuilder extends DefaultHandler {
      * will calculate the score of the card.
      */
     private static final Map<String, PublicObjectiveScore> scoreStrategies = new HashMap<>();
-
-    /**
-     * The constructor of the class.
-     *
-     * @param controller the controller that is handling the loading of the files.
-     */
-    SaxPublicObjectiveBuilder(Controller controller) {
-        this.controller = controller;
-    }
 
     /**
      * The method to set the map {@code scoreStrategies}.
@@ -239,7 +225,6 @@ public class SaxPublicObjectiveBuilder extends DefaultHandler {
     @Override
     public void endDocument() {
         registerScoreStrategy();
-        controller.addPublicScoreStrategy(newPublicScore());
     }
 
     /**
@@ -248,7 +233,7 @@ public class SaxPublicObjectiveBuilder extends DefaultHandler {
      *
      * @return the {@link PublicObjectiveScore} of the card described in the file.
      */
-    private PublicObjectiveScore newPublicScore() {
+    public PublicObjectiveScore buildPublicScore() {
         PublicObjectiveScore scoreStrategy = scoreStrategies.get(strategy);
         if (scoreStrategy == null)
             throw new IllegalArgumentException();
@@ -260,7 +245,7 @@ public class SaxPublicObjectiveBuilder extends DefaultHandler {
      *
      * @return the {@link PublicObjectiveCard}.
      */
-    public PublicObjectiveCard build() {
+    public PublicObjectiveCard buildCard() {
         return new PublicObjectiveCard(name, description, victoryPoints);
     }
 

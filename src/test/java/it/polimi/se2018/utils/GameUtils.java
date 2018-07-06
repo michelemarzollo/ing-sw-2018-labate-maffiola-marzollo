@@ -2,7 +2,6 @@ package it.polimi.se2018.utils;
 
 import it.polimi.se2018.controller.*;
 import it.polimi.se2018.model.*;
-import org.junit.Assert;
 import org.xml.sax.SAXException;
 
 import java.util.ArrayList;
@@ -357,14 +356,14 @@ public class GameUtils {
      * The dice are chosen so that the sum of the values for each colour is always six, so that
      * independently from the Private Objective chosen, the score related to it
      * will always be 6.
-     * The {@link PublicObjectiveCard}S are chosen randomly, among a few cards that
-     * are in the directory resources. The reason why this method is not in {@link GameUtils}
-     * is that to load those cards the loader had to be in the package controller.</p>
+     * The {@link PublicObjectiveCard}s are set for methods that don't need to calculate scores.
+     * The ones that need so must replace them with the XmlPublicObjectiveLoader.</p>
      *
+     * @param game the game to work on.
      * @return the game
      * @author michelemarzollo
      */
-    public static Game getCompleteSinglePlayerGame(Game game, Controller controller) {
+    public static Game getCompleteSinglePlayerGame(Game game) {
         Pattern sunCatcher;
         try {
             String patternDir = "it/polimi/se2018/model/patternSources/sun_catcher/";
@@ -379,13 +378,9 @@ public class GameUtils {
 
         Player player = new Player("Pippo");
         game.addPlayer(player);
-        //sets the public Objective Cards in the game
-        try {
-            XmlPublicObjectiveLoader publicObjectiveFactory = new XmlPublicObjectiveLoader(controller);
-            game.setPublicObjectiveCards(publicObjectiveFactory.load(3));
-        } catch (SAXException e) {
-            Logger.getDefaultLogger().log("USAXException " + e);
-        }
+        //public objective cards are dealt, but then they will be changed in the tests for the controller,
+        //to set also scores
+        dealPublicObjectives(game);
         dealToolCards(game);
         assignPrivateObjectives(player, null, false);
 

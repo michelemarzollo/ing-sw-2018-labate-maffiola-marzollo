@@ -31,14 +31,15 @@ public class XmlPublicObjectiveLoader extends XmlCardLoader {
     private static final String LIST_NAME = "cards.list";
 
     /**
+     * The error message to show if there were problems while parsing the file.
+     */
+    private static final String PARSING_ERROR_MESSAGE = "The file was validated, " +
+            "but the parser couldn't create the PublicObjectiveElement";
+
+    /**
      * Path where files are stored.
      */
     private final String basePath;
-
-    /**
-     * The controller the loader refers to.
-     */
-    private Controller controller;
 
     /**
      * Creates a new {@code XmlPublicObjectiveLoader} that can load cards from
@@ -46,13 +47,12 @@ public class XmlPublicObjectiveLoader extends XmlCardLoader {
      * <p>It also loads the xsd file which card definitions are checked against.</p>
      * <p>The default set of cards will be loaded.</p>
      *
-     * @param controller the controller the loader refers to.
      * @throws IllegalArgumentException if the specified directory isn't actually
      *                                  a directory or it isn't readable.
      * @throws SAXException             if sax validator or sax parser cannot be used.
      */
-    public XmlPublicObjectiveLoader(Controller controller) throws SAXException {
-        this(DEFAULT_PATH, LIST_NAME, controller);
+    public XmlPublicObjectiveLoader() throws SAXException {
+        this(DEFAULT_PATH, LIST_NAME);
     }
 
     /**
@@ -60,16 +60,14 @@ public class XmlPublicObjectiveLoader extends XmlCardLoader {
      * xmls contained in the specified directory.
      * <p>It also loads the xsd file which card definitions are checked against.</p>
      *
-     * @param basePath   The directory that contains the xmls.
-     * @param listName   The name of the list file containing the names of the available files to load.
-     * @param controller The controller the loader refers to.
+     * @param basePath The directory that contains the xmls.
+     * @param listName The name of the list file containing the names of the available files to load.
      * @throws IllegalArgumentException if the specified directory isn't actually
      *                                  a directory or it isn't readable.
      * @throws SAXException             if sax validator or sax parser cannot be used.
      */
-    public XmlPublicObjectiveLoader(String basePath, String listName, Controller controller) throws SAXException {
+    public XmlPublicObjectiveLoader(String basePath, String listName) throws SAXException {
         super();
-        this.controller = controller;
         this.basePath = basePath;
 
         validator = getValidator(ResourceManager.getInstance().getPublicObjectiveSchema());
@@ -86,33 +84,64 @@ public class XmlPublicObjectiveLoader extends XmlCardLoader {
      * @return An array of size at most {@code n} containing a set of unique
      * cards.
      */
-    public PublicObjectiveCard[] load(int n) {
+    public PublicObjectiveElements load(int n) {
+
         Collections.shuffle(loadableCards);
 
-        return loadableCards.stream()
-                .limit(n)
-                .map(this::loadCard)
-                .toArray(PublicObjectiveCard[]::new);
+        //The two arrays to be returned must have the dimension of the number
+        //of instances required if there are enough files, or, otherwise, of the number of available files
+        int numberOfCards = n < loadableCards.size() ? n : loadableCards.size();
+        PublicObjectiveCard[] arrayOfCards = new PublicObjectiveCard[numberOfCards];
+        PublicObjectiveScore[] scoreCalculators = new PublicObjectiveScore[numberOfCards];
+
+        for (int i = 0; i < n && i < loadableCards.size(); i++) {
+            PublicObjectiveElements cardAndScoreCalculator = loadCard(loadableCards.get(i));
+            if (cardAndScoreCalculator != null) {
+                arrayOfCards[i] = cardAndScoreCalculator.getCards()[0];
+                scoreCalculators[i] = cardAndScoreCalculator.getScoreCalculators()[0];
+            } else throw new CouldNotCreateObjectException(PARSING_ERROR_MESSAGE); //should never enter here
+        }
+
+        return new PublicObjectiveElements(arrayOfCards, scoreCalculators);
     }
 
     /**
-     * Loads a {@link PublicObjectiveCard} from an xml file.
+     * Loads a {@link PublicObjectiveElements} from an xml file.
      *
      * @param resource The resource where the card is stored.
-     * @return A {@link PublicObjectiveCard} matching its description in xml.
+     * @return A {@link PublicObjectiveElements} matching its description in xml.
      * If {@code null} is returned then some error while loading happened.
      */
-    private PublicObjectiveCard loadCard(String resource) {
+    private PublicObjectiveElements loadCard(String resource) {
         try {
 
             InputStream stream = ResourceManager.getInstance().getXmlStream(basePath, resource);
-            SaxPublicObjectiveBuilder saxPublicObjectiveBuilder = new SaxPublicObjectiveBuilder(controller);
+            SaxPublicObjectiveBuilder saxPublicObjectiveBuilder = new SaxPublicObjectiveBuilder();
 
             saxParser.parse(stream, saxPublicObjectiveBuilder);
-            return saxPublicObjectiveBuilder.build();
+            PublicObjectiveCard[] card = new PublicObjectiveCard[]{saxPublicObjectiveBuilder.buildCard()};
+            PublicObjectiveScore[] scoreCalculator = new PublicObjectiveScore[]{saxPublicObjectiveBuilder.buildPublicScore()};
+
+            return new PublicObjectiveElements(card, scoreCalculator);
 
         } catch (SAXException | IOException ignored) {
             return null;
+        }
+    }
+
+    /**
+     * The {@link RuntimeException} thrown when the file to load was validated,
+     * but the parser couldn't create the object to construct from it.
+     */
+    public class CouldNotCreateObjectException extends RuntimeException {
+
+        /**
+         * The constructor.
+         *
+         * @param msg the message of the exception.
+         */
+        CouldNotCreateObjectException(String msg) {
+            super(msg);
         }
     }
 }

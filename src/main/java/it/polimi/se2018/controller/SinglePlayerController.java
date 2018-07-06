@@ -130,7 +130,9 @@ public class SinglePlayerController extends Controller {
                 CardDealer cardDealer = new CardDealer(getGame());
                 //In singlePlayer mode the Player has two privateObjectiveCards and
                 //the number of ToolCards depend on the level of difficulty chosen.
-                cardDealer.deal(NUM_OF_PUBLIC_OBJECTIVE, NUM_OF_PRIVATE_OBJECTIVE, difficulty.getDifficulty(), this);
+                PublicObjectiveScore[] publicScoreCalculators = cardDealer
+                        .deal(NUM_OF_PUBLIC_OBJECTIVE, NUM_OF_PRIVATE_OBJECTIVE, difficulty.getDifficulty());
+                setPublicScoreCalculators(publicScoreCalculators);
                 getGame().terminateSetup(); //this invocation in Game generates the GAME_SET_UP message
             }
         } else message.getView().showError("There is no registered player!");

@@ -1,8 +1,6 @@
 package it.polimi.se2018.controller;
 
-import it.polimi.se2018.model.Game;
 import it.polimi.se2018.model.PublicObjectiveCard;
-import it.polimi.se2018.utils.GameUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.SAXException;
@@ -25,11 +23,9 @@ public class XmlPublicObjectiveLoaderTest {
      */
     @Test
     public void testBadDirectoryConstructorFailure() {
-        Game game = new Game();
-        Controller controller = new MultiPlayerController(game, 100, 100);
         String path = "/fake/fake/fake/";
         try {
-            new XmlPublicObjectiveLoader(path, LIST_NAME, controller);
+            new XmlPublicObjectiveLoader(path, LIST_NAME);
             Assert.fail("Should not create object");
         } catch (SAXException e) {
             Assert.fail();
@@ -47,20 +43,17 @@ public class XmlPublicObjectiveLoaderTest {
         String listPath = "it/polimi/se2018/utils/public_objective_cards/";
 
         try {
-            Game game = new Game();
-            Controller controller = new SinglePlayerController(game, 100);
-            GameUtils.getCompleteSinglePlayerGame(game, controller);
-            XmlPublicObjectiveLoader loader = new XmlPublicObjectiveLoader(listPath, LIST_NAME, controller);
-            PublicObjectiveCard[] cards = loader.load(1);
+            XmlPublicObjectiveLoader loader = new XmlPublicObjectiveLoader(listPath, LIST_NAME);
+            PublicObjectiveElements publicObjectiveElements = loader.load(1);
+            PublicObjectiveCard[] cards = publicObjectiveElements.getCards();
+            PublicObjectiveScore[] scoreCalculators = publicObjectiveElements.getScoreCalculators();
 
             Assert.assertEquals(1, cards.length);
             Assert.assertEquals("Color Diagonals", cards[0].getName());
             Assert.assertEquals(1, cards[0].getVictoryPoints());
 
-            //The first 3 classes, set in getCompleteSinglePlayerGame, are already in the controller.
-            //the new one will be the third
-            Assert.assertEquals(4, controller.getPublicScoreCalculators().size());
-            Assert.assertTrue(controller.getPublicScoreCalculators().get(3) instanceof DiagonalScore);
+            Assert.assertEquals(1, scoreCalculators.length);
+            Assert.assertTrue(scoreCalculators[0] instanceof DiagonalScore);
 
 
         } catch (SAXException e) {
@@ -69,7 +62,7 @@ public class XmlPublicObjectiveLoaderTest {
     }
 
     /**
-     * Tests if ill-formed patterns are ignored during the loading phase.
+     * Tests if ill-formed xml card descriptions are ignored during the loading phase.
      */
     @Test
     public void testBadCardLoading() {
@@ -92,13 +85,13 @@ public class XmlPublicObjectiveLoaderTest {
         String listPath = "it/polimi/se2018/controller/public_objective_cards/";
 
         try {
-            Game game = new Game();
-            Controller controller = new SinglePlayerController(game, 100);
-            GameUtils.getCompleteSinglePlayerGame(game,controller);
-            XmlPublicObjectiveLoader loader = new XmlPublicObjectiveLoader(listPath, LIST_NAME, controller);
-            PublicObjectiveCard[] cards = loader.load(12);
+            XmlPublicObjectiveLoader loader = new XmlPublicObjectiveLoader(listPath, LIST_NAME);
+            PublicObjectiveElements publicObjectiveElements = loader.load(12);
+            PublicObjectiveCard[] cards = publicObjectiveElements.getCards();
+            PublicObjectiveScore[] scoreCalculators = publicObjectiveElements.getScoreCalculators();
 
             Assert.assertEquals(10, cards.length);
+            Assert.assertEquals(10, scoreCalculators.length);
 
         } catch (SAXException e) {
             Assert.fail(e.getMessage());
