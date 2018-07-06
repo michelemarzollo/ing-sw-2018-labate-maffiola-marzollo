@@ -8,7 +8,6 @@ import java.io.Serializable;
  * This class represents a tool card in the game.
  * <p>Each tool card is defined by its name and its colour
  * restriction.</p>
- * <p>No thread-safety has yet been implemented.</p>
  * @author dvdmff
  */
 public class ToolCard implements Serializable {
