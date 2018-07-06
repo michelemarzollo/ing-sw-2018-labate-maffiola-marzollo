@@ -8,7 +8,6 @@ import it.polimi.se2018.model.Cell;
  * It's used by the card 'Color Diagonals'.
  *
  * @author michelemarzollo
- * @see this#getScore(Cell[][])
  */
 public class DiagonalScore extends PublicObjectiveScore {
 

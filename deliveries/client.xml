@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<client_specification xmlns="http://se2018.polimi.it/client_specification">
+    <server_address>localhost</server_address>
+    <service_name>Sagrada</service_name>
+    <server_port>8888</server_port>
+</client_specification>

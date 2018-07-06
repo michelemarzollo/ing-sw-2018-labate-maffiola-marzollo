@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<server_specification xmlns="http://se2018.polimi.it/server_specification">
+    <port>8888</port>
+    <address>localhost</address>
+    <service_name>Sagrada</service_name>
+    <turn_duration>60</turn_duration>
+    <multi_player_timeout>20</multi_player_timeout>
+</server_specification>
