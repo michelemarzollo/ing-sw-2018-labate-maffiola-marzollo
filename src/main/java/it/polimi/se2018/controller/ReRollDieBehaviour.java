@@ -15,14 +15,16 @@ import java.util.List;
 public class ReRollDieBehaviour implements ToolCardBehaviour {
 
     /**
-     * Always returns true because this tool card has no specific requirements.
+     * Tells if the requirements for the usage are met.
+     * <p>This behaviour can only be used if the player has not placed a die yet.</p>
      *
      * @param game The game the tool card will be applied to.
-     * @return Always {@code true}.
+     * @return {@code true} if the requirements are met; {@code false} otherwise.
      */
     @Override
     public boolean areRequirementsSatisfied(Game game) {
-        return true;
+        return !game.getTurnManager().getCurrentTurn().hasAlreadyPlacedDie();
+
     }
 
     /**
