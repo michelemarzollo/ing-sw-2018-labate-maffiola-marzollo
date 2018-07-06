@@ -5,6 +5,7 @@ import it.polimi.se2018.model.events.ChooseValue;
 import it.polimi.se2018.model.events.SelectDie;
 import it.polimi.se2018.model.events.ViewMessage;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -128,8 +129,8 @@ public class PullAgainAndPlaceBehaviour implements ToolCardBehaviour {
 
         //I create a new die with the same colour and the specified value
         Die newDie = new Die(chooseMessage.getValue(), new Random(), oldDie.getColour());
+        insertNewDie(game, newDie, forcedSelection);
         try {
-
             Turn currentTurn = game.getTurnManager().getCurrentTurn();
 
             // place die
@@ -139,18 +140,28 @@ public class PullAgainAndPlaceBehaviour implements ToolCardBehaviour {
             game.getDraftPool().draft(forcedSelection);
 
             currentTurn.placeDie();
-            firstStepDone = false;
 
             if(currentTurn.getSacrificeIndex() > currentTurn.getForcedSelectionIndex())
                 currentTurn.setSacrificeIndex(currentTurn.getSacrificeIndex() - 1);
             currentTurn.setForcedSelectionIndex(-1);
-            return ToolCardBehaviourResponse.USE;
-
         } catch (PlacementErrorException e) {
             chooseMessage.getView().showError(
                     "Placement doesn't respect restrictions!\n" + e.getMessage()
             );
         }
-        return ToolCardBehaviourResponse.FAILURE;
+        firstStepDone = false;
+        return ToolCardBehaviourResponse.USE;
+    }
+
+    /**
+     * Inserts the given die at the given position.
+     * @param game The game owning the die.
+     * @param newDie The die to insert.
+     * @param index The index of the die.
+     */
+    private void insertNewDie(Game game, Die newDie, int index) {
+        List<Die> draftPool = new ArrayList<>(game.getDraftPool().getDice());
+        draftPool.set(index, newDie);
+        game.getDraftPool().setDice(draftPool);
     }
 }

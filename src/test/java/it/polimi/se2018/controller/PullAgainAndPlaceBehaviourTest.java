@@ -232,7 +232,7 @@ public class PullAgainAndPlaceBehaviourTest {
 
         ToolCardBehaviourResponse response = behaviour.useToolCard(game, message);
 
-        Assert.assertEquals(ToolCardBehaviourResponse.FAILURE, response);
+        Assert.assertEquals(ToolCardBehaviourResponse.USE, response);
         Assert.assertEquals(2, mockView.getCalledMethods().size());
         boolean isError = mockView.getCalledMethods().get(1).startsWith("showError");
         Assert.assertTrue(isError);

@@ -59,6 +59,7 @@ public class RmiServer extends Server {
     public RmiServer(Server superSystem, String address, String serviceName) {
         super(superSystem);
         this.url = "//" + address + "/" + serviceName;
+        System.setProperty("java.rmi.server.hostname", address);
     }
 
     /**

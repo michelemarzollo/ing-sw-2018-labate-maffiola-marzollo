@@ -43,6 +43,8 @@ public class MoveDiceManager extends InputEventManager {
      */
     private int lastRow = -1;
 
+    private boolean selectionEnded = false;
+
 
     /**
      * Constructor of the class.
@@ -84,21 +86,17 @@ public class MoveDiceManager extends InputEventManager {
             return;
         }
 
-        if (lastRow == -1) {
+        if (lastRow == -1)
             lastRow = choice;
-        } else if (sources.size() == destinations.size()) {
+        else if (sources.size() == destinations.size()) {
             sources.add(new Coordinates(lastRow, choice));
             lastRow = -1;
-        } else {
+        } else if (!selectionEnded) {
             destinations.add(new Coordinates(lastRow, choice));
             lastRow = -1;
+            if (destinations.size() == amount)
+                endSelection();
         }
-
-        if (destinations.size() == amount)
-            getView().handleToolCardUsage(
-                    sources.toArray(new Coordinates[0]),
-                    destinations.toArray(new Coordinates[0]));
-
     }
 
     /**
@@ -120,11 +118,15 @@ public class MoveDiceManager extends InputEventManager {
     private void handleConfirm(int choice) {
         if (choice == 1)
             setHasConfirmed();
-
         else if (choice == 0)
-            getView().handleToolCardUsage(
-                    sources.toArray(new Coordinates[0]),
-                    destinations.toArray(new Coordinates[0]));
+            endSelection();
+    }
+
+    private void endSelection() {
+        selectionEnded = true;
+        getView().handleToolCardUsage(
+                sources.toArray(new Coordinates[0]),
+                destinations.toArray(new Coordinates[0]));
     }
 
 
@@ -134,21 +136,22 @@ public class MoveDiceManager extends InputEventManager {
      */
     @Override
     public void showPrompt() {
-
-        if (isConfirm()) {
-            getOutput().println("Do you want to move another die? Enter 1 if so, 0 otherwise");
-            return;
-        }
-
-        getOutput().print("Insert the ");
-        if (lastRow == -1) {
-            getOutput().printPatternLarger(getPattern());
-            String target = (sources.size() == destinations.size()) ? "source" : "destination";
-            getOutput().print((destinations.size() + 1) + ". " + target + " row: ");
-        } else if (sources.size() == destinations.size()) {
-            getOutput().print((sources.size() + 1) + ". source column: ");
-        } else {
-            getOutput().print((destinations.size() + 1) + ". destination column: ");
+        if (!selectionEnded) {
+            if (isConfirm()) {
+                getOutput().println("Do you want to move another die? Enter 1 if so, 0 otherwise");
+                return;
+            }
+            String message = "Insert the ";
+            if (lastRow == -1) {
+                getOutput().printPatternLarger(getPattern());
+                String target = (sources.size() == destinations.size()) ? "source" : "destination";
+                message += (destinations.size() + 1) + ". " + target + " row: ";
+            } else if (sources.size() == destinations.size()) {
+                message += (sources.size() + 1) + ". source column: ";
+            } else {
+                message += (destinations.size() + 1) + ". destination column: ";
+            }
+            getOutput().print(message);
         }
     }
 

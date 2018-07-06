@@ -45,7 +45,7 @@ public class ValueAndDestinationManager extends InputEventManager {
         try {
             int choice = Integer.parseInt(input.trim());
             if (choice >= 0) {
-                if (value == -1) {
+                if (value == -1 && choice <= 6 && choice >= 1) {
                     value = choice;
                 } else if (row == -1) {
                     row = choice;

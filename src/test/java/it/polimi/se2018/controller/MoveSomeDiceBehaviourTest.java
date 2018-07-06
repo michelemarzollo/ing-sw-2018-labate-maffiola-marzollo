@@ -29,7 +29,7 @@ public class MoveSomeDiceBehaviourTest {
         if (game == null)
             Assert.fail("Error on game initialization");
         MoveSomeDiceBehaviour behaviour = new MoveSomeDiceBehaviour();
-        Assert.assertTrue(behaviour.areRequirementsSatisfied(game));
+        Assert.assertFalse(behaviour.areRequirementsSatisfied(game));
     }
 
     /**
